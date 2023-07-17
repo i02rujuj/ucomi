@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('centros', function (Blueprint $table) {
-            $table->bigIncrements('id')->unique();
+            // Es lo mismo más simplificado a continuación: $table->bigIncrements('id')->unique();
+            $table->id()->unique();
             $table->string('nombre');
             $table->string('direccion');
             $table->string('tipo');

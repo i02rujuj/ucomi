@@ -9,27 +9,30 @@
 
     <title>{{ config('app.name', 'Ucomi') }}</title>
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
 
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    <img class="h-16" src="{{ asset('img/logo.png') }}" alt="logo_ucomi" />
-                </a>
+    <nav class="bg-white fixed top-0 w-full z-50">
+        <div class="mx-auto max-w-full sm:px-4 lg:px-8">
+            <div class="flex items-center justify-center md:justify-between h-20">
+                <div class="flex justify-center items-center">
+                    <div class="flex-shrink-0">
+                        <a href="/" class="flex justify-center items-center">
+                            <img class="h-14" src="{{ asset('img/logo.png') }}" alt="logo_ucomi" />
+                        </a>
+                    </div>
+                </div>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
+    <main>
+        @yield('content')
+    </main>
+
+    @include('components.footer')
+    
 </body>
 </html>

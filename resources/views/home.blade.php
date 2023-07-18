@@ -5,7 +5,4 @@ Panel
 
 @section ('content')
 
-</div>
-
-<!-- Contenido Principal -->
 @endsection

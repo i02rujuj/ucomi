@@ -20,13 +20,21 @@ Auth::routes();
 
 Route::get('/', function () {
     if(Auth::user())
-            return redirect()->route('home');
+        return redirect()->route('home');
     else
         return view('welcome');
-});
-
+})->name('welcome');;
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+// Modificamos las rutas por defecto(vendor/laravel/ui/src/AuthRouteMethods.php) para que al entrar a login o register envíe a welcome
+Route::get('login', function () {
+    return redirect()->route('welcome');
+})->name('login');
+
+Route::get('register', function () {
+    return redirect()->route('welcome');
+})->name('register');
 
 Route::get('/logout', function () {
     Auth::logout();

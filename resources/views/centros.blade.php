@@ -134,4 +134,5 @@ Centros
     </div>
     @endsection
 
-    @vite(['resources/js/centros/centros.js'])
+@vite(['resources/js/centros/centros.js'])
+@vite(['resources/js/filtros.js'])

@@ -1,0 +1,21 @@
+import axios from "axios";
+
+import { ENDPOINT_CENTRO_UPDATE_BBDD,ENDPOINT_CENTRO_GET_BBDD, ENDPOINT_CENTRO_DELETE_BBDD} from "./apiConst";
+
+function DELETE_CENTRO_AXIOS() {
+    return axios(ENDPOINT_CENTRO_DELETE_BBDD);
+}
+
+function GET_CENTRO_AXIOS() {
+    return axios(ENDPOINT_CENTRO_GET_BBDD);
+}
+
+function UPDATE_CENTRO_AXIOS() {
+    return axios(ENDPOINT_CENTRO_UPDATE_BBDD);
+}
+
+export {
+    DELETE_CENTRO_AXIOS,
+    GET_CENTRO_AXIOS,
+    UPDATE_CENTRO_AXIOS,
+}

@@ -101,7 +101,7 @@ Centros
                             </div>
                             <div class="right-part -mr-3 truncate">
                                 <button type="button" class="truncate text-sm hover:text-black font-medium py-1 mx-3 rounded"
-                                    id="btn-editar-cita" data-cita-id="{{ $centro['id'] }}" value="{{ $centro['estado'] }}"">
+                                    id="btn-editar-centro" data-centro-id="{{ $centro['id'] }}" value="{{ $centro['estado'] }}"">
                                     <span class="material-icons-round text-slate-400 scale-125 truncate">
                                         edit_note
                                     </span>
@@ -109,10 +109,10 @@ Centros
                             </div>
                         </div>
             
-                        <div class="flex items-center gap-3 mb-1" id="btn-delete-cita" data-cita-id="{{ $centro['id'] }}"
+                        <div class="flex items-center gap-3 mb-1" id="btn-delete-centro" data-centro-id="{{ $centro['id'] }}"
                             data-estado="{{ $centro['estado'] }}">
                             <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Centro {{ $centro['tipo'] }}</span>
-                            @if ($centro['estado'])
+                            @if ($centro['estado']==1)
                                 <span class="material-icons-round text-green-500 scale-150 cursor-pointer">
                                     toggle_on
                                 </span>
@@ -128,3 +128,5 @@ Centros
         </div>
     </div>
     @endsection
+
+    @vite(['resources/js/centros/centros.js'])

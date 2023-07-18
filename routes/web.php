@@ -35,6 +35,10 @@ Route::get('/logout', function () {
 
 // CENTROS
 Route::get('/centros', [CentrosController::class, 'index'])->name('centros');
-Route::post('/sedes', [CentrosController::class, 'store'])->name('centros.store');
+Route::post('/centros', [CentrosController::class, 'store'])->name('centros.store');
+Route::post('/centro/delete', [CentrosController::class, 'delete']);
+//Route::post('/sede/get', [CentrosController::class, 'getSede']);
+//Route::post('/sede/update', [CentrosController::class, 'updateSede']);
+
     
 

@@ -11,7 +11,7 @@ class CentrosController extends Controller
     public function index()
     {
         try {
-            $centros = Centro::select('id', 'nombre', 'direccion', 'tipo')->get();
+            $centros = Centro::select('id', 'nombre', 'direccion', 'tipo', 'estado')->get();
             return view('centros', ['centros' => $centros]);
         } catch (\Throwable $th) {
             return redirect()->route('centros')->with('error', 'No se pudieron obtener los centros: ' . $th->getMessage());
@@ -54,6 +54,29 @@ class CentrosController extends Controller
             return redirect()->route('centros')->with('success', 'Centro creado correctamente.');
         } catch (\Throwable $th) {
             return redirect()->route('centros')->with('error', 'No se pudo crear el centro: ' . $th->getMessage());
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $centro = centro::where('id', $request->id)->first();
+
+            if ($request->estado == 0) {
+                $centro->estado = 1;
+            } else {
+                $centro->estado = 0;
+            }
+
+            if (!$centro) {
+                return response()->json(['error' => 'No se ha encontrado el centro.'], 404);
+            }
+
+            $centro->save();
+            return response()->json($request);
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'No se ha encontrado el centro.'], 404);
         }
     }
 }

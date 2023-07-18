@@ -8,6 +8,7 @@ export default defineConfig({
                 'resources/sass/app.scss',
                 'resources/js/centros/centros.js',
                 'resources/js/home.js',
+                'resources/js/filtros.js',
                 'resources/js/app.js',
             ],
             refresh: true,

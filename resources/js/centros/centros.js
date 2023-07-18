@@ -1,6 +1,7 @@
 import { DELETE_CENTRO_BBDD, GET_CENTRO_BBDD, UPDATE_CENTRO_BBDD } from "./axiosTemplate.js";
 import Swal from 'sweetalert2';
 
+// EVENTO EDITAR
 const addEditEvent = (button) => {
     button.addEventListener("click", async (event) => {
         const dataToSend = {
@@ -80,6 +81,7 @@ editButtons.forEach(button => {
     addEditEvent(button);
 });
 
+// EVENTO ELIMINAR
 const addDeleteEvent = (button) => {
     button.addEventListener("click", async (event) => {
         let dataToSend = {};

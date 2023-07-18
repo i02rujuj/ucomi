@@ -48,7 +48,12 @@ Centros
                             <label for="tipo" class="block text-sm text-gray-600 mb-1">
                                 Tipo:
                             </label>
-                            <input id="tipo" name="tipo" type="tipo" value="{{old("tipo")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
+                            
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="tipo" name="tipo" value="{{old("tipo")}}">
+                                <option value="propio">Propio</option>
+                                <option value="adscrito">Adscrito</option>
+                            </select>
+                           
                             @error('tipo')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror

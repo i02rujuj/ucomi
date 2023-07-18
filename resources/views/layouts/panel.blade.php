@@ -22,7 +22,7 @@
                 <div class="flex transition-all duration-200 ease-in-out">
                     <img class="h-12" src="{{ asset('img/logo.png') }}" alt="logo_ucomi" />
                 </div>
-                <button id="mostrar_menu" class="md:hidden mr-5 text-white">
+                <button id="mostrar_menu" class="md:hidden mr-5 text-black">
                     <span class="material-icons-round scale-125">
                         menu
                     </span>

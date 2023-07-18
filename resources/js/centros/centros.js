@@ -12,12 +12,21 @@ const addEditEvent = (button) => {
             const result = await Swal.fire({
                 title: "Editar Centro",
                 html: `
-                    <label>Nombre:</label>
-                    <input type="text"  class="swal2-input centro" value="${response.nombre}" id="nombre">
-                    <label>Direccion:</label>
-                    <input type="text" id="domicilio" class="swal2-input centro" value="${response.direccion}">
-                    <label>Tipo:</label>
-                    <input type="text" id="tipo" class="swal2-input centro" value="${response.tipo}">
+                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
+                        <label class="block text-sm text-gray-600 w-32">Nombre:</label>
+                        <input type="text" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required value="${response.nombre}" id="nombre">
+                    </div>
+                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
+                        <label for="direccion" class="block text-sm text-gray-600 w-32">Direccion:</label>
+                        <input type="text" id="domicilio" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.direccion}">
+                    </div>
+                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
+                        <label for="tipo" class="block text-sm text-gray-600 mb-1 w-32">Tipo:</label>
+                        <select id="tipo" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required value="${response.tipo}">
+                            <option value="propio">Propio</option>
+                            <option value="adscrito">Adscrito</option>
+                        </select>
+                    </div>
                 `,
                 focusConfirm: false,
                 showCancelButton: true,

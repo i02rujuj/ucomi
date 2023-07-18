@@ -33,5 +33,8 @@ Route::get('/logout', function () {
     return redirect('/');
 })->name('logout');
 
+// CENTROS
 Route::get('/centros', [CentrosController::class, 'index'])->name('centros');
+Route::post('/sedes', [CentrosController::class, 'store'])->name('centros.store');
+    
 

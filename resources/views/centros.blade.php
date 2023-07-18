@@ -7,7 +7,19 @@ Centros
     <div class="md:ml-64 lg:ml-64 mt-14">
         <div class="mx-auto p-6">
 
-            <form method="POST" action="" class="bg-white p-8 mb-6 rounded-lg shadow-md">
+            @if (session()->has('success'))
+            <div class="mb-2 py-1 px-4 text-sm font-medium bg-green-100 text-slate-700 rounded" role="alert">
+                {{ session("success") }}
+            </div>
+            @endif
+            
+            @if (session()->has('error'))
+            <div class="my-2 py-1 px-4 text-sm font-medium bg-red-100 text-slate-700 rounded" role="alert">
+                {{ session("error") }}
+            </div>
+            @endif
+
+            <form method="POST" action="{{ route('centros.store') }}" class="bg-white p-8 mb-6 rounded-lg shadow-md">
                 <h2 class="text-gray-600 font-bold mb-2">Añadir nuevo centro</h2>
                 @csrf
                 <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">

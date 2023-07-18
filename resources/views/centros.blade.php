@@ -116,5 +116,3 @@ Centros
         </div>
     </div>
     @endsection
-
-    @vite(['resources/js/centros.js'])

@@ -14,22 +14,23 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $javier = User::factory(User::class)->create([
-            'name' => 'Javier Ruiz Jurado',
-            'email' => 'i02rujuj@uco.es',
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', /* Contraseña: password */
-            'remember_token' => Str::random(10),
-            'estado' => true
-        ]);
+        $javier = new User();
+        $javier->name = 'Javier Ruiz Jurado';
+        $javier->email = 'i02rujuj@uco.es';
+        $javier->email_verified_at = now();
+        $javier->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; /* Contraseña: password */
+        $javier->remember_token = Str::random(10);
+        $javier->estado = true;
+        $javier->save();
 
-        $joseluis = User::factory(User::class)->create([
-            'name' => 'Jose Luis Ávila Jiménez',
-            'email' => 'jlavila@uco.es',
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', /* Contraseña: password */
-            'remember_token' => Str::random(10),
-            'estado' => true
-        ]);
+        $javier = new User();
+        $javier->name = 'Jose Luis Ávila Jiménez';
+        $javier->email = 'jlavila@uco.es';
+        $javier->email_verified_at = now();
+        $javier->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; /* Contraseña: password */
+        $javier->remember_token = Str::random(10);
+        $javier->estado = true;
+        $javier->save();
+
     }
 }

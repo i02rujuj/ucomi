@@ -37,8 +37,8 @@ Route::get('/logout', function () {
 Route::get('/centros', [CentrosController::class, 'index'])->name('centros');
 Route::post('/centros', [CentrosController::class, 'store'])->name('centros.store');
 Route::post('/centro/delete', [CentrosController::class, 'delete']);
-//Route::post('/sede/get', [CentrosController::class, 'getSede']);
-//Route::post('/sede/update', [CentrosController::class, 'updateSede']);
+Route::post('/centro/get', [CentrosController::class, 'get']);
+Route::post('/centro/update', [CentrosController::class, 'update']);
 
     
 

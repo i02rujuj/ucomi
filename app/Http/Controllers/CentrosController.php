@@ -79,4 +79,35 @@ class CentrosController extends Controller
             return response()->json(['error' => 'No se ha encontrado el centro.'], 404);
         }
     }
+
+    public function get(Request $request)
+    {
+        try {
+            $centro = Centro::where('id', $request->id)->first();
+            if (!$centro) {
+                return response()->json(['error' => 'No se ha encontrado el centro.'], 404);
+            }
+            return response()->json($centro);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'No se ha encontrado el centro.'], 404);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            $centro = Centro::where('id', $request->id)->first();
+            if (!$centro) {
+                return response()->json(['error' => 'No se ha encontrado el centro.', 'status' => 404], 404);
+            }
+            $centro->nombre = $request->data['nombre'];
+            $centro->direccion = $request->data['domicilio'];
+            $centro->tipo = $request->data['tipo'];
+            $centro->save();
+            return response()->json(['message' => 'El centro se ha actualizado correctamente.', 'status' => 200], 200);
+            
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'Error al actualizar el centro.', 'status' => 404], 404);
+        }
+    }
 }

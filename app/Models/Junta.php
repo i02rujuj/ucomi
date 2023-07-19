@@ -19,7 +19,7 @@ class Junta extends Model
      //Campos
      protected $fillable = ['idCentro','fechaConstitucion', 'estado'];
 
-     public function centro()
+    public function centro()
     {
         return $this->belongsTo(Centro::class, 'idCentro');
     }

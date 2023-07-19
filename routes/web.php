@@ -3,8 +3,9 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\CentrosController;
 use App\Http\Controllers\JuntasController;
+use App\Http\Controllers\CentrosController;
+use App\Http\Controllers\MiembrosGobiernoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,13 @@ Route::post('/centros', [CentrosController::class, 'store'])->name('centros.stor
 Route::post('/centro/delete', [CentrosController::class, 'delete']);
 Route::post('/centro/get', [CentrosController::class, 'get']);
 Route::post('/centro/update', [CentrosController::class, 'update']);
+
+// MIEMBROS EQUIPO DE GOBIERNO
+Route::get('/miembrosGobierno', [MiembrosGobiernoController::class, 'index'])->name('miembrosGobierno');
+Route::post('/miembrosGobierno', [MiembrosGobiernoController::class, 'store'])->name('miembrosGobierno.store');
+Route::post('/miembroGobierno/delete', [MiembrosGobiernoController::class, 'delete']);
+Route::post('/miembroGobierno/get', [MiembrosGobiernoController::class, 'get']);
+Route::post('/miembroGobierno/update', [MiembrosGobiernoController::class, 'update']);
 
 // JUNTAS
 Route::get('/juntas', [JuntasController::class, 'index'])->name('juntas');

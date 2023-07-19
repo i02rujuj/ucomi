@@ -6,23 +6,18 @@ use App\Models\MiembroGobierno;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Centro extends Model
+class RepresentacionGobierno extends Model
 {
     use HasFactory;
 
     // Tabla
-    protected $table = 'centros'; 
+    protected $table = 'representaciones_gobierno'; 
 
     //Primary Key
     protected $primaryKey = 'id';
     
     //Campos
-    protected $fillable = ['nombre','direccion', 'tipo', 'estado'];
-
-    public function juntas()
-    {
-        return $this->hasMany(Junta::class, 'id');
-    }
+    protected $fillable = ['nombre', 'estado'];
 
     public function miembrosGobierno()
     {

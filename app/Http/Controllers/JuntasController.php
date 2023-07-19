@@ -13,7 +13,7 @@ class JuntasController extends Controller
     {
         try {
             $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'estado')->get();
-            $centros = Centro::select('id', 'nombre', 'direccion', 'tipo', 'estado')->get();
+            $centros = Centro::select('id', 'nombre')->get();
             return view('juntas', ['juntas' => $juntas, 'centros' => $centros,]);
         } catch (\Throwable $th) {
             return redirect()->route('juntas')->with('error', 'No se pudieron obtener las juntas: ' . $th->getMessage());
@@ -30,7 +30,7 @@ class JuntasController extends Controller
                 // Mensajes error idCentro
                 'idCentro.required' => 'El centro es obligatorio.',
                 'idCentro.integer' => 'El centro debe ser un entero.',
-                'idCentro.unique' => 'El centro seleccionado no existe.',
+                'idCentro.exists' => 'El centro seleccionado no existe.',
                 // Mensajes error fechaConstitucion
                 'fechaConstitucion.required' => 'La fecha de constitución es obligatoria.',
                 'fechaConstitucion.date' => 'La fecha de constitución debe tener el formato fecha DD/MM/YYYY.',

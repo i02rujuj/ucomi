@@ -93,7 +93,7 @@ Centros
                                     &nbsp;
                                     <h2 class="text-lg font-bold -mb-1 truncate">{{ $centro['nombre'] }}</h2>
                                 </div>
-                                <h3 class="flex text-xs text-slate-400 font-medium mb-1 truncate items-center gap-1">
+                                <div class="flex text-xs text-slate-400 font-medium mb-1 truncate items-center gap-1">
                                     <div class="truncate flex items-center">
                                         <span class="material-icons-round scale-75">
                                             place
@@ -102,7 +102,7 @@ Centros
                                             {{ $centro->direccion }}
                                         </div>
                                     </div>
-                                </h3>
+                                </div>
                             </div>
                             <div class="right-part -mr-3 truncate">
                                 <button type="button" class="truncate text-sm hover:text-black font-medium py-1 mx-3 rounded"

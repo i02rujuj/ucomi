@@ -1,0 +1,70 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use App\Models\Centro;
+use App\Models\MiembroGobierno;
+use Illuminate\Http\Request;
+use App\Models\RepresentacionGobierno;
+use Illuminate\Support\Facades\Validator;
+
+class MiembrosGobiernoController extends Controller
+{
+    public function index()
+    {
+        try {
+            $centros = Centro::select('id', 'nombre')->get();
+            $users = User::select('id', 'name')->get();
+            $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->get();
+            $miembrosGobierno = MiembroGobierno::all();
+            return view('miembrosGobierno', ['centros' => $centros, 'users' => $users, 'representacionesGobierno' => $representacionesGobierno, 'miembrosGobierno' => $miembrosGobierno]);
+        } catch (\Throwable $th) {
+            return redirect()->route('miembrosGobierno')->with('error', 'No se pudieron obtener los centros/usuarios | Miembro de Gobierno: ' . $th->getMessage());
+        }
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(),[
+                'idCentro' => 'required|integer|exists:App\Models\Centro,id',
+                'idUsuario' => 'required|integer|exists:App\Models\User,id',
+                'fechaInicio' => 'required|date',
+                'idRepresentacion' => 'required|integer|exists:App\Models\RepresentacionGobierno,id',
+            ], [
+                // Mensajes error idCentro
+                'idCentro.required' => 'El centro es obligatorio.',
+                'idCentro.integer' => 'El centro debe ser un entero.',
+                'idCentro.exists' => 'El centro seleccionado no existe.',
+                // Mensajes error idUsuario
+                'idUsuario.required' => 'El usuario es obligatorio.',
+                'idUsuario.integer' => 'El usuario debe ser un entero.',
+                'idUsuario.exists' => 'El usuario seleccionado no existe.',
+                // Mensajes error fechaInicio
+                'fechaInicio.required' => 'La fecha de inicio es obligatoria.',
+                'fechaInicio.date' => 'La fecha de inicio debe tener el formato fecha DD/MM/YYYY.',
+                // Mensajes error idRepresentacion
+                'idRepresentacion.required' => 'La representación es obligatoria.',
+                'idRepresentacion.integer' => 'La representación debe ser un entero.',
+                'idRepresentacion.exists' => 'La representación seleccionada no existe.',
+            ]);
+
+            if ($validator->fails()) {
+                // Si la validación falla, redirige de vuelta con los errores
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            $miembroGobierno = MiembroGobierno::create([
+                "idCentro" => $request->idCentro,
+                "idUsuario" => $request->idUsuario,
+                "fechaInicio" => $request->fechaInicio,
+                "idRepresentacion" => $request->idRepresentacion,
+                'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
+            ]);
+            return redirect()->route('miembrosGobierno')->with('success', 'Miembro del Equipo de Gobierno creado correctamente.');
+        } catch (\Throwable $th) {
+            return redirect()->route('miembrosGobierno')->with('error', 'No se pudo crear el miembro del equipo de gobierno: ' . $th->getMessage());
+        }
+    }
+}

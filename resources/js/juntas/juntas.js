@@ -9,11 +9,16 @@ selectJuntas.addEventListener("change", async (event) => {
     const nombreSecretario = document.getElementById("nombreSecretario");
     const errorDirector = document.getElementById("errorDirector");
     const errorSecretario = document.getElementById("errorSecretario");
+    const errorDirectorFront = document.getElementById("errorDirectorFront");
+    const errorSecretarioFront = document.getElementById("errorSecretarioFront");
 
     if(errorDirector)
         errorDirector.innerHTML="";
     if(errorSecretario)
         errorSecretario.innerHTML="";
+
+    errorDirectorFront.innerHTML="";
+    errorSecretarioFront.innerHTML="";
 
     $.ajax({
         type: "POST",
@@ -25,14 +30,15 @@ selectJuntas.addEventListener("change", async (event) => {
         success: function (response) {
             //director.value=response['director']?.id ?? "No existe directivo activo para el centro seleccionado";
             //secretario.value=response['secretario']?.id ?? "---";
-console.log(response);
+
             if(response['director'] && Object.hasOwn(response['director'], 'id')){
                 idDirector.value=response['director'].id;
                 nombreDirector.value=response['director'].name;
             }
             else{
                 idDirector.value="";
-                nombreDirector.value ='No existe actualmente director/decano para el centro seleccionado';
+                nombreDirector.value ="";
+                errorDirectorFront.innerHTML="No existe actualmente director/decano para el centro seleccionado";
             }
 
             if(response['secretario'] && Object.hasOwn(response['secretario'], 'id')){
@@ -41,7 +47,8 @@ console.log(response);
             }
             else{
                 idSecretario.value="";
-                nombreSecretario.value ='No existe actualmente secretario para el centro seleccionado';
+                nombreSecretario.value = "";
+                errorSecretarioFront.innerHTML = 'No existe actualmente secretario para el centro seleccionado';
             }
         },
         error: function (errorMessage) {

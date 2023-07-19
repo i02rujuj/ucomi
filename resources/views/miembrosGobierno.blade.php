@@ -31,8 +31,7 @@ Equipo de Gobierno
                             
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idCentro" name="idCentro" value="{{old("idCentro")}}">
                                 @foreach ($centros as $centro)
-                                    <option value="{{ $centro['id'] }}">{{ $centro['nombre'] }}
-                                    </option>
+                                    <option value="{{ $centro['id'] }}">{{ $centro['nombre'] }}</option>
                                 @endforeach
                             </select>
                         
@@ -48,8 +47,7 @@ Equipo de Gobierno
                             
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idRepresentacion" name="idRepresentacion" value="{{old("idRepresentacion")}}">
                                 @foreach ($representacionesGobierno as $rep)
-                                    <option value="{{ $rep['id'] }}">{{ $rep['nombre'] }}
-                                    </option>
+                                    <option value="{{ $rep['id'] }}">{{ $rep['nombre'] }}</option>
                                 @endforeach
                             </select>
                         
@@ -66,8 +64,7 @@ Equipo de Gobierno
                             
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idUsuario" name="idUsuario" value="{{old("idUsuario")}}">
                                 @foreach ($users as $user)
-                                    <option value="{{ $user['id'] }}">{{ $user['name'] }}
-                                    </option>
+                                    <option value="{{ $user['id'] }}">{{ $user['name'] }}</option>
                                 @endforeach
                             </select>
                         
@@ -98,14 +95,36 @@ Equipo de Gobierno
 
             <button class="accordion w-full text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">Filtros</button>
             <div class="panel">
-                <div class="mt-4 bg-white px-6 py-4 rounded-lg shadow-md hidden">
-                    <input type="text" id="search-input" class="w-full  outline-none bg-white px-2 rounded form-input" placeholder="Buscar..." value="{{ request('miembrosGobierno') }}">
-                </div>
-
                 <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-2">
 
-                    <div class="left-side">
-                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-80">
+                    <div class="left-side w-full"> 
+
+                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-full">
+                            <span class="block text-sm text-gray-600 mb-1">
+                                Texto: 
+                            </span>
+                            <input type="text" id="search-input" class="text-sm text-gray-600 border py-1 w-full outline-none bg-white px-2 rounded form-input" placeholder="Buscar..." value="{{ request('miembroGobierno') }}">
+                        </div>
+                    </div>
+
+                    <div class="left-side w-full">
+                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-72">
+                            <span class="block text-sm text-gray-600 mb-1">
+                                Estado:
+                            </span>
+                        
+                            <button class="truncate  md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-habilitado">
+                                Habilitado
+                            </button>
+                            <button class="truncate  md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-deshabilitado">
+                                Deshabilitado
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="right-side w-full"> 
+
+                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-full">
                             <label for="search-idCentro" class="block text-sm text-gray-600 mb-1">
                                 Centro:
                             </label>
@@ -113,15 +132,14 @@ Equipo de Gobierno
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" id="search-idCentro" name="search-idCentro">
                                 <option value="">-----</option>
                                 @foreach ($centros as $centro)
-                                    <option value="{{ $centro['id'] }}">{{ $centro['nombre'] }}
-                                    </option>
+                                    <option value="{{ $centro['id'] }}">{{ $centro['nombre'] }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
 
-                    <div class="left-side">
-                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-80">
+                    <div class="right-side w-full">
+                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-full">
                             <label for="search-idUsuario" class="block text-sm text-gray-600 mb-1">
                                 Usuario:
                             </label>
@@ -129,42 +147,25 @@ Equipo de Gobierno
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" id="search-idUsuario" name="search-idUsuario">
                                 <option value="">-----</option>
                                 @foreach ($users as $user)
-                                    <option value="{{ $user['id'] }}">{{ $user['name'] }}
-                                    </option>
+                                    <option value="{{ $user['id'] }}">{{ $user['name'] }}</option>
                                 @endforeach
                             </select>            
                         </div>
                     </div>
-
-                    <div class="left-side">
-                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-80">
+                    <div class="right-side w-full">
+                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-full">
 
                             <label for="idRepresentacion" class="block text-sm text-gray-600 mb-1">
                                 Representación:
                             </label>
                             
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idRepresentacion" name="idRepresentacion" value="{{old("idRepresentacion")}}">
+                                <option value="">-----</option>
                                 @foreach ($representacionesGobierno as $rep)
-                                    <option value="{{ $rep['id'] }}">{{ $rep['nombre'] }}
-                                    </option>
+                                    <option value="{{ $rep['id'] }}">{{ $rep['nombre'] }}</option>
                                 @endforeach
                             </select>
-                        </div>
-                    </div>
-
-                    <div class="left-side">
-                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-80">
-                            <span class="block text-sm text-gray-600 mb-1">
-                                Estado:
-                            </span>
-                        
-                            <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-habilitado">
-                                Habilitado
-                            </button>
-                            <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-deshabilitado">
-                                Deshabilitado
-                            </button>
-                        </div>
+                        </div>  
                     </div>
                 </div>
             </div>

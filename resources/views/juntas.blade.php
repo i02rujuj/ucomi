@@ -29,7 +29,7 @@ Juntas
                                 Centro que coordina la junta:
                             </label>
                             
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idCentro" name="idCentro" value="{{old("idCentro")}}">
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idCentro" name="idCentro">
                                 <option value="">-----</option>
                                 @foreach ($centros as $centro)
                                     <option value="{{ $centro['id'] }}">{{ $centro['nombre'] }}</option>
@@ -58,10 +58,11 @@ Juntas
                                 <span class="text-xs text-gray-600 mb-1">(Miembro nato del Equipo de Gobierno del centro)</span>
                             </label>
                             <input type="hidden" id="idDirector" name="idDirector" required/>
-                            <input id="nombreDirector" name="nombreDirector" type="text" class="text-sm text-gray-600 border bg-gray-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required readonly/>
+                            <input id="nombreDirector" name="nombreDirector" type="text" class="readonly text-sm text-gray-600 border bg-gray-50 rounded-md px-2 py-1 w-full outline-none " autocomplete="off" required/>
                             @error('idDirector')
                                 <p id="errorDirector" class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
+                            <p id="errorDirectorFront" class="text-red-500 text-xs mt-1"></p>
                         </div>
 
                         <div class="mb-2">
@@ -70,10 +71,11 @@ Juntas
                                 <span class="text-xs text-gray-600 mb-1">(Miembro nato del Equipo de Gobierno del centro)</span> 
                             </label>
                             <input type="hidden" id="idSecretario" name="idSecretario" required/>
-                            <input id="nombreSecretario" name="nombreSecretario" type="text" class="text-sm text-gray-600 border bg-gray-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required readonly/>
+                            <input  id="nombreSecretario" name="nombreSecretario" type="text" class="readonly text-sm text-gray-600 border bg-gray-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
                             @error('idSecretario')
                                 <p id="errorSecretario" class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
+                            <p id="errorSecretarioFront" class="text-red-500 text-xs mt-1"></p>
                         </div>
                     </div>
                 </div>
@@ -86,17 +88,34 @@ Juntas
 
 <!----------------------------- START FILTROS ---------------------------------->
 
-            <div class="mt-4 bg-white px-6 py-4 rounded-lg shadow-md">
-                <input type="text" id="search-input" class="w-full  outline-none bg-white px-2 rounded form-input" placeholder="Buscar..." value="{{ request('junta') }}">
-            </div>
+            <button class="accordion w-full text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">Filtros</button>
+            <div class="panel">
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap gap-2">
 
-            <div class="flex gap-2 mt-4">
-                <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-habilitado">
-                    Habilitado
-                </button>
-                <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-deshabilitado">
-                    Deshabilitado
-                </button>
+                    <div class="left-side w-full">
+                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md">
+                            <span class="block text-sm text-gray-600 mb-1">
+                                Texto:
+                            </span>
+                            <input type="text" id="search-input" class="text-sm text-gray-600 border py-1 w-full outline-none bg-white px-2 rounded form-input" placeholder="Buscar..." value="{{ request('junta') }}">
+                        </div>
+                    </div>
+
+                    <div class="left-side w-full">
+                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-72">
+                            <span class="block text-sm text-gray-600 mb-1">
+                                Estado:
+                            </span>
+                        
+                            <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-habilitado">
+                                Habilitado
+                            </button>
+                            <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-deshabilitado">
+                                Deshabilitado
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 <!----------------------------- END FILTROS ---------------------------------->

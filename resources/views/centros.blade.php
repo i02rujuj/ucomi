@@ -67,18 +67,43 @@ Centros
 
             <hr className="my-6 border-t border-gray-300" />
 
-            <div class="mt-4 bg-white px-6 py-4 rounded-lg shadow-md">
-                <input type="text" id="search-input" class="w-full  outline-none bg-white px-2 rounded form-input" placeholder="Buscar..." value="{{ request('centro') }}">
+<!----------------------------- START FILTROS ---------------------------------->
+
+            <button class="accordion w-full text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">Filtros</button>
+            <div class="panel">
+
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-2">
+
+                    <div class="left-side w-full"> 
+
+                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-full">
+                            <span class="block text-sm text-gray-600 mb-1">
+                                Texto: 
+                            </span>
+                            <input type="text" id="search-input" class="text-sm text-gray-600 border py-1 w-full outline-none bg-white px-2 rounded form-input" placeholder="Buscar..." value="{{ request('centro') }}">
+                        </div>
+                    </div>
+
+                    <div class="right-side w-full">
+                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-72">
+                            <span class="block text-sm text-gray-600 mb-1">
+                                Estado:
+                            </span>
+                        
+                            <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-habilitado">
+                                Habilitado
+                            </button>
+                            <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-deshabilitado">
+                                Deshabilitado
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="flex gap-2 mt-4">
-                <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-habilitado">
-                    Habilitado
-                </button>
-                <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-deshabilitado">
-                    Deshabilitado
-                </button>
-            </div>
+<!----------------------------- END FILTROS ---------------------------------->
+
+<!----------------------------- START LISTADOS ---------------------------------->
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                 @foreach ($centros as $centro)
@@ -130,6 +155,9 @@ Centros
                     </div>
                 @endforeach
             </div>
+
+<!----------------------------- END LISTADOS ---------------------------------->
+
         </div>
     </div>
     @endsection

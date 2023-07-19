@@ -61,7 +61,7 @@
                                 groups_3
                             </span>
                             &nbsp;
-                            Equipo Gobierno
+                            Miembros Gobierno
                         </a>
                     </li>
 

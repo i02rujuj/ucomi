@@ -31,7 +31,7 @@ class MiembrosGobiernoController extends Controller
             $validator = Validator::make($request->all(),[
                 'idCentro' => 'required|integer|exists:App\Models\Centro,id',
                 'idUsuario' => 'required|integer|exists:App\Models\User,id',
-                'fechaInicio' => 'required|date',
+                'fechaTomaPosesion' => 'required|date',
                 'idRepresentacion' => 'required|integer|exists:App\Models\RepresentacionGobierno,id',
             ], [
                 // Mensajes error idCentro
@@ -43,8 +43,8 @@ class MiembrosGobiernoController extends Controller
                 'idUsuario.integer' => 'El usuario debe ser un entero.',
                 'idUsuario.exists' => 'El usuario seleccionado no existe.',
                 // Mensajes error fechaInicio
-                'fechaInicio.required' => 'La fecha de inicio es obligatoria.',
-                'fechaInicio.date' => 'La fecha de inicio debe tener el formato fecha DD/MM/YYYY.',
+                'fechaTomaPosesion.required' => 'La fecha de inicio es obligatoria.',
+                'fechaTomaPosesion.date' => 'La fecha de inicio debe tener el formato fecha DD/MM/YYYY.',
                 // Mensajes error idRepresentacion
                 'idRepresentacion.required' => 'La representación es obligatoria.',
                 'idRepresentacion.integer' => 'La representación debe ser un entero.',
@@ -59,7 +59,7 @@ class MiembrosGobiernoController extends Controller
             $miembroGobierno = MiembroGobierno::create([
                 "idCentro" => $request->idCentro,
                 "idUsuario" => $request->idUsuario,
-                "fechaInicio" => $request->fechaInicio,
+                "fechaTomaPosesion" => $request->fechaInicio,
                 "idRepresentacion" => $request->idRepresentacion,
                 'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
             ]);
@@ -74,14 +74,14 @@ class MiembrosGobiernoController extends Controller
         try {
             // Falta filtrar entre fechas y estado
             $director = DB::table('miembros_gobierno')
-                ->join('users', 'miembros_gobierno.id', '=', 'users.id')
+                ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                 ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
                 ->whereIn('miembros_gobierno.idRepresentacion', [1, 2])
                 ->select('users.id', 'users.name')
                 ->first();
 
             $secretario = DB::table('miembros_gobierno')
-                ->join('users', 'miembros_gobierno.id', '=', 'users.id')
+                ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                 ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
                 ->whereIn('miembros_gobierno.idRepresentacion', [3])
                 ->select('users.id', 'users.name')

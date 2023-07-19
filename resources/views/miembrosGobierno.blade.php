@@ -20,7 +20,7 @@ Equipo de Gobierno
             @endif
 
             <form method="POST" action="{{ route('miembrosGobierno.store') }}" class="bg-white p-8 mb-6 rounded-lg shadow-md">
-                <h2 class="text-gray-600 font-bold mb-2">Añadir nuevo miembro</h2>
+                <h2 class="text-gray-600 font-bold mb-2">Añadir nuevo miembro de Gobierno</h2>
                 @csrf
                 <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">
                     <div class="left-side w-full">
@@ -35,7 +35,7 @@ Equipo de Gobierno
                                     </option>
                                 @endforeach
                             </select>
-                           
+                        
                             @error('idCentro')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
@@ -52,7 +52,7 @@ Equipo de Gobierno
                                     </option>
                                 @endforeach
                             </select>
-                           
+                        
                             @error('idRepresentacion')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
@@ -70,18 +70,18 @@ Equipo de Gobierno
                                     </option>
                                 @endforeach
                             </select>
-                           
+                        
                             @error('idUsuario')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div class="mb-2">
-                            <label for="fechaInicio" class="block text-sm text-gray-600 mb-1">
+                            <label for="fechaTomaPosesion" class="block text-sm text-gray-600 mb-1">
                                 Fecha de Inicio:
                             </label>
-                            <input id="fechaInicio" name="fechaInicio" type="date" value="{{old("fechaInicio")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
-                            @error('fechaInicio')
+                            <input id="fechaTomaPosesion" name="fechaTomaPosesion" type="date" value="{{old("fechaTomaPosesion")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
+                            @error('fechaTomaPosesion')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
@@ -91,22 +91,84 @@ Equipo de Gobierno
                     Añadir miembro
                 </button>
             </form>
-
+            
             <hr className="my-6 border-t border-gray-300" />
 
 <!----------------------------- START FILTROS ---------------------------------->
-            <div class="mt-4 bg-white px-6 py-4 rounded-lg shadow-md">
-                <input type="text" id="search-input" class="w-full  outline-none bg-white px-2 rounded form-input" placeholder="Buscar..." value="{{ request('miembrosGobierno') }}">
-            </div>
 
-            <div class="flex gap-2 mt-4">
-                <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-habilitado">
-                    Habilitado
-                </button>
-                <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-deshabilitado">
-                    Deshabilitado
-                </button>
+            <button class="accordion w-full text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">Filtros</button>
+            <div class="panel">
+                <div class="mt-4 bg-white px-6 py-4 rounded-lg shadow-md hidden">
+                    <input type="text" id="search-input" class="w-full  outline-none bg-white px-2 rounded form-input" placeholder="Buscar..." value="{{ request('miembrosGobierno') }}">
+                </div>
+
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-2">
+
+                    <div class="left-side">
+                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-80">
+                            <label for="search-idCentro" class="block text-sm text-gray-600 mb-1">
+                                Centro:
+                            </label>
+                            
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" id="search-idCentro" name="search-idCentro">
+                                <option value="">-----</option>
+                                @foreach ($centros as $centro)
+                                    <option value="{{ $centro['id'] }}">{{ $centro['nombre'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="left-side">
+                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-80">
+                            <label for="search-idUsuario" class="block text-sm text-gray-600 mb-1">
+                                Usuario:
+                            </label>
+                            
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" id="search-idUsuario" name="search-idUsuario">
+                                <option value="">-----</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user['id'] }}">{{ $user['name'] }}
+                                    </option>
+                                @endforeach
+                            </select>            
+                        </div>
+                    </div>
+
+                    <div class="left-side">
+                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-80">
+
+                            <label for="idRepresentacion" class="block text-sm text-gray-600 mb-1">
+                                Representación:
+                            </label>
+                            
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idRepresentacion" name="idRepresentacion" value="{{old("idRepresentacion")}}">
+                                @foreach ($representacionesGobierno as $rep)
+                                    <option value="{{ $rep['id'] }}">{{ $rep['nombre'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="left-side">
+                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-80">
+                            <span class="block text-sm text-gray-600 mb-1">
+                                Estado:
+                            </span>
+                        
+                            <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-habilitado">
+                                Habilitado
+                            </button>
+                            <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-deshabilitado">
+                                Deshabilitado
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
+ 
 <!----------------------------- END FILTROS ---------------------------------->
 
 <!----------------------------- START LISTADO ---------------------------------->
@@ -126,23 +188,30 @@ Equipo de Gobierno
                                 </div>
                                 <div class="flex items-center mb-1">
                                     <span class="material-icons-round scale-75">
-                                        psychology
+                                        lan
                                     </span>
                                     &nbsp;
-                                    <h2 class="text-lg mb-1 truncate">{{ $miembro->representacion->nombre }}</h2>
+                                    <h2 class="text-sm mb-1 truncate">{{ $miembro->representacion->nombre }}</h2>
+                                </div>
+                                <div class="flex items-center mb-1">
+                                    <span class="material-icons-round scale-75">
+                                        school
+                                    </span>
+                                    &nbsp;
+                                    <h2 class="text-sm mb-1 truncate">{{ $miembro->centro->nombre }}</h2>
                                 </div>
                                 <div class="flex text-xs text-slate-400 font-medium mb-1 truncate items-center gap-1">
                                     <div class="truncate flex items-center">
                                         <span class="material-icons-round scale-75">
                                             event
                                         </span>
-                                        <div class="fechaInicio truncate">
-                                            Inicio: {{ $miembro->fechaInicio }} | 
+                                        <div class="fechaTomaPosesion truncate">
+                                            Toma posesión: {{ $miembro->fechaTomaPosesion }} | 
                                             
-                                            @empty ($miembro->fechaFin)
+                                            @empty ($miembro->fechaCese)
                                                 Actualidad
                                             @else
-                                                Fin: {{ $miembro->fechaFin }}
+                                                Cese: {{ $miembro->fechaCese }}
                                             @endempty
                                         </div>
                                     </div>
@@ -160,7 +229,7 @@ Equipo de Gobierno
 
                         <div class="flex items-center gap-3 mb-1" id="btn-delete-junta" data-miembro-id="{{ $miembro['id'] }}"
                             data-estado="{{ $miembro['estado'] }}">
-                            <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Miembro Gobierno</span>
+                            <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Miembro Equipo Gobierno</span>
                             @if ($miembro['estado']==1)
                                 <span class="material-icons-round text-green-500 scale-150 cursor-pointer">
                                     toggle_on

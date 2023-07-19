@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('idCentro')->unique;
             $table->unsignedBigInteger('idUsuario')->unique;
-            $table->date('fechaInicio');
-            $table->date('fechaFin')->nullable();
+            $table->date('fechaTomaPosesion');
+            $table->date('fechaCese')->nullable();
             $table->unsignedBigInteger('idRepresentacion');
             $table->boolean('estado');
             $table->timestamps();

@@ -25,7 +25,7 @@ selectJuntas.addEventListener("change", async (event) => {
         success: function (response) {
             //director.value=response['director']?.id ?? "No existe directivo activo para el centro seleccionado";
             //secretario.value=response['secretario']?.id ?? "---";
-
+console.log(response);
             if(response['director'] && Object.hasOwn(response['director'], 'id')){
                 idDirector.value=response['director'].id;
                 nombreDirector.value=response['director'].name;

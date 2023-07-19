@@ -30,7 +30,7 @@ Juntas
                             </label>
                             
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idCentro" name="idCentro" value="{{old("idCentro")}}">
-                                <option value="---"></option>
+                                <option value="">-----</option>
                                 @foreach ($centros as $centro)
                                     <option value="{{ $centro['id'] }}">{{ $centro['nombre'] }}</option>
                                 @endforeach

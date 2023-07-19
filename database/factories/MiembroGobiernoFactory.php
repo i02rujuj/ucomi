@@ -22,8 +22,8 @@ class MiembroGobiernoFactory extends Factory
         return [
             'idCentro' => Centro::pluck('id')->random(),
             'idUsuario' => User::pluck('id')->random(),
-            'fechaInicio' => now(),
-            'fechaFin' => null, 
+            'fechaTomaPosesion' => now(),
+            'fechaCese' => null, 
             'idRepresentacion' => RepresentacionGobierno::pluck('id')->random(),
             'estado' => true,
         ];

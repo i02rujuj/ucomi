@@ -26,13 +26,13 @@ Juntas
                     <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="idCentro" class="block text-sm text-gray-600 mb-1">
-                                Centro que representa la junta:
+                                Centro que coordina la junta:
                             </label>
                             
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idCentro" name="idCentro" value="{{old("idCentro")}}">
+                                <option value="---"></option>
                                 @foreach ($centros as $centro)
-                                    <option value="{{ $centro['id'] }}">{{ $centro['nombre'] }}
-                                    </option>
+                                    <option value="{{ $centro['id'] }}">{{ $centro['nombre'] }}</option>
                                 @endforeach
                             </select>
                            
@@ -40,14 +40,36 @@ Juntas
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
-                    </div>
-                    <div class="right-side w-full">
+
                         <div class="mb-2">
                             <label for="fechaConstitucion" class="block text-sm text-gray-600 mb-1">
-                                Fecha de Constitucion:
+                                Fecha de Constitución:
                             </label>
                             <input id="fechaConstitucion" name="fechaConstitucion" type="date" value="{{old("fechaConstitucion")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
                             @error('fechaConstitucion')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="right-side w-full">
+                        <div class="mb-2">
+                            <label for="director" class="block text-sm text-gray-600 mb-1">
+                                Director/Decano 
+                                <span class="text-xs text-gray-600 mb-1">(Miembro nato del Equipo de Gobierno del centro)</span>
+                            </label>
+                            <input id="director" name="director" type="text" class="text-sm text-gray-600 border bg-red-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required readonly/>
+                            @error('director')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="secretario" class="block text-sm text-gray-600 mb-1">
+                                Secretario/a
+                                <span class="text-xs text-gray-600 mb-1">(Miembro nato del Equipo de Gobierno del centro)</span> 
+                            </label>
+                            <input id="secretario" name="secretario" type="text" class="text-sm text-gray-600 border bg-red-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required readonly/>
+                            @error('secretario')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>

@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use Carbon\Carbon;
 use App\Models\Centro;
 use App\Models\RepresentacionGobierno;
 use App\Models\User;

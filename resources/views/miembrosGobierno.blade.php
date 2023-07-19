@@ -26,7 +26,7 @@ Equipo de Gobierno
                     <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="idCentro" class="block text-sm text-gray-600 mb-1">
-                                Centro a gestionar:
+                                Centro a representar:
                             </label>
                             
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idCentro" name="idCentro" value="{{old("idCentro")}}">
@@ -43,7 +43,7 @@ Equipo de Gobierno
 
                         <div class="mb-2">
                             <label for="idRepresentacion" class="block text-sm text-gray-600 mb-1">
-                                Representación a ocupar:
+                                Representación:
                             </label>
                             
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idRepresentacion" name="idRepresentacion" value="{{old("idRepresentacion")}}">
@@ -125,11 +125,11 @@ Equipo de Gobierno
                                     <h2 class="text-lg font-bold -mb-1 truncate">{{ $miembro->usuario->name }}</h2>
                                 </div>
                                 <div class="flex items-center mb-1">
-                                    <span class="material-icons-round mt-1 scale-75">
+                                    <span class="material-icons-round scale-75">
                                         psychology
                                     </span>
                                     &nbsp;
-                                    <h4 class="text-lg font-bold -mb-1 truncate">{{ $miembro->representacion->nombre }}</h4>
+                                    <h2 class="text-lg mb-1 truncate">{{ $miembro->representacion->nombre }}</h2>
                                 </div>
                                 <div class="flex text-xs text-slate-400 font-medium mb-1 truncate items-center gap-1">
                                     <div class="truncate flex items-center">

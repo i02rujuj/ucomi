@@ -1,7 +1,5 @@
 // Funciones reutilizables que no dependan de un archivo específico
 
-import $ from 'jquery';
-
 // Readonly and required
 $(".readonly").on('keydown paste focus mousedown', function(e){
     if(e.keyCode != 9) // ignore tab
@@ -9,7 +7,6 @@ $(".readonly").on('keydown paste focus mousedown', function(e){
 });
 
 /* Responsive Menu */
-
 function toggleMenu() {
     let menu = document.getElementById("menu");
     menu.classList.toggle("-translate-x-full");
@@ -18,3 +15,7 @@ function toggleMenu() {
 }
 
 document.getElementById("mostrar_menu").addEventListener("click", toggleMenu);
+
+export {
+    toggleMenu
+}

@@ -17,4 +17,9 @@ class Centro extends Model
     
     //Campos
     protected $fillable = ['nombre','direccion', 'tipo', 'estado'];
+
+    public function juntas()
+    {
+        return $this->hasMany(Junta::class, 'id');
+    }
 }

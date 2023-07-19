@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CentrosController;
+use App\Http\Controllers\JuntasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +48,13 @@ Route::post('/centros', [CentrosController::class, 'store'])->name('centros.stor
 Route::post('/centro/delete', [CentrosController::class, 'delete']);
 Route::post('/centro/get', [CentrosController::class, 'get']);
 Route::post('/centro/update', [CentrosController::class, 'update']);
+
+// JUNTAS
+Route::get('/juntas', [JuntasController::class, 'index'])->name('juntas');
+Route::post('/juntas', [JuntasController::class, 'store'])->name('juntas.store');
+Route::post('/junta/delete', [JuntasController::class, 'delete']);
+Route::post('/junta/get', [JuntasController::class, 'get']);
+Route::post('/junta/update', [JuntasController::class, 'update']);
 
     
 

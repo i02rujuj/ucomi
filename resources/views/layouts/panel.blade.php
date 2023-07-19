@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>@yield('title')</title>
+    <link rel="icon" type="image/ico" href="{{ asset('img/favicon.ico') }}"/>
 
     <!-- Google Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
@@ -47,10 +48,20 @@
                     <li @class(['mb-1 flex', request()->routeIs('centros') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="{{ route('centros') }}" class="text-gray-600 w-full flex justify-start items-center">
                             <span class="material-icons-round text-slate-600 ml-4 mr-1">
-                                supervisor_account
+                                school
                             </span>
                             &nbsp;
                             Centros
+                        </a>
+                    </li>
+
+                    <li @class(['mb-1 flex', request()->routeIs('juntas') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
+                        <a href="{{ route('juntas') }}" class="text-gray-600 w-full flex justify-start items-center">
+                            <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                                account_balance
+                            </span>
+                            &nbsp;
+                            Juntas
                         </a>
                     </li>
         

@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Centro;
-use App\Models\MiembroGobierno;
 use Illuminate\Http\Request;
+use App\Models\MiembroGobierno;
+use Illuminate\Support\Facades\DB;
 use App\Models\RepresentacionGobierno;
 use Illuminate\Support\Facades\Validator;
 
@@ -66,5 +67,30 @@ class MiembrosGobiernoController extends Controller
         } catch (\Throwable $th) {
             return redirect()->route('miembrosGobierno')->with('error', 'No se pudo crear el miembro del equipo de gobierno: ' . $th->getMessage());
         }
+    }
+
+    public function getDirectivos(Request $request)
+    {
+        try {
+            // Falta filtrar entre fechas y estado
+            $director = DB::table('miembros_gobierno')
+                ->join('users', 'miembros_gobierno.id', '=', 'users.id')
+                ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
+                ->whereIn('miembros_gobierno.idRepresentacion', [1, 2])
+                ->select('users.id', 'users.name')
+                ->first();
+
+            $secretario = DB::table('miembros_gobierno')
+                ->join('users', 'miembros_gobierno.id', '=', 'users.id')
+                ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
+                ->whereIn('miembros_gobierno.idRepresentacion', [3])
+                ->select('users.id', 'users.name')
+                ->first();
+
+            return response()->json(['director'=>$director, 'secretario'=>$secretario]);
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'No se han encontrado directivos para el centro seleccionado.'], 404);
+        }    
     }
 }

@@ -14,7 +14,7 @@ Juntas
             @endif
             
             @if (session()->has('error'))
-            <div class="my-2 py-1 px-4 text-sm font-medium bg-red-100 text-slate-700 rounded" role="alert">
+            <div class="errorMessage my-2 py-1 px-4 text-sm font-medium bg-red-100 text-slate-700 rounded" role="alert">
                 {{ session("error") }}
             </div>
             @endif
@@ -53,24 +53,26 @@ Juntas
                     </div>
                     <div class="right-side w-full">
                         <div class="mb-2">
-                            <label for="director" class="block text-sm text-gray-600 mb-1">
+                            <label for="nombreDirector" class="block text-sm text-gray-600 mb-1">
                                 Director/Decano 
                                 <span class="text-xs text-gray-600 mb-1">(Miembro nato del Equipo de Gobierno del centro)</span>
                             </label>
-                            <input id="director" name="director" type="text" class="text-sm text-gray-600 border bg-red-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required readonly/>
-                            @error('director')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            <input type="hidden" id="idDirector" name="idDirector" required/>
+                            <input id="nombreDirector" name="nombreDirector" type="text" class="text-sm text-gray-600 border bg-gray-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required readonly/>
+                            @error('idDirector')
+                                <p id="errorDirector" class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div class="mb-2">
-                            <label for="secretario" class="block text-sm text-gray-600 mb-1">
+                            <label for="nombreSecretario" class="block text-sm text-gray-600 mb-1">
                                 Secretario/a
                                 <span class="text-xs text-gray-600 mb-1">(Miembro nato del Equipo de Gobierno del centro)</span> 
                             </label>
-                            <input id="secretario" name="secretario" type="text" class="text-sm text-gray-600 border bg-red-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required readonly/>
-                            @error('secretario')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            <input type="hidden" id="idSecretario" name="idSecretario" required/>
+                            <input id="nombreSecretario" name="nombreSecretario" type="text" class="text-sm text-gray-600 border bg-gray-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required readonly/>
+                            @error('idSecretario')
+                                <p id="errorSecretario" class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>

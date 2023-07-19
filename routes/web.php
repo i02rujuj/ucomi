@@ -56,6 +56,7 @@ Route::post('/miembrosGobierno', [MiembrosGobiernoController::class, 'store'])->
 Route::post('/miembroGobierno/delete', [MiembrosGobiernoController::class, 'delete']);
 Route::post('/miembroGobierno/get', [MiembrosGobiernoController::class, 'get']);
 Route::post('/miembroGobierno/update', [MiembrosGobiernoController::class, 'update']);
+Route::post('/miembroGobierno/getDirectivos', [MiembrosGobiernoController::class, 'getDirectivos']);
 
 // JUNTAS
 Route::get('/juntas', [JuntasController::class, 'index'])->name('juntas');

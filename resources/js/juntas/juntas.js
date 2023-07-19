@@ -38,7 +38,7 @@ selectJuntas.addEventListener("change", async (event) => {
             else{
                 idDirector.value="";
                 nombreDirector.value ="";
-                errorDirectorFront.innerHTML="No existe actualmente director/decano para el centro seleccionado";
+                errorDirectorFront.innerHTML = '<span class="text-red-500 text-xs mt-1">No existe actualmente director/decano para el centro seleccionado. <a class="inline-block w-full mt-1 md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" href="/miembrosGobierno?idCentro='+idCentro+'&idRepresentacion=1">Añadir director</a>';
             }
 
             if(response['secretario'] && Object.hasOwn(response['secretario'], 'id')){
@@ -48,7 +48,7 @@ selectJuntas.addEventListener("change", async (event) => {
             else{
                 idSecretario.value="";
                 nombreSecretario.value = "";
-                errorSecretarioFront.innerHTML = 'No existe actualmente secretario para el centro seleccionado';
+                errorSecretarioFront.innerHTML = '<span class="text-red-500 text-xs mt-1">No existe actualmente secretario para el centro seleccionado. <a class="inline-block w-full mt-1 md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" href="/miembrosGobierno?idCentro='+idCentro+'&idRepresentacion=3">Añadir secretario</a>';
             }
         },
         error: function (errorMessage) {

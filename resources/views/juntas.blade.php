@@ -75,7 +75,7 @@ Juntas
                             @error('idSecretario')
                                 <p id="errorSecretario" class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
-                            <p id="errorSecretarioFront" class="text-red-500 text-xs mt-1"></p>
+                            <div id="errorSecretarioFront"></div>
                         </div>
                     </div>
                 </div>

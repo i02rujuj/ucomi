@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 // Funciones reutilizables que no dependan de un archivo específico
 
 // Readonly and required

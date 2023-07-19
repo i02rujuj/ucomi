@@ -17,7 +17,7 @@ class Junta extends Model
      protected $primaryKey = 'id';
      
      //Campos
-     protected $fillable = ['idCentro','fechaConstitucion', 'estado'];
+     protected $fillable = ['idCentro','fechaConstitucion', 'fechaDisolucion', 'estado'];
 
     public function centro()
     {

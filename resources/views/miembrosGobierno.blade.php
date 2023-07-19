@@ -78,7 +78,7 @@ Equipo de Gobierno
 
                         <div class="mb-2">
                             <label for="fechaTomaPosesion" class="block text-sm text-gray-600 mb-1">
-                                Fecha de Inicio:
+                                Toma de posesión:
                             </label>
                             <input id="fechaTomaPosesion" name="fechaTomaPosesion" type="date" value="{{old("fechaTomaPosesion")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
                             @error('fechaTomaPosesion')

@@ -59,7 +59,7 @@ class MiembrosGobiernoController extends Controller
             $miembroGobierno = MiembroGobierno::create([
                 "idCentro" => $request->idCentro,
                 "idUsuario" => $request->idUsuario,
-                "fechaTomaPosesion" => $request->fechaInicio,
+                "fechaTomaPosesion" => $request->fechaTomaPosesion,
                 "idRepresentacion" => $request->idRepresentacion,
                 'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
             ]);

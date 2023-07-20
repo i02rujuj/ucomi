@@ -224,7 +224,7 @@ Equipo de Gobierno
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-3 mb-1" id="btn-delete-junta" data-miembro-id="{{ $miembro['id'] }}"
+                        <div class="flex items-center gap-3 mb-1" id="btn-delete-miembroGobierno" data-miembro-id="{{ $miembro['id'] }}"
                             data-estado="{{ $miembro['estado'] }}">
                             <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $miembro->representacion->nombre }}</span>
                             @if ($miembro['estado']==1)
@@ -247,5 +247,5 @@ Equipo de Gobierno
     </div>
     @endsection
 
-
+@vite(['resources/js/miembrosGobierno/miembrosGobierno.js'])
 @vite(['resources/js/filtros.js'])

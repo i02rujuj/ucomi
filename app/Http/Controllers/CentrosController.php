@@ -62,7 +62,7 @@ class CentrosController extends Controller
     public function delete(Request $request)
     {
         try {
-            $centro = centro::where('id', $request->id)->first();
+            $centro = Centro::where('id', $request->id)->first();
 
             if ($request->estado == 0) {
                 $centro->estado = 1;

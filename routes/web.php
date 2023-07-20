@@ -58,10 +58,10 @@ Route::post('/centro/update', [CentrosController::class, 'update']);
 // MIEMBROS EQUIPO DE GOBIERNO
 Route::get('/miembrosGobierno', [MiembrosGobiernoController::class, 'index'])->name('miembrosGobierno');
 Route::post('/miembrosGobierno', [MiembrosGobiernoController::class, 'store'])->name('miembrosGobierno.store');
-Route::post('/miembroGobierno/delete', [MiembrosGobiernoController::class, 'delete']);
-Route::post('/miembroGobierno/get', [MiembrosGobiernoController::class, 'get']);
-Route::post('/miembroGobierno/update', [MiembrosGobiernoController::class, 'update']);
-Route::post('/miembroGobierno/getDirectivos', [MiembrosGobiernoController::class, 'getDirectivos']);
+Route::post('/miembro_gobierno/delete', [MiembrosGobiernoController::class, 'delete']);
+Route::post('/miembro_gobierno/get', [MiembrosGobiernoController::class, 'get']);
+Route::post('/miembro_gobierno/update', [MiembrosGobiernoController::class, 'update']);
+Route::post('/miembro_gobierno/getDirectivos', [MiembrosGobiernoController::class, 'getDirectivos']);
 
 // JUNTAS
 Route::get('/juntas', [JuntasController::class, 'index'])->name('juntas');

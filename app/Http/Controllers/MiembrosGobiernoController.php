@@ -20,7 +20,7 @@ class MiembrosGobiernoController extends Controller
             $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->where('estado', 1)->get();
 
 
-            $miembrosGobierno = MiembroGobierno::orderBy('idCentro')->orderBy('idRepresentacion')->orderBy('idUsuario')->get();
+            $miembrosGobierno = MiembroGobierno::orderBy('idCentro')->orderBy('idRepresentacion')->orderBy('estado')->orderBy('idUsuario')->get();
 
 
             return view('miembrosGobierno', ['centros' => $centros, 'users' => $users, 'representacionesGobierno' => $representacionesGobierno, 'miembrosGobierno' => $miembrosGobierno]);
@@ -125,4 +125,28 @@ class MiembrosGobiernoController extends Controller
             return response()->json(['error' => 'No se han encontrado directivos para el centro seleccionado.'], 404);
         }    
     }
+
+    public function delete(Request $request)
+    {
+        try {
+            $miembro = MiembroGobierno::where('id', $request->id)->first();
+
+            if ($request->estado == 0) {
+                $miembro->estado = 1;
+            } else {
+                $miembro->estado = 0;
+            }
+
+            if (!$miembro) {
+                return response()->json(['error' => 'No se ha encontrado el miembro de Gobierno.'], 404);
+            }
+
+            $miembro->save();
+            return response()->json($request);
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'No se ha encontrado el miembro de Gobierno.'], 404);
+        }
+    }
+
 }

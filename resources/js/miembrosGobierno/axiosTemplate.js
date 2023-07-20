@@ -1,0 +1,39 @@
+import { MIEMBROSGOBIERNO_UPDATE_URL, MIEMBROSGOBIERNO_GET_URL, MIEMBROSGOBIERNO_DELETE_URL } from "./api/endPoints";
+import { UPDATE_MIEMBROSGOBIERNO_AXIOS, GET_MIEMBROSGOBIERNO_AXIOS, DELETE_MIEMBROSGOBIERNO_AXIOS } from "./api/apiSender";
+import { ENDPOINT_MIEMBROSGOBIERNO_UPDATE_BBDD, ENDPOINT_MIEMBROSGOBIERNO_GET_BBDD, ENDPOINT_MIEMBROSGOBIERNO_DELETE_BBDD } from "./api/apiConst";
+
+function DELETE_MIEMBROSGOBIERNO_BBDD(data) {
+    ENDPOINT_MIEMBROSGOBIERNO_DELETE_BBDD.url = MIEMBROSGOBIERNO_DELETE_URL;
+    ENDPOINT_MIEMBROSGOBIERNO_DELETE_BBDD.data = data;
+    return DELETE_MIEMBROSGOBIERNO_AXIOS().then((response) => {
+        return response.data;
+    }).catch((error) => {
+        return error;
+    });
+}
+
+function GET_MIEMBROSGOBIERNO_BBDD(data) {
+    ENDPOINT_MIEMBROSGOBIERNO_GET_BBDD.url = MIEMBROSGOBIERNO_GET_URL;
+    ENDPOINT_MIEMBROSGOBIERNO_GET_BBDD.data = data;
+    return GET_MIEMBROSGOBIERNO_AXIOS().then((response) => {
+        return response.data;
+    }).catch((error) => {
+        return error;
+    });
+}
+
+function UPDATE_MIEMBROSGOBIERNO_BBDD(data) {
+    ENDPOINT_MIEMBROSGOBIERNO_UPDATE_BBDD.url = MIEMBROSGOBIERNO_UPDATE_URL;
+    ENDPOINT_MIEMBROSGOBIERNO_UPDATE_BBDD.data = data;
+    return UPDATE_MIEMBROSGOBIERNO_AXIOS().then((response) => {
+        return response.data;
+    }).catch((error) => {
+        return error;
+    });
+}
+
+export {
+    DELETE_MIEMBROSGOBIERNO_BBDD,
+    GET_MIEMBROSGOBIERNO_BBDD,
+    UPDATE_MIEMBROSGOBIERNO_BBDD
+}

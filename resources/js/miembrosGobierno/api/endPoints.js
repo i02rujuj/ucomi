@@ -1,0 +1,9 @@
+const MIEMBROSGOBIERNO_DELETE_URL = "miembro_gobierno/delete"
+const MIEMBROSGOBIERNO_GET_URL = "miembro_gobierno/get"
+const MIEMBROSGOBIERNO_UPDATE_URL = "miembro_gobierno/update"
+
+export {
+    MIEMBROSGOBIERNO_DELETE_URL,
+    MIEMBROSGOBIERNO_GET_URL,
+    MIEMBROSGOBIERNO_UPDATE_URL
+}

@@ -1,5 +1,6 @@
 import { DELETE_MIEMBROSGOBIERNO_BBDD, GET_MIEMBROSGOBIERNO_BBDD, UPDATE_MIEMBROSGOBIERNO_BBDD } from "./axiosTemplate.js";
-import {GETALL_CENTRO_BBDD} from '../centros/axiosTemplate';
+import {GETALL_CENTRO_BBDD, GET_CENTRO_BBDD} from '../centros/axiosTemplate';
+import {GET_USER_BBDD} from '../users/axiosTemplate';
 import Swal from 'sweetalert2';
 
 // EVENTO EDITAR
@@ -9,13 +10,32 @@ const addEditEvent = (button) => {
             id: button.dataset.miembroId,
         };
         try {
-            var optionsCentros ="";
-
-            // Obtenemos el centro a editar
+            // Obtenemos el miembro a editar
             const response = await GET_MIEMBROSGOBIERNO_BBDD(dataToSend);
+console.log(response);
+            const dataToSendCentro = {
+                id: response.idCentro,
+            };
+
+            const centro = await GET_CENTRO_BBDD(dataToSendCentro); 
+
+            const dataToSendUsuario = {
+                id: response.idUsuario,
+            };
+
+            const usuario = await GET_USER_BBDD(dataToSendUsuario); 
+
             const result = await Swal.fire({
                 title: "Editar Miembro Gobierno",
                 html: `
+                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
+                        <label for="centro" class="block text-sm text-gray-600 w-32">Centro:</label>
+                        <input type="text" id="centro" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${centro.nombre}" readonly>
+                    </div>
+                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
+                        <label for="usuario" class="block text-sm text-gray-600 w-32">Usuario:</label>
+                        <input type="text" id="usuario" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${usuario.name}" readonly>
+                    </div>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
                         <label for="fechaTomaPosesion" class="block text-sm text-gray-600 w-32">Fecha Toma posesión:</label>
                         <input type="date" id="fechaTomaPosesion" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required value="${response.fechaTomaPosesion}">

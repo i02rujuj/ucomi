@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\JuntasController;
 use App\Http\Controllers\CentrosController;
 use App\Http\Controllers\TiposCentroController;
@@ -70,6 +71,10 @@ Route::post('/juntas', [JuntasController::class, 'store'])->name('juntas.store')
 Route::post('/junta/delete', [JuntasController::class, 'delete']);
 Route::post('/junta/get', [JuntasController::class, 'get']);
 Route::post('/junta/update', [JuntasController::class, 'update']);
+
+// USERS
+Route::post('/user/get', [UserController::class, 'get']);
+
 
     
 

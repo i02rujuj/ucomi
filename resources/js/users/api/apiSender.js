@@ -1,0 +1,26 @@
+import axios from "axios";
+
+import { ENDPOINT_USER_UPDATE_BBDD,ENDPOINT_USER_GET_BBDD, ENDPOINT_USER_DELETE_BBDD, ENDPOINT_USER_GETALL_BBDD} from "./apiConst";
+
+function DELETE_USER_AXIOS() {
+    return axios(ENDPOINT_USER_DELETE_BBDD);
+}
+
+function GET_USER_AXIOS() {
+    return axios(ENDPOINT_USER_GET_BBDD);
+}
+
+function UPDATE_USER_AXIOS() {
+    return axios(ENDPOINT_USER_UPDATE_BBDD);
+}
+
+function GETALL_USER_AXIOS() {
+    return axios(ENDPOINT_USER_GETALL_BBDD);
+}
+
+export {
+    DELETE_USER_AXIOS,
+    GET_USER_AXIOS,
+    UPDATE_USER_AXIOS,
+    GETALL_USER_AXIOS
+}

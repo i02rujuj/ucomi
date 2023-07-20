@@ -22,7 +22,26 @@ Centros
             <form method="POST" action="{{ route('centros.store') }}" class="bg-white p-8 mb-6 rounded-lg shadow-md">
                 <h2 class="text-gray-600 font-bold mb-2">Añadir nuevo centro</h2>
                 @csrf
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-2">
+                    <div class="left-side w-full">
+                        <div class="mb-2">
+                            <label for="idTipo" class="block text-sm text-gray-600 mb-1">
+                                Tipo:
+                            </label>
+                            
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idTipo" name="idTipo" value="{{old("idTipo")}}">
+                                <option value="">-----</option>
+                                @foreach ($tiposCentro as $tipo)
+                                    <option value="{{ $tipo['id'] }}" {{ (old("idTipo")== $tipo['id'] || app('request')->input('idTipo') == $tipo['id'] ? "selected":"") }}>{{ $tipo['nombre'] }}</option>
+                                @endforeach
+                            </select>
+                        
+                            @error('idTipo')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div> 
+                    </div>
+
                     <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="nombre" class="block text-sm text-gray-600 mb-1">
@@ -33,28 +52,15 @@ Centros
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
+                    </div>
+
+                    <div class="left-side w-full">
                         <div>
                             <label for="direccion" class="block text-sm text-gray-600 mb-1">
                                 Direccion:
                             </label>
                             <input id="direccion" name="direccion" type="text" value="{{old("direccion")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
                             @error('direccion')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="right-side w-full">
-                        <div class="mb-2">
-                            <label for="tipo" class="block text-sm text-gray-600 mb-1">
-                                Tipo:
-                            </label>
-                            
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="tipo" name="tipo" value="{{old("tipo")}}">
-                                <option value="propio">Propio</option>
-                                <option value="adscrito">Adscrito</option>
-                            </select>
-                           
-                            @error('tipo')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
@@ -141,7 +147,7 @@ Centros
             
                         <div class="flex items-center gap-3 mb-1" id="btn-delete-centro" data-centro-id="{{ $centro['id'] }}"
                             data-estado="{{ $centro['estado'] }}">
-                            <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Centro {{ $centro['tipo'] }}</span>
+                            <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $centro->tipo->nombre }}</span>
                             @if ($centro['estado']==1)
                                 <span class="material-icons-round text-green-500 scale-150 cursor-pointer">
                                     toggle_on

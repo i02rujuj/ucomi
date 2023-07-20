@@ -14,14 +14,9 @@ class RepresentacionGobiernoSeeder extends Seeder
     public function run(): void
     {
         $director = new RepresentacionGobierno();
-        $director->nombre = 'Director/a';
+        $director->nombre = 'Director/a | Decano/a';
         $director->estado = true;
         $director->save();
-
-        $decano = new RepresentacionGobierno();
-        $decano->nombre = 'Decano/a';
-        $decano->estado = true;
-        $decano->save();
 
         $secretario = new RepresentacionGobierno();
         $secretario->nombre = 'Secretario/a';
@@ -29,14 +24,9 @@ class RepresentacionGobiernoSeeder extends Seeder
         $secretario->save();
 
         $vicedirector = new RepresentacionGobierno();
-        $vicedirector->nombre = 'ViceDirector/a';
+        $vicedirector->nombre = 'ViceDirector/a | ViceDecano/a';
         $vicedirector->estado = true;
         $vicedirector->save();
-
-        $vicedecano = new RepresentacionGobierno();
-        $vicedecano->nombre = 'ViceDecano/a';
-        $vicedecano->estado = true;
-        $vicedecano->save();
 
         $subdirector = new RepresentacionGobierno();
         $subdirector->nombre = 'Subdirector/a';

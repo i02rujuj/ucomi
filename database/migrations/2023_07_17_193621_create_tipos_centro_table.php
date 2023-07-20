@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('centros', function (Blueprint $table) {
-            // Es lo mismo más simplificado a continuación: $table->bigIncrements('id')->unique();
+        Schema::create('tipos_centro', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('direccion');
-            $table->unsignedBigInteger('idTipo');
             $table->boolean('estado');
             $table->timestamps();
-
-            $table->foreign('idTipo')->references('id')->on('tipos_centro');
         });
     }
 
@@ -29,7 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('centros');
-
+        Schema::dropIfExists('tipos_centro');
     }
 };

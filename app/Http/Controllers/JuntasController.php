@@ -13,7 +13,7 @@ class JuntasController extends Controller
     {
         try {
             $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'estado')->get();
-            $centros = Centro::select('id', 'nombre')->get();
+            $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
             return view('juntas', ['juntas' => $juntas, 'centros' => $centros,]);
         } catch (\Throwable $th) {
             return redirect()->route('juntas')->with('error', 'No se pudieron obtener las juntas: ' . $th->getMessage());

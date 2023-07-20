@@ -15,9 +15,9 @@ class MiembrosGobiernoController extends Controller
     public function index()
     {
         try {
-            $centros = Centro::select('id', 'nombre')->get();
-            $users = User::select('id', 'name')->get();
-            $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->get();
+            $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
+            $users = User::select('id', 'name')->where('estado', 1)->get();
+            $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->where('estado', 1)->get();
             $miembrosGobierno = MiembroGobierno::all();
             return view('miembrosGobierno', ['centros' => $centros, 'users' => $users, 'representacionesGobierno' => $representacionesGobierno, 'miembrosGobierno' => $miembrosGobierno]);
         } catch (\Throwable $th) {
@@ -76,14 +76,16 @@ class MiembrosGobiernoController extends Controller
             $director = DB::table('miembros_gobierno')
                 ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                 ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
-                ->whereIn('miembros_gobierno.idRepresentacion', [1, 2])
+                ->where('miembros_gobierno.estado', 1)
+                ->whereIn('miembros_gobierno.idRepresentacion', [1])
                 ->select('users.id', 'users.name')
                 ->first();
 
             $secretario = DB::table('miembros_gobierno')
                 ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                 ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
-                ->whereIn('miembros_gobierno.idRepresentacion', [3])
+                ->where('miembros_gobierno.estado', 1)
+                ->whereIn('miembros_gobierno.idRepresentacion', [2])
                 ->select('users.id', 'users.name')
                 ->first();
 

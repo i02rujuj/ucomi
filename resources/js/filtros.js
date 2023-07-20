@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 });
 
 document.querySelector("#buscar-habilitado").addEventListener("click", function () {
-    document.querySelector("#search-input").value = "Habilitada";
+    document.querySelector("#search-input").value = "Habilitado";
     filterFunction();
 });
 

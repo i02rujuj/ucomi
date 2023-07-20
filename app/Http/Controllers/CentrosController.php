@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Centro;
+use App\Models\TipoCentro;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -11,8 +12,9 @@ class CentrosController extends Controller
     public function index()
     {
         try {
-            $centros = Centro::select('id', 'nombre', 'direccion', 'tipo', 'estado')->get();
-            return view('centros', ['centros' => $centros]);
+            $centros = Centro::select('id', 'nombre', 'direccion', 'idTipo', 'estado')->get();
+            $tiposCentro = TipoCentro::select('id', 'nombre')->get();
+            return view('centros', ['centros' => $centros, 'tiposCentro' => $tiposCentro]);
         } catch (\Throwable $th) {
             return redirect()->route('centros')->with('error', 'No se pudieron obtener los centros: ' . $th->getMessage());
         }
@@ -24,7 +26,7 @@ class CentrosController extends Controller
             $validator = Validator::make($request->all(),[
                 'nombre' => 'required|max:100|string',
                 'direccion' => 'required|string|max:150',
-                'tipo' => 'required|max:50|string'
+                'idTipo' => 'required|integer|exists:App\Models\TipoCentro,id',
             ], [
                 // Mensajes error nombre
                 'nombre.required' => 'El nombre es obligatorio.',
@@ -35,9 +37,9 @@ class CentrosController extends Controller
                 'direccion.string' => 'La dirección debe ser una cadena de texto.',
                 'direccion.max' => 'La dirección no puede exceder los 150 carácteres.',
                 // Mensajes error tipo
-                'tipo.required' => 'El tipo es obligatorio.',
-                'tipo.string' => 'El tipo debe ser una cadena de texto.',
-                'tipo.max' => 'El nombre no puede exceder los 50 caracteres.',
+                'idTipo.required' => 'El tipo es obligatorio.',
+                'idTipo.integer' => 'El tipo debe ser un entero',
+                'idTipo.exixts' => 'El tipo no existe.',
             ]);
 
             if ($validator->fails()) {
@@ -48,7 +50,7 @@ class CentrosController extends Controller
             $centro = Centro::create([
                 "nombre" => $request->nombre,
                 "direccion" => $request->direccion,
-                "tipo" => $request->tipo,
+                "idTipo" => $request->idTipo,
                 'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
             ]);
             return redirect()->route('centros')->with('success', 'Centro creado correctamente.');
@@ -102,7 +104,7 @@ class CentrosController extends Controller
             }
             $centro->nombre = $request->data['nombre'];
             $centro->direccion = $request->data['domicilio'];
-            $centro->tipo = $request->data['tipo'];
+            $centro->tipo = $request->data['idTipo'];
             $centro->save();
             return response()->json(['message' => 'El centro se ha actualizado correctamente.', 'status' => 200], 200);
             

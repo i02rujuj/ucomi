@@ -54,6 +54,7 @@ Route::post('/centros', [CentrosController::class, 'store'])->name('centros.stor
 Route::post('/centro/delete', [CentrosController::class, 'delete']);
 Route::post('/centro/get', [CentrosController::class, 'get']);
 Route::post('/centro/update', [CentrosController::class, 'update']);
+Route::post('/centro/all', [CentrosController::class, 'all']);
 
 // MIEMBROS EQUIPO DE GOBIERNO
 Route::get('/miembrosGobierno', [MiembrosGobiernoController::class, 'index'])->name('miembrosGobierno');

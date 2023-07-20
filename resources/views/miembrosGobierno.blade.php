@@ -216,7 +216,7 @@ Equipo de Gobierno
                             </div>
                             <div class="right-part -mr-3 truncate">
                                 <button type="button" class="truncate text-sm hover:text-black font-medium py-1 mx-3 rounded"
-                                    id="btn-editar-miembroGobierno" data-miembro-id="{{ $miembro['id'] }}" value="{{ $miembro['estado'] }}">
+                                    id="btn-editar-miembro" data-miembro-id="{{ $miembro['id'] }}" value="{{ $miembro['estado'] }}">
                                     <span class="material-icons-round text-slate-400 scale-125 truncate">
                                         edit_note
                                     </span>
@@ -224,7 +224,7 @@ Equipo de Gobierno
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-3 mb-1" id="btn-delete-miembroGobierno" data-miembro-id="{{ $miembro['id'] }}"
+                        <div class="flex items-center gap-3 mb-1" id="btn-delete-miembro" data-miembro-id="{{ $miembro['id'] }}"
                             data-estado="{{ $miembro['estado'] }}">
                             <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $miembro->representacion->nombre }}</span>
                             @if ($miembro['estado']==1)

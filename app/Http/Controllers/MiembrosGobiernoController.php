@@ -126,6 +126,19 @@ class MiembrosGobiernoController extends Controller
         }    
     }
 
+    public function get(Request $request)
+    {
+        try {
+            $miembro = MiembroGobierno::where('id', $request->id)->first();
+            if (!$miembro) {
+                return response()->json(['error' => 'No se ha encontrado el miembro de gobierno.'], 404);
+            }
+            return response()->json($miembro);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'No se ha encontrado el miembro de gobierno.'], 404);
+        }
+    }
+
     public function delete(Request $request)
     {
         try {
@@ -146,6 +159,23 @@ class MiembrosGobiernoController extends Controller
 
         } catch (\Throwable $th) {
             return response()->json(['error' => 'No se ha encontrado el miembro de Gobierno.'], 404);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            $miembro = MiembroGobierno::where('id', $request->id)->first();
+            if (!$miembro) {
+                return response()->json(['error' => 'No se ha encontrado el miembro de Gobierno', 'status' => 404], 404);
+            }
+            $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
+            $miembro->fechaCese = $request->data['fechaCese'];
+            $miembro->save();
+            return response()->json(['message' => 'El miembro de Gobierno se ha actualizado correctamente.', 'status' => 200], 200);
+            
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'Error al actualizar el miembro de gobierno.', 'status' => 404], 404);
         }
     }
 

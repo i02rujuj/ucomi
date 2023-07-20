@@ -1,42 +1,28 @@
 import { DELETE_MIEMBROSGOBIERNO_BBDD, GET_MIEMBROSGOBIERNO_BBDD, UPDATE_MIEMBROSGOBIERNO_BBDD } from "./axiosTemplate.js";
+import {GETALL_CENTRO_BBDD} from '../centros/axiosTemplate';
 import Swal from 'sweetalert2';
 
 // EVENTO EDITAR
-/*const addEditEvent = (button) => {
+const addEditEvent = (button) => {
     button.addEventListener("click", async (event) => {
         const dataToSend = {
-            id: button.dataset.centroId,
+            id: button.dataset.miembroId,
         };
         try {
-            // Obtenemos los tipos de Centro
-            const tiposCentro = await GET_TIPOSCENTRO_BBDD();
-            var options ="";
+            var optionsCentros ="";
 
             // Obtenemos el centro a editar
-            const response = await GET_CENTRO_BBDD(dataToSend);
+            const response = await GET_MIEMBROSGOBIERNO_BBDD(dataToSend);
             const result = await Swal.fire({
-                title: "Editar Centro",
+                title: "Editar Miembro Gobierno",
                 html: `
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
-                        <label class="block text-sm text-gray-600 w-32">Nombre:</label>
-                        <input type="text" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required value="${response.nombre}" id="nombre">
+                        <label for="fechaTomaPosesion" class="block text-sm text-gray-600 w-32">Fecha Toma posesión:</label>
+                        <input type="date" id="fechaTomaPosesion" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required value="${response.fechaTomaPosesion}">
                     </div>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
-                        <label for="direccion" class="block text-sm text-gray-600 w-32">Direccion:</label>
-                        <input type="text" id="domicilio" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.direccion}">
-                    </div>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
-                        <label for="idTipo" class="block text-sm text-gray-600 mb-1 w-32">Tipo:</label>
-                        <select id="idTipo" class="centro swal2-input tipo text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required">
-                            <option value="">-----</option>
-                            ${tiposCentro.forEach(tipo => {            
-                                options+='<option value="'+tipo.id+'" ';
-                                if(tipo.id == response.idTipo) 
-                                    options+='selected';
-                                options+='>'+tipo.nombre+'</option>';                                               
-                            })}
-                            ${options}
-                        </select>
+                        <label for="fechaCese" class="block text-sm text-gray-600 w-32">Fecha cese:</label>
+                        <input type="date" id="fechaCese" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.fechaCese}">
                     </div>
                 `,
                 focusConfirm: false,
@@ -45,14 +31,20 @@ import Swal from 'sweetalert2';
                 cancelButtonText: "Cancelar",
             });
             if (result.isConfirmed) {
-                const inputs = document.querySelectorAll(".centro");
+                const inputs = document.querySelectorAll(".miembro");
                 const valores = {};
                 let error = 0;
                 inputs.forEach((input) => {
-                    valores[input.id] = input.value;
-                    if (input.value === "") {
+                    if (input.id!='fechaCese' && input.value === "") {
                         error++;
                     }
+
+                    // Si es vacío fechaCese, colocamos un null
+                    if(input.id=='fechaCese' && input.value === ""){
+                        input.value=null;
+                    }
+
+                    valores[input.id] = input.value;
                 });
                 
                 if (error > 0) {
@@ -63,24 +55,24 @@ import Swal from 'sweetalert2';
                     });
                 } else {
                     const dataToSend = {
-                        id: button.dataset.centroId,
+                        id: button.dataset.miembroId,
                         data: valores,
                     };
                     console.log(dataToSend);
-                    const response = await UPDATE_CENTRO_BBDD(dataToSend);
+                    const response = await UPDATE_MIEMBROSGOBIERNO_BBDD(dataToSend);
                     console.log(response.status);
                     if (response.status === 200) {
                         await Swal.fire({
                             icon: "success",
                             title: "Updated!",
-                            text: "Se ha editado el centro.",
+                            text: "Se ha editado el miembro de Gobierno.",
                         });
                         window.location.reload();
                     } else {
                         await Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Ha ocurrido un error al actualizar el centro.",
+                            text: "Ha ocurrido un error al actualizar el miembro de Gobierno.",
                         });
                     }
                 }
@@ -90,18 +82,18 @@ import Swal from 'sweetalert2';
             await Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "Ha ocurrido un error al editar el centro.",
+                text: "Ha ocurrido un error al editar el miembro de Gobierno.",
             });
         }
     });
 };
 
-const editButtons = document.querySelectorAll('#btn-editar-centro');
+const editButtons = document.querySelectorAll('#btn-editar-miembro');
 
 editButtons.forEach(button => {
     addEditEvent(button);
 });
-*/
+
 
 // EVENTO ELIMINAR
 const addDeleteEvent = (button) => {
@@ -161,7 +153,7 @@ const addDeleteEvent = (button) => {
     });
 };
 
-const deleteButtons = document.querySelectorAll('#btn-delete-miembroGobierno');
+const deleteButtons = document.querySelectorAll('#btn-delete-miembro');
 
 deleteButtons.forEach(button => {
     addDeleteEvent(button);

@@ -19,12 +19,12 @@ const addEditEvent = (button) => {
                 title: "Editar Centro",
                 html: `
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
-                        <label class="block text-sm text-gray-600 w-32">Nombre:</label>
-                        <input type="text" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required value="${response.nombre}" id="nombre">
+                        <label for="nombre" class="block text-sm text-gray-600 w-32">Nombre:</label>
+                        <input type="text" id="nombre" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required value="${response.nombre}">
                     </div>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
                         <label for="direccion" class="block text-sm text-gray-600 w-32">Direccion:</label>
-                        <input type="text" id="domicilio" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.direccion}">
+                        <input type="text" id="direccion" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.direccion}">
                     </div>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
                         <label for="idTipo" class="block text-sm text-gray-600 mb-1 w-32">Tipo:</label>

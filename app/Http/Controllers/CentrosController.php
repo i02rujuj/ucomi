@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Centro;
 use App\Models\TipoCentro;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class CentrosController extends Controller
@@ -103,13 +104,28 @@ class CentrosController extends Controller
                 return response()->json(['error' => 'No se ha encontrado el centro.', 'status' => 404], 404);
             }
             $centro->nombre = $request->data['nombre'];
-            $centro->direccion = $request->data['domicilio'];
+            $centro->direccion = $request->data['direccion'];
             $centro->idTipo = $request->data['idTipo'];
             $centro->save();
             return response()->json(['message' => 'El centro se ha actualizado correctamente.', 'status' => 200], 200);
             
         } catch (\Throwable $th) {
             return response()->json(['error' => 'Error al actualizar el centro.', 'status' => 404], 404);
+        }
+    }
+
+    public function all()
+    {
+        try {
+            $centros = Centro::all()->where('estado',1);
+
+            if (!$centros) {
+                return response()->json(['error' => 'No se han podido obtener los centros.'], 404);
+            }
+
+            return response()->json($centros);
+        } catch (\Throwable $th) {
+            return redirect()->route('centros')->with('error', 'No se pudieron obtener los centros: ' . $th->getMessage());
         }
     }
 }

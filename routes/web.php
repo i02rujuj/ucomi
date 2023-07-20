@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\JuntasController;
 use App\Http\Controllers\CentrosController;
 use App\Http\Controllers\TiposCentroController;
+use App\Http\Controllers\RepresentacionController;
 use App\Http\Controllers\MiembrosGobiernoController;
 
 /*
@@ -74,6 +75,9 @@ Route::post('/junta/update', [JuntasController::class, 'update']);
 
 // USERS
 Route::post('/user/get', [UserController::class, 'get']);
+
+// REPRESENTACIONES
+Route::post('/representacion/get', [RepresentacionController::class, 'get']);
 
 
     

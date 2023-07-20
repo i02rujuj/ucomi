@@ -171,12 +171,16 @@ class MiembrosGobiernoController extends Controller
                 return response()->json(['error' => 'No se ha encontrado el miembro de Gobierno', 'status' => 404], 200);
             }
 
+            // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
             $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
             $dateCese = new DateTime($request->data['fechaCese']);
 
             if ($dateTomaPosesion>$dateCese) {
                 return response()->json(['error' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 404], 200);
             }
+
+            // Validar en el caso de ser director o secretario, no se choquen fechas de algún otro director que o secretario en el mismo centro
+            
 
             $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
             $miembro->fechaCese = $request->data['fechaCese'];  

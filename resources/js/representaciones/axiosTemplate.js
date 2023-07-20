@@ -1,0 +1,50 @@
+import { REPRESENTACION_UPDATE_URL, REPRESENTACION_GET_URL, REPRESENTACION_DELETE_URL, REPRESENTACION_GETALL_URL } from "./api/endPoints";
+import { UPDATE_REPRESENTACION_AXIOS, GET_REPRESENTACION_AXIOS, DELETE_REPRESENTACION_AXIOS, GETALL_REPRESENTACION_AXIOS } from "./api/apiSender";
+import { ENDPOINT_REPRESENTACION_UPDATE_BBDD, ENDPOINT_REPRESENTACION_GET_BBDD, ENDPOINT_REPRESENTACION_DELETE_BBDD, ENDPOINT_REPRESENTACION_GETALL_BBDD } from "./api/apiConst";
+
+function DELETE_REPRESENTACION_BBDD(data) {
+    ENDPOINT_REPRESENTACION_DELETE_BBDD.url = REPRESENTACION_DELETE_URL;
+    ENDPOINT_REPRESENTACION_DELETE_BBDD.data = data;
+    return DELETE_REPRESENTACION_AXIOS().then((response) => {
+        return response.data;
+    }).catch((error) => {
+        return error;
+    });
+}
+
+function GET_REPRESENTACION_BBDD(data) {
+    ENDPOINT_REPRESENTACION_GET_BBDD.url = REPRESENTACION_GET_URL;
+    ENDPOINT_REPRESENTACION_GET_BBDD.data = data;
+    return GET_REPRESENTACION_AXIOS().then((response) => {
+        return response.data;
+    }).catch((error) => {
+        return error;
+    });
+}
+
+function UPDATE_REPRESENTACION_BBDD(data) {
+    ENDPOINT_REPRESENTACION_UPDATE_BBDD.url = REPRESENTACION_UPDATE_URL;
+    ENDPOINT_REPRESENTACION_UPDATE_BBDD.data = data;
+    return UPDATE_REPRESENTACION_AXIOS().then((response) => {
+        return response.data;
+    }).catch((error) => {
+        return error;
+    });
+}
+
+function GETALL_REPRESENTACION_BBDD(data) {
+    ENDPOINT_REPRESENTACION_GETALL_BBDD.url = REPRESENTACION_GETALL_URL;
+    ENDPOINT_REPRESENTACION_GETALL_BBDD.data = data;
+    return GETALL_REPRESENTACION_AXIOS().then((response) => {
+        return response.data;
+    }).catch((error) => {
+        return error;
+    });
+}
+
+export {
+    DELETE_REPRESENTACION_BBDD,
+    GET_REPRESENTACION_BBDD,
+    UPDATE_REPRESENTACION_BBDD,
+    GETALL_REPRESENTACION_BBDD
+}

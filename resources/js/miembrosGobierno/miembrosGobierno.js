@@ -1,6 +1,7 @@
 import { DELETE_MIEMBROSGOBIERNO_BBDD, GET_MIEMBROSGOBIERNO_BBDD, UPDATE_MIEMBROSGOBIERNO_BBDD } from "./axiosTemplate.js";
-import {GETALL_CENTRO_BBDD, GET_CENTRO_BBDD} from '../centros/axiosTemplate';
+import {GET_CENTRO_BBDD} from '../centros/axiosTemplate';
 import {GET_USER_BBDD} from '../users/axiosTemplate';
+import {GET_REPRESENTACION_BBDD} from '../representaciones/axiosTemplate';
 import Swal from 'sweetalert2';
 
 // EVENTO EDITAR
@@ -12,7 +13,7 @@ const addEditEvent = (button) => {
         try {
             // Obtenemos el miembro a editar
             const response = await GET_MIEMBROSGOBIERNO_BBDD(dataToSend);
-console.log(response);
+            console.log(response);
             const dataToSendCentro = {
                 id: response.idCentro,
             };
@@ -25,16 +26,29 @@ console.log(response);
 
             const usuario = await GET_USER_BBDD(dataToSendUsuario); 
 
+            const dataToSendRepresentacion = {
+                id: response.idRepresentacion,
+            };
+
+            const representacion = await GET_REPRESENTACION_BBDD(dataToSendRepresentacion); 
+
             const result = await Swal.fire({
                 title: "Editar Miembro Gobierno",
                 html: `
+                    <input type="hidden" id="idCentro" value="${centro.id}"/>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
                         <label for="centro" class="block text-sm text-gray-600 w-32">Centro:</label>
                         <input type="text" id="centro" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${centro.nombre}" readonly>
                     </div>
+                    <input type="hidden" id="idUsuario" value="${usuario.id}"/>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
                         <label for="usuario" class="block text-sm text-gray-600 w-32">Usuario:</label>
                         <input type="text" id="usuario" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${usuario.name}" readonly>
+                    </div>
+                    <input type="hidden" id="idRepresentacion" value="${representacion.id}"/>
+                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
+                        <label for="representacion" class="block text-sm text-gray-600 w-32">Representación:</label>
+                        <input type="text" id="representacion" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${representacion.nombre}" readonly>
                     </div>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
                         <label for="fechaTomaPosesion" class="block text-sm text-gray-600 w-32">Fecha Toma posesión:</label>

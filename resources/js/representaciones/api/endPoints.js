@@ -1,0 +1,11 @@
+const REPRESENTACION_DELETE_URL = "representacion/delete"
+const REPRESENTACION_GET_URL = "representacion/get"
+const REPRESENTACION_UPDATE_URL = "representacion/update"
+const REPRESENTACION_GETALL_URL = "representacion/all"
+
+export {
+    REPRESENTACION_DELETE_URL,
+    REPRESENTACION_GET_URL,
+    REPRESENTACION_UPDATE_URL,
+    REPRESENTACION_GETALL_URL
+}

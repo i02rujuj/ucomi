@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use App\Models\User;
 use App\Models\Centro;
 use Illuminate\Http\Request;
@@ -167,10 +168,18 @@ class MiembrosGobiernoController extends Controller
         try {
             $miembro = MiembroGobierno::where('id', $request->id)->first();
             if (!$miembro) {
-                return response()->json(['error' => 'No se ha encontrado el miembro de Gobierno', 'status' => 404], 404);
+                return response()->json(['error' => 'No se ha encontrado el miembro de Gobierno', 'status' => 404], 200);
             }
+
+            $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
+            $dateCese = new DateTime($request->data['fechaCese']);
+
+            if ($dateTomaPosesion>$dateCese) {
+                return response()->json(['error' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 404], 200);
+            }
+
             $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
-            $miembro->fechaCese = $request->data['fechaCese'];
+            $miembro->fechaCese = $request->data['fechaCese'];  
             $miembro->save();
             return response()->json(['message' => 'El miembro de Gobierno se ha actualizado correctamente.', 'status' => 200], 200);
             

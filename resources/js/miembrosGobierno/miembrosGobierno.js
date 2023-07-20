@@ -59,14 +59,14 @@ console.log(response);
                         error++;
                     }
 
-                    // Si es vacío fechaCese, colocamos un null
-                    if(input.id=='fechaCese' && input.value === ""){
-                        input.value=null;
-                    }
-
                     valores[input.id] = input.value;
                 });
-                
+
+                // Si es vacío fechaCese, colocamos un null
+                if(!valores['fechaCese']){
+                    valores['fechaCese']=null;
+                }
+                      
                 if (error > 0) {
                     await Swal.fire({
                         icon: "error",
@@ -92,7 +92,7 @@ console.log(response);
                         await Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Ha ocurrido un error al actualizar el miembro de Gobierno.",
+                            text: response.error,
                         });
                     }
                 }

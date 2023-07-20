@@ -22,7 +22,7 @@ selectJuntas.addEventListener("change", async (event) => {
 
     $.ajax({
         type: "POST",
-        url: '/miembroGobierno/getDirectivos',
+        url: '/miembro_gobierno/getDirectivos',
         data: {
             _token: $("meta[name='csrf-token']").attr("content"),
             idCentro: idCentro,
@@ -52,7 +52,7 @@ selectJuntas.addEventListener("change", async (event) => {
             }
         },
         error: function (errorMessage) {
-            //$("#errorMessage").append("Error: " + errorMessage);
+            $("#errorMessage").append("Error: " + errorMessage);
         }
     });
 });

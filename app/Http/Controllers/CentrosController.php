@@ -104,7 +104,7 @@ class CentrosController extends Controller
             }
             $centro->nombre = $request->data['nombre'];
             $centro->direccion = $request->data['domicilio'];
-            $centro->tipo = $request->data['idTipo'];
+            $centro->idTipo = $request->data['idTipo'];
             $centro->save();
             return response()->json(['message' => 'El centro se ha actualizado correctamente.', 'status' => 200], 200);
             

@@ -12,7 +12,7 @@ const addEditEvent = (button) => {
             // Obtenemos los tipos de Centro
             const tiposCentro = await GET_TIPOSCENTRO_BBDD();
             var options ="";
-            console.log(tiposCentro);
+
             // Obtenemos el centro a editar
             const response = await GET_CENTRO_BBDD(dataToSend);
             const result = await Swal.fire({
@@ -27,8 +27,8 @@ const addEditEvent = (button) => {
                         <input type="text" id="domicilio" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.direccion}">
                     </div>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
-                        <label for="tipo" class="block text-sm text-gray-600 mb-1 w-32">Tipo:</label>
-                        <select id="tipo" class="centro swal2-input tipo text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required">
+                        <label for="idTipo" class="block text-sm text-gray-600 mb-1 w-32">Tipo:</label>
+                        <select id="idTipo" class="centro swal2-input tipo text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required">
                             <option value="">-----</option>
                             ${tiposCentro.forEach(tipo => {            
                                 options+='<option value="'+tipo.id+'" ';

@@ -56,6 +56,32 @@ class MiembrosGobiernoController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
+            /// Comprobación existencia director actual en el centro
+            if($request->idRepresentacion==1){
+                $director = MiembroGobierno::select('id')
+                    ->where('idCentro', $request->get('idCentro'))
+                    ->where('idRepresentacion', 1)
+                    ->where('fechaCese', null)
+                    ->where('estado', 1)
+                    ->first();
+
+                if($director)
+                    return redirect()->route('miembrosGobierno')->with('error', 'No se pudo crear el miembro del equipo de gobierno: ya existe un Director/a | Decano/a en activo en el centro seleccionado')->withInput();
+            }
+
+            // Comprobación existencia secretario actual en el centro
+            if($request->idRepresentacion==2){
+                $secretario = MiembroGobierno::select('id')
+                    ->where('idCentro', $request->get('idCentro'))
+                    ->where('idRepresentacion', 2)
+                    ->where('fechaCese', null)
+                    ->where('estado', 1)
+                    ->first();
+
+                if($secretario)
+                    return redirect()->route('miembrosGobierno')->with('error', 'No se pudo crear el miembro del equipo de gobierno: ya existe un Secretario/a en activo en el centro seleccionado')->withInput();
+            }
+
             $miembroGobierno = MiembroGobierno::create([
                 "idCentro" => $request->idCentro,
                 "idUsuario" => $request->idUsuario,

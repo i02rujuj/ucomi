@@ -46,7 +46,7 @@ Equipo de Gobierno
                                 Representación:
                             </label>
                             
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idRepresentacion" name="idRepresentacion" value="{{old("idRepresentacion")}}">
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idRepresentacion" name="idRepresentacion">
                                 <option value="">-----</option>
                                 @foreach ($representacionesGobierno as $rep)
                                     <option value="{{ $rep['id'] }}" {{ (old("idRepresentacion")== $rep['id'] || app('request')->input('idRepresentacion') == $rep['id'] ? "selected":"") }}>{{ $rep['nombre'] }}</option>
@@ -64,10 +64,10 @@ Equipo de Gobierno
                                 Usuario:
                             </label>
                             
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idUsuario" name="idUsuario" value="{{old("idUsuario")}}">
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idUsuario" name="idUsuario">
                                 <option value="">-----</option>
                                 @foreach ($users as $user)
-                                    <option value="{{ $user['id'] }}">{{ $user['name'] }}</option>
+                                    <option value="{{ $user['id'] }}" {{ (old("idUsuario")== $user['id'] || app('request')->input('idUsuario') == $user['id'] ? "selected":"") }}>{{ $user['name'] }}</option>
                                 @endforeach
                             </select>
                         

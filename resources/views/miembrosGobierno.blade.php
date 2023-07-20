@@ -180,7 +180,7 @@ Equipo de Gobierno
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                 @foreach ($miembrosGobierno as $miembro)
                     <div class="card bg-white p-6 rounded-lg shadow-md">
-                        <span class="hidden" id="card-status">{{ $miembro->estado == 1 ? 'Habilitada' : 'Deshabilitado' }}</span>
+                        <span class="hidden" id="card-status">{{ $miembro->estado == 1 ? 'Habilitado' : 'Deshabilitado' }}</span>
                         <div class="flex items-start justify-between">
                             <div class="left-part truncate">
                                 <div class="flex items-center mb-1">

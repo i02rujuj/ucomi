@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JuntasController;
 use App\Http\Controllers\CentrosController;
+use App\Http\Controllers\TiposCentroController;
 use App\Http\Controllers\MiembrosGobiernoController;
 
 /*
@@ -42,6 +43,10 @@ Route::get('/logout', function () {
     Auth::logout();
     return redirect('/');
 })->name('logout');
+
+
+// TIPOS DE CENTROS
+Route::post('/tiposCentro', [TiposCentroController::class, 'index']);
 
 // CENTROS
 Route::get('/centros', [CentrosController::class, 'index'])->name('centros');

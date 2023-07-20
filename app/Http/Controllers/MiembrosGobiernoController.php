@@ -72,7 +72,7 @@ class MiembrosGobiernoController extends Controller
     public function getDirectivos(Request $request)
     {
         try {
-            // Falta filtrar entre fechas y estado
+            // Falta filtrar entre fechas y estado 
             $director = DB::table('miembros_gobierno')
                 ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                 ->where('miembros_gobierno.idCentro', $request->get('idCentro'))

@@ -13,6 +13,16 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0T5L2JGC2L"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-0T5L2JGC2L');
+</script>
+
 <body>
 
     <nav class="bg-white fixed top-0 w-full z-50">

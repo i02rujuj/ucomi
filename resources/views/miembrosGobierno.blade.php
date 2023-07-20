@@ -192,13 +192,6 @@ Equipo de Gobierno
                                 </div>
                                 <div class="flex items-center mb-1">
                                     <span class="material-icons-round scale-75">
-                                        lan
-                                    </span>
-                                    &nbsp;
-                                    <h2 class="text-sm mb-1 truncate">{{ $miembro->representacion->nombre }}</h2>
-                                </div>
-                                <div class="flex items-center mb-1">
-                                    <span class="material-icons-round scale-75">
                                         school
                                     </span>
                                     &nbsp;
@@ -233,7 +226,7 @@ Equipo de Gobierno
 
                         <div class="flex items-center gap-3 mb-1" id="btn-delete-junta" data-miembro-id="{{ $miembro['id'] }}"
                             data-estado="{{ $miembro['estado'] }}">
-                            <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Miembro Equipo Gobierno</span>
+                            <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $miembro->representacion->nombre }}</span>
                             @if ($miembro['estado']==1)
                                 <span class="material-icons-round text-green-500 scale-150 cursor-pointer">
                                     toggle_on

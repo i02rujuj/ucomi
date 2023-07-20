@@ -12,7 +12,7 @@ class JuntasController extends Controller
     public function index()
     {
         try {
-            $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'estado')->get();
+            $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'estado')->orderBy('idCentro')->orderBy('fechaConstitucion')->get();
             $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
             return view('juntas', ['juntas' => $juntas, 'centros' => $centros,]);
         } catch (\Throwable $th) {

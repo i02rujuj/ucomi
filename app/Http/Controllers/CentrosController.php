@@ -12,7 +12,7 @@ class CentrosController extends Controller
     public function index()
     {
         try {
-            $centros = Centro::select('id', 'nombre', 'direccion', 'idTipo', 'estado')->get();
+            $centros = Centro::select('id', 'nombre', 'direccion', 'idTipo', 'estado')->orderBy('idTipo')->orderBy('nombre')->get();
             $tiposCentro = TipoCentro::select('id', 'nombre')->get();
             return view('centros', ['centros' => $centros, 'tiposCentro' => $tiposCentro]);
         } catch (\Throwable $th) {

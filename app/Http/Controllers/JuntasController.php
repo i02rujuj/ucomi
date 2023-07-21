@@ -27,6 +27,7 @@ class JuntasController extends Controller
             $validator = Validator::make($request->all(),[
                 'idCentro' => 'required|integer|exists:App\Models\Centro,id',
                 'fechaConstitucion' => 'required|date',
+                'fechaDisolucion' => 'nullable|date',
                 'idDirector' => 'required|integer|exists:App\Models\MiembroGobierno,id',
                 'idSecretario' => 'required|integer|exists:App\Models\MiembroGobierno,id',
             ], [
@@ -37,6 +38,8 @@ class JuntasController extends Controller
                 // Mensajes error fechaConstitucion
                 'fechaConstitucion.required' => 'La fecha de constitución es obligatoria.',
                 'fechaConstitucion.date' => 'La fecha de constitución debe tener el formato fecha DD/MM/YYYY.',
+                // Mensajes error fechaDisolucion
+                'fechaDisolucion.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
                 // Mensajes error director
                 'idDirector.required' => 'Es necesario que exista un director/decano actual en el equipo de gobierno del centro para crear una nueva junta.',
                 'idDirector.integer' => 'Es necesario que exista un director/decano actual en el equipo de gobierno del centro para crear una nueva junta.',
@@ -52,9 +55,18 @@ class JuntasController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
+            // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
+            $dateConstitucion = new DateTime($request->fechaConstitucion);
+            $dateDisolucion = new DateTime($request->fechaDisolucion);
+
+            if ($dateConstitucion>$dateDisolucion) {
+                return redirect()->route('juntas')->with('error', 'La fecha de disolución no puede ser anterior a la fecha de constitución')->withInput();
+            }
+
             $junta = Junta::create([
                 "idCentro" => $request->idCentro,
                 "fechaConstitucion" => $request->fechaConstitucion,
+                "fechaDisolucion" => $request->fechaDisolucion,
                 'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
             ]);
             return redirect()->route('juntas')->with('success', 'Junta creada correctamente.');

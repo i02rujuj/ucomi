@@ -40,7 +40,9 @@ Juntas
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
+                    </div>
 
+                    <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="fechaConstitucion" class="block text-sm text-gray-600 mb-1">
                                 Fecha de Constitución:
@@ -51,7 +53,22 @@ Juntas
                             @enderror
                         </div>
                     </div>
-                    <div class="right-side w-full">
+
+                    <div class="left-side w-full">
+                        <div class="mb-2">
+                            <label for="fechaDisolucion" class="block text-sm text-gray-600 mb-1">
+                                Fecha de Disolución:
+                            </label>
+                            <input id="fechaDisolucion" name="fechaDisolucion" type="date" value="{{old("fechaDisolucion")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off"/>
+                            @error('fechaDisolucion')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">
+                    <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="nombreDirector" class="block text-sm text-gray-600 mb-1">
                                 Director/Decano 
@@ -64,7 +81,9 @@ Juntas
                             @enderror
                             <p id="errorDirectorFront" class="text-red-500 text-xs mt-1"></p>
                         </div>
+                    </div>
 
+                    <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="nombreSecretario" class="block text-sm text-gray-600 mb-1">
                                 Secretario/a
@@ -79,6 +98,7 @@ Juntas
                         </div>
                     </div>
                 </div>
+
                 <button type="submit" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
                     Añadir Junta
                 </button>

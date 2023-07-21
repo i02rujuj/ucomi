@@ -10,25 +10,26 @@ const addEditEvent = (button) => {
         const dataToSend = {
             id: button.dataset.miembroId,
         };
+
         try {
             // Obtenemos el miembro a editar
             const response = await GET_MIEMBROSGOBIERNO_BBDD(dataToSend);
-            console.log(response);
+
             const dataToSendCentro = {
                 id: response.idCentro,
+            };
+    
+            const dataToSendUsuario = {
+                id: response.idUsuario,
+            };
+    
+            const dataToSendRepresentacion = {
+                id: response.idRepresentacion,
             };
 
             const centro = await GET_CENTRO_BBDD(dataToSendCentro); 
 
-            const dataToSendUsuario = {
-                id: response.idUsuario,
-            };
-
             const usuario = await GET_USER_BBDD(dataToSendUsuario); 
-
-            const dataToSendRepresentacion = {
-                id: response.idRepresentacion,
-            };
 
             const representacion = await GET_REPRESENTACION_BBDD(dataToSendRepresentacion); 
 
@@ -94,7 +95,7 @@ const addEditEvent = (button) => {
                     };
                     console.log(dataToSend);
                     const response = await UPDATE_MIEMBROSGOBIERNO_BBDD(dataToSend);
-                    console.log(response.status);
+
                     if (response.status === 200) {
                         await Swal.fire({
                             icon: "success",

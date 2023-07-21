@@ -1,0 +1,26 @@
+import axios from "axios";
+
+import { ENDPOINT_JUNTA_UPDATE_BBDD,ENDPOINT_JUNTA_GET_BBDD, ENDPOINT_JUNTA_DELETE_BBDD, ENDPOINT_JUNTA_GETALL_BBDD} from "./apiConst";
+
+function DELETE_JUNTA_AXIOS() {
+    return axios(ENDPOINT_JUNTA_DELETE_BBDD);
+}
+
+function GET_JUNTA_AXIOS() {
+    return axios(ENDPOINT_JUNTA_GET_BBDD);
+}
+
+function UPDATE_JUNTA_AXIOS() {
+    return axios(ENDPOINT_JUNTA_UPDATE_BBDD);
+}
+
+function GETALL_JUNTA_AXIOS() {
+    return axios(ENDPOINT_JUNTA_GETALL_BBDD);
+}
+
+export {
+    DELETE_JUNTA_AXIOS,
+    GET_JUNTA_AXIOS,
+    UPDATE_JUNTA_AXIOS,
+    GETALL_JUNTA_AXIOS
+}

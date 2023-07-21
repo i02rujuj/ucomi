@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use App\Models\Junta;
 use App\Models\Centro;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ class JuntasController extends Controller
     public function index()
     {
         try {
-            $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'estado')->orderBy('idCentro')->orderBy('fechaConstitucion')->get();
+            $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'estado')->orderBy('idCentro')->orderBy('fechaConstitucion')->get();
             $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
             return view('juntas', ['juntas' => $juntas, 'centros' => $centros,]);
         } catch (\Throwable $th) {
@@ -64,55 +65,63 @@ class JuntasController extends Controller
 
     public function delete(Request $request)
     {
-        /*try {
-            $centro = centro::where('id', $request->id)->first();
+        try {
+            $junta = Junta::where('id', $request->id)->first();
 
             if ($request->estado == 0) {
-                $centro->estado = 1;
+                $junta->estado = 1;
             } else {
-                $centro->estado = 0;
+                $junta->estado = 0;
             }
 
-            if (!$centro) {
-                return response()->json(['error' => 'No se ha encontrado el centro.'], 404);
+            if (!$junta) {
+                return response()->json(['error' => 'No se ha encontrado la junta.'], 404);
             }
 
-            $centro->save();
+            $junta->save();
             return response()->json($request);
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se ha encontrado el centro.'], 404);
-        }*/
+            return response()->json(['error' => 'No se ha encontrado la junta.'], 404);
+        }
     }
 
     public function get(Request $request)
     {
-        /*try {
-            $centro = Centro::where('id', $request->id)->first();
-            if (!$centro) {
-                return response()->json(['error' => 'No se ha encontrado el centro.'], 404);
+        try {
+            $junta = Junta::where('id', $request->id)->first();
+            if (!$junta) {
+                return response()->json(['error' => 'No se ha encontrado la junta.'], 404);
             }
-            return response()->json($centro);
+            return response()->json($junta);
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se ha encontrado el centro.'], 404);
-        }*/
+            return response()->json(['error' => 'No se ha encontrado la junta.'], 404);
+        }
     }
 
     public function update(Request $request)
     {
-        /*try {
-            $centro = Centro::where('id', $request->id)->first();
-            if (!$centro) {
-                return response()->json(['error' => 'No se ha encontrado el centro.', 'status' => 404], 404);
+        try {
+            $junta = Junta::where('id', $request->id)->first();
+            if (!$junta) {
+                return response()->json(['error' => 'No se ha encontrado la junta.', 'status' => 404], 404);
             }
-            $centro->nombre = $request->data['nombre'];
-            $centro->direccion = $request->data['domicilio'];
-            $centro->tipo = $request->data['tipo'];
-            $centro->save();
-            return response()->json(['message' => 'El centro se ha actualizado correctamente.', 'status' => 200], 200);
+
+            // Validar que fechaConstitución no pueda ser mayor a fechaDisolución
+            $dateConstitucion = new DateTime($request->data['fechaConstitucion']);
+            $dateDisolucion = new DateTime($request->data['fechaDisolucion']);
+
+            if ($dateConstitucion>$dateDisolucion) {
+                return response()->json(['error' => 'La fecha de disolución no puede ser anterior a la fecha de constitución de la junta', 'status' => 404], 200);
+            } 
+
+            $junta->fechaConstitucion = $request->data['fechaConstitucion'];
+            $junta->fechaDisolucion = $request->data['fechaDisolucion'];
+            $junta->save();
+            return response()->json(['message' => 'La junta se ha actualizado correctamente.', 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'Error al actualizar el centro.', 'status' => 404], 404);
-        }*/
+            return response()->json(['error' => 'Error al actualizar la junta.', 'status' => 404], 404);
+        }
     }
 }

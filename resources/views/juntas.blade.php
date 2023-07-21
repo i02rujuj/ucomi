@@ -139,8 +139,14 @@ Juntas
                                         <span class="material-icons-round scale-75">
                                             event
                                         </span>
-                                        <div class="fechaConstitucion truncate">
-                                            {{ $junta->fechaConstitucion }}
+                                        <div class="fechaTomaPosesion truncate">
+                                            Contitución: {{ $junta->fechaConstitucion }} | 
+                                            
+                                            @empty ($junta->fechaDisolucion)
+                                                Actualidad
+                                            @else
+                                                Disolución: {{ $junta->fechaDisolucion }}
+                                            @endempty
                                         </div>
                                     </div>
                                 </div>

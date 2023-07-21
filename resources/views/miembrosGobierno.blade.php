@@ -26,7 +26,7 @@ Equipo de Gobierno
                     <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="idCentro" class="block text-sm text-gray-600 mb-1">
-                                Centro a representar:
+                                Centro:
                             </label>
                             
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idCentro" name="idCentro" value="{{old("idCentro")}}">
@@ -40,7 +40,9 @@ Equipo de Gobierno
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
+                    </div>
 
+                    <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="idRepresentacion" class="block text-sm text-gray-600 mb-1">
                                 Representación:
@@ -58,7 +60,7 @@ Equipo de Gobierno
                             @enderror
                         </div>
                     </div>
-                    <div class="right-side w-full">
+                    <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="idUsuario" class="block text-sm text-gray-600 mb-1">
                                 Usuario:
@@ -75,13 +77,28 @@ Equipo de Gobierno
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
+                    </div>
 
+                    <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="fechaTomaPosesion" class="block text-sm text-gray-600 mb-1">
                                 Toma de posesión:
                             </label>
                             <input id="fechaTomaPosesion" name="fechaTomaPosesion" type="date" value="{{old("fechaTomaPosesion")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
                             @error('fechaTomaPosesion')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                    </div>
+                    
+                    <div class="left-side w-full">
+                        <div class="mb-2">
+                            <label for="fechaCese" class="block text-sm text-gray-600 mb-1">
+                                Cese:
+                            </label>
+                            <input id="fechaCese" name="fechaCese" type="date" value="{{old("fechaCese")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" />
+                            @error('fechaCese')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>

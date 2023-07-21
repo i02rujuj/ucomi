@@ -37,6 +37,7 @@ class MiembrosGobiernoController extends Controller
                 'idCentro' => 'required|integer|exists:App\Models\Centro,id',
                 'idUsuario' => 'required|integer|exists:App\Models\User,id',
                 'fechaTomaPosesion' => 'required|date',
+                'fechaCese' => 'nullable|date',
                 'idRepresentacion' => 'required|integer|exists:App\Models\RepresentacionGobierno,id',
             ], [
                 // Mensajes error idCentro
@@ -47,9 +48,11 @@ class MiembrosGobiernoController extends Controller
                 'idUsuario.required' => 'El usuario es obligatorio.',
                 'idUsuario.integer' => 'El usuario debe ser un entero.',
                 'idUsuario.exists' => 'El usuario seleccionado no existe.',
-                // Mensajes error fechaInicio
-                'fechaTomaPosesion.required' => 'La fecha de inicio es obligatoria.',
-                'fechaTomaPosesion.date' => 'La fecha de inicio debe tener el formato fecha DD/MM/YYYY.',
+                // Mensajes error fechaTomaPosesión
+                'fechaTomaPosesion.required' => 'La fecha de toma de posesión es obligatoria.',
+                'fechaTomaPosesion.date' => 'La fecha de toma de posesión debe tener el formato fecha DD/MM/YYYY.',
+                // Mensajes error fechaCese
+                'fechaCese.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
                 // Mensajes error idRepresentacion
                 'idRepresentacion.required' => 'La representación es obligatoria.',
                 'idRepresentacion.integer' => 'La representación debe ser un entero.',
@@ -62,35 +65,46 @@ class MiembrosGobiernoController extends Controller
             }
 
             /// Comprobación existencia director actual en el centro
-            if($request->idRepresentacion==1){
-                $director = MiembroGobierno::select('id')
-                    ->where('idCentro', $request->get('idCentro'))
-                    ->where('idRepresentacion', 1)
-                    ->where('fechaCese', null)
-                    ->where('estado', 1)
-                    ->first();
-
-                if($director)
-                    return redirect()->route('miembrosGobierno')->with('error', 'No se pudo crear el miembro del equipo de gobierno: ya existe un Director/a | Decano/a en activo en el centro seleccionado')->withInput();
+            if($request->fechaCese==null){
+                if($request->idRepresentacion==1){
+                    $director = MiembroGobierno::select('id')
+                        ->where('idCentro', $request->get('idCentro'))
+                        ->where('idRepresentacion', 1)
+                        ->where('fechaCese', null)
+                        ->where('estado', 1)
+                        ->first();
+    
+                    if($director)
+                        return redirect()->route('miembrosGobierno')->with('error', 'No se pudo crear el miembro del equipo de gobierno: ya existe un Director/a | Decano/a en activo en el centro seleccionado')->withInput();
+                }
+    
+                // Comprobación existencia secretario actual en el centro
+                if($request->idRepresentacion==2){
+                    $secretario = MiembroGobierno::select('id')
+                        ->where('idCentro', $request->get('idCentro'))
+                        ->where('idRepresentacion', 2)
+                        ->where('fechaCese', null)
+                        ->where('estado', 1)
+                        ->first();
+    
+                    if($secretario)
+                        return redirect()->route('miembrosGobierno')->with('error', 'No se pudo crear el miembro del equipo de gobierno: ya existe un Secretario/a en activo en el centro seleccionado')->withInput();
+                }
             }
 
-            // Comprobación existencia secretario actual en el centro
-            if($request->idRepresentacion==2){
-                $secretario = MiembroGobierno::select('id')
-                    ->where('idCentro', $request->get('idCentro'))
-                    ->where('idRepresentacion', 2)
-                    ->where('fechaCese', null)
-                    ->where('estado', 1)
-                    ->first();
+            // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
+            $dateTomaPosesion = new DateTime($request->fechaTomaPosesion);
+            $dateCese = new DateTime($request->fechaCese);
 
-                if($secretario)
-                    return redirect()->route('miembrosGobierno')->with('error', 'No se pudo crear el miembro del equipo de gobierno: ya existe un Secretario/a en activo en el centro seleccionado')->withInput();
-            }
+            if ($dateTomaPosesion>$dateCese) {
+                return redirect()->route('miembrosGobierno')->with('error', 'La fecha de cese no puede ser anterior a la toma de posesión')->withInput();
+            }  
 
             $miembroGobierno = MiembroGobierno::create([
                 "idCentro" => $request->idCentro,
                 "idUsuario" => $request->idUsuario,
                 "fechaTomaPosesion" => $request->fechaTomaPosesion,
+                "fechaCese" => $request->fechaCese,
                 "idRepresentacion" => $request->idRepresentacion,
                 'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
             ]);

@@ -23,24 +23,6 @@ Centros
                 <h2 class="text-gray-600 font-bold mb-2">Añadir nuevo centro</h2>
                 @csrf
                 <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-2">
-                    <div class="left-side w-full">
-                        <div class="mb-2">
-                            <label for="idTipo" class="block text-sm text-gray-600 mb-1">
-                                Tipo:
-                            </label>
-                            
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idTipo" name="idTipo" value="{{old("idTipo")}}">
-                                <option value="">-----</option>
-                                @foreach ($tiposCentro as $tipo)
-                                    <option value="{{ $tipo['id'] }}" {{ (old("idTipo")== $tipo['id'] || app('request')->input('idTipo') == $tipo['id'] ? "selected":"") }}>{{ $tipo['nombre'] }}</option>
-                                @endforeach
-                            </select>
-                        
-                            @error('idTipo')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div> 
-                    </div>
 
                     <div class="left-side w-full">
                         <div class="mb-2">
@@ -64,6 +46,25 @@ Centros
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
+                    </div>
+
+                    <div class="left-side w-full">
+                        <div class="mb-2">
+                            <label for="idTipo" class="block text-sm text-gray-600 mb-1">
+                                Tipo:
+                            </label>
+                            
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idTipo" name="idTipo" value="{{old("idTipo")}}">
+                                <option value="">-----</option>
+                                @foreach ($tiposCentro as $tipo)
+                                    <option value="{{ $tipo['id'] }}" {{ (old("idTipo")== $tipo['id'] || app('request')->input('idTipo') == $tipo['id'] ? "selected":"") }}>{{ $tipo['nombre'] }}</option>
+                                @endforeach
+                            </select>
+                        
+                            @error('idTipo')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div> 
                     </div>
                 </div>
                 <button type="submit" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">

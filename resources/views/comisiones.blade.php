@@ -23,25 +23,7 @@ Comisiones
                 <h2 class="text-gray-600 font-bold mb-2">Añadir nueva comisión</h2>
                 @csrf
                 <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">
-                    <div class="left-side w-full">
-                        <div class="mb-2">
-                            <label for="idJunta" class="block text-sm text-gray-600 mb-1">
-                                Junta que gestiona la comisión:
-                            </label>
-                            
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idJunta" name="idJunta" required>
-                                <option value="">-----</option>
-                                @foreach ($juntas as $junta)
-                                    <option value="{{ $junta['id'] }}">{{ $junta->centro->nombre }}</option>
-                                @endforeach
-                            </select>
-                           
-                            @error('idJunta')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-
+                    
                     <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="nombre" class="block text-sm text-gray-600 mb-1">
@@ -61,6 +43,25 @@ Comisiones
                             </label>
                             <input id="descripcion" name="descripcion" type="textarea" value="{{old("descripcion")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
                             @error('descripcion')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="left-side w-full">
+                        <div class="mb-2">
+                            <label for="idJunta" class="block text-sm text-gray-600 mb-1">
+                                Junta a la que pertenece:
+                            </label>
+                            
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idJunta" name="idJunta" required>
+                                <option value="">-----</option>
+                                @foreach ($juntas as $junta)
+                                    <option value="{{ $junta['id'] }}">{{ $junta->centro->nombre }}</option>
+                                @endforeach
+                            </select>
+                           
+                            @error('idJunta')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>

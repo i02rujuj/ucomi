@@ -20,13 +20,16 @@ Juntas
             @endif
 
             <form method="POST" action="{{ route('juntas.store') }}" class="bg-white p-8 mb-6 rounded-lg shadow-md">
-                <h2 class="text-gray-600 font-bold mb-2">Añadir nueva junta</h2>
+                <div class="text-gray-600 font-bold mb-2">
+                    Añadir nueva junta
+                </div>
+                
                 @csrf
                 <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">
                     <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="idCentro" class="block text-sm text-gray-600 mb-1">
-                                Centro que coordina la junta:
+                                ¿A qué centro pertenece?
                             </label>
                             
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idCentro" name="idCentro" required>
@@ -102,6 +105,24 @@ Juntas
                 <button type="submit" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
                     Añadir Junta
                 </button>
+
+                <button type="button" class="accordion-info mt-4 w-full text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
+                    <span class="material-icons-round">
+                        info
+                    </span>
+                    &nbsp;
+                    Información aclaratoria sobre la creación de una junta
+                </button>
+
+                <div class="info text-sm text-slate-600 border font-medium py-1 px-4 rounded">
+                    Para crear una junta será necesario que existan como mínimo los siguientes miembros del equipo de gobierno del centro al que pertenezca:
+                    <br><br>
+                    - Director/a o Decano/a
+                    <br>
+                    - Secretario/a
+                    <br><br>
+                    Estos serán automáticamente miembros natos de la junta.
+                </div>
             </form>
 
             <hr className="my-6 border-t border-gray-300" />

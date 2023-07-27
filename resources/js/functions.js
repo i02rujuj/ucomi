@@ -39,3 +39,21 @@ for (i = 0; i < acc.length; i++) {
 
   });
 }
+
+var acc = document.getElementsByClassName("accordion-info");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("info-active");
+    var submenu = this.nextElementSibling;
+
+    if (submenu.style.maxHeight || submenu.classList.contains("info-visible")) {
+        submenu.style.maxHeight = null;
+        submenu.classList.remove("info-visible");
+    } else {
+        submenu.style.maxHeight = submenu.scrollHeight + "px";
+    }
+
+  });
+}

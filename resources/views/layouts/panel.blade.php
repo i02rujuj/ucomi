@@ -133,8 +133,6 @@
         </div>
 
     </div>
-
-    <script src="https://flowbite.com/docs/flowbite.min.js?v=1.7.0a"></script>
 </body>
 
 </html>

@@ -23,20 +23,21 @@ Miembros de Gobierno
                 <h2 class="text-gray-600 font-bold mb-2">Añadir nuevo miembro de Gobierno</h2>
                 @csrf
                 <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">
+
                     <div class="left-side w-full">
                         <div class="mb-2">
-                            <label for="idCentro" class="block text-sm text-gray-600 mb-1">
-                                Centro:
+                            <label for="idUsuario" class="block text-sm text-gray-600 mb-1">
+                                Usuario:
                             </label>
                             
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idCentro" name="idCentro" value="{{old("idCentro")}}">
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idUsuario" name="idUsuario">
                                 <option value="">-----</option>
-                                @foreach ($centros as $centro)
-                                    <option value="{{ $centro['id'] }}" {{ (old("idCentro")== $centro['id'] || app('request')->input('idCentro') == $centro['id'] ? "selected":"") }}>{{ $centro['nombre'] }}</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user['id'] }}" {{ (old("idUsuario")== $user['id'] || app('request')->input('idUsuario') == $user['id'] ? "selected":"") }}>{{ $user['name'] }}</option>
                                 @endforeach
                             </select>
                         
-                            @error('idCentro')
+                            @error('idUsuario')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
@@ -60,25 +61,26 @@ Miembros de Gobierno
                             @enderror
                         </div>
                     </div>
+
                     <div class="left-side w-full">
                         <div class="mb-2">
-                            <label for="idUsuario" class="block text-sm text-gray-600 mb-1">
-                                Usuario:
+                            <label for="idCentro" class="block text-sm text-gray-600 mb-1">
+                                Centro:
                             </label>
                             
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idUsuario" name="idUsuario">
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idCentro" name="idCentro" value="{{old("idCentro")}}">
                                 <option value="">-----</option>
-                                @foreach ($users as $user)
-                                    <option value="{{ $user['id'] }}" {{ (old("idUsuario")== $user['id'] || app('request')->input('idUsuario') == $user['id'] ? "selected":"") }}>{{ $user['name'] }}</option>
+                                @foreach ($centros as $centro)
+                                    <option value="{{ $centro['id'] }}" {{ (old("idCentro")== $centro['id'] || app('request')->input('idCentro') == $centro['id'] ? "selected":"") }}>{{ $centro['nombre'] }}</option>
                                 @endforeach
                             </select>
                         
-                            @error('idUsuario')
+                            @error('idCentro')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
-                    </div>
-
+                    </div> 
+                
                     <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="fechaTomaPosesion" class="block text-sm text-gray-600 mb-1">

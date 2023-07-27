@@ -1,0 +1,39 @@
+import { MIEMBROSCOMISION_UPDATE_URL, MIEMBROSCOMISION_GET_URL, MIEMBROSCOMISION_DELETE_URL } from "./api/endPoints";
+import { UPDATE_MIEMBROSCOMISION_AXIOS, GET_MIEMBROSCOMISION_AXIOS, DELETE_MIEMBROSCOMISION_AXIOS } from "./api/apiSender";
+import { ENDPOINT_MIEMBROSCOMISION_UPDATE_BBDD, ENDPOINT_MIEMBROSCOMISION_GET_BBDD, ENDPOINT_MIEMBROSCOMISION_DELETE_BBDD } from "./api/apiConst";
+
+function DELETE_MIEMBROSCOMISION_BBDD(data) {
+    ENDPOINT_MIEMBROSCOMISION_DELETE_BBDD.url = MIEMBROSCOMISION_DELETE_URL;
+    ENDPOINT_MIEMBROSCOMISION_DELETE_BBDD.data = data;
+    return DELETE_MIEMBROSCOMISION_AXIOS().then((response) => {
+        return response.data;
+    }).catch((error) => {
+        return error;
+    });
+}
+
+function GET_MIEMBROSCOMISION_BBDD(data) {
+    ENDPOINT_MIEMBROSCOMISION_GET_BBDD.url = MIEMBROSCOMISION_GET_URL;
+    ENDPOINT_MIEMBROSCOMISION_GET_BBDD.data = data;
+    return GET_MIEMBROSCOMISION_AXIOS().then((response) => {
+        return response.data;
+    }).catch((error) => {
+        return error;
+    });
+}
+
+function UPDATE_MIEMBROSCOMISION_BBDD(data) {
+    ENDPOINT_MIEMBROSCOMISION_UPDATE_BBDD.url = MIEMBROSCOMISION_UPDATE_URL;
+    ENDPOINT_MIEMBROSCOMISION_UPDATE_BBDD.data = data;
+    return UPDATE_MIEMBROSCOMISION_AXIOS().then((response) => {
+        return response.data;
+    }).catch((error) => {
+        return error;
+    });
+}
+
+export {
+    DELETE_MIEMBROSCOMISION_BBDD,
+    GET_MIEMBROSCOMISION_BBDD,
+    UPDATE_MIEMBROSCOMISION_BBDD
+}

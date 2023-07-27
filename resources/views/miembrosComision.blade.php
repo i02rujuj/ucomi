@@ -1,6 +1,6 @@
 @extends ('layouts.panel')
 @section ('title')
-Miembros de Junta
+Miembros de Comisión
 @endsection
 
 @section ('content')
@@ -19,8 +19,8 @@ Miembros de Junta
             </div>
             @endif
 
-            <form method="POST" action="{{ route('miembrosJunta.store') }}" class="bg-white p-8 mb-6 rounded-lg shadow-md">
-                <h2 class="text-gray-600 font-bold mb-2">Añadir nuevo miembro de Junta</h2>
+            <form method="POST" action="{{ route('miembrosComision.store') }}" class="bg-white p-8 mb-6 rounded-lg shadow-md">
+                <h2 class="text-gray-600 font-bold mb-2">Añadir nuevo miembro de Comisión</h2>
                 @csrf
                 <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">
 
@@ -64,18 +64,18 @@ Miembros de Junta
 
                     <div class="left-side w-full">
                         <div class="mb-2">
-                            <label for="idJunta" class="block text-sm text-gray-600 mb-1">
-                                Junta:
+                            <label for="idComision" class="block text-sm text-gray-600 mb-1">
+                                Comisión:
                             </label>
                             
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idJunta" name="idJunta" value="{{old("idJunta")}}">
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idComision" name="idComision" value="{{old("idComision")}}">
                                 <option value="">-----</option>
-                                @foreach ($juntas as $junta)
-                                    <option value="{{ $junta['id'] }}" {{ (old("idJunta")== $junta['id'] || app('request')->input('idJunta') == $junta['id'] ? "selected":"") }}>{{ $junta->centro->nombre }}</option>
+                                @foreach ($comisiones as $com)
+                                    <option value="{{ $com['id'] }}" {{ (old("idComision")== $com['id'] || app('request')->input('idComision') == $com['id'] ? "selected":"") }}>{{ $com->nombre }}</option>
                                 @endforeach
                             </select>
                         
-                            @error('idJunta')
+                            @error('idComision')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
@@ -147,14 +147,14 @@ Miembros de Junta
                     <div class="right-side w-full"> 
 
                         <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-full">
-                            <label for="search-idJunta" class="block text-sm text-gray-600 mb-1">
-                                Junta:
+                            <label for="search-idComision" class="block text-sm text-gray-600 mb-1">
+                                Comisión:
                             </label>
                             
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" id="search-idJunta" name="search-idJunta">
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" id="search-idComision" name="search-idComision">
                                 <option value="">-----</option>
-                                @foreach ($juntas as $junta)
-                                    <option value="{{ $junta['id'] }}">{{ $junta->centro->nombre }}</option>
+                                @foreach ($comisiones as $com)
+                                    <option value="{{ $com['id'] }}">{{ $com->nombre }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -197,7 +197,7 @@ Miembros de Junta
 <!----------------------------- START LISTADO ---------------------------------->
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-                @foreach ($miembrosJunta as $miembro)
+                @foreach ($miembrosComision as $miembro)
                     <div class="card bg-white p-6 rounded-lg shadow-md">
                         <span class="hidden" id="card-status">{{ $miembro->estado == 1 ? 'Habilitado' : 'Deshabilitado' }}</span>
                         <div class="flex items-start justify-between">
@@ -211,10 +211,10 @@ Miembros de Junta
                                 </div>
                                 <div class="flex items-center mb-1">
                                     <span class="material-icons-round scale-75">
-                                        account_balance
+                                        send
                                     </span>
                                     &nbsp;
-                                    <h2 class="text-sm mb-1 truncate">{{ $miembro->junta->centro->nombre }}</h2>
+                                    <h2 class="text-sm mb-1 truncate">{{ $miembro->comision->nombre }}</h2>
                                 </div>
                                 <div class="flex text-xs text-slate-400 font-medium mb-1 truncate items-center gap-1">
                                     <div class="truncate flex items-center">
@@ -266,5 +266,5 @@ Miembros de Junta
     </div>
     @endsection
 
-@vite(['resources/js/miembrosJunta/miembrosJunta.js'])
+@vite(['resources/js/miembrosComision/miembrosComision.js'])
 @vite(['resources/js/filtros.js'])

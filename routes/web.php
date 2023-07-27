@@ -10,6 +10,7 @@ use App\Http\Controllers\ComisionController;
 use App\Http\Controllers\TiposCentroController;
 use App\Http\Controllers\MiembrosJuntaController;
 use App\Http\Controllers\RepresentacionController;
+use App\Http\Controllers\MiembrosComisionController;
 use App\Http\Controllers\MiembrosGobiernoController;
 use App\Http\Controllers\RepresentacionGeneralController;
 
@@ -77,13 +78,19 @@ Route::post('/junta/get', [JuntasController::class, 'get']);
 Route::post('/junta/update', [JuntasController::class, 'update']);
 Route::post('/junta/all', [JuntasController::class, 'all']);
 
-
 // MIEMBROS JUNTA
 Route::get('/miembros_junta', [MiembrosJuntaController::class, 'index'])->name('miembrosJunta');
 Route::post('/miembros_junta', [MiembrosJuntaController::class, 'store'])->name('miembrosJunta.store');
 Route::post('/miembro_junta/delete', [MiembrosJuntaController::class, 'delete']);
 Route::post('/miembro_junta/get', [MiembrosJuntaController::class, 'get']);
 Route::post('/miembro_junta/update', [MiembrosJuntaController::class, 'update']);
+
+// MIEMBROS COMISIÓN
+Route::get('/miembros_comision', [MiembrosComisionController::class, 'index'])->name('miembrosComision');
+Route::post('/miembros_comision', [MiembrosComisionController::class, 'store'])->name('miembrosComision.store');
+Route::post('/miembro_comision/delete', [MiembrosComisionController::class, 'delete']);
+Route::post('/miembro_comision/get', [MiembrosComisionController::class, 'get']);
+Route::post('/miembro_comision/update', [MiembrosComisionController::class, 'update']);
 
 // USERS
 Route::post('/user/get', [UserController::class, 'get']);

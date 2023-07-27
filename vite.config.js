@@ -9,6 +9,7 @@ export default defineConfig({
                 'resources/js/centros/centros.js',
                 'resources/js/miembrosGobierno/miembrosGobierno.js',
                 'resources/js/miembrosJunta/miembrosJunta.js',
+                'resources/js/miembrosComision/miembrosComision.js',
                 'resources/js/juntas/juntas.js',
                 'resources/js/comisiones/comisiones.js',
                 'resources/js/home.js',

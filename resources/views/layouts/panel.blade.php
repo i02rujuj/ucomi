@@ -92,11 +92,11 @@
                             Miembros
                     </button>
 
-                    <div @class(['submenu', request()->routeIs('miembrosGobierno') || request()->routeIs('miembrosJunta') ? 'submenu-visible' : ''])>
+                    <div @class(['submenu', request()->routeIs('miembrosGobierno') || request()->routeIs('miembrosJunta') || request()->routeIs('miembrosComision') ? 'submenu-visible' : ''])>
                         <li @class(['mb-1 flex', request()->routeIs('miembrosGobierno') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('miembrosGobierno') }}" class="text-gray-600 w-full flex justify-start items-center">
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
-                                    groups_3
+                                    school
                                 </span>
                                 &nbsp;
                                 Gobierno
@@ -106,10 +106,20 @@
                         <li @class(['mb-1 flex', request()->routeIs('miembrosJunta') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('miembrosJunta') }}" class="text-gray-600 w-full flex justify-start items-center">
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
-                                    diversity_3
+                                    account_balance
                                 </span>
                                 &nbsp;
                                 Junta
+                            </a>
+                        </li>
+
+                        <li @class(['mb-1 flex', request()->routeIs('miembrosComision') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
+                            <a href="{{ route('miembrosComision') }}" class="text-gray-600 w-full flex justify-start items-center">
+                                <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                                    send
+                                </span>
+                                &nbsp;
+                                Comisión
                             </a>
                         </li>
                     </div>

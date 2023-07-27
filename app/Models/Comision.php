@@ -22,4 +22,9 @@ class Comision extends Model
     {
         return $this->belongsTo(Junta::class, 'idJunta');
     }
+
+    public function comisiones()
+    {
+        return $this->hasMany(Comision::class, 'id');
+    }
 }

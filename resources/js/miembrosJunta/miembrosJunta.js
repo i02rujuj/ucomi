@@ -1,7 +1,8 @@
 import { DELETE_MIEMBROSJUNTA_BBDD, GET_MIEMBROSJUNTA_BBDD, UPDATE_MIEMBROSJUNTA_BBDD } from "./axiosTemplate.js";
+import {GET_JUNTA_BBDD} from '../juntas/axiosTemplate.js';
 import {GET_CENTRO_BBDD} from '../centros/axiosTemplate.js';
 import {GET_USER_BBDD} from '../users/axiosTemplate.js';
-import {GET_REPRESENTACION_BBDD} from '../representaciones/axiosTemplate.js';
+import {GETALL_REPRESENTACION_BBDD} from '../representacionesGeneral/axiosTemplate.js';
 import Swal from 'sweetalert2';
 
 // EVENTO EDITAR
@@ -12,6 +13,9 @@ const addEditEvent = (button) => {
         };
 
         try {
+
+            var options ="";
+
             // Obtenemos el miembro a editar
             const response = await GET_MIEMBROSJUNTA_BBDD(dataToSend);
 
@@ -27,30 +31,46 @@ const addEditEvent = (button) => {
                 id: response.idRepresentacion,
             };
 
-            const junta = await GET_CENTRO_BBDD(dataToSendJunta); 
+            const junta = await GET_JUNTA_BBDD(dataToSendJunta);
+
+            const dataToSendCentro = {
+                id: junta.idCentro,
+            };
+            
+            const centro = await GET_CENTRO_BBDD(dataToSendCentro);
 
             const usuario = await GET_USER_BBDD(dataToSendUsuario); 
 
-            const representacion = await GET_REPRESENTACION_BBDD(dataToSendRepresentacion); 
+            const representaciones = await GETALL_REPRESENTACION_BBDD(dataToSendRepresentacion); 
 
             const result = await Swal.fire({
                 title: "Editar Miembro Junta",
                 html: `
                     <input type="hidden" id="idJunta" value="${junta.id}"/>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
-                        <label for="junta" class="block text-sm text-gray-600 w-32">Centro:</label>
-                        <input type="text" id="junta" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${junta.nombre}" readonly>
+                        <label for="junta" class="block text-sm text-gray-600 w-32">Junta:</label>
+                        <input type="text" id="junta" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${centro.nombre}" readonly>
                     </div>
                     <input type="hidden" id="idUsuario" value="${usuario.id}"/>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
                         <label for="usuario" class="block text-sm text-gray-600 w-32">Usuario:</label>
                         <input type="text" id="usuario" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${usuario.name}" readonly>
                     </div>
-                    <input type="hidden" id="idRepresentacion" value="${representacion.id}"/>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
-                        <label for="representacion" class="block text-sm text-gray-600 w-32">Representación:</label>
-                        <input type="text" id="representacion" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${representacion.nombre}" readonly>
+
+                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
+                        <label for="idRepresentacion" class="block text-sm text-gray-600 mb-1 w-32">Tipo:</label>
+                        <select id="idRepresentacion" class="miembro swal2-input tipo text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required">
+                            <option value="">-----</option>
+                            ${representaciones.forEach(rep => {            
+                                options+='<option value="'+rep.id+'" ';
+                                if(rep.id == response.idRepresentacion) 
+                                    options+='selected';
+                                options+='>'+rep.nombre+'</option>';                                               
+                            })}
+                            ${options}
+                        </select>
                     </div>
+
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
                         <label for="fechaTomaPosesion" class="block text-sm text-gray-600 w-32">Fecha Toma posesión:</label>
                         <input type="date" id="fechaTomaPosesion" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required value="${response.fechaTomaPosesion}">

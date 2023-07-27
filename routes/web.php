@@ -10,6 +10,7 @@ use App\Http\Controllers\TiposCentroController;
 use App\Http\Controllers\MiembrosJuntaController;
 use App\Http\Controllers\RepresentacionController;
 use App\Http\Controllers\MiembrosGobiernoController;
+use App\Http\Controllers\RepresentacionGeneralController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,15 +78,19 @@ Route::post('/junta/update', [JuntasController::class, 'update']);
 // MIEMBROS JUNTA
 Route::get('/miembros_junta', [MiembrosJuntaController::class, 'index'])->name('miembrosJunta');
 Route::post('/miembros_junta', [MiembrosJuntaController::class, 'store'])->name('miembrosJunta.store');
-Route::post('/miembros_junta/delete', [MiembrosJuntaController::class, 'delete']);
-Route::post('/miembros_junta/get', [MiembrosJuntaController::class, 'get']);
-Route::post('/miembros_junta/update', [MiembrosJuntaController::class, 'update']);
+Route::post('/miembro_junta/delete', [MiembrosJuntaController::class, 'delete']);
+Route::post('/miembro_junta/get', [MiembrosJuntaController::class, 'get']);
+Route::post('/miembro_junta/update', [MiembrosJuntaController::class, 'update']);
 
 // USERS
 Route::post('/user/get', [UserController::class, 'get']);
 
-// REPRESENTACIONES
+// REPRESENTACIONES GOBIERNO
 Route::post('/representacion/get', [RepresentacionController::class, 'get']);
+
+// REPRESENTACIONES GENERAL
+Route::post('/representacion_general/get', [RepresentacionGeneralController::class, 'get']);
+Route::post('/representacion_general/all', [RepresentacionGeneralController::class, 'all']);
 
 
     

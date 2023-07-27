@@ -77,8 +77,8 @@ class MiembrosJuntaController extends Controller
                         ->where('estado', 1)
                         ->first();
     
-                    if($miembroRepetido)
-                        return redirect()->route('miembrosJunta')->with('error', 'No se pudo crear el miembro de Junta: ya existe un miembro en activo para la junta seleccionada')->withInput();
+            if($miembroRepetido)
+                return redirect()->route('miembrosJunta')->with('error', 'No se pudo crear el miembro de Junta: ya existe un miembro en activo para la junta seleccionada')->withInput();
                 
 
             $miembroJunta = MiembroJunta::create([
@@ -92,6 +92,69 @@ class MiembrosJuntaController extends Controller
             return redirect()->route('miembrosJunta')->with('success', 'Miembrode Junta creado correctamente.');
         } catch (\Throwable $th) {
             return redirect()->route('miembrosJunta')->with('error', 'No se pudo crear el miembro de junta: ' . $th->getMessage());
+        }
+    }
+
+    public function get(Request $request)
+    {
+        try {
+            $miembro = MiembroJunta::where('id', $request->id)->first();
+            if (!$miembro) {
+                return response()->json(['error' => 'No se ha encontrado el miembro de junta.'], 404);
+            }
+            return response()->json($miembro);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'No se ha encontrado el miembro de junta.'], 404);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $miembro = MiembroJunta::where('id', $request->id)->first();
+
+            if ($request->estado == 0) {
+                $miembro->estado = 1;
+            } else {
+                $miembro->estado = 0;
+            }
+
+            if (!$miembro) {
+                return response()->json(['error' => 'No se ha encontrado el miembro de Junta.'], 404);
+            }
+
+            $miembro->save();
+            return response()->json($request);
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'No se ha encontrado el miembro de Junta.'], 404);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            $miembro = MiembroJunta::where('id', $request->id)->first();
+            if (!$miembro) {
+                return response()->json(['error' => 'No se ha encontrado el miembro de Junta', 'status' => 404], 200);
+            }
+
+            // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
+            $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
+            $dateCese = new DateTime($request->data['fechaCese']);
+
+            if ($dateTomaPosesion>$dateCese) {
+                return response()->json(['error' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 404], 200);
+            }          
+
+            $miembro->idRepresentacion = $request->data['idRepresentacion'];
+            $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
+            $miembro->fechaCese = $request->data['fechaCese'];  
+            $miembro->save();
+            return response()->json(['message' => 'El miembro de Junta se ha actualizado correctamente.', 'status' => 200], 200);
+            
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'Error al actualizar el miembro de junta.', 'status' => 404], 404);
         }
     }
 }

@@ -8,6 +8,7 @@ export default defineConfig({
                 'resources/sass/app.scss',
                 'resources/js/centros/centros.js',
                 'resources/js/miembrosGobierno/miembrosGobierno.js',
+                'resources/js/miembrosJunta/miembrosJunta.js',
                 'resources/js/juntas/juntas.js',
                 'resources/js/home.js',
                 'resources/js/filtros.js',

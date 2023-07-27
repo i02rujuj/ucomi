@@ -29,7 +29,7 @@ Juntas
                                 Centro que coordina la junta:
                             </label>
                             
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idCentro" name="idCentro">
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idCentro" name="idCentro" required>
                                 <option value="">-----</option>
                                 @foreach ($centros as $centro)
                                     <option value="{{ $centro['id'] }}">{{ $centro['nombre'] }}</option>

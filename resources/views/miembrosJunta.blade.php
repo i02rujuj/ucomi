@@ -1,6 +1,6 @@
 @extends ('layouts.panel')
 @section ('title')
-Miembros de Gobierno
+Miembros de Junta
 @endsection
 
 @section ('content')
@@ -19,24 +19,24 @@ Miembros de Gobierno
             </div>
             @endif
 
-            <form method="POST" action="{{ route('miembrosGobierno.store') }}" class="bg-white p-8 mb-6 rounded-lg shadow-md">
-                <h2 class="text-gray-600 font-bold mb-2">Añadir nuevo miembro de Gobierno</h2>
+            <form method="POST" action="{{ route('miembrosJunta.store') }}" class="bg-white p-8 mb-6 rounded-lg shadow-md">
+                <h2 class="text-gray-600 font-bold mb-2">Añadir nuevo miembro de Junta</h2>
                 @csrf
                 <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">
                     <div class="left-side w-full">
                         <div class="mb-2">
-                            <label for="idCentro" class="block text-sm text-gray-600 mb-1">
-                                Centro:
+                            <label for="idJunta" class="block text-sm text-gray-600 mb-1">
+                                Junta:
                             </label>
                             
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idCentro" name="idCentro" value="{{old("idCentro")}}">
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idJunta" name="idJunta" value="{{old("idJunta")}}">
                                 <option value="">-----</option>
-                                @foreach ($centros as $centro)
-                                    <option value="{{ $centro['id'] }}" {{ (old("idCentro")== $centro['id'] || app('request')->input('idCentro') == $centro['id'] ? "selected":"") }}>{{ $centro['nombre'] }}</option>
+                                @foreach ($juntas as $junta)
+                                    <option value="{{ $junta['id'] }}" {{ (old("idJunta")== $junta['id'] || app('request')->input('idJunta') == $junta['id'] ? "selected":"") }}>{{ $junta->centro->nombre }}</option>
                                 @endforeach
                             </select>
                         
-                            @error('idCentro')
+                            @error('idJunta')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
@@ -50,7 +50,7 @@ Miembros de Gobierno
                             
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idRepresentacion" name="idRepresentacion">
                                 <option value="">-----</option>
-                                @foreach ($representacionesGobierno as $rep)
+                                @foreach ($representacionesGeneral as $rep)
                                     <option value="{{ $rep['id'] }}" {{ (old("idRepresentacion")== $rep['id'] || app('request')->input('idRepresentacion') == $rep['id'] ? "selected":"") }}>{{ $rep['nombre'] }}</option>
                                 @endforeach
                             </select>
@@ -145,14 +145,14 @@ Miembros de Gobierno
                     <div class="right-side w-full"> 
 
                         <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-full">
-                            <label for="search-idCentro" class="block text-sm text-gray-600 mb-1">
-                                Centro:
+                            <label for="search-idJunta" class="block text-sm text-gray-600 mb-1">
+                                Junta:
                             </label>
                             
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" id="search-idCentro" name="search-idCentro">
+                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" id="search-idJunta" name="search-idJunta">
                                 <option value="">-----</option>
-                                @foreach ($centros as $centro)
-                                    <option value="{{ $centro['id'] }}">{{ $centro['nombre'] }}</option>
+                                @foreach ($juntas as $junta)
+                                    <option value="{{ $junta['id'] }}">{{ $junta['nombre'] }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -181,7 +181,7 @@ Miembros de Gobierno
                             
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idRepresentacion" name="idRepresentacion" value="{{old("idRepresentacion")}}">
                                 <option value="">-----</option>
-                                @foreach ($representacionesGobierno as $rep)
+                                @foreach ($representacionesGeneral as $rep)
                                     <option value="{{ $rep['id'] }}">{{ $rep['nombre'] }}</option>
                                 @endforeach
                             </select>
@@ -195,7 +195,7 @@ Miembros de Gobierno
 <!----------------------------- START LISTADO ---------------------------------->
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-                @foreach ($miembrosGobierno as $miembro)
+                @foreach ($miembrosJunta as $miembro)
                     <div class="card bg-white p-6 rounded-lg shadow-md">
                         <span class="hidden" id="card-status">{{ $miembro->estado == 1 ? 'Habilitado' : 'Deshabilitado' }}</span>
                         <div class="flex items-start justify-between">
@@ -212,7 +212,7 @@ Miembros de Gobierno
                                         school
                                     </span>
                                     &nbsp;
-                                    <h2 class="text-sm mb-1 truncate">{{ $miembro->centro->nombre }}</h2>
+                                    <h2 class="text-sm mb-1 truncate">{{ $miembro->junta->centro->nombre }}</h2>
                                 </div>
                                 <div class="flex text-xs text-slate-400 font-medium mb-1 truncate items-center gap-1">
                                     <div class="truncate flex items-center">
@@ -264,5 +264,5 @@ Miembros de Gobierno
     </div>
     @endsection
 
-@vite(['resources/js/miembrosGobierno/miembrosGobierno.js'])
+@vite(['resources/js/miembrosJunta/miembrosJunta.js'])
 @vite(['resources/js/filtros.js'])

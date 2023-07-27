@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             RepresentacionGobiernoSeeder::class,
             MiembroGobiernoSeeder::class,
+            RepresentacionGeneralSeeder::class,
+            JuntaSeeder::class,
         ]);
     }
 }

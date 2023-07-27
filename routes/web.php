@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\JuntasController;
 use App\Http\Controllers\CentrosController;
 use App\Http\Controllers\TiposCentroController;
+use App\Http\Controllers\MiembrosJuntaController;
 use App\Http\Controllers\RepresentacionController;
 use App\Http\Controllers\MiembrosGobiernoController;
 
@@ -59,8 +60,8 @@ Route::post('/centro/update', [CentrosController::class, 'update']);
 Route::post('/centro/all', [CentrosController::class, 'all']);
 
 // MIEMBROS EQUIPO DE GOBIERNO
-Route::get('/miembrosGobierno', [MiembrosGobiernoController::class, 'index'])->name('miembrosGobierno');
-Route::post('/miembrosGobierno', [MiembrosGobiernoController::class, 'store'])->name('miembrosGobierno.store');
+Route::get('/miembros_gobierno', [MiembrosGobiernoController::class, 'index'])->name('miembrosGobierno');
+Route::post('/miembros_gobierno', [MiembrosGobiernoController::class, 'store'])->name('miembrosGobierno.store');
 Route::post('/miembro_gobierno/delete', [MiembrosGobiernoController::class, 'delete']);
 Route::post('/miembro_gobierno/get', [MiembrosGobiernoController::class, 'get']);
 Route::post('/miembro_gobierno/update', [MiembrosGobiernoController::class, 'update']);
@@ -72,6 +73,13 @@ Route::post('/juntas', [JuntasController::class, 'store'])->name('juntas.store')
 Route::post('/junta/delete', [JuntasController::class, 'delete']);
 Route::post('/junta/get', [JuntasController::class, 'get']);
 Route::post('/junta/update', [JuntasController::class, 'update']);
+
+// MIEMBROS JUNTA
+Route::get('/miembros_junta', [MiembrosJuntaController::class, 'index'])->name('miembrosJunta');
+Route::post('/miembros_junta', [MiembrosJuntaController::class, 'store'])->name('miembrosJunta.store');
+Route::post('/miembros_junta/delete', [MiembrosJuntaController::class, 'delete']);
+Route::post('/miembros_junta/get', [MiembrosJuntaController::class, 'get']);
+Route::post('/miembros_junta/update', [MiembrosJuntaController::class, 'update']);
 
 // USERS
 Route::post('/user/get', [UserController::class, 'get']);

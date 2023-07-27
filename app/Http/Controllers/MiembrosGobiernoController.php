@@ -20,13 +20,11 @@ class MiembrosGobiernoController extends Controller
             $users = User::select('id', 'name')->where('estado', 1)->get();
             $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->where('estado', 1)->get();
 
-
             $miembrosGobierno = MiembroGobierno::orderBy('idCentro')->orderBy('idRepresentacion')->orderBy('estado')->orderBy('idUsuario')->get();
-
 
             return view('miembrosGobierno', ['centros' => $centros, 'users' => $users, 'representacionesGobierno' => $representacionesGobierno, 'miembrosGobierno' => $miembrosGobierno]);
         } catch (\Throwable $th) {
-            return redirect()->route('miembrosGobierno')->with('error', 'No se pudieron obtener los centros/usuarios | Miembro de Gobierno: ' . $th->getMessage());
+            return redirect()->route('miembrosGobierno')->with('error', 'No se pudieron obtener algunos datos referentes a los miembros de Gobierno: ' . $th->getMessage());
         }
     }
 

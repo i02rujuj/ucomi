@@ -64,6 +64,16 @@ class JuntasController extends Controller
                 return redirect()->route('juntas')->with('error', 'La fecha de disolución no puede ser anterior a la fecha de constitución')->withInput();
             }
 
+            // Comprobación existencia junta en activo para el centro seleccionado
+            $junta = Junta::select('id')
+                ->where('idCentro', $request->get('idCentro'))
+                ->where('fechaDisolucion', null)
+                ->where('estado', 1)
+                ->first();
+
+            if($junta)
+                return redirect()->route('juntas')->with('error', 'No se pudo crear la junta: ya existe una junta en activo para el centro indicado')->withInput();
+
             $junta = Junta::create([
                 "idCentro" => $request->idCentro,
                 "fechaConstitucion" => $request->fechaConstitucion,

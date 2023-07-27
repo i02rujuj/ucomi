@@ -64,16 +64,6 @@
                         </a>
                     </li>
 
-                    <li @class(['mb-1 flex', request()->routeIs('miembrosGobierno') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
-                        <a href="{{ route('miembrosGobierno') }}" class="text-gray-600 w-full flex justify-start items-center">
-                            <span class="material-icons-round text-slate-600 ml-4 mr-1">
-                                groups_3
-                            </span>
-                            &nbsp;
-                            Miembros Gobierno
-                        </a>
-                    </li>
-
                     <li @class(['mb-1 flex', request()->routeIs('juntas') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="{{ route('juntas') }}" class="text-gray-600 w-full flex justify-start items-center">
                             <span class="material-icons-round text-slate-600 ml-4 mr-1">
@@ -82,17 +72,7 @@
                             &nbsp;
                             Juntas
                         </a>
-                    </li>
-
-                    <li @class(['mb-1 flex', request()->routeIs('miembrosJunta') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
-                        <a href="{{ route('miembrosJunta') }}" class="text-gray-600 w-full flex justify-start items-center">
-                            <span class="material-icons-round text-slate-600 ml-4 mr-1">
-                                diversity_3
-                            </span>
-                            &nbsp;
-                            Miembros Junta
-                        </a>
-                    </li>
+                    </li> 
 
                     <li @class(['mb-1 flex', request()->routeIs('comisiones') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="{{ route('comisiones') }}" class="text-gray-600 w-full flex justify-start items-center">
@@ -103,17 +83,37 @@
                             Comisiones
                         </a>
                     </li>
-        
-                    <li @class(['mb-1 flex', request()->routeIs('perfil') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
-                        <a href="" class="text-gray-600 w-full flex justify-start items-center">
-                            <span class="material-icons-round text-slate-600 ml-4 mr-2">
-                                manage_accounts
-                            </span>
-                            &nbsp;
-                            Mi Perfil
-                        </a>
-                    </li>
-        
+
+                    <button class="accordion-submenu text-gray-600 w-full flex justify-start items-center hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200">
+                        <span class="material-icons-round text-slate-600 ml-4 mr-2">
+                            manage_accounts
+                        </span>
+                        &nbsp;
+                            Miembros
+                    </button>
+
+                    <div @class(['submenu', request()->routeIs('miembrosGobierno') || request()->routeIs('miembrosJunta') ? 'submenu-visible' : ''])>
+                        <li @class(['mb-1 flex', request()->routeIs('miembrosGobierno') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
+                            <a href="{{ route('miembrosGobierno') }}" class="text-gray-600 w-full flex justify-start items-center">
+                                <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                                    groups_3
+                                </span>
+                                &nbsp;
+                                Gobierno
+                            </a>
+                        </li>
+
+                        <li @class(['mb-1 flex', request()->routeIs('miembrosJunta') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
+                            <a href="{{ route('miembrosJunta') }}" class="text-gray-600 w-full flex justify-start items-center">
+                                <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                                    diversity_3
+                                </span>
+                                &nbsp;
+                                Junta
+                            </a>
+                        </li>
+                    </div>
+
                     <li @class(['mb-1 flex', request()->routeIs('logout') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="{{ route('logout') }}" class="text-red-600 hover:text-red-700 w-full flex justify-start items-center">
                             <span class="material-icons-round text-red-600 ml-4 mr-2">
@@ -134,6 +134,7 @@
 
     </div>
 
+    <script src="https://flowbite.com/docs/flowbite.min.js?v=1.7.0a"></script>
 </body>
 
 </html>

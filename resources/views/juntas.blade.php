@@ -19,6 +19,24 @@ Juntas
             </div>
             @endif
 
+            <button type="button" class="accordion-info mt-4 w-full text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
+                <span class="material-icons-round">
+                    info
+                </span>
+                &nbsp;
+                Información aclaratoria sobre la creación de una junta
+            </button>
+
+            <div class="info text-sm text-slate-600 border font-medium py-1 px-4 rounded">
+                Para crear una junta será necesario que existan como mínimo los siguientes miembros del equipo de gobierno del centro al que pertenezca:
+                <br><br>
+                - Director/a o Decano/a
+                <br>
+                - Secretario/a
+                <br><br>
+                Estos serán automáticamente miembros natos de la junta.
+            </div>
+
             <form method="POST" action="{{ route('juntas.store') }}" class="bg-white p-8 mb-6 rounded-lg shadow-md">
                 <div class="text-gray-600 font-bold mb-2">
                     Añadir nueva junta
@@ -105,24 +123,6 @@ Juntas
                 <button type="submit" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
                     Añadir Junta
                 </button>
-
-                <button type="button" class="accordion-info mt-4 w-full text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
-                    <span class="material-icons-round">
-                        info
-                    </span>
-                    &nbsp;
-                    Información aclaratoria sobre la creación de una junta
-                </button>
-
-                <div class="info text-sm text-slate-600 border font-medium py-1 px-4 rounded">
-                    Para crear una junta será necesario que existan como mínimo los siguientes miembros del equipo de gobierno del centro al que pertenezca:
-                    <br><br>
-                    - Director/a o Decano/a
-                    <br>
-                    - Secretario/a
-                    <br><br>
-                    Estos serán automáticamente miembros natos de la junta.
-                </div>
             </form>
 
             <hr className="my-6 border-t border-gray-300" />

@@ -23,4 +23,9 @@ class Junta extends Model
     {
         return $this->belongsTo(Centro::class, 'idCentro');
     }
+
+    public function comisiones()
+    {
+        return $this->hasMany(Comision::class, 'id');
+    }
 }

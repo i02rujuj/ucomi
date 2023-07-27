@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JuntasController;
 use App\Http\Controllers\CentrosController;
+use App\Http\Controllers\ComisionController;
 use App\Http\Controllers\TiposCentroController;
 use App\Http\Controllers\MiembrosJuntaController;
 use App\Http\Controllers\RepresentacionController;
@@ -74,6 +75,8 @@ Route::post('/juntas', [JuntasController::class, 'store'])->name('juntas.store')
 Route::post('/junta/delete', [JuntasController::class, 'delete']);
 Route::post('/junta/get', [JuntasController::class, 'get']);
 Route::post('/junta/update', [JuntasController::class, 'update']);
+Route::post('/junta/all', [JuntasController::class, 'all']);
+
 
 // MIEMBROS JUNTA
 Route::get('/miembros_junta', [MiembrosJuntaController::class, 'index'])->name('miembrosJunta');
@@ -91,6 +94,14 @@ Route::post('/representacion/get', [RepresentacionController::class, 'get']);
 // REPRESENTACIONES GENERAL
 Route::post('/representacion_general/get', [RepresentacionGeneralController::class, 'get']);
 Route::post('/representacion_general/all', [RepresentacionGeneralController::class, 'all']);
+
+// COMISIONES
+Route::get('/comisiones', [ComisionController::class, 'index'])->name('comisiones');
+Route::post('/comisiones', [ComisionController::class, 'store'])->name('comisiones.store');
+Route::post('/comision/delete', [ComisionController::class, 'delete']);
+Route::post('/comision/get', [ComisionController::class, 'get']);
+Route::post('/comision/update', [ComisionController::class, 'update']);
+
 
 
     

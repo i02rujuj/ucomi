@@ -93,6 +93,16 @@
                             Miembros Junta
                         </a>
                     </li>
+
+                    <li @class(['mb-1 flex', request()->routeIs('comisiones') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
+                        <a href="{{ route('comisiones') }}" class="text-gray-600 w-full flex justify-start items-center">
+                            <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                                send
+                            </span>
+                            &nbsp;
+                            Comisiones
+                        </a>
+                    </li>
         
                     <li @class(['mb-1 flex', request()->routeIs('perfil') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="" class="text-gray-600 w-full flex justify-start items-center">

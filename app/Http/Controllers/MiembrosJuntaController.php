@@ -89,7 +89,7 @@ class MiembrosJuntaController extends Controller
                 "idRepresentacion" => $request->idRepresentacion,
                 'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
             ]);
-            return redirect()->route('miembrosJunta')->with('success', 'Miembrode Junta creado correctamente.');
+            return redirect()->route('miembrosJunta')->with('success', 'Miembro de Junta creado correctamente.');
         } catch (\Throwable $th) {
             return redirect()->route('miembrosJunta')->with('error', 'No se pudo crear el miembro de junta: ' . $th->getMessage());
         }

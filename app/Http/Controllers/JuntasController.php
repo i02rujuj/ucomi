@@ -6,6 +6,7 @@ use DateTime;
 use App\Models\Junta;
 use App\Models\Centro;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class JuntasController extends Controller
@@ -134,6 +135,24 @@ class JuntasController extends Controller
             
         } catch (\Throwable $th) {
             return response()->json(['error' => 'Error al actualizar la junta.', 'status' => 404], 404);
+        }
+    }
+
+    public function all()
+    {
+        try {
+            $juntas = DB::table('juntas')
+            ->join('centros', 'juntas.idCentro', '=', 'centros.id')
+            ->where('juntas.estado', 1)
+            ->select('juntas.id', 'centros.nombre')
+            ->get();
+            if (!$juntas) {
+                return response()->json(['error' => 'No se han podido obtener las juntas.'], 404);
+            }
+
+            return response()->json($juntas);
+        } catch (\Throwable $th) {
+            return redirect()->route('juntas')->with('error', 'No se pudieron obtener las juntas: ' . $th->getMessage());
         }
     }
 }

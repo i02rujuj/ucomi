@@ -152,7 +152,7 @@ Miembros de Junta
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" id="search-idJunta" name="search-idJunta">
                                 <option value="">-----</option>
                                 @foreach ($juntas as $junta)
-                                    <option value="{{ $junta['id'] }}">{{ $junta['nombre'] }}</option>
+                                    <option value="{{ $junta['id'] }}">{{ $junta->centro->nombre }}</option>
                                 @endforeach
                             </select>
                         </div>

@@ -41,7 +41,7 @@ Comisiones
                             <label for="descripcion" class="block text-sm text-gray-600 mb-1">
                                 Descripción:
                             </label>
-                            <input id="descripcion" name="descripcion" type="textarea" value="{{old("descripcion")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
+                            <input id="descripcion" name="descripcion" type="textarea" value="{{old("descripcion")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off"/>
                             @error('descripcion')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror

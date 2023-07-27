@@ -61,7 +61,7 @@ class JuntasController extends Controller
             $dateDisolucion = new DateTime($request->fechaDisolucion);
 
             if ($dateConstitucion>$dateDisolucion) {
-                return redirect()->route('juntas')->with('error', 'La fecha de disolución no puede ser anterior a la fecha de constitución')->withInput();
+                return redirect()->route('juntas')->with('error', 'La fecha de disolución '.$request->fechaDisolucion.' no puede ser anterior a la fecha de constitución '. $request->fechaConstitucion)->withInput();
             }
 
             // Comprobación existencia junta en activo para el centro seleccionado

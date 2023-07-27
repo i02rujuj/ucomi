@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('idJunta');
             $table->string('nombre');
-            $table->string('descripcion');
+            $table->string('descripcion')->nullable();
             $table->date('fechaConstitucion');
             $table->date('fechaDisolucion')->nullable();
             $table->boolean('estado');

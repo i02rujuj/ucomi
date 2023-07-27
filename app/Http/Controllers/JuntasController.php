@@ -14,7 +14,11 @@ class JuntasController extends Controller
     public function index()
     {
         try {
-            $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'estado')->orderBy('idCentro')->orderBy('fechaConstitucion')->get();
+            $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'estado')
+            ->orderBy('estado', 'DESC')
+            ->orderBy('idCentro')
+            ->orderBy('fechaConstitucion')
+            ->get();
             $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
             return view('juntas', ['juntas' => $juntas, 'centros' => $centros,]);
         } catch (\Throwable $th) {
@@ -56,14 +60,16 @@ class JuntasController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-            $dateConstitucion = new DateTime($request->fechaConstitucion);
-            $dateDisolucion = new DateTime($request->fechaDisolucion);
+            if($request->fechaDisolucion!=null){
+                // Validar que fechaConstitución no pueda ser mayor a fechaDisolución
+                $dateConstitucion = new DateTime($request->fechaConstitucion);
+                $dateDisolucion = new DateTime($request->fechaDisolucion);
 
-            if ($dateConstitucion>$dateDisolucion) {
-                return redirect()->route('juntas')->with('error', 'La fecha de disolución '.$request->fechaDisolucion.' no puede ser anterior a la fecha de constitución '. $request->fechaConstitucion)->withInput();
+                if ($dateConstitucion>$dateDisolucion) {
+                    return redirect()->route('juntas')->with('error', 'La fecha de disolución '.$request->fechaDisolucion.' no puede ser anterior a la fecha de constitución '. $request->fechaConstitucion)->withInput();
+                }
             }
-
+           
             // Comprobación existencia junta en activo para el centro seleccionado
             $junta = Junta::select('id')
                 ->where('idCentro', $request->get('idCentro'))
@@ -130,13 +136,30 @@ class JuntasController extends Controller
                 return response()->json(['error' => 'No se ha encontrado la junta.', 'status' => 404], 404);
             }
 
-            // Validar que fechaConstitución no pueda ser mayor a fechaDisolución
-            $dateConstitucion = new DateTime($request->data['fechaConstitucion']);
-            $dateDisolucion = new DateTime($request->data['fechaDisolucion']);
+            // Comprobar al actualizar que solamente puede haber una junta en activo (fechaDisolucion=null)
+            // O estaba ya a null o quiere convertirla en actual
+            if($request->data['fechaDisolucion']==null){
+                // Comprobación existencia junta en activo para el centro seleccionado que no sea la propia
+                $juntaActiva = Junta::select('id')
+                    ->where('idCentro', $junta->idCentro)
+                    ->where('fechaDisolucion', null)
+                    ->where('estado', 1)
+                    ->whereNot('id', $junta->id)
+                    ->first();
 
-            if ($dateConstitucion>$dateDisolucion) {
-                return response()->json(['error' => 'La fecha de disolución no puede ser anterior a la fecha de constitución de la junta', 'status' => 404], 200);
-            } 
+                if ($juntaActiva) {
+                    return response()->json(['error' => 'No se ha podido actualizar la junta: solo puede existir una junta en activo', 'status' => 404], 200);
+                } 
+            }
+            else{
+                // Validar que fechaConstitución no pueda ser mayor a fechaDisolución
+                $dateConstitucion = new DateTime($request->data['fechaConstitucion']);
+                $dateDisolucion = new DateTime($request->data['fechaDisolucion']);
+
+                if ($dateConstitucion>$dateDisolucion) {
+                    return response()->json(['error' => 'La fecha de disolución no puede ser anterior a la fecha de constitución de la junta', 'status' => 404], 200);
+                } 
+            }
 
             $junta->fechaConstitucion = $request->data['fechaConstitucion'];
             $junta->fechaDisolucion = $request->data['fechaDisolucion'];

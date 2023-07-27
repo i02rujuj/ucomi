@@ -13,6 +13,23 @@ class JuntaSeeder extends Seeder
      */
     public function run(): void
     {
-        Junta::factory()->count(10)->create();
+        $juntas =[
+            [
+                'idCentro'=>1, 
+            ],
+            [ 
+                'idCentro'=>9, 
+            ],
+        ];
+
+        foreach($juntas as $j){
+            $junta = new Junta();
+            $junta->idCentro = $j['idCentro'];
+            $junta->fechaConstitucion = now();
+            $junta->fechaDisolucion= null;
+            $junta->estado = true;
+            $junta->save();
+        }
+
     }
 }

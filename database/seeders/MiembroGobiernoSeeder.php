@@ -13,6 +13,38 @@ class MiembroGobiernoSeeder extends Seeder
      */
     public function run(): void
     {
-        MiembroGobierno::factory()->count(5)->create();
+        $miembrosGobierno =[
+            [
+                'idUsuario'=>4, 
+                'idCentro'=>1, 
+                'representacion'=>1
+            ],
+            [
+                'idUsuario'=>3, 
+                'idCentro'=>1, 
+                'representacion'=>2
+            ],
+            [
+                'idUsuario'=>2, 
+                'idCentro'=>9, 
+                'representacion'=>1
+            ],
+            [
+                'idUsuario'=>1, 
+                'idCentro'=>9, 
+                'representacion'=>2
+            ],
+        ];
+
+        foreach($miembrosGobierno as $m){
+            $miembro = new MiembroGobierno();
+            $miembro->idUsuario = $m['idUsuario'];
+            $miembro->idCentro = $m['idCentro'];
+            $miembro->fechaTomaPosesion = now();
+            $miembro->fechaCese = null;
+            $miembro->idRepresentacion = $m['representacion'];
+            $miembro->estado = true;
+            $miembro->save();
+        }
     }
 }

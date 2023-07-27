@@ -22,10 +22,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     filterFunction();
 });
 
-document.addEventListener("DOMContentLoaded", function (event) {
-    filterFunction();
-});
-
 document.querySelector("#buscar-habilitado").addEventListener("click", function () {
     document.querySelector("#search-input").value = "Habilitado";
     filterFunction();
@@ -36,17 +32,9 @@ document.querySelector("#buscar-deshabilitado").addEventListener("click", functi
     filterFunction();
 });
 
-var acc = document.getElementsByClassName("accordion");
-var i;
+document.querySelector("#search-idCentro").addEventListener("change", function () {
+  var selectCentro = document.querySelector("#search-idCentro");
+  document.querySelector("#search-input").value = selectCentro.options[selectCentro.selectedIndex].text;
+  filterFunction();
+});
 
-for (i = 0; i < acc.length; i++) {
-  acc[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var panel = this.nextElementSibling;
-    if (panel.style.maxHeight) {
-      panel.style.maxHeight = null;
-    } else {
-      panel.style.maxHeight = panel.scrollHeight + "px";
-    }
-  });
-}

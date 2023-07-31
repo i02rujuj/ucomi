@@ -7,96 +7,9 @@
 @tailwind base;
 @tailwind components; 
 @tailwind utilities;   
- 
-/*-------------------------- START Accordion submenu -----------------------------*/
-  
-  /* Style the accordion panel. Note: hidden by default */
-  .submenu {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
-  }
 
-  .accordion-submenu:after {
-    content: '\2B9F'; /* Unicode character for "plus" sign (+) */
-    font-size: 13px;
-    color: #777;
-    margin-left: 5px;
-  }
-  
-  .submenu-active:after {
-    content: "\2B9D"; /* Unicode character for "minus" sign (-) */
-  }
-
-  .submenu-visible{
-    max-height: 100%;
-  }
-
-/*-------------------------- END Accordion submenu -----------------------------*/
-
-/*-------------------------- START Accordion panel -----------------------------*/
-
-  /* Style the buttons that are used to open and close the accordion panel */
-.accordion {
-  background-color: #eee;
-  color: #444;
-  cursor: pointer;
-  padding: 18px;
-  width: 100%;
-  text-align: left;
-  border: none;
-  outline: none;
-  transition: 0.4s;
-}
-
-/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-.active, .accordion:hover {
-  background-color: white;
-}
-
-/* Style the accordion panel. Note: hidden by default */
-.panel {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.2s ease-out;
-}
-
-.accordion:after {
-  content: '\02795'; /* Unicode character for "plus" sign (+) */
-  font-size: 13px;
-  color: #777;
-  float: right;
-  margin-left: 5px;
-}
-
-.active:after {
-  content: "\2796"; /* Unicode character for "minus" sign (-) */
-}
-
-/*-------------------------- END Accordion panel -----------------------------*/
-
-/*-------------------------- START Accordion info -----------------------------*/
-  
-  
-  /* Style the accordion panel. Note: hidden by default */
-  .info {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
-    border:none;
-  }
-
-  .accordion-info:after {
-    font-size: 13px;
-    color: #777;
-    margin-left: 5px;
-  }
-
-  .info-visible{
-    max-height: 72px;
-  }
-
-/*-------------------------- END Accordion info -----------------------------*/
+@import 'accordion'; 
+@import '404'; 
 
 #tree {
   width: 100%;

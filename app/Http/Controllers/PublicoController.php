@@ -15,7 +15,7 @@ class PublicoController extends Controller
             return redirect()->route('home');
         else{
             $centros = Centro::where('estado', 1)->get();
-            return view('welcome',['centros' => $centros]);
+            return view('publico.welcome',['centros' => $centros]);
         }
     }
     
@@ -26,6 +26,17 @@ class PublicoController extends Controller
         
 
         $centros = Centro::where('estado', 1)->get();
-        return view('infoPublica',['centros' => $centros]);
+        return view('publico.infoPublica',['centros' => $centros]);
+    }
+    
+    public function login(Request $request)
+    {
+
+        if(Auth::check())
+            return redirect()->route('home');
+        else{
+            $centros = Centro::where('estado', 1)->get();
+            return view('publico.login',['centros' => $centros]);
+        }
     }
 }

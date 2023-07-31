@@ -31,17 +31,12 @@ Auth::routes();
 
 Route::get('/', [PublicoController::class, 'index'])->name('welcome');
 Route::get('/info', [PublicoController::class, 'info'])->name('infoPublica');
+Route::get('login', [PublicoController::class, 'login'])->name('login');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 ///////////////////////////////////////////////////////////////////////////////
 // Modificamos las rutas por defecto(vendor/laravel/ui/src/AuthRouteMethods.php) para que al entrar a login o register envíe a welcome
-Route::get('login', function () {
-    if(Auth::user())
-        return redirect()->route('home');
-    else
-        return view('login');
-})->name('login');
 
 Route::get('register', function () {
     return redirect()->route('welcome');

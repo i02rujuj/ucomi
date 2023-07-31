@@ -37,8 +37,22 @@ const ENDPOINT_MIEMBROSGOBIERNO_UPDATE_BBDD = {
     data: [],
 };
 
+const ENDPOINT_MIEMBROSGOBIERNO_GETBYCENTRO_BBDD = {
+    method: 'POST',
+    url: "",
+    comment: "Endpoint obtener todos los miembros gobierno por centro",
+    explanation: "This endpoint is used get all miebros gobierno por centro of the server",
+    transformResponse: (data) => JSON.parse(data),
+    withCredentials: false,
+    headers: {
+        'content-type': 'application/json',
+    },
+    data: [],
+};
+
 export {
     ENDPOINT_MIEMBROSGOBIERNO_DELETE_BBDD,
     ENDPOINT_MIEMBROSGOBIERNO_GET_BBDD,
-    ENDPOINT_MIEMBROSGOBIERNO_UPDATE_BBDD
+    ENDPOINT_MIEMBROSGOBIERNO_UPDATE_BBDD,
+    ENDPOINT_MIEMBROSGOBIERNO_GETBYCENTRO_BBDD
 }

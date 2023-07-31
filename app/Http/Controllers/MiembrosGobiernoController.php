@@ -201,4 +201,23 @@ class MiembrosGobiernoController extends Controller
         }
     }
 
+    public function getByCentro(Request $request)
+    {
+        try {
+            $miembros = DB::table('miembros_gobierno')
+                ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
+                ->join('representaciones_gobierno', 'miembros_gobierno.idRepresentacion', '=', 'representaciones_gobierno.id')
+                ->where('miembros_gobierno.idCentro', $request->get('id'))
+                ->where('miembros_gobierno.fechaCese', null)
+                ->where('miembros_gobierno.estado', 1)
+                ->select('users.id', 'users.name', 'users.email', 'miembros_gobierno.idRepresentacion', 'representaciones_gobierno.nombre')
+                ->get();
+
+            return response()->json(['miembros'=>$miembros]);
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'No se han encontrado miembros para el centro seleccionado.'], 404);
+        }    
+    }
+
 }

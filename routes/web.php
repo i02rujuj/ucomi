@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JuntasController;
 use App\Http\Controllers\CentrosController;
+use App\Http\Controllers\PublicoController;
 use App\Http\Controllers\ComisionController;
 use App\Http\Controllers\TiposCentroController;
 use App\Http\Controllers\MiembrosJuntaController;
@@ -28,17 +29,13 @@ use App\Http\Controllers\RepresentacionGeneralController;
 
 Auth::routes();
 
-Route::get('/', function () {
-    if(Auth::user())
-        return redirect()->route('home');
-    else{
-        $centros = Centro::where('estado', 1)->get();
-        return view('welcome',['centros' => $centros]);
-    }
-})->name('welcome');
+Route::get('/', [PublicoController::class, 'index'])->name('welcome');
+Route::get('/info', [PublicoController::class, 'info'])->name('infoPublica');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+///////////////////////////////////////////////////////////////////////////////
+// Modificamos las rutas por defecto(vendor/laravel/ui/src/AuthRouteMethods.php) para que al entrar a login o register envíe a welcome
 Route::get('login', function () {
     if(Auth::user())
         return redirect()->route('home');
@@ -46,7 +43,6 @@ Route::get('login', function () {
         return view('login');
 })->name('login');
 
-// Modificamos las rutas por defecto(vendor/laravel/ui/src/AuthRouteMethods.php) para que al entrar a login o register envíe a welcome
 Route::get('register', function () {
     return redirect()->route('welcome');
 })->name('register');
@@ -55,6 +51,9 @@ Route::get('/logout', function () {
     Auth::logout();
     return redirect('/');
 })->name('logout');
+
+///////////////////////////////////////////////////////////////////////////////
+
 
 // TIPOS DE CENTROS
 Route::post('/tiposCentro', [TiposCentroController::class, 'index']);
@@ -67,14 +66,6 @@ Route::post('/centro/get', [CentrosController::class, 'get']);
 Route::post('/centro/update', [CentrosController::class, 'update']);
 Route::post('/centro/all', [CentrosController::class, 'all']);
 
-// MIEMBROS EQUIPO DE GOBIERNO
-Route::get('/miembros_gobierno', [MiembrosGobiernoController::class, 'index'])->name('miembrosGobierno');
-Route::post('/miembros_gobierno', [MiembrosGobiernoController::class, 'store'])->name('miembrosGobierno.store');
-Route::post('/miembro_gobierno/delete', [MiembrosGobiernoController::class, 'delete']);
-Route::post('/miembro_gobierno/get', [MiembrosGobiernoController::class, 'get']);
-Route::post('/miembro_gobierno/update', [MiembrosGobiernoController::class, 'update']);
-Route::post('/miembro_gobierno/getDirectivos', [MiembrosGobiernoController::class, 'getDirectivos']);
-
 // JUNTAS
 Route::get('/juntas', [JuntasController::class, 'index'])->name('juntas');
 Route::post('/juntas', [JuntasController::class, 'store'])->name('juntas.store');
@@ -82,6 +73,15 @@ Route::post('/junta/delete', [JuntasController::class, 'delete']);
 Route::post('/junta/get', [JuntasController::class, 'get']);
 Route::post('/junta/update', [JuntasController::class, 'update']);
 Route::post('/junta/all', [JuntasController::class, 'all']);
+
+// MIEMBROS EQUIPO DE GOBIERNO
+Route::get('/miembros_gobierno', [MiembrosGobiernoController::class, 'index'])->name('miembrosGobierno');
+Route::post('/miembros_gobierno/getbycentro', [MiembrosGobiernoController::class, 'getByCentro']);
+Route::post('/miembros_gobierno', [MiembrosGobiernoController::class, 'store'])->name('miembrosGobierno.store');
+Route::post('/miembro_gobierno/delete', [MiembrosGobiernoController::class, 'delete']);
+Route::post('/miembro_gobierno/get', [MiembrosGobiernoController::class, 'get']);
+Route::post('/miembro_gobierno/update', [MiembrosGobiernoController::class, 'update']);
+Route::post('/miembro_gobierno/getDirectivos', [MiembrosGobiernoController::class, 'getDirectivos']);
 
 // MIEMBROS JUNTA
 Route::get('/miembros_junta', [MiembrosJuntaController::class, 'index'])->name('miembrosJunta');
@@ -113,8 +113,3 @@ Route::post('/comisiones', [ComisionController::class, 'store'])->name('comision
 Route::post('/comision/delete', [ComisionController::class, 'delete']);
 Route::post('/comision/get', [ComisionController::class, 'get']);
 Route::post('/comision/update', [ComisionController::class, 'update']);
-
-
-
-    
-

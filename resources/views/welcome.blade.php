@@ -2,15 +2,12 @@
 @section ('title')
 Ucomi
 @endsection
+
 @section('content')
 
-@section ('content')
-
-<!-- Sección Inicial -->
-
-<!-- Sección de llamada a la acción -->
+<!-- Sección búsqueda del centro -->
 <section class="bg-ucomi bg-cover lg:h-screen md:h-screen py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full w-full flex items-center justify-center">
         <div class="text-center">
             <div class="mt-20">
                 <div class="sentences_together flex flex-col md:flex-row">
@@ -23,17 +20,19 @@ Ucomi
                     También encontrarás información relativa a la composición del equipo de gobierno, juntas y comisiones de cada centro
                 </p>
                 
-                <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none required" id="idCentro" name="idCentro" required>
-                    @foreach ($centros as $centro)
-                        <option value="{{ $centro['id'] }}">{{ $centro['nombre'] }}</option>
-                    @endforeach
-                </select>
+                <form action="{{ route('infoPublica') }}" method="GET">
+                    <select class="max-sm:w-52 text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none required" id="idCentro" name="idCentro" required>
+                        @foreach ($centros as $centro)
+                            <option value="{{ $centro['id'] }}">{{ $centro['nombre'] }}</option>
+                        @endforeach
+                    </select>
 
-                <div class="buttons flex justify-center items-center gap-6 py-4">
-                    <a href="" class="md:w-36 w-1/2 inline-block px-6 py-3 font-bold text-white bg-blue-600 rounded-md shadow-md">
-                        Buscar
-                    </a>
-                </div>
+                    <div class="buttons flex justify-center items-center gap-6 py-4">
+                        <button type="submit" class="md:w-36 w-1/2 inline-block px-6 py-3 font-bold text-white bg-blue-600 rounded-md shadow-md">
+                            Buscar
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -48,7 +47,6 @@ Ucomi
         </h2>
         <div class="flex flex-wrap -mx-4 justify-center items-center">
             <div class="w-full lg:w-2/5 px-4">
-                <!-- Tarjetas -->
                 <ul class="text-gray-700 leading-relaxed">
                     <li id="card-1" class="bg-white mb-4 rounded-lg shadow-lg p-4 cursor-pointer hover:bg-gray-100">
                         <span class="font-bold text-gray-900">Gestión eficiente de datos:</span>
@@ -114,6 +112,5 @@ Ucomi
         </form>
     </div>
 </section>
-@endsection
 
 @endsection

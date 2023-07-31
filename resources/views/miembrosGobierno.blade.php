@@ -262,13 +262,9 @@ Miembros de Gobierno
 
 <!----------------------------- END LISTADO ---------------------------------->
 
-            <div id="tree"></div>
-
         </div>
     </div>
     @endsection
-
-    <script src="https://balkan.app/js/OrgChart.js"></script>
 
 @vite(['resources/js/miembrosGobierno/miembrosGobierno.js'])
 @vite(['resources/js/filtros.js'])

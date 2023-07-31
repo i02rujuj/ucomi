@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Ucomi') }}</title>
+    <title>@yield('title')</title>
     <link rel="icon" type="image/ico" href="{{ asset('img/favicon.ico') }}"/>
 
     <!-- Google Icons -->
@@ -15,6 +15,7 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
 </head>
 
 <!-- START Analytics -->
@@ -29,29 +30,20 @@
 <!-- END Analytics -->
 
 <body>
+
     <nav class="bg-white fixed top-0 w-full z-50">
         <div class="mx-auto max-w-full sm:px-4 lg:px-8">
-            <div class="flex items-center justify-center md:justify-between h-20">
-                <div class="flex justify-center items-center">
-                    <div class="flex-shrink-0">
-                        <a href="/" class="flex justify-center items-center">
-                            <img class="h-14" src="{{ asset('img/logo.png') }}" alt="logo_ucomi" />
+            <div class="flex items-center justify-between h-20 ml-2">
+                    <div class="flex transition-all duration-200 ease-in-out">
+                        <a href="{{ route('welcome') }}">
+                            <img class="h-12" src="{{ asset('img/logo.png') }}" alt="logo_ucomi" />
                         </a>
-                    </div>
-                </div>
-
-                <div class="hidden md:block">
+                    </div> 
+                               
+                <div class="md:block">
                     <div class="ml-4 flex items-center md:ml-6"> 
-
-                        @if (Route::current()->getName() === 'welcome')
-                            <a href="#Contacto" class="ml-3 px-3 py-1 text-sm font-medium rounded-md hover:text-white hover:bg-gray-700">
-                                Contactar
-                            </a>
-                        @endif
-
-
                         @if (!Auth::check())
-                        <a href="{{ route('login') }}" class="ml-3 px-3 py-1 text-sm font-medium rounded-md hover:text-white hover:bg-gray-700">Login</a>
+                            <a href="{{ route('login') }}" class="ml-3 px-3 py-1 text-sm font-medium rounded-md hover:text-white hover:bg-gray-700">Login</a>
                         @endif
                     </div>
                 </div>

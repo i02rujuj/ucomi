@@ -15,6 +15,7 @@ export default defineConfig({
                 'resources/js/home.js',
                 'resources/js/filtros.js',
                 'resources/js/app.js',
+                'resources/js/publico/info.js',
             ],
             refresh: true,
         }),

@@ -90,7 +90,12 @@ class CentrosController extends Controller
     public function get(Request $request)
     {
         try {
-            $centro = Centro::where('id', $request->id)->first();
+            $centro = DB::table('centros')
+            ->join('tipos_centro', 'centros.idTipo', '=', 'tipos_centro.id')
+            ->where('centros.id', $request->id)
+            ->select('centros.id', 'centros.nombre', 'centros.direccion', 'centros.idTipo', 'centros.estado', 'tipos_centro.nombre as tipo')
+            ->first();
+
             if (!$centro) {
                 return response()->json(['error' => 'No se ha encontrado el centro.'], 404);
             }

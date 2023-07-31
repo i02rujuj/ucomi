@@ -14,8 +14,7 @@ export default {
       },
       /* Imágenes para añadir desde Tailwind CSS */
       backgroundImage: (theme) => ({
-          prueba: "url('/public/img/prueba.jpg')",
-          prueba2: "url('/public/svgs/prueba2.svg')",
+          ucomi: "url('/public/img/bgucomi.jpg')",
       }),
     },
   },

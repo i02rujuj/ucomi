@@ -15,6 +15,7 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
+<!-- START Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-0T5L2JGC2L"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
@@ -23,6 +24,7 @@
 
     gtag('config', 'G-0T5L2JGC2L');
 </script>
+<!-- END Analytics -->
 
 <body class="bg-gray-100 text-sm">
     

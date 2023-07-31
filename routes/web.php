@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Centro;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -30,17 +31,22 @@ Auth::routes();
 Route::get('/', function () {
     if(Auth::user())
         return redirect()->route('home');
-    else
-        return view('welcome');
-})->name('welcome');;
+    else{
+        $centros = Centro::where('estado', 1)->get();
+        return view('welcome',['centros' => $centros]);
+    }
+})->name('welcome');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-// Modificamos las rutas por defecto(vendor/laravel/ui/src/AuthRouteMethods.php) para que al entrar a login o register envíe a welcome
 Route::get('login', function () {
-    return redirect()->route('welcome');
+    if(Auth::user())
+        return redirect()->route('home');
+    else
+        return view('login');
 })->name('login');
 
+// Modificamos las rutas por defecto(vendor/laravel/ui/src/AuthRouteMethods.php) para que al entrar a login o register envíe a welcome
 Route::get('register', function () {
     return redirect()->route('welcome');
 })->name('register');
@@ -49,7 +55,6 @@ Route::get('/logout', function () {
     Auth::logout();
     return redirect('/');
 })->name('logout');
-
 
 // TIPOS DE CENTROS
 Route::post('/tiposCentro', [TiposCentroController::class, 'index']);

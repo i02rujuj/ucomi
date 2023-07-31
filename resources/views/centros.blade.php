@@ -120,7 +120,7 @@ Centros
                             <div class="left-part truncate">
                                 <div class="flex items-center mb-1">
                                     <span class="material-icons-round mt-1 scale-75">
-                                        person
+                                        school
                                     </span>
                                     &nbsp;
                                     <h2 class="text-lg font-bold -mb-1 truncate">{{ $centro['nombre'] }}</h2>

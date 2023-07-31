@@ -5,6 +5,7 @@
 @endsection
 
 @section('contentTop')
+    <span id="idCentro" class="hidden">{{$idCentro}}</span>
     <div id="equipoGobierno"></div>
 @endsection
 

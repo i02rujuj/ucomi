@@ -7,8 +7,11 @@ import {REPRESENTACIONES, TIPOS_CENTRO} from '../constants'
 import Swal from 'sweetalert2';
 
 document.addEventListener("DOMContentLoaded", async (event) => {
+
+    const idCentro = document.getElementById('idCentro').innerHTML;
+
     const dataToSend = {
-        id: 1,
+        id: idCentro,
     };
   
     try {

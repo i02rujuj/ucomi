@@ -21,12 +21,10 @@ class PublicoController extends Controller
     
     public function info(Request $request)
     {
-        $centro = $request->get('idCentro');
-
-        
-
+        $idCentro = $request->get('idCentro');
         $centros = Centro::where('estado', 1)->get();
-        return view('publico.infoPublica',['centros' => $centros]);
+
+        return view('publico.infoPublica',['idCentro' => $idCentro, 'centros' => $centros]);
     }
     
     public function login(Request $request)

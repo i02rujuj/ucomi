@@ -216,7 +216,7 @@ class MiembrosGobiernoController extends Controller
             return response()->json(['miembros'=>$miembros]);
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se han encontrado miembros para el centro seleccionado.'], 404);
+            return response()->json(['error' => 'No se han encontrado miembros de gobierno para el centro seleccionado.'], 404);
         }    
     }
 

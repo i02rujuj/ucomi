@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Junta;
 use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\RepresentacionGeneral;
 use Illuminate\Support\Facades\Validator;
 
@@ -156,5 +157,25 @@ class MiembrosJuntaController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['error' => 'Error al actualizar el miembro de junta.', 'status' => 404], 404);
         }
+    }
+
+    public function getByCentro(Request $request)
+    {
+        try {
+            $miembros = DB::table('miembros_junta')
+                ->join('users', 'miembros_junta.idUsuario', '=', 'users.id')
+                ->join('representaciones_general', 'miembros_junta.idRepresentacion', '=', 'representaciones_general.id')
+                ->join('juntas', 'miembros_junta.idJunta', '=', 'juntas.id')
+                ->where('juntas.idCentro', $request->get('id'))
+                ->where('miembros_junta.fechaCese', null)
+                ->where('miembros_junta.estado', 1)
+                ->select('users.id', 'users.name', 'users.email', 'miembros_junta.idRepresentacion', 'representaciones_general.nombre')
+                ->get();
+
+            return response()->json(['miembros'=>$miembros]);
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'No se han encontrado miembros de la junta para el centro seleccionado.'], 404);
+        }    
     }
 }

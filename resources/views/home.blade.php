@@ -6,3 +6,5 @@ Panel
 @section ('content')
 
 @endsection
+
+@vite(['resources/js/panel.js'])

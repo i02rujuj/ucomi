@@ -18,9 +18,6 @@ function toggleMenu() {
 
 document.getElementById("mostrar_menu").addEventListener("click", toggleMenu);
 
-export {
-    toggleMenu
-}
 
 var acc = document.getElementsByClassName("accordion-submenu");
 var i;
@@ -55,5 +52,7 @@ for (i = 0; i < acc.length; i++) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", toggleMenu);
+export {
+    toggleMenu
+}
 

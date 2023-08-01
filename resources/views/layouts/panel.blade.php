@@ -147,7 +147,6 @@
     </div>
 
     @vite(['resources/js/home.js'])
-
 </body>
 
 </html>

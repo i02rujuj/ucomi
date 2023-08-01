@@ -88,6 +88,16 @@
                         </a>
                     </li>
 
+                    <li @class(['mb-1 flex', request()->routeIs('convocatorias') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
+                        <a href="{{ route('convocatorias') }}" class="text-gray-600 w-full flex justify-start items-center">
+                            <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                                event
+                            </span>
+                            &nbsp;
+                            Convocatorias
+                        </a>
+                    </li>
+
                     <button class="accordion-submenu text-gray-600 w-full flex justify-start items-center hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200">
                         <span class="material-icons-round text-slate-600 ml-4 mr-2">
                             manage_accounts

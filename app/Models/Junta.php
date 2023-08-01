@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Centro;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -27,5 +26,10 @@ class Junta extends Model
     public function comisiones()
     {
         return $this->hasMany(Comision::class, 'id');
+    }
+
+    public function convocatorias()
+    {
+        return $this->hasMany(Convocatoria::class, 'id');
     }
 }

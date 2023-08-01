@@ -17,6 +17,7 @@ export default defineConfig({
                 'resources/js/filtros.js',
                 'resources/js/app.js',
                 'resources/js/publico/info.js',
+                'resources/js/convocatorias/convocatorias.js',
             ],
             refresh: true,
         }),

@@ -15,11 +15,9 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     };
   
     try {
+        const centro = await GET_CENTRO_BBDD(dataToSend); 
         const gobierno = await GETBYCENTRO_MIEMBROSGOBIERNO_BBDD(dataToSend);
         const junta = await GETBYCENTRO_MIEMBROSJUNTA_BBDD(dataToSend);
-        const centro = await GET_CENTRO_BBDD(dataToSend); 
-
-        console.log(centro);
 
         var arrayOrgChart = [];
         var cont=10;

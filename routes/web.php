@@ -10,6 +10,7 @@ use App\Http\Controllers\CentrosController;
 use App\Http\Controllers\PublicoController;
 use App\Http\Controllers\ComisionController;
 use App\Http\Controllers\TiposCentroController;
+use App\Http\Controllers\ConvocatoriasController;
 use App\Http\Controllers\MiembrosJuntaController;
 use App\Http\Controllers\RepresentacionController;
 use App\Http\Controllers\MiembrosComisionController;
@@ -92,6 +93,13 @@ Route::post('/miembros_comision', [MiembrosComisionController::class, 'store'])-
 Route::post('/miembro_comision/delete', [MiembrosComisionController::class, 'delete']);
 Route::post('/miembro_comision/get', [MiembrosComisionController::class, 'get']);
 Route::post('/miembro_comision/update', [MiembrosComisionController::class, 'update']);
+
+// CONVOCATORIAS
+Route::get('/convocatorias', [ConvocatoriasController::class, 'index'])->name('convocatorias');
+Route::post('/convocatorias', [ConvocatoriasController::class, 'store'])->name('convocatorias.store');
+Route::post('/convocatoria/delete', [ConvocatoriasController::class, 'delete']);
+Route::post('/convocatoria/get', [ConvocatoriasController::class, 'get']);
+Route::post('/convocatoria/update', [ConvocatoriasController::class, 'update']);
 
 // USERS
 Route::post('/user/get', [UserController::class, 'get']);

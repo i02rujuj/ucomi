@@ -103,15 +103,15 @@ Centros
                         <div class="flex items-start justify-between">
                             <div class="left-part truncate">
 
-                                <div class="flex items-center mb-1">
-                                    <span class="material-icons-round mt-1 scale-75">
+                                <div class="flex items-center">
+                                    <span class="material-icons-round scale-75">
                                         school
                                     </span>
                                     &nbsp;
                                     <h2 class="text-base font-bold truncate">{{ $centro['nombre'] }}</h2>
                                 </div>
 
-                                <div class="flex text-xs text-slate-400 font-medium mb-2 truncate items-center gap-1">
+                                <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
                                     <div class="truncate flex items-center">
                                         <span class="material-icons-round scale-75">
                                             place
@@ -122,7 +122,7 @@ Centros
                                     </div>
                                 </div>
 
-                                <div class="flex items-center gap-3 mb-1" >
+                                <div class="flex items-center gap-2 mt-2" >
                                     <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $centro->tipo->nombre }}</span>
                                     @if ($centro['estado']==1)
                                         <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Vigente</span>

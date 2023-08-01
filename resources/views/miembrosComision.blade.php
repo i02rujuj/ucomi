@@ -142,31 +142,35 @@ Miembros de Comisión
                         <div class="flex items-start justify-between">
                             <div class="left-part truncate">
 
-                                <div class="flex items-center mb-1">
-                                    <span class="material-icons-round mt-1 scale-75">
+                                <div class="flex items-center">
+                                    <span class="material-icons-round scale-75">
                                         person
                                     </span>
                                     &nbsp;
-                                    <h2 class="text-lg font-bold mb-1 truncate">{{ $miembro->usuario->name }}</h2>
+                                    <h2 class="text-lg font-bold truncate">{{ $miembro->usuario->name }}</h2>
                                 </div>
 
-                                <div class="flex items-center mb-1">
-                                    <span class="material-icons-round scale-75">
-                                        send
-                                    </span>
-                                    &nbsp;
-                                    <h2 class="text-sm mb-1 truncate">{{ $miembro->comision->nombre }}</h2>
+                                <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                    <div class="flex items-center">
+                                        <span class="material-icons-round scale-75">
+                                            send
+                                        </span>
+                                        &nbsp;
+                                        <h2 class="truncate">{{ $miembro->comision->nombre }}</h2>
+                                    </div>
                                 </div>
 
-                                <div class="flex items-center mb-1">
-                                    <span class="material-icons-round scale-75">
-                                        psychology
-                                    </span>
-                                    &nbsp;
-                                    <h2 class="text-sm mb-1 truncate">{{ $miembro->representacion->nombre }}</h2>
+                                <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                    <div class="flex items-center">
+                                        <span class="material-icons-round scale-75">
+                                            psychology
+                                        </span>
+                                        &nbsp;
+                                        <h2 class="truncate">{{ $miembro->representacion->nombre }}</h2>
+                                    </div>
                                 </div>
 
-                                <div class="flex text-xs text-slate-400 font-medium mb-2 truncate items-center gap-1">
+                                <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
                                     <div class="truncate flex items-center">
                                         <span class="material-icons-round scale-75">
                                             event
@@ -185,7 +189,7 @@ Miembros de Comisión
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2 mt-2">
                             <span class="text-xs bg-blue-100 {{ $miembro->comision->fechaDisolucion == null ? 'bg-blue-100' : 'bg-red-200' }} font-semibold px-2 rounded-lg truncate">
                                 Miembro de Comisión
                             </span>

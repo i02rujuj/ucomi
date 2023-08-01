@@ -16,11 +16,19 @@ class MiembrosJuntaController extends Controller
     public function index()
     {
         try {
-            $juntas = Junta::where('estado', 1)->get();
+            $juntas = Junta::where('estado', 1)
+            ->where('fechaDisolucion', null)
+            ->get();
+
             $users = User::select('id', 'name')->where('estado', 1)->get();
             $representacionesGeneral = RepresentacionGeneral::select('id', 'nombre')->where('estado', 1)->get();
 
-            $miembrosJunta = MiembroJunta::orderBy('idJunta')->orderBy('idRepresentacion')->orderBy('estado')->orderBy('idUsuario')->get();
+            $miembrosJunta = MiembroJunta::orderBy('idJunta')
+            ->where('estado', 1)
+            ->orderBy('fechaCese')
+            ->orderBy('idRepresentacion')
+            ->orderBy('idUsuario')
+            ->get();
 
             return view('miembrosJunta', ['juntas' => $juntas, 'users' => $users, 'representacionesGeneral' => $representacionesGeneral, 'miembrosJunta' => $miembrosJunta]);
         } catch (\Throwable $th) {
@@ -62,25 +70,26 @@ class MiembrosJuntaController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-            $dateTomaPosesion = new DateTime($request->fechaTomaPosesion);
-            $dateCese = new DateTime($request->fechaCese);
+            if($request->fechaCese==null){
+                // Comprobación existencia miembro repetido en la misma junta
+                $miembroRepetido = MiembroJunta::select('id')
+                ->where('idJunta', $request->get('idJunta'))
+                ->where('idUsuario', $request->get('idUsuario'))
+                ->where('fechaCese', null)
+                ->where('estado', 1)
+                ->first();
 
-            if ($dateTomaPosesion>$dateCese) {
-                return redirect()->route('miembrosJunta')->with('error', 'La fecha de cese no puede ser anterior a la toma de posesión')->withInput();
-            }  
+                if($miembroRepetido)
+                    return redirect()->route('miembrosJunta')->with('error', 'No se pudo crear el miembro de Junta: ya existe un miembro vigente para la junta seleccionada')->withInput();
+            }
+            else{
+                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
+                $dateTomaPosesion = new DateTime($request->fechaTomaPosesion);
+                $dateCese = new DateTime($request->fechaCese);
 
-            // Comprobación existencia miembro repetido en la misma junta
-            $miembroRepetido = MiembroJunta::select('id')
-                        ->where('idJunta', $request->get('idJunta'))
-                        ->where('idUsuario', $request->get('idUsuario'))
-                        ->where('fechaCese', null)
-                        ->where('estado', 1)
-                        ->first();
-    
-            if($miembroRepetido)
-                return redirect()->route('miembrosJunta')->with('error', 'No se pudo crear el miembro de Junta: ya existe un miembro en activo para la junta seleccionada')->withInput();
-                
+                if ($dateTomaPosesion>$dateCese) 
+                    return redirect()->route('miembrosJunta')->with('error', 'La fecha de cese no puede ser anterior a la toma de posesión')->withInput();
+            }
 
             $miembroJunta = MiembroJunta::create([
                 "idJunta" => $request->idJunta,
@@ -114,16 +123,11 @@ class MiembrosJuntaController extends Controller
         try {
             $miembro = MiembroJunta::where('id', $request->id)->first();
 
-            if ($request->estado == 0) {
-                $miembro->estado = 1;
-            } else {
-                $miembro->estado = 0;
-            }
-
             if (!$miembro) {
                 return response()->json(['error' => 'No se ha encontrado el miembro de Junta.'], 404);
             }
 
+            $miembro->estado = 0;
             $miembro->save();
             return response()->json($request);
 
@@ -140,13 +144,30 @@ class MiembrosJuntaController extends Controller
                 return response()->json(['error' => 'No se ha encontrado el miembro de Junta', 'status' => 404], 200);
             }
 
-            // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-            $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
-            $dateCese = new DateTime($request->data['fechaCese']);
+            // Comprobar que la junta a la que pertenece esté vigente
+            if($miembro->junta->fechaDisolucion!=null)
+                return response()->json(['error' => 'No se puede editar un miembro de junta en la que se junta se encuentra caducada', 'status' => 404], 200);
 
-            if ($dateTomaPosesion>$dateCese) {
-                return response()->json(['error' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 404], 200);
-            }          
+            if($request->data['fechaCese'] != null){
+                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
+                $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
+                $dateCese = new DateTime($request->data['fechaCese']);
+
+                if ($dateTomaPosesion>$dateCese) 
+                    return response()->json(['error' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 404], 200);
+            }
+            else{
+                // Comprobación existencia usuario vigente en la junta
+                $miembroRepetido = MiembroJunta::select('id')
+                ->where('idJunta', $miembro->idJunta)
+                ->where('idUsuario', $miembro->idUsuario)
+                ->where('fechaCese', null)
+                ->where('estado', 1)
+                ->count();
+
+                if($miembroRepetido>1)
+                    return response()->json(['error' => 'No se pudo editar el miembro de la junta: ya existe el usuario vigente en la junta seleccionada', 'status' => 404], 200);
+            }
 
             $miembro->idRepresentacion = $request->data['idRepresentacion'];
             $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];

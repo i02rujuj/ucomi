@@ -15,57 +15,57 @@ class CentroSeeder extends Seeder
     {
         $centros =[
             [
-                'nombre'=>'Facultad de Ciencias', 
+                'nombre'=>'Ciencias', 
                 'direccion'=>'Campus de Rabanales', 
-                'tipo'=>1
+                'tipo'=> 1
             ],
             [
-                'nombre'=>'Facultad de Ciencias de la Eduación y Psicología', 
+                'nombre'=>'Ciencias de la Eduación y Psicología', 
                 'direccion'=>'Campus de Menéndez Pidal', 
                 'tipo'=>1
             ],
             [
-                'nombre'=>'Facultad de Ciencias del trabajo', 
+                'nombre'=>'Ciencias del trabajo', 
                 'direccion'=>'Campus del Centro Histórico', 
                 'tipo'=>1
             ],
             [
-                'nombre'=>'Facultad de Derecho y Ciencias Económicas y Empresariales', 
+                'nombre'=>'Derecho y Ciencias Económicas y Empresariales', 
                 'direccion'=>'Campus del Centro Histórico', 
                 'tipo'=>1
             ],
             [
-                'nombre'=>'Facultad de Filosofía y Letras', 
+                'nombre'=>'Filosofía y Letras', 
                 'direccion'=>'Campus del Centro Histórico', 
                 'tipo'=>1
             ],
             [
-                'nombre'=>'Facultad de Medicina y Enfermería', 
+                'nombre'=>'Medicina y Enfermería', 
                 'direccion'=>'Campus de Menéndez Pidal', 
                 'tipo'=>1
             ],
             [
-                'nombre'=>'Facultad de Veterinaria', 
+                'nombre'=>'Veterinaria', 
                 'direccion'=>'Campus de Rabanales', 
                 'tipo'=>1
             ],
             [
-                'nombre'=>'Escuela Politécnica Superior de Belmez', 
+                'nombre'=>'Politécnica Superior de Belmez', 
                 'direccion'=>'Campus de Belmez', 
                 'tipo'=>2
             ],
             [
-                'nombre'=>'Escuela Politécnica Superior de Córdoba', 
+                'nombre'=>'Politécnica Superior de Córdoba', 
                 'direccion'=>'Campus de Rabanales', 
                 'tipo'=>2
             ],
             [
-                'nombre'=>'Escuela Técnica Superior de Ingeniería Agronómica y de Montes', 
+                'nombre'=>'Técnica Superior de Ingeniería Agronómica y de Montes', 
                 'direccion'=>'Campus de Rabanales', 
                 'tipo'=>2
             ],
             [
-                'nombre'=>'Centro de Magisterio Sagrado Corazón', 
+                'nombre'=>'Centro Magisterio Sagrado Corazón', 
                 'direccion'=>'Córdoba', 
                 'tipo'=>3
             ],

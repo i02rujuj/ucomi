@@ -81,14 +81,21 @@ const addEditEvent = (button) => {
                     </div>
                 `,
                 focusConfirm: false,
+                showDenyButton: true,
                 showCancelButton: true,
+                denyButtonText: 'Eliminar',
                 confirmButtonText: "Actualizar",
                 cancelButtonText: "Cancelar",
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '',
+                denyButtonColor: '#d33',
             });
+
             if (result.isConfirmed) {
                 const inputs = document.querySelectorAll(".miembro");
                 const valores = {};
                 let error = 0;
+
                 inputs.forEach((input) => {
                     if (input.id!='fechaCese' && input.value === "") {
                         error++;
@@ -103,16 +110,20 @@ const addEditEvent = (button) => {
                 }
                       
                 if (error > 0) {
+
                     await Swal.fire({
                         icon: "error",
                         title: "Oops...",
                         text: "Faltan campos por rellenar.",
                     });
+
                 } else {
+
                     const dataToSend = {
                         id: button.dataset.miembroId,
                         data: valores,
                     };
+
                     console.log(dataToSend);
                     const response = await UPDATE_MIEMBROSJUNTA_BBDD(dataToSend);
 
@@ -122,14 +133,53 @@ const addEditEvent = (button) => {
                             title: "Updated!",
                             text: "Se ha editado el miembro de Junta.",
                         });
+
                         window.location.reload();
+
                     } else {
+
                         await Swal.fire({
                             icon: "error",
                             title: "Oops...",
                             text: response.error,
                         });
+
                     }
+                }
+            }
+             // BOTÓN ELIMINAR
+             else if (result.isDenied) {
+
+                try {
+                    const result = await Swal.fire({
+                        title: "¿Eliminar el miembro de junta?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "",
+                        confirmButtonText: "Eliminar",
+                    });
+
+                    if (result.isConfirmed) {
+
+                        const response = await DELETE_MIEMBROSJUNTA_BBDD(dataToSend);
+ 
+                        await Swal.fire(
+                            "Eliminado",
+                            "El miembro de junta fue eliminado.",
+                            "success"
+                        );
+                        
+                        window.location.reload();
+                    }
+
+                } catch (error) {
+
+                    await Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Ha ocurrido un error al eliminar el miembro de junta",
+                    });
                 }
             }
         } catch (error) {

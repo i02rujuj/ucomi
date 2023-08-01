@@ -61,14 +61,22 @@ const addEditEvent = (button) => {
                     </div>
                 `,
                 focusConfirm: false,
+                showDenyButton: true,
                 showCancelButton: true,
+                denyButtonText: 'Eliminar',
                 confirmButtonText: "Actualizar",
                 cancelButtonText: "Cancelar",
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '',
+                denyButtonColor: '#d33',
             });
+
+            // BOTÓN ACTUALIZAR
             if (result.isConfirmed) {
                 const inputs = document.querySelectorAll(".miembro");
                 const valores = {};
                 let error = 0;
+
                 inputs.forEach((input) => {
                     if (input.id!='fechaCese' && input.value === "") {
                         error++;
@@ -83,33 +91,76 @@ const addEditEvent = (button) => {
                 }
                       
                 if (error > 0) {
+
                     await Swal.fire({
                         icon: "error",
                         title: "Oops...",
                         text: "Faltan campos por rellenar.",
                     });
+
                 } else {
+
                     const dataToSend = {
                         id: button.dataset.miembroId,
                         data: valores,
                     };
-                    console.log(dataToSend);
+
                     const response = await UPDATE_MIEMBROSGOBIERNO_BBDD(dataToSend);
 
                     if (response.status === 200) {
+
                         await Swal.fire({
                             icon: "success",
-                            title: "Updated!",
+                            title: "Actualizado!",
                             text: "Se ha editado el miembro de Gobierno.",
                         });
+
                         window.location.reload();
+
                     } else {
+
                         await Swal.fire({
                             icon: "error",
                             title: "Oops...",
                             text: response.error,
                         });
+
                     }
+                }
+            }
+            // BOTÓN ELIMINAR
+            else if (result.isDenied) {
+
+                try {
+                    const result = await Swal.fire({
+                        title: "¿Eliminar el miembro de gobierno?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "",
+                        confirmButtonText: "Eliminar",
+                    });
+
+                    if (result.isConfirmed) {
+
+                        const response = await DELETE_MIEMBROSGOBIERNO_BBDD(dataToSend);
+ 
+                        await Swal.fire(
+                            "Eliminado",
+                            "El miembro de gobierno fue eliminado.",
+                            "success"
+                        );
+                        
+                        window.location.reload();
+                    }
+
+                } catch (error) {
+
+                    await Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Ha ocurrido un error al eliminar el miembro de gobierno",
+                    });
                 }
             }
         } catch (error) {
@@ -128,69 +179,3 @@ const editButtons = document.querySelectorAll('#btn-editar-miembro');
 editButtons.forEach(button => {
     addEditEvent(button);
 });
-
-
-// EVENTO ELIMINAR
-const addDeleteEvent = (button) => {
-    button.addEventListener("click", async (event) => {
-        let dataToSend = {};
-
-        if (button.dataset.estado == 0) {
-            dataToSend = {
-                id: button.dataset.miembroId,
-                estado: button.dataset.estado,
-            };
-        } else {
-            dataToSend = {
-                id: button.dataset.miembroId,
-                estado: button.dataset.estado,
-            };
-        }
-        try {
-            const result = await Swal.fire({
-                title:
-                    button.dataset.estado == 1
-                        ? "¿Deshabilitar el miembro?"
-                        : "¿Habilitar el miembro?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText:
-                    button.dataset.estado == 1 ? "Deshabilitar" : "Habilitar",
-            });
-            if (result.isConfirmed) {
-                const response = await DELETE_MIEMBROSGOBIERNO_BBDD(dataToSend);
-                console.log(response);
-                if (button.dataset.estado == 1) {
-                    await Swal.fire(
-                        "Deshabilitado",
-                        "El miembro de Gobierno fue deshabilitado.",
-                        "success"
-                    );
-                } else {
-                    await Swal.fire(
-                        "Habilitado",
-                        "El miembro de Gobierno fue habilitado.",
-                        "success"
-                    );
-                }
-                window.location.reload();
-            }
-        } catch (error) {
-            console.error(error);
-            await Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Ha ocurrido un error al cambiar el estado del miembro de Gobierno",
-            });
-        }
-    });
-};
-
-const deleteButtons = document.querySelectorAll('#btn-delete-miembro');
-
-deleteButtons.forEach(button => {
-    addDeleteEvent(button);
-});
-

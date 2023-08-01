@@ -89,22 +89,7 @@ Centros
                             </span>
                             <input type="text" id="search-input" class="text-sm text-gray-600 border py-1 w-full outline-none bg-white px-2 rounded form-input" placeholder="Buscar..." value="{{ request('centro') }}">
                         </div>
-                    </div>
-
-                    <div class="right-side w-full">
-                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-72">
-                            <span class="block text-sm text-gray-600 mb-1">
-                                Estado:
-                            </span>
-                        
-                            <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-habilitado">
-                                Habilitado
-                            </button>
-                            <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-deshabilitado">
-                                Deshabilitado
-                            </button>
-                        </div>
-                    </div>
+                    </div>          
                 </div>
             </div>
 
@@ -114,18 +99,19 @@ Centros
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                 @foreach ($centros as $centro)
-                    <div class="card bg-white p-6 rounded-lg shadow-md">
-                        <span class="hidden" id="card-status">{{ $centro->estado == 1 ? 'Habilitado' : 'Deshabilitado' }}</span>
+                    <div id="btn-editar-centro" data-centro-id="{{ $centro['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
                         <div class="flex items-start justify-between">
                             <div class="left-part truncate">
+
                                 <div class="flex items-center mb-1">
                                     <span class="material-icons-round mt-1 scale-75">
                                         school
                                     </span>
                                     &nbsp;
-                                    <h2 class="text-lg font-bold -mb-1 truncate">{{ $centro['nombre'] }}</h2>
+                                    <h2 class="text-base font-bold truncate">{{ $centro['nombre'] }}</h2>
                                 </div>
-                                <div class="flex text-xs text-slate-400 font-medium mb-1 truncate items-center gap-1">
+
+                                <div class="flex text-xs text-slate-400 font-medium mb-2 truncate items-center gap-1">
                                     <div class="truncate flex items-center">
                                         <span class="material-icons-round scale-75">
                                             place
@@ -135,30 +121,18 @@ Centros
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="flex items-center gap-3 mb-1" >
+                                    <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $centro->tipo->nombre }}</span>
+                                    @if ($centro['estado']==1)
+                                        <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Vigente</span>
+                                    @else
+                                        <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">No vigente</span>
+                                    @endif
+                                </div>
+
                             </div>
-                            <div class="right-part -mr-3 truncate">
-                                <button type="button" class="truncate text-sm hover:text-black font-medium py-1 mx-3 rounded"
-                                    id="btn-editar-centro" data-centro-id="{{ $centro['id'] }}" value="{{ $centro['estado'] }}">
-                                    <span class="material-icons-round text-slate-400 scale-125 truncate">
-                                        edit_note
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
-            
-                        <div class="flex items-center gap-3 mb-1" id="btn-delete-centro" data-centro-id="{{ $centro['id'] }}"
-                            data-estado="{{ $centro['estado'] }}">
-                            <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $centro->tipo->nombre }}</span>
-                            @if ($centro['estado']==1)
-                                <span class="material-icons-round text-green-500 scale-150 cursor-pointer">
-                                    toggle_on
-                                </span>
-                            @else
-                                <span class="material-icons-round text-slate-400 scale-150 cursor-pointer">
-                                    toggle_off
-                                </span>
-                            @endif
-                        </div>
+                        </div>         
                     </div>
                 @endforeach
             </div>

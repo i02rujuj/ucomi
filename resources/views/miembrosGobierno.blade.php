@@ -129,66 +129,6 @@ Miembros de Gobierno
                         </div>
                     </div>
 
-                    <div class="left-side w-full">
-                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-72">
-                            <span class="block text-sm text-gray-600 mb-1">
-                                Estado:
-                            </span>
-                        
-                            <button class="truncate  md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-habilitado">
-                                Habilitado
-                            </button>
-                            <button class="truncate  md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-deshabilitado">
-                                Deshabilitado
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="right-side w-full"> 
-
-                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-full">
-                            <label for="search-idCentro" class="block text-sm text-gray-600 mb-1">
-                                Centro:
-                            </label>
-                            
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" id="search-idCentro" name="search-idCentro">
-                                <option value="">-----</option>
-                                @foreach ($centros as $centro)
-                                    <option value="{{ $centro['id'] }}">{{ $centro['nombre'] }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="right-side w-full">
-                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-full">
-                            <label for="search-idUsuario" class="block text-sm text-gray-600 mb-1">
-                                Usuario:
-                            </label>
-                            
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" id="search-idUsuario" name="search-idUsuario">
-                                <option value="">-----</option>
-                                @foreach ($users as $user)
-                                    <option value="{{ $user['id'] }}">{{ $user['name'] }}</option>
-                                @endforeach
-                            </select>            
-                        </div>
-                    </div>
-                    <div class="right-side w-full">
-                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-full">
-
-                            <label for="idRepresentacion" class="block text-sm text-gray-600 mb-1">
-                                Representación:
-                            </label>
-                            
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idRepresentacion" name="idRepresentacion" value="{{old("idRepresentacion")}}">
-                                <option value="">-----</option>
-                                @foreach ($representacionesGobierno as $rep)
-                                    <option value="{{ $rep['id'] }}">{{ $rep['nombre'] }}</option>
-                                @endforeach
-                            </select>
-                        </div>  
-                    </div>
                 </div>
             </div>
  
@@ -198,8 +138,7 @@ Miembros de Gobierno
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                 @foreach ($miembrosGobierno as $miembro)
-                    <div class="card bg-white p-6 rounded-lg shadow-md">
-                        <span class="hidden" id="card-status">{{ $miembro->estado == 1 ? 'Habilitado' : 'Deshabilitado' }}</span>
+                    <div id="btn-editar-miembro" data-miembro-id="{{ $miembro['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
                         <div class="flex items-start justify-between">
                             <div class="left-part truncate">
                                 <div class="flex items-center mb-1">
@@ -207,7 +146,7 @@ Miembros de Gobierno
                                         person
                                     </span>
                                     &nbsp;
-                                    <h2 class="text-lg font-bold -mb-1 truncate">{{ $miembro->usuario->name }}</h2>
+                                    <h2 class="text-base font-bold -mb-1 truncate">{{ $miembro->usuario->name }}</h2>
                                 </div>
                                 <div class="flex items-center mb-1">
                                     <span class="material-icons-round scale-75">
@@ -216,7 +155,7 @@ Miembros de Gobierno
                                     &nbsp;
                                     <h2 class="text-sm mb-1 truncate">{{ $miembro->centro->nombre }}</h2>
                                 </div>
-                                <div class="flex text-xs text-slate-400 font-medium mb-1 truncate items-center gap-1">
+                                <div class="flex text-xs text-slate-400 font-medium mb-2 truncate items-center gap-1">
                                     <div class="truncate flex items-center">
                                         <span class="material-icons-round scale-75">
                                             event
@@ -233,27 +172,15 @@ Miembros de Gobierno
                                     </div>
                                 </div>
                             </div>
-                            <div class="right-part -mr-3 truncate">
-                                <button type="button" class="truncate text-sm hover:text-black font-medium py-1 mx-3 rounded"
-                                    id="btn-editar-miembro" data-miembro-id="{{ $miembro['id'] }}" value="{{ $miembro['estado'] }}">
-                                    <span class="material-icons-round text-slate-400 scale-125 truncate">
-                                        edit_note
-                                    </span>
-                                </button>
-                            </div>
+                            
                         </div>
 
-                        <div class="flex items-center gap-3 mb-1" id="btn-delete-miembro" data-miembro-id="{{ $miembro['id'] }}"
-                            data-estado="{{ $miembro['estado'] }}">
+                        <div class="flex items-center gap-3 mb-1">
                             <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $miembro->representacion->nombre }}</span>
-                            @if ($miembro['estado']==1)
-                                <span class="material-icons-round text-green-500 scale-150 cursor-pointer">
-                                    toggle_on
-                                </span>
+                            @if ($miembro['fechaCese']==null)
+                                <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Vigente</span>
                             @else
-                                <span class="material-icons-round text-slate-400 scale-150 cursor-pointer">
-                                    toggle_off
-                                </span>
+                                <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">No vigente</span>
                             @endif
                         </div>
                     </div>

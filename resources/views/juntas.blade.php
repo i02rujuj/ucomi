@@ -19,24 +19,6 @@ Juntas
             </div>
             @endif
 
-            <button type="button" class="accordion-info mt-4 w-full text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
-                <span class="material-icons-round">
-                    info
-                </span>
-                &nbsp;
-                Información aclaratoria sobre la creación de una junta
-            </button>
-
-            <div class="info text-sm text-slate-600 border font-medium py-1 px-4 rounded">
-                Para crear una junta será necesario que existan como mínimo los siguientes miembros del equipo de gobierno del centro al que pertenezca:
-                <br><br>
-                - Director/a o Decano/a
-                <br>
-                - Secretario/a
-                <br><br>
-                Estos serán automáticamente miembros natos de la junta.
-            </div>
-
             <form method="POST" action="{{ route('juntas.store') }}" class="bg-white p-8 mb-6 rounded-lg shadow-md">
                 <div class="text-gray-600 font-bold mb-2">
                     Añadir nueva junta
@@ -88,38 +70,6 @@ Juntas
                     </div>
                 </div>
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">
-                    <div class="left-side w-full">
-                        <div class="mb-2">
-                            <label for="nombreDirector" class="block text-sm text-gray-600 mb-1">
-                                Director/Decano 
-                                <span class="text-xs text-gray-600 mb-1">(Miembro nato del Equipo de Gobierno del centro)</span>
-                            </label>
-                            <input type="hidden" id="idDirector" name="idDirector" required/>
-                            <input id="nombreDirector" name="nombreDirector" type="text" class="readonly text-sm text-gray-600 border bg-gray-50 rounded-md px-2 py-1 w-full outline-none " autocomplete="off" required/>
-                            @error('idDirector')
-                                <p id="errorDirector" class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                            <p id="errorDirectorFront" class="text-red-500 text-xs mt-1"></p>
-                        </div>
-                    </div>
-
-                    <div class="left-side w-full">
-                        <div class="mb-2">
-                            <label for="nombreSecretario" class="block text-sm text-gray-600 mb-1">
-                                Secretario/a
-                                <span class="text-xs text-gray-600 mb-1">(Miembro nato del Equipo de Gobierno del centro)</span> 
-                            </label>
-                            <input type="hidden" id="idSecretario" name="idSecretario" required/>
-                            <input  id="nombreSecretario" name="nombreSecretario" type="text" class="readonly text-sm text-gray-600 border bg-gray-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
-                            @error('idSecretario')
-                                <p id="errorSecretario" class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                            <div id="errorSecretarioFront"></div>
-                        </div>
-                    </div>
-                </div>
-
                 <button type="submit" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
                     Añadir Junta
                 </button>
@@ -140,22 +90,7 @@ Juntas
                             </span>
                             <input type="text" id="search-input" class="text-sm text-gray-600 border py-1 w-full outline-none bg-white px-2 rounded form-input" placeholder="Buscar..." value="{{ request('junta') }}">
                         </div>
-                    </div>
-
-                    <div class="left-side w-full">
-                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-72">
-                            <span class="block text-sm text-gray-600 mb-1">
-                                Estado:
-                            </span>
-                        
-                            <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-habilitado">
-                                Habilitado
-                            </button>
-                            <button class="truncate w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" id="buscar-deshabilitado">
-                                Deshabilitado
-                            </button>
-                        </div>
-                    </div>
+                    </div>        
                 </div>
             </div>
 
@@ -164,8 +99,7 @@ Juntas
 <!----------------------------- START LISTADO ---------------------------------->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                 @foreach ($juntas as $junta)
-                    <div class="card bg-white p-6 rounded-lg shadow-md">
-                        <span class="hidden" id="card-status">{{ $junta->estado == 1 ? 'Habilitado' : 'Deshabilitado' }}</span>
+                    <div id="btn-editar-junta" data-junta-id="{{ $junta['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
                         <div class="flex items-start justify-between">
                             <div class="left-part truncate">
                                 <div class="flex items-center mb-1">
@@ -173,9 +107,9 @@ Juntas
                                         account_balance
                                     </span>
                                     &nbsp;
-                                    <h2 class="text-lg font-bold -mb-1 truncate">Junta de {{ $junta->centro->nombre }}</h2>
+                                    <h2 class="text-base font-bold truncate">{{ $junta->centro->nombre }}</h2>
                                 </div>
-                                <div class="flex text-xs text-slate-400 font-medium mb-1 truncate items-center gap-1">
+                                <div class="flex text-xs text-slate-400 font-medium mb-2 truncate items-center gap-1">
                                     <div class="truncate flex items-center">
                                         <span class="material-icons-round scale-75">
                                             event
@@ -192,29 +126,17 @@ Juntas
                                     </div>
                                 </div>
                             </div>
-                            <div class="right-part -mr-3 truncate">
-                                <button type="button" class="truncate text-sm hover:text-black font-medium py-1 mx-3 rounded"
-                                    id="btn-editar-junta" data-junta-id="{{ $junta['id'] }}" value="{{ $junta['estado'] }}">
-                                    <span class="material-icons-round text-slate-400 scale-125 truncate">
-                                        edit_note
-                                    </span>
-                                </button>
-                            </div>
                         </div>
-            
-                        <div class="flex items-center gap-3 mb-1" id="btn-delete-junta" data-junta-id="{{ $junta['id'] }}"
-                            data-estado="{{ $junta['estado'] }}">
+
+                        <div class="flex items-center gap-3 mb-1" >
                             <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Junta</span>
-                            @if ($junta['estado']==1)
-                                <span class="material-icons-round text-green-500 scale-150 cursor-pointer">
-                                    toggle_on
-                                </span>
+                            @if ($junta['fechaDisolucion']==null)
+                                <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Vigente</span>
                             @else
-                                <span class="material-icons-round text-slate-400 scale-150 cursor-pointer">
-                                    toggle_off
-                                </span>
+                                <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">No vigente</span>
                             @endif
                         </div>
+
                     </div>
                 @endforeach
             </div>

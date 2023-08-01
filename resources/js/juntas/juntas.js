@@ -44,14 +44,23 @@ const addEditEvent = (button) => {
                     </div>     
                 `,
                 focusConfirm: false,
+                showDenyButton: true,
                 showCancelButton: true,
+                denyButtonText: 'Eliminar',
                 confirmButtonText: "Actualizar",
                 cancelButtonText: "Cancelar",
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '',
+                denyButtonColor: '#d33',
             });
+
+            // BOTÓN ACTUALIZAR
             if (result.isConfirmed) {
+
                 const inputs = document.querySelectorAll(".junta");
                 const valores = {};
                 let error = 0;
+
                 inputs.forEach((input) => {
                     valores[input.id] = input.value;
                     if (input.id!='fechaDisolucion' && input.value === "") {
@@ -65,43 +74,135 @@ const addEditEvent = (button) => {
                 }
                 
                 if (error > 0) {
+
                     await Swal.fire({
                         icon: "error",
                         title: "Oops...",
                         text: "Faltan campos por rellenar.",
                     });
-                } else {
-                    const dataToSend = {
-                        id: button.dataset.juntaId,
-                        data: valores,
-                    };
-                    console.log(dataToSend);
-                    const response = await UPDATE_JUNTA_BBDD(dataToSend);
-                    console.log(response);
 
-                    if (response.status === 200) {
-                        await Swal.fire({
-                            icon: "success",
-                            title: "Updated!",
-                            text: "Se ha editado la junta.",
+                } else {
+
+                    // Avisar sobre poner fecha Cese como fecha disolución de la junta
+                    if(valores['fechaDisolucion']!=null){
+                        const result2 = await Swal.fire({
+                            text: "Se ha indicado una fecha de disolución para la junta. Todos los miembros de la junta cesarán con la fecha de disolución indicada",
+                            focusConfirm: false,
+                            showCancelButton: true,
+                            confirmButtonText: "Aceptar",
+                            cancelButtonText: "Cancelar",
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '',
                         });
-                        window.location.reload();
-                    } else {
-                        await Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: response.error,
-                        });
+
+                        // BOTÓN ACTUALIZAR CESANDO A LOS MIEMBROS
+                        if (result2.isConfirmed) {
+
+                            const dataToSend = {
+                                id: button.dataset.juntaId,
+                                data: valores,
+                            };
+
+                            const response = await UPDATE_JUNTA_BBDD(dataToSend);
+
+                            if (response.status === 200) {
+
+                                await Swal.fire({
+                                    icon: "success",
+                                    title: "Updated!",
+                                    text: "Se ha editado la junta y se han cesado a todos los miembros de la junta.",
+                                });
+
+                                window.location.reload();
+
+                            } else {
+
+                                await Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: response.error,
+                                });
+
+                            }
+                        }
                     }
+                    else{
+                        // BOTÓN ACTUALIZAR
+                        if (result.isConfirmed) {
+
+                            const dataToSend = {
+                                id: button.dataset.juntaId,
+                                data: valores,
+                            };
+
+                            const response = await UPDATE_JUNTA_BBDD(dataToSend);
+
+                            if (response.status === 200) {
+
+                                await Swal.fire({
+                                    icon: "success",
+                                    title: "Updated!",
+                                    text: "Se ha editado la junta.",
+                                });
+
+                                window.location.reload();
+
+                            } else {
+
+                                await Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: response.error,
+                                });
+
+                            }
+                        }
+                    }   
+                }
+            }
+            // BOTÓN ELIMINAR
+            else if (result.isDenied) {
+
+                try {
+                    const result = await Swal.fire({
+                        title: "¿Eliminar la junta?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "",
+                        confirmButtonText: "Eliminar",
+                    });
+
+                    if (result.isConfirmed) {
+
+                        const response = await DELETE_JUNTA_BBDD(dataToSend);
+ 
+                        await Swal.fire(
+                            "Eliminado",
+                            "La junta fue eliminada.",
+                            "success"
+                        );
+                        
+                        window.location.reload();
+                    }
+
+                } catch (error) {
+
+                    await Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Ha ocurrido un error al eliminar la junta",
+                    });
                 }
             }
         } catch (error) {
-            console.error(error);
+
             await Swal.fire({
                 icon: "error",
                 title: "Oops...",
                 text: "Ha ocurrido un error al editar la junta.",
             });
+
         }
     });
 };
@@ -110,129 +211,4 @@ const editButtons = document.querySelectorAll('#btn-editar-junta');
 
 editButtons.forEach(button => {
     addEditEvent(button);
-});
-
-// EVENTO ELIMINAR
-const addDeleteEvent = (button) => {
-    button.addEventListener("click", async (event) => {
-        let dataToSend = {};
-
-        if (button.dataset.estado == 0) {
-            dataToSend = {
-                id: button.dataset.juntaId,
-                estado: button.dataset.estado,
-            };
-        } else {
-            dataToSend = {
-                id: button.dataset.juntaId,
-                estado: button.dataset.estado,
-            };
-        }
-        try {
-            const result = await Swal.fire({
-                title:
-                    button.dataset.estado == 1
-                        ? "¿Deshabilitar la junta?"
-                        : "¿Habilitar la junta?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText:
-                    button.dataset.estado == 1 ? "Deshabilitar" : "Habilitar",
-            });
-            if (result.isConfirmed) {
-                const response = await DELETE_JUNTA_BBDD(dataToSend);
-                console.log(response);
-                if (button.dataset.estado == 1) {
-                    await Swal.fire(
-                        "Deshabilitado",
-                        "La junta fue deshabilitada.",
-                        "success"
-                    );
-                } else {
-                    await Swal.fire(
-                        "Habilitado",
-                        "La junta fue habilitada.",
-                        "success"
-                    );
-                }
-                window.location.reload();
-            }
-        } catch (error) {
-            console.error(error);
-            await Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Ha ocurrido un error al cambiar el estado de la junta",
-            });
-        }
-    });
-};
-
-const deleteButtons = document.querySelectorAll('#btn-delete-junta');
-
-deleteButtons.forEach(button => {
-    addDeleteEvent(button);
-});
-
-
-// EVENTO COMPROBAR DIRECTOR Y SECRETARIO
-const selectJuntas = document.getElementById("idCentro");
-
-selectJuntas.addEventListener("change", async (event) => {
-
-    const idCentro = document.getElementById("idCentro").value;
-    const idDirector = document.getElementById("idDirector");
-    const idSecretario = document.getElementById("idSecretario");
-    const nombreDirector = document.getElementById("nombreDirector");
-    const nombreSecretario = document.getElementById("nombreSecretario");
-    const errorDirector = document.getElementById("errorDirector");
-    const errorSecretario = document.getElementById("errorSecretario");
-    const errorDirectorFront = document.getElementById("errorDirectorFront");
-    const errorSecretarioFront = document.getElementById("errorSecretarioFront");
-
-    if(errorDirector)
-        errorDirector.innerHTML="";
-    if(errorSecretario)
-        errorSecretario.innerHTML="";
-
-    errorDirectorFront.innerHTML="";
-    errorSecretarioFront.innerHTML="";
-
-    $.ajax({
-        type: "POST",
-        url: '/miembro_gobierno/getDirectivos',
-        data: {
-            _token: $("meta[name='csrf-token']").attr("content"),
-            idCentro: idCentro,
-        },
-        success: function (response) {
-            //director.value=response['director']?.id ?? "No existe directivo activo para el centro seleccionado";
-            //secretario.value=response['secretario']?.id ?? "---";
-
-            if(response['director'] && Object.hasOwn(response['director'], 'id')){
-                idDirector.value=response['director'].id;
-                nombreDirector.value=response['director'].name;
-            }
-            else{
-                idDirector.value="";
-                nombreDirector.value ="";
-                errorDirectorFront.innerHTML = '<span class="text-red-500 text-xs mt-1">No existe actualmente director/decano como miembro de gobierno para el centro seleccionado. <a class="inline-block w-full mt-1 md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" href="/miembros_gobierno?idCentro='+idCentro+'&idRepresentacion=1">Añadir director</a>';
-            }
-
-            if(response['secretario'] && Object.hasOwn(response['secretario'], 'id')){
-                idSecretario.value=response['secretario'].id;
-                nombreSecretario.value=response['secretario'].name;
-            }
-            else{
-                idSecretario.value="";
-                nombreSecretario.value = "";
-                errorSecretarioFront.innerHTML = '<span class="text-red-500 text-xs mt-1">No existe actualmente secretario como miembro de gobierno para el centro seleccionado. <a class="inline-block w-full mt-1 md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" href="/miembros_gobierno?idCentro='+idCentro+'&idRepresentacion=2">Añadir secretario</a>';
-            }
-        },
-        error: function (errorMessage) {
-            $("#errorMessage").append("Error: " + errorMessage);
-        }
-    });
 });

@@ -6,5 +6,3 @@ Panel
 @section ('content')
 
 @endsection
-
-@vite(['resources/js/home.js'])

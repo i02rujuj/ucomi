@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     filterFunction();
 });
 
+/*
 document.querySelector("#buscar-habilitado").addEventListener("click", function () {
     document.querySelector("#search-input").value = "Habilitado";
     filterFunction();
@@ -32,9 +33,10 @@ document.querySelector("#buscar-deshabilitado").addEventListener("click", functi
     filterFunction();
 });
 
+
 document.querySelector("#search-idCentro").addEventListener("change", function () {
   var selectCentro = document.querySelector("#search-idCentro");
   document.querySelector("#search-input").value = selectCentro.options[selectCentro.selectedIndex].text;
   filterFunction();
-});
+});*/
 

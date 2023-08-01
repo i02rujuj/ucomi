@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DateTime;
 use App\Models\Junta;
 use App\Models\Centro;
+use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -15,10 +16,12 @@ class JuntasController extends Controller
     {
         try {
             $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'estado')
-            ->orderBy('estado', 'DESC')
+            ->where('estado', 1)
+            ->orderBy('fechaDisolucion')
             ->orderBy('idCentro')
             ->orderBy('fechaConstitucion')
             ->get();
+
             $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
             return view('juntas', ['juntas' => $juntas, 'centros' => $centros,]);
         } catch (\Throwable $th) {
@@ -33,8 +36,6 @@ class JuntasController extends Controller
                 'idCentro' => 'required|integer|exists:App\Models\Centro,id',
                 'fechaConstitucion' => 'required|date',
                 'fechaDisolucion' => 'nullable|date',
-                'idDirector' => 'required|integer|exists:App\Models\MiembroGobierno,id',
-                'idSecretario' => 'required|integer|exists:App\Models\MiembroGobierno,id',
             ], [
                 // Mensajes error idCentro
                 'idCentro.required' => 'El centro es obligatorio.',
@@ -45,14 +46,6 @@ class JuntasController extends Controller
                 'fechaConstitucion.date' => 'La fecha de constitución debe tener el formato fecha DD/MM/YYYY.',
                 // Mensajes error fechaDisolucion
                 'fechaDisolucion.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
-                // Mensajes error director
-                'idDirector.required' => 'Es necesario que exista un director/decano actual en el equipo de gobierno del centro para crear una nueva junta.',
-                'idDirector.integer' => 'Es necesario que exista un director/decano actual en el equipo de gobierno del centro para crear una nueva junta.',
-                'idDirector.exists' => 'El director seleccionado no existe.',
-                // Mensajes error secretario
-                'idSecretario.required' => 'Es necesario que exista un secretario actual en el equipo de gobierno del centro para crear una nueva junta.',
-                'idSecretario.integer' => 'Es necesario que exista un secretario actual en el equipo de gobierno del centro para crear una nueva junta.',
-                'idSecretario.exists' => 'El secretario seleccionado no existe.',
             ]);
 
             if ($validator->fails()) {
@@ -69,17 +62,18 @@ class JuntasController extends Controller
                     return redirect()->route('juntas')->with('error', 'La fecha de disolución '.$request->fechaDisolucion.' no puede ser anterior a la fecha de constitución '. $request->fechaConstitucion)->withInput();
                 }
             }
-           
-            // Comprobación existencia junta en activo para el centro seleccionado
-            $junta = Junta::select('id')
+            else{
+                // Comprobación existencia junta en activo para el centro seleccionado
+                $junta = Junta::select('id')
                 ->where('idCentro', $request->get('idCentro'))
                 ->where('fechaDisolucion', null)
                 ->where('estado', 1)
                 ->first();
 
-            if($junta)
-                return redirect()->route('juntas')->with('error', 'No se pudo crear la junta: ya existe una junta en activo para el centro indicado')->withInput();
-
+                if($junta)
+                    return redirect()->route('juntas')->with('error', 'No se pudo crear la junta: ya existe una junta en activo para el centro indicado')->withInput();
+            }
+           
             $junta = Junta::create([
                 "idCentro" => $request->idCentro,
                 "fechaConstitucion" => $request->fechaConstitucion,
@@ -87,6 +81,7 @@ class JuntasController extends Controller
                 'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
             ]);
             return redirect()->route('juntas')->with('success', 'Junta creada correctamente.');
+
         } catch (\Throwable $th) {
             return redirect()->route('juntas')->with('error', 'No se pudo crear la junta: ' . $th->getMessage());
         }
@@ -97,16 +92,11 @@ class JuntasController extends Controller
         try {
             $junta = Junta::where('id', $request->id)->first();
 
-            if ($request->estado == 0) {
-                $junta->estado = 1;
-            } else {
-                $junta->estado = 0;
-            }
-
             if (!$junta) {
                 return response()->json(['error' => 'No se ha encontrado la junta.'], 404);
             }
 
+            $junta->estado = 0;
             $junta->save();
             return response()->json($request);
 
@@ -132,6 +122,7 @@ class JuntasController extends Controller
     {
         try {
             $junta = Junta::where('id', $request->id)->first();
+
             if (!$junta) {
                 return response()->json(['error' => 'No se ha encontrado la junta.', 'status' => 404], 404);
             }
@@ -148,7 +139,7 @@ class JuntasController extends Controller
                     ->first();
 
                 if ($juntaActiva) {
-                    return response()->json(['error' => 'No se ha podido actualizar la junta: solo puede existir una junta en activo', 'status' => 404], 200);
+                    return response()->json(['error' => 'No se pudo crear la junta: ya existe una junta en activo para el centro indicado', 'status' => 404], 200);
                 } 
             }
             else{
@@ -159,6 +150,10 @@ class JuntasController extends Controller
                 if ($dateConstitucion>$dateDisolucion) {
                     return response()->json(['error' => 'La fecha de disolución no puede ser anterior a la fecha de constitución de la junta', 'status' => 404], 200);
                 } 
+
+                $miembrosJunta = DB::table('miembros_junta')
+                ->where('idJunta', $junta->id)
+                ->update(['fechaCese' => $request->data['fechaDisolucion']]);
             }
 
             $junta->fechaConstitucion = $request->data['fechaConstitucion'];

@@ -14,12 +14,14 @@ class CentrosController extends Controller
     {
         try {
             $centros = Centro::select('id', 'nombre', 'direccion', 'idTipo', 'estado')
-            ->orderBy('estado', 'DESC')
+            ->where('estado', 1)
             ->orderBy('idTipo')
             ->orderBy('nombre')
             ->get();
+
             $tiposCentro = TipoCentro::select('id', 'nombre')->get();
             return view('centros', ['centros' => $centros, 'tiposCentro' => $tiposCentro]);
+
         } catch (\Throwable $th) {
             return redirect()->route('centros')->with('error', 'No se pudieron obtener los centros: ' . $th->getMessage());
         }
@@ -69,16 +71,11 @@ class CentrosController extends Controller
         try {
             $centro = Centro::where('id', $request->id)->first();
 
-            if ($request->estado == 0) {
-                $centro->estado = 1;
-            } else {
-                $centro->estado = 0;
-            }
-
             if (!$centro) {
                 return response()->json(['error' => 'No se ha encontrado el centro.'], 404);
             }
 
+            $centro->estado = 0;
             $centro->save();
             return response()->json($request);
 

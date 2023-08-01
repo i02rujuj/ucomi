@@ -47,6 +47,8 @@
                     <div class="ml-4 flex items-center md:ml-6"> 
                         @if (!Auth::check())
                             <a href="{{ route('login') }}" class="ml-3 px-3 py-1 text-sm font-medium rounded-md hover:text-white hover:bg-gray-700">Login</a>
+                        @else
+                            <a href="{{ route('home') }}" class="ml-3 px-3 py-1 text-sm font-medium rounded-md hover:text-white hover:bg-gray-700">{{Auth::user()->name}}</a>
                         @endif
                     </div>
                 </div>

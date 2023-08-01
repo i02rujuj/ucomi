@@ -11,12 +11,8 @@ class PublicoController extends Controller
     
     public function index()
     {
-        if(Auth::check())
-            return redirect()->route('home');
-        else{
-            $centros = Centro::where('estado', 1)->get();
-            return view('publico.welcome',['centros' => $centros]);
-        }
+        $centros = Centro::where('estado', 1)->get();
+        return view('publico.welcome',['centros' => $centros]);
     }
     
     public function info(Request $request)

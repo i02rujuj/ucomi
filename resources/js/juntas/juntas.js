@@ -166,6 +166,7 @@ const addEditEvent = (button) => {
                 try {
                     const result = await Swal.fire({
                         title: "¿Eliminar la junta?",
+                        text: "También se eliminarán todos los miembros de la junta",
                         icon: "warning",
                         showCancelButton: true,
                         confirmButtonColor: "#d33",
@@ -179,7 +180,7 @@ const addEditEvent = (button) => {
  
                         await Swal.fire(
                             "Eliminado",
-                            "La junta fue eliminada.",
+                            "La junta y todos sus miembros fueron eliminados.",
                             "success"
                         );
                         

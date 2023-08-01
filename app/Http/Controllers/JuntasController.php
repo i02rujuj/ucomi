@@ -96,6 +96,10 @@ class JuntasController extends Controller
                 return response()->json(['error' => 'No se ha encontrado la junta.'], 404);
             }
 
+            $miembrosJunta = DB::table('miembros_junta')
+                ->where('idJunta', $junta->id)
+                ->update(['estado' => 0]);
+
             $junta->estado = 0;
             $junta->save();
             return response()->json($request);
@@ -172,7 +176,7 @@ class JuntasController extends Controller
             $juntas = DB::table('juntas')
             ->join('centros', 'juntas.idCentro', '=', 'centros.id')
             ->where('juntas.estado', 1)
-            ->select('juntas.id', 'centros.nombre')
+            ->select('juntas.id', 'juntas.fechaConstitucion', 'centros.nombre')
             ->get();
             if (!$juntas) {
                 return response()->json(['error' => 'No se han podido obtener las juntas.'], 404);

@@ -23,9 +23,9 @@ class MiembrosJuntaController extends Controller
             $users = User::select('id', 'name')->where('estado', 1)->get();
             $representacionesGeneral = RepresentacionGeneral::select('id', 'nombre')->where('estado', 1)->get();
 
-            $miembrosJunta = MiembroJunta::orderBy('idJunta')
-            ->where('estado', 1)
+            $miembrosJunta = MiembroJunta::where('estado', 1)
             ->orderBy('fechaCese')
+            ->orderBy('idJunta')
             ->orderBy('idRepresentacion')
             ->orderBy('idUsuario')
             ->get();

@@ -20,9 +20,9 @@ class MiembrosGobiernoController extends Controller
             $users = User::select('id', 'name')->where('estado', 1)->get();
             $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->where('estado', 1)->get();
 
-            $miembrosGobierno = MiembroGobierno::orderBy('idCentro')
-            ->where('estado', 1)
+            $miembrosGobierno = MiembroGobierno::where('estado', 1)
             ->orderBy('fechaCese')
+            ->orderBy('idCentro')
             ->orderBy('idRepresentacion')
             ->orderBy('idUsuario')
             ->get();

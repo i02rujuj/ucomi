@@ -141,6 +141,7 @@ Miembros de Gobierno
                     <div id="btn-editar-miembro" data-miembro-id="{{ $miembro['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
                         <div class="flex items-start justify-between">
                             <div class="left-part truncate">
+
                                 <div class="flex items-center mb-1">
                                     <span class="material-icons-round mt-1 scale-75">
                                         person
@@ -148,6 +149,7 @@ Miembros de Gobierno
                                     &nbsp;
                                     <h2 class="text-base font-bold -mb-1 truncate">{{ $miembro->usuario->name }}</h2>
                                 </div>
+
                                 <div class="flex items-center mb-1">
                                     <span class="material-icons-round scale-75">
                                         school
@@ -155,6 +157,15 @@ Miembros de Gobierno
                                     &nbsp;
                                     <h2 class="text-sm mb-1 truncate">{{ $miembro->centro->nombre }}</h2>
                                 </div>
+
+                                <div class="flex items-center mb-1">
+                                    <span class="material-icons-round scale-75">
+                                        psychology
+                                    </span>
+                                    &nbsp;
+                                    <h2 class="text-sm mb-1 truncate">{{ $miembro->representacion->nombre }}</h2>
+                                </div>
+
                                 <div class="flex text-xs text-slate-400 font-medium mb-2 truncate items-center gap-1">
                                     <div class="truncate flex items-center">
                                         <span class="material-icons-round scale-75">
@@ -171,18 +182,23 @@ Miembros de Gobierno
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                             
                         </div>
 
-                        <div class="flex items-center gap-3 mb-1">
-                            <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $miembro->representacion->nombre }}</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs bg-blue-100 {{ $miembro->centro->estado == 1 ? 'bg-blue-100' : 'bg-red-200' }} font-semibold px-2 rounded-lg truncate">
+                                Miembro de Gobierno
+                            </span>
+
                             @if ($miembro['fechaCese']==null)
                                 <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Vigente</span>
                             @else
                                 <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">No vigente</span>
                             @endif
                         </div>
+
                     </div>
                 @endforeach
             </div>

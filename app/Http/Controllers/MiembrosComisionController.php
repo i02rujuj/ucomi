@@ -15,11 +15,19 @@ class MiembrosComisionController extends Controller
     public function index()
     {
         try {
-            $comisiones = Comision::where('estado', 1)->get();
+            $comisiones = Comision::where('estado', 1)
+            ->where('fechaDisolucion', null)
+            ->get();
+
             $users = User::select('id', 'name')->where('estado', 1)->get();
             $representacionesGeneral = RepresentacionGeneral::select('id', 'nombre')->where('estado', 1)->get();
 
-            $miembrosComision = MiembroComision::orderBy('idComision')->orderBy('idRepresentacion')->orderBy('estado')->orderBy('idUsuario')->get();
+            $miembrosComision = MiembroComision::where('estado',1)
+            ->orderBy('fechaCese')
+            ->orderBy('idComision')
+            ->orderBy('idRepresentacion')
+            ->orderBy('idUsuario')
+            ->get();
 
             return view('miembrosComision', ['comisiones' => $comisiones, 'users' => $users, 'representacionesGeneral' => $representacionesGeneral, 'miembrosComision' => $miembrosComision]);
         } catch (\Throwable $th) {
@@ -61,13 +69,14 @@ class MiembrosComisionController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-            $dateTomaPosesion = new DateTime($request->fechaTomaPosesion);
-            $dateCese = new DateTime($request->fechaCese);
+            if($request->fechaCese != null){
+                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
+                $dateTomaPosesion = new DateTime($request->fechaTomaPosesion);
+                $dateCese = new DateTime($request->fechaCese);
 
-            if ($dateTomaPosesion>$dateCese) {
-                return redirect()->route('miembrosComision')->with('error', 'La fecha de cese no puede ser anterior a la toma de posesión')->withInput();
-            }  
+                if ($dateTomaPosesion>$dateCese) 
+                    return redirect()->route('miembrosComision')->with('error', 'La fecha de cese no puede ser anterior a la toma de posesión')->withInput();
+            }
 
             // Comprobación existencia miembro repetido en la misma comisión
             $miembroRepetido = MiembroComision::select('id')
@@ -113,16 +122,11 @@ class MiembrosComisionController extends Controller
         try {
             $miembro = MiembroComision::where('id', $request->id)->first();
 
-            if ($request->estado == 0) {
-                $miembro->estado = 1;
-            } else {
-                $miembro->estado = 0;
-            }
-
             if (!$miembro) {
                 return response()->json(['error' => 'No se ha encontrado el miembro de Comisión.'], 404);
             }
 
+            $miembro->estado = 0;
             $miembro->save();
             return response()->json($request);
 
@@ -139,13 +143,26 @@ class MiembrosComisionController extends Controller
                 return response()->json(['error' => 'No se ha encontrado el miembro de Comisión', 'status' => 404], 200);
             }
 
-            // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-            $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
-            $dateCese = new DateTime($request->data['fechaCese']);
+            if($request->data['fechaCese'] != null){
+                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
+                $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
+                $dateCese = new DateTime($request->data['fechaCese']);
 
-            if ($dateTomaPosesion>$dateCese) {
-                return response()->json(['error' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 404], 200);
-            }          
+                if ($dateTomaPosesion>$dateCese) 
+                    return response()->json(['error' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 404], 200);
+            }
+            else{
+                // Comprobación existencia usuario vigente en la comisión
+                $miembroRepetido = MiembroComision::select('id')
+                ->where('idComision', $miembro->idComision)
+                ->where('idUsuario', $miembro->idUsuario)
+                ->where('fechaCese', null)
+                ->where('estado', 1)
+                ->count();
+
+                if($miembroRepetido>1)
+                    return response()->json(['error' => 'No se pudo editar el miembro de la comisión: ya existe el usuario vigente en la comisión seleccionada', 'status' => 404], 200);
+            }
 
             $miembro->idRepresentacion = $request->data['idRepresentacion'];
             $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];

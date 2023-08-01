@@ -34,7 +34,7 @@ const addEditEvent = (button) => {
                     </div>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
                         <label for="descripcion" class="block text-sm text-gray-600 w-32">Descripción:</label>
-                        <input type="text" id="descripcion" class="swal2-input comision text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.descripcion}">
+                        <input type="text" id="descripcion" class="swal2-input comision text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${(response.descripcion == null) ? '' : response.descripcion}">
                     </div>
 
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
@@ -45,7 +45,7 @@ const addEditEvent = (button) => {
                                 options+='<option value="'+junta.id+'" ';
                                 if(junta.id == response.idJunta) 
                                     options+='selected';
-                                options+='>'+junta.nombre+'</option>';                                               
+                                options+='>'+junta.nombre+' ('+junta.fechaConstitucion+')</option>';                                               
                             })}
                             ${options}
                         </select>
@@ -61,17 +61,25 @@ const addEditEvent = (button) => {
                     </div>     
                 `,
                 focusConfirm: false,
+                showDenyButton: true,
                 showCancelButton: true,
+                denyButtonText: 'Eliminar',
                 confirmButtonText: "Actualizar",
                 cancelButtonText: "Cancelar",
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '',
+                denyButtonColor: '#d33',
             });
+
             if (result.isConfirmed) {
+
                 const inputs = document.querySelectorAll(".comision");
                 const valores = {};
                 let error = 0;
+
                 inputs.forEach((input) => {
                     valores[input.id] = input.value;
-                    if (input.id!='fechaDisolucion' && input.value === "") {
+                    if (input.id!='fechaDisolucion' && input.id!='descripcion' && input.value === "") {
                         error++;
                     }
                 });
@@ -82,19 +90,21 @@ const addEditEvent = (button) => {
                 }
                 
                 if (error > 0) {
+
                     await Swal.fire({
                         icon: "error",
                         title: "Oops...",
                         text: "Faltan campos por rellenar.",
                     });
+
                 } else {
+
                     const dataToSend = {
                         id: button.dataset.comisionId,
                         data: valores,
                     };
-                    console.log(dataToSend);
+
                     const response = await UPDATE_COMISION_BBDD(dataToSend);
-                    console.log(response);
 
                     if (response.status === 200) {
                         await Swal.fire({
@@ -102,24 +112,66 @@ const addEditEvent = (button) => {
                             title: "Updated!",
                             text: "Se ha editado la comision.",
                         });
+
                         window.location.reload();
+
                     } else {
+
                         await Swal.fire({
                             icon: "error",
                             title: "Oops...",
                             text: response.error,
                         });
+
                     }
                 }
             }
+            // BOTÓN ELIMINAR
+            else if (result.isDenied) {
+
+                try {
+                    const result = await Swal.fire({
+                        title: "¿Eliminar la comisión?",
+                        text: "",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "",
+                        confirmButtonText: "Eliminar",
+                    });
+
+                    if (result.isConfirmed) {
+
+                        const response = await DELETE_COMISION_BBDD(dataToSend);
+ 
+                        await Swal.fire(
+                            "Eliminado",
+                            "La comisión se ha eliminado.",
+                            "success"
+                        );
+                        
+                        window.location.reload();
+                    }
+
+                } catch (error) {
+
+                    await Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Ha ocurrido un error al eliminar la comisión",
+                    });
+                }
+            }
         } catch (error) {
-            console.error(error);
+
             await Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "Ha ocurrido un error al editar la comision.",
+                text: "Ha ocurrido un error al editar la comisión.",
             });
+
         }
+
     });
 };
 
@@ -127,68 +179,4 @@ const editButtons = document.querySelectorAll('#btn-editar-comision');
 
 editButtons.forEach(button => {
     addEditEvent(button);
-});
-
-// EVENTO ELIMINAR
-const addDeleteEvent = (button) => {
-    button.addEventListener("click", async (event) => {
-        let dataToSend = {};
-
-        if (button.dataset.estado == 0) {
-            dataToSend = {
-                id: button.dataset.comisionId,
-                estado: button.dataset.estado,
-            };
-        } else {
-            dataToSend = {
-                id: button.dataset.comisionId,
-                estado: button.dataset.estado,
-            };
-        }
-        try {
-            const result = await Swal.fire({
-                title:
-                    button.dataset.estado == 1
-                        ? "¿Deshabilitar la comisión?"
-                        : "¿Habilitar la comisión?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText:
-                    button.dataset.estado == 1 ? "Deshabilitar" : "Habilitar",
-            });
-            if (result.isConfirmed) {
-                const response = await DELETE_COMISION_BBDD(dataToSend);
-                console.log(response);
-                if (button.dataset.estado == 1) {
-                    await Swal.fire(
-                        "Deshabilitado",
-                        "La comisión fue deshabilitada.",
-                        "success"
-                    );
-                } else {
-                    await Swal.fire(
-                        "Habilitado",
-                        "La comisión fue habilitada.",
-                        "success"
-                    );
-                }
-                window.location.reload();
-            }
-        } catch (error) {
-            console.error(error);
-            await Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Ha ocurrido un error al cambiar el estado de la comisión",
-            });
-        }
-    });
-};
-
-const deleteButtons = document.querySelectorAll('#btn-delete-comision');
-
-deleteButtons.forEach(button => {
-    addDeleteEvent(button);
 });

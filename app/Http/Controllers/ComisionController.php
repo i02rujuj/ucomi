@@ -13,8 +13,17 @@ class ComisionController extends Controller
     public function index()
     {
         try {
-            $comisiones = Comision::select('id', 'idJunta', 'nombre', 'descripcion', 'fechaConstitucion', 'fechaDisolucion', 'estado')->orderBy('idJunta')->orderBy('fechaConstitucion')->get();
-            $juntas = Junta::where('estado', 1)->get();
+            $comisiones = Comision::select('id', 'idJunta', 'nombre', 'descripcion', 'fechaConstitucion', 'fechaDisolucion', 'estado')
+            ->where('estado', 1)
+            ->orderBy('fechaDisolucion')          
+            ->orderBy('idJunta')
+            ->orderBy('fechaConstitucion')
+            ->get();
+            
+            $juntas = Junta::where('estado', 1)
+            ->where('fechaDisolucion', null)
+            ->get();
+
             return view('comisiones', ['comisiones' => $comisiones, 'juntas' => $juntas]);
         } catch (\Throwable $th) {
             return redirect()->route('comisiones')->with('error', 'No se pudieron obtener las comisiones: ' . $th->getMessage());
@@ -27,7 +36,7 @@ class ComisionController extends Controller
             $validator = Validator::make($request->all(),[
                 'idJunta' => 'required|integer|exists:App\Models\Junta,id',
                 'nombre' => 'required|max:100|string',
-                'descripcion' => 'required|string|max:250',
+                'descripcion' => 'nullable|string|max:250',
                 'fechaConstitucion' => 'required|date',
                 'fechaDisolucion' => 'nullable|date',
             ], [
@@ -40,7 +49,6 @@ class ComisionController extends Controller
                 'nombre.string' => 'El nombre no puede contener números ni caracteres especiales.',
                 'nombre.max' => 'El nombre no puede exceder los 100 caracteres.',
                 // Mensajes error descripcion
-                'descripcion.required' => 'La descripcion es obligatoria.',
                 'descripcion.string' => 'La descripcion debe ser una cadena de texto.',
                 'descripcion.max' => 'La descripcion no puede exceder los 250 carácteres.',
                 // Mensajes error fechaConstitucion
@@ -55,12 +63,14 @@ class ComisionController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-            $dateConstitucion = new DateTime($request->fechaConstitucion);
-            $dateDisolucion = new DateTime($request->fechaDisolucion);
+            if($request->fechaDisolucion != null){
+                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
+                $dateConstitucion = new DateTime($request->fechaConstitucion);
+                $dateDisolucion = new DateTime($request->fechaDisolucion);
 
-            if ($dateConstitucion>$dateDisolucion) {
-                return redirect()->route('juntas')->with('error', 'La fecha de disolución no puede ser anterior a la fecha de constitución')->withInput();
+                if ($dateConstitucion>$dateDisolucion) {
+                    return redirect()->route('comisiones')->with('error', 'La fecha de disolución no puede ser anterior a la fecha de constitución')->withInput();
+                }
             }
 
             $comision = Comision::create([
@@ -82,16 +92,11 @@ class ComisionController extends Controller
         try {
             $comision = Comision::where('id', $request->id)->first();
 
-            if ($request->estado == 0) {
-                $comision->estado = 1;
-            } else {
-                $comision->estado = 0;
-            }
-
             if (!$comision) {
                 return response()->json(['error' => 'No se ha encontrado el comisión.'], 404);
             }
 
+            $comision->estado = 0;
             $comision->save();
             return response()->json($request);
 

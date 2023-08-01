@@ -33,7 +33,7 @@ Miembros de Junta
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idJunta" name="idJunta" value="{{old("idJunta")}}">
                                 <option value="">-----</option>
                                 @foreach ($juntas as $junta)
-                                    <option value="{{ $junta['id'] }}" {{ (old("idJunta")== $junta['id'] || app('request')->input('idJunta') == $junta['id'] ? "selected":"") }}>{{ $junta->centro->nombre }}</option>
+                                    <option value="{{ $junta['id'] }}" {{ (old("idJunta")== $junta['id'] || app('request')->input('idJunta') == $junta['id'] ? "selected":"") }}>{{ $junta->centro->nombre }} ({{ $junta->fechaConstitucion }})</option>
                                 @endforeach
                             </select>
                         
@@ -150,6 +150,14 @@ Miembros de Junta
 
                                 <div class="flex items-center mb-1">
                                     <span class="material-icons-round scale-75">
+                                        account_balance
+                                    </span>
+                                    &nbsp;
+                                    <h2 class="text-sm mb-1 truncate">{{ $miembro->junta->centro->nombre }} ({{ $junta->fechaConstitucion }})</h2>
+                                </div>
+
+                                <div class="flex items-center mb-1">
+                                    <span class="material-icons-round scale-75">
                                         psychology
                                     </span>
                                     &nbsp;
@@ -175,10 +183,9 @@ Miembros de Junta
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-3 mb-1">
-
+                        <div class="flex items-center gap-3">
                             <span class="text-xs bg-blue-100 {{ $miembro->junta->fechaDisolucion == null ? 'bg-blue-100' : 'bg-red-200' }} font-semibold px-2 rounded-lg truncate">
-                                {{ $miembro->junta->centro->nombre }}
+                                Miembro de Junta
                             </span>
 
                             @if ($miembro['fechaCese']==null)
@@ -187,7 +194,7 @@ Miembros de Junta
                                 <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">No vigente</span>
                             @endif
                         </div>
-                            
+
                     </div>
                 @endforeach
             </div>

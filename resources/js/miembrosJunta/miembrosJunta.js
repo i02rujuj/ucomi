@@ -49,7 +49,7 @@ const addEditEvent = (button) => {
                     <input type="hidden" id="idJunta" value="${junta.id}"/>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
                         <label for="junta" class="block text-sm text-gray-600 w-32">Junta:</label>
-                        <input type="text" id="junta" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${centro.nombre}" readonly>
+                        <input type="text" id="junta" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${centro.nombre} (${junta.fechaConstitucion})" readonly>
                     </div>
                     <input type="hidden" id="idUsuario" value="${usuario.id}"/>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">

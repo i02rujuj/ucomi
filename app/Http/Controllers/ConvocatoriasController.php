@@ -74,6 +74,10 @@ class ConvocatoriasController extends Controller
                 // Si la validación falla, redirige de vuelta con los errores
                 return redirect()->back()->withErrors($validator)->withInput();
             }
+
+            if(!$request->idJunta && !$request->idComision){
+                return redirect()->route('convocatorias')->with('error', 'Debe seleccionar una junta o comisión para poder crear la convocatoria')->withInput();
+            }
            
             $convocatoria = Convocatoria::create([
                 "idJunta" => $request->idJunta,

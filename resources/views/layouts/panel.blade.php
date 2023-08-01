@@ -92,8 +92,13 @@
                         <span class="material-icons-round text-slate-600 ml-4 mr-2">
                             manage_accounts
                         </span>
+                        
                         &nbsp;
                             Miembros
+
+                        <span class="material-icons-round text-slate-600 ml-2">
+                            expand_more
+                        </span>
                     </button>
 
                     <div @class(['submenu', request()->routeIs('miembrosGobierno') || request()->routeIs('miembrosJunta') || request()->routeIs('miembrosComision') ? 'submenu-visible' : ''])>

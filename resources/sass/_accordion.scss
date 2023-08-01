@@ -8,14 +8,12 @@
   }
 
   .accordion-submenu:after {
-    content: '\2B9F'; /* Unicode character for "plus" sign (+) */
     font-size: 13px;
     color: #777;
     margin-left: 5px;
   }
   
   .submenu-active:after {
-    content: "\2B9D"; /* Unicode character for "minus" sign (-) */
   }
 
   .submenu-visible{

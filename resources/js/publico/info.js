@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
             nodeMouseClick: OrgChart.action.none,
             //mouseScrool: OrgChart.action.none,
             enableSearch: false,
-    
+            scaleInitial: 0.8,
             nodeBinding: {
                 field_0: "name",
                 field_1: "title",

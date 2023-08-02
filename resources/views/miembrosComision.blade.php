@@ -147,7 +147,7 @@ Miembros de Comisión
                                         person
                                     </span>
                                     &nbsp;
-                                    <h2 class="text-lg font-bold truncate">{{ $miembro->usuario->name }}</h2>
+                                    <h2 class="text-base font-bold truncate">{{ $miembro->usuario->name }}</h2>
                                 </div>
 
                                 <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">

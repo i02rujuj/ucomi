@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             MiembroJuntaSeeder::class,
             TipoConvocatoriaSeeder::class,
             ComisionSeeder::class,
+            MiembroComisionSeeder::class,
         ]);
     }
 }

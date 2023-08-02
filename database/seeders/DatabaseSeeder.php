@@ -22,7 +22,9 @@ class DatabaseSeeder extends Seeder
             RepresentacionGobiernoSeeder::class,
             MiembroGobiernoSeeder::class,
             RepresentacionGeneralSeeder::class,
+            MiembroJuntaSeeder::class,
             TipoConvocatoriaSeeder::class,
+            ComisionSeeder::class,
         ]);
     }
 }

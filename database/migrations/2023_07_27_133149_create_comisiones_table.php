@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('comisiones', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('idJunta');
             $table->string('nombre');
             $table->string('descripcion')->nullable();
             $table->date('fechaConstitucion');
             $table->date('fechaDisolucion')->nullable();
+            $table->unsignedBigInteger('idJunta');
             $table->boolean('estado');
             $table->timestamps();
 

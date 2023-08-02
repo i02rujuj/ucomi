@@ -14,72 +14,45 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        $usuarios = [
+            [
+                'nombre'=>'Manuel Cañas Ramírez', 
+                'email'=>'epsc.director@uco.es', 
+            ],
+            [
+                'nombre'=>'Luis Manuel Fernández de Ahumada', 
+                'email'=>'epsc.secretaria@uco.es', 
+            ],
+            [
+                'nombre'=>'Francisco Ramón Lara Raya', 
+                'email'=>'epsc.ord.acad@uco.es', 
+            ],
+            [
+                'nombre'=>'Joost van Duijn', 
+                'email'=>'epsc.relexteriores@uco.es', 
+            ],
+            [
+                'nombre'=>'Isabel Moreno García', 
+                'email'=>'calidad.epsc@uco.es', 
+            ],
+            [
+                'nombre'=>'Rosa María Relaño Luna', 
+                'email'=>'direccioneps@uco.es', 
+            ],
+        ];
 
-        // USUARIOS
+        foreach($usuarios as $user){
+            $u = new User();
+            $u->name = $user['nombre'];
+            $u->email = $user['email'];
+            $u->email_verified_at = now();
+            $u->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; /* Contraseña: password */
+            $u->remember_token = Str::random(10);
+            $u->estado = true;
+            $u->save();
+        }
 
-        $javier = new User();
-        $javier->name = 'Javier Ruiz Jurado';
-        $javier->email = 'i02rujuj@uco.es';
-        $javier->email_verified_at = now();
-        $javier->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; /* Contraseña: password */
-        $javier->remember_token = Str::random(10);
-        $javier->estado = true;
-        $javier->save();
-
-        $jose = new User();
-        $jose->name = 'Jose Luis Ávila Jiménez';
-        $jose->email = 'jlavila@uco.es';
-        $jose->email_verified_at = now();
-        $jose->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; /* Contraseña: password */
-        $jose->remember_token = Str::random(10);
-        $jose->estado = true;
-        $jose->save();
-
-        // MIEMBROS UCO
-        $usuario = new User();
-        $usuario->name = 'Manuel Cañas Ramírez';
-        $usuario->email = 'epsc.director@uco.es';
-        $usuario->email_verified_at = now();
-        $usuario->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; /* Contraseña: password */
-        $usuario->remember_token = Str::random(10);
-        $usuario->estado = true;
-        $usuario->save();
-
-        $usuario = new User();
-        $usuario->name = 'Luis Manuel Fernández de Ahumada';
-        $usuario->email = 'epsc.secretaria@uco.es';
-        $usuario->email_verified_at = now();
-        $usuario->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; /* Contraseña: password */
-        $usuario->remember_token = Str::random(10);
-        $usuario->estado = true;
-        $usuario->save();    
-
-        $usuario = new User();
-        $usuario->name = 'Francisco Ramón Lara Raya';
-        $usuario->email = 'epsc.ord.acad@uco.es';
-        $usuario->email_verified_at = now();
-        $usuario->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; /* Contraseña: password */
-        $usuario->remember_token = Str::random(10);
-        $usuario->estado = true;
-        $usuario->save();
-
-        $usuario = new User();
-        $usuario->name = 'Joost van Duijn';
-        $usuario->email = 'epsc.relexteriores@uco.es';
-        $usuario->email_verified_at = now();
-        $usuario->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; /* Contraseña: password */
-        $usuario->remember_token = Str::random(10);
-        $usuario->estado = true;
-        $usuario->save();
-
-        $usuario = new User();
-        $usuario->name = 'Isabel Moreno García';
-        $usuario->email = 'calidad.epsc@uco.es';
-        $usuario->email_verified_at = now();
-        $usuario->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; /* Contraseña: password */
-        $usuario->remember_token = Str::random(10);
-        $usuario->estado = true;
-        $usuario->save();
+        $users = User::factory()->count(100)->create();
 
     }
 }

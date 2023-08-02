@@ -3,7 +3,11 @@ import {GET_JUNTA_BBDD, GETALL_JUNTA_BBDD} from '../juntas/axiosTemplate';
 import {GET_CENTRO_BBDD} from '../centros/axiosTemplate';
 import {GET_USER_BBDD} from '../users/axiosTemplate';
 import {GET_REPRESENTACION_BBDD} from '../representaciones/axiosTemplate';
+
 import Swal from 'sweetalert2';
+import $ from 'jquery';
+import select2 from 'select2';
+import 'select2/dist/css/select2.css';
 
 // EVENTO EDITAR
 const addEditEvent = (button) => {
@@ -204,3 +208,9 @@ const editButtons = document.querySelectorAll('#btn-editar-miembro');
 editButtons.forEach(button => {
     addEditEvent(button);
 });
+
+
+//Hook up select2 to jQuery
+select2($);
+
+document.addEventListener("DOMContentLoaded", $('#idUsuario').select2());

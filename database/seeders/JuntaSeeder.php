@@ -15,10 +15,7 @@ class JuntaSeeder extends Seeder
     {
         $juntas =[
             [
-                'idCentro'=>1, 
-            ],
-            [ 
-                'idCentro'=>9, 
+                'idCentro'=>9, // EPS
             ],
         ];
 

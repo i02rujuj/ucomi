@@ -15,28 +15,40 @@ class MiembroGobiernoSeeder extends Seeder
     {
         $miembrosGobierno =[
             [
-                'idUsuario' => 4, 
-                'idCentro' => 1,
-                'idJunta' => 1, 
-                'representacion' => 1
-            ],
-            [
-                'idUsuario' => 3, 
-                'idCentro' => 1, 
+                'idUsuario' => 1, 
+                'idCentro' => 9, 
                 'idJunta' => 1,
-                'representacion' => 2
+                'representacion' => 1
             ],
             [
                 'idUsuario' => 2, 
                 'idCentro' => 9, 
-                'idJunta' => 2,
-                'representacion' => 1
+                'idJunta' => 1,
+                'representacion' => 2
             ],
             [
-                'idUsuario' => 1, 
+                'idUsuario' => 3, 
                 'idCentro' => 9, 
-                'idJunta' => 2,
-                'representacion' => 2
+                'idJunta' => 1,
+                'representacion' => 4
+            ],
+            [
+                'idUsuario' => 4, 
+                'idCentro' => 9, 
+                'idJunta' => 1,
+                'representacion' => 4
+            ],
+            [
+                'idUsuario' => 5, 
+                'idCentro' => 9, 
+                'idJunta' => 1,
+                'representacion' => 4
+            ],
+            [
+                'idUsuario' => 6, 
+                'idCentro' => 9, 
+                'idJunta' => 1,
+                'representacion' => 5
             ],
         ];
 

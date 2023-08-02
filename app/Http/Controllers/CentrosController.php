@@ -71,13 +71,18 @@ class CentrosController extends Controller
         try {
             $centro = Centro::where('id', $request->id)->first();
 
-            if (!$centro) {
+            if (!$centro) 
                 return response()->json(['error' => 'No se ha encontrado el centro.'], 404);
-            }
+
+            if($centro->juntas->where('estado', 1)->count() > 0)
+                return response()->json(['error' => 'Existen juntas asociadas a este centro. Para borrar el centro es necesario eliminar todas sus juntas.', 'status' => 404], 200);
+
+            if($centro->miembros->where('estado', 1)->count() > 0)
+                return response()->json(['error' => 'Existen miembros de gobierno asociados a este centro. Para borrar el centro es necesario eliminar todos sus miembros de gobierno.', 'status' => 404], 200);
 
             $centro->estado = 0;
             $centro->save();
-            return response()->json($request);
+            return response()->json(['status' => 200], 200);
 
         } catch (\Throwable $th) {
             return response()->json(['error' => 'No se ha encontrado el centro.'], 404);

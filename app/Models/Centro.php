@@ -25,7 +25,7 @@ class Centro extends Model
         return $this->hasMany(Junta::class, 'idCentro');
     }
 
-    public function miembrosGobierno()
+    public function miembros()
     {
         return $this->hasMany(MiembroGobierno::class, 'idCentro');
     }

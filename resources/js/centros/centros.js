@@ -116,14 +116,22 @@ const addEditEvent = (button) => {
                     if (result.isConfirmed) {
 
                         const response = await DELETE_CENTRO_BBDD(dataToSend);
- 
-                        await Swal.fire(
-                            "Eliminado",
-                            "El centro fue eliminado.",
-                            "success"
-                        );
-                        
-                        window.location.reload();
+
+                        if (response.status === 200) {
+                            await Swal.fire(
+                                "Eliminado",
+                                "El centro fue eliminado.",
+                                "success"
+                            );
+                            window.location.reload();
+                        } 
+                        else {
+                            await Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Ha ocurrido un error al eliminar el centro. " + response.error,
+                            });
+                        }
                     }
 
                 } catch (error) {

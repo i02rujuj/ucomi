@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DateTime;
 use App\Models\Junta;
 use App\Models\Centro;
+use App\Models\MiembroGobierno;
 use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -92,6 +93,15 @@ class JuntasController extends Controller
                 "fechaDisolucion" => $request->fechaDisolucion,
                 'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
             ]);
+
+            $director = DB::table('miembros_gobierno')
+            ->where('idUsuario', $request->idDirector)
+            ->update(['idJunta' => $junta->id]);
+
+            $secretario = DB::table('miembros_gobierno')
+            ->where('idUsuario', $request->idSecretario)
+            ->update(['idJunta' => $junta->id]);
+
             return redirect()->route('juntas')->with('success', 'Junta creada correctamente.');
 
         } catch (\Throwable $th) {
@@ -155,7 +165,7 @@ class JuntasController extends Controller
                     ->first();
 
                 if ($juntaActiva) {
-                    return response()->json(['error' => 'No se pudo crear la junta: ya existe una junta en activo para el centro indicado', 'status' => 404], 200);
+                    return response()->json(['error' => 'No se pudo crear la junta: ya existe una junta vigente para el centro indicado', 'status' => 404], 200);
                 } 
             }
             else{

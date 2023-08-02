@@ -5,9 +5,12 @@ import {GET_USER_BBDD} from '../users/axiosTemplate';
 import {GET_REPRESENTACION_BBDD} from '../representaciones/axiosTemplate';
 
 import Swal from 'sweetalert2';
+
 import $ from 'jquery';
 import select2 from 'select2';
-import 'select2/dist/css/select2.css';
+//Hook up select2 to jQuery
+select2($);
+document.addEventListener("DOMContentLoaded", $('#idUsuario').select2());
 
 // EVENTO EDITAR
 const addEditEvent = (button) => {
@@ -209,8 +212,3 @@ editButtons.forEach(button => {
     addEditEvent(button);
 });
 
-
-//Hook up select2 to jQuery
-select2($);
-
-document.addEventListener("DOMContentLoaded", $('#idUsuario').select2());

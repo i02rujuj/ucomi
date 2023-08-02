@@ -165,8 +165,24 @@ Miembros de Gobierno
                                         <span class="material-icons-round scale-75">
                                             psychology
                                         </span>
+
                                         &nbsp;
-                                        <h2 class="truncate">{{ $miembro->representacion->nombre }}</h2>
+
+                                        @if($miembro->representacion->id == config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR'))
+                                            @if ($miembro->centro->id == config('constants.TIPOS_CENTRO.FACULTAD')) 
+                                                <h2 class="truncate">Decano/a</h2>
+                                            @else
+                                                <h2 class="truncate">Director/a</h2>
+                                            @endif
+                                        @elseif ($miembro->representacion->id == config('constants.REPRESENTACIONES.GOBIERNO.VICEDIRECTOR'))
+                                            @if ($miembro->centro->id == config('constants.TIPOS_CENTRO.FACULTAD')) 
+                                                <h2 class="truncate">ViceDecano/a</h2>
+                                            @else
+                                                <h2 class="truncate">ViceDirector/a</h2>
+                                            @endif
+                                        @else
+                                            <h2 class="truncate">{{ $miembro->representacion->nombre }}</h2>
+                                        @endif
                                     </div>
                                 </div>
 
@@ -176,6 +192,7 @@ Miembros de Gobierno
                                             event
                                         </span>
                                         <div class="fechaTomaPosesion truncate">
+
                                             Toma posesión: {{ $miembro->fechaTomaPosesion }} | 
                                             
                                             @empty ($miembro->fechaCese)

@@ -139,6 +139,7 @@ class MiembrosGobiernoController extends Controller
             $director = DB::table('miembros_gobierno')
                 ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                 ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
+                ->where('miembros_gobierno.fechaCese', null)
                 ->where('miembros_gobierno.estado', 1)
                 ->whereIn('miembros_gobierno.idRepresentacion', [config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR')])
                 ->select('users.id', 'users.name')
@@ -147,6 +148,7 @@ class MiembrosGobiernoController extends Controller
             $secretario = DB::table('miembros_gobierno')
                 ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                 ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
+                ->where('miembros_gobierno.fechaCese', null)
                 ->where('miembros_gobierno.estado', 1)
                 ->whereIn('miembros_gobierno.idRepresentacion', [config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO')])
                 ->select('users.id', 'users.name')
@@ -220,6 +222,7 @@ class MiembrosGobiernoController extends Controller
                     return response()->json(['error' => 'No se pudo editar el miembro del equipo de gobierno: ya existe el usuario vigente en el centro seleccionado', 'status' => 404], 200);
             }
 
+            $miembro->idJunta = $request->data['idJunta'];
             $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
             $miembro->fechaCese = $request->data['fechaCese'];  
             $miembro->save();

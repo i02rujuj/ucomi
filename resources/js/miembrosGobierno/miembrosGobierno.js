@@ -1,4 +1,5 @@
 import { DELETE_MIEMBROSGOBIERNO_BBDD, GET_MIEMBROSGOBIERNO_BBDD, UPDATE_MIEMBROSGOBIERNO_BBDD } from "./axiosTemplate.js";
+import {GET_JUNTA_BBDD, GETALL_JUNTA_BBDD} from '../juntas/axiosTemplate';
 import {GET_CENTRO_BBDD} from '../centros/axiosTemplate';
 import {GET_USER_BBDD} from '../users/axiosTemplate';
 import {GET_REPRESENTACION_BBDD} from '../representaciones/axiosTemplate';
@@ -7,6 +8,9 @@ import Swal from 'sweetalert2';
 // EVENTO EDITAR
 const addEditEvent = (button) => {
     button.addEventListener("click", async (event) => {
+
+        var options = "";
+
         const dataToSend = {
             id: button.dataset.miembroId,
         };
@@ -27,11 +31,17 @@ const addEditEvent = (button) => {
                 id: response.idRepresentacion,
             };
 
+            const dataToSendJunta = {
+                id: response.idJunta,
+            };
+
             const centro = await GET_CENTRO_BBDD(dataToSendCentro); 
 
             const usuario = await GET_USER_BBDD(dataToSendUsuario); 
 
             const representacion = await GET_REPRESENTACION_BBDD(dataToSendRepresentacion); 
+
+            const juntas = await GETALL_JUNTA_BBDD(); 
 
             const result = await Swal.fire({
                 title: "Editar Miembro Gobierno",
@@ -59,6 +69,21 @@ const addEditEvent = (button) => {
                         <label for="fechaCese" class="block text-sm text-gray-600 w-32">Fecha cese:</label>
                         <input type="date" id="fechaCese" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.fechaCese}">
                     </div>
+                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
+                        <label for="idJunta" class="block text-sm text-gray-600 mb-1 w-32">Junta que representa:</label>
+                        <select id="idJunta" class="miembro swal2-input tipo text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" ">
+                            <option value="">-----</option>
+                            ${juntas.forEach(j => { 
+                                if(j.idCentro == response.idCentro){
+                                    options+='<option value="'+j.id+'" ';
+                                    if(j.id == response.idJunta) 
+                                        options+='selected';
+                                    options+='>'+j.nombre+' ('+j.fechaConstitucion+')</option>';
+                                }
+                            })}
+                            ${options}
+                        </select>
+                    </div>
                 `,
                 focusConfirm: false,
                 showDenyButton: true,
@@ -78,7 +103,7 @@ const addEditEvent = (button) => {
                 let error = 0;
 
                 inputs.forEach((input) => {
-                    if (input.id!='fechaCese' && input.value === "") {
+                    if (input.id!='idJunta' && input.id!='fechaCese' && input.value === "") {
                         error++;
                     }
 

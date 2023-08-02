@@ -25,7 +25,7 @@ class JuntasController extends Controller
             $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
 
             return view('juntas', ['juntas' => $juntas, 'centros' => $centros,]);
-            
+
         } catch (\Throwable $th) {
             return redirect()->route('juntas')->with('error', 'No se pudieron obtener las juntas: ' . $th->getMessage());
         }
@@ -188,13 +188,15 @@ class JuntasController extends Controller
             $juntas = DB::table('juntas')
             ->join('centros', 'juntas.idCentro', '=', 'centros.id')
             ->where('juntas.estado', 1)
-            ->select('juntas.id', 'juntas.fechaConstitucion', 'centros.nombre')
+            ->select('juntas.id', 'juntas.fechaConstitucion', 'centros.id as idCentro', 'centros.nombre')
             ->get();
+
             if (!$juntas) {
                 return response()->json(['error' => 'No se han podido obtener las juntas.'], 404);
             }
 
             return response()->json($juntas);
+
         } catch (\Throwable $th) {
             return redirect()->route('juntas')->with('error', 'No se pudieron obtener las juntas: ' . $th->getMessage());
         }

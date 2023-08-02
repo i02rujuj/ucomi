@@ -39,6 +39,14 @@ class UserSeeder extends Seeder
                 'nombre'=>'Rosa María Relaño Luna', 
                 'email'=>'direccioneps@uco.es', 
             ],
+            [
+                'nombre'=>'José Luis Ávila Jiménez', 
+                'email'=>'jlavila@uco.es', 
+            ],
+            [
+                'nombre'=>'Javier Ruiz Jurado', 
+                'email'=>'i02rujuj@uco.es', 
+            ],
         ];
 
         foreach($usuarios as $user){

@@ -22,12 +22,12 @@ class Centro extends Model
 
     public function juntas()
     {
-        return $this->hasMany(Junta::class, 'id');
+        return $this->hasMany(Junta::class, 'idCentro');
     }
 
     public function miembrosGobierno()
     {
-        return $this->hasMany(MiembroGobierno::class, 'id');
+        return $this->hasMany(MiembroGobierno::class, 'idCentro');
     }
 
     public function tipo()

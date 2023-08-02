@@ -23,7 +23,9 @@ class JuntasController extends Controller
             ->get();
 
             $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
+
             return view('juntas', ['juntas' => $juntas, 'centros' => $centros,]);
+            
         } catch (\Throwable $th) {
             return redirect()->route('juntas')->with('error', 'No se pudieron obtener las juntas: ' . $th->getMessage());
         }
@@ -36,6 +38,8 @@ class JuntasController extends Controller
                 'idCentro' => 'required|integer|exists:App\Models\Centro,id',
                 'fechaConstitucion' => 'required|date',
                 'fechaDisolucion' => 'nullable|date',
+                'idDirector' => 'required|integer|exists:App\Models\MiembroGobierno,id',
+                'idSecretario' => 'required|integer|exists:App\Models\MiembroGobierno,id',
             ], [
                 // Mensajes error idCentro
                 'idCentro.required' => 'El centro es obligatorio.',
@@ -46,6 +50,14 @@ class JuntasController extends Controller
                 'fechaConstitucion.date' => 'La fecha de constitución debe tener el formato fecha DD/MM/YYYY.',
                 // Mensajes error fechaDisolucion
                 'fechaDisolucion.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
+                // Mensajes error director
+                'idDirector.required' => 'Es necesario que exista un director/decano actual en el equipo de gobierno del centro para crear una nueva junta.',
+                'idDirector.integer' => 'Es necesario que exista un director/decano actual en el equipo de gobierno del centro para crear una nueva junta.',
+                'idDirector.exists' => 'El director seleccionado no existe.',
+                // Mensajes error secretario
+                'idSecretario.required' => 'Es necesario que exista un secretario actual en el equipo de gobierno del centro para crear una nueva junta.',
+                'idSecretario.integer' => 'Es necesario que exista un secretario actual en el equipo de gobierno del centro para crear una nueva junta.',
+                'idSecretario.exists' => 'El secretario seleccionado no existe.',
             ]);
 
             if ($validator->fails()) {

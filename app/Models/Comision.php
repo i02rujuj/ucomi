@@ -23,8 +23,13 @@ class Comision extends Model
         return $this->belongsTo(Junta::class, 'idJunta');
     }
 
-    public function comisiones()
+    public function miembros()
     {
-        return $this->hasMany(Comision::class, 'id');
+        return $this->hasMany(MiembroComision::class, 'idComision');
+    }
+
+    public function convocatorias()
+    {
+        return $this->hasMany(Convocatoria::class, 'idComision');
     }
 }

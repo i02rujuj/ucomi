@@ -21,6 +21,6 @@ class RepresentacionGobierno extends Model
 
     public function miembrosGobierno()
     {
-        return $this->hasMany(MiembroGobierno::class, 'id');
+        return $this->hasMany(MiembroGobierno::class, 'idTipo');
     }
 }

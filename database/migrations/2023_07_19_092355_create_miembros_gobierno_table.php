@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('idCentro')->unique;
             $table->unsignedBigInteger('idUsuario')->unique;
+            $table->unsignedBigInteger('idJunta')->nullable();
             $table->date('fechaTomaPosesion');
             $table->date('fechaCese')->nullable();
             $table->unsignedBigInteger('idRepresentacion');
@@ -23,6 +24,7 @@ return new class extends Migration
 
             $table->foreign('idCentro')->references('id')->on('centros');
             $table->foreign('idUsuario')->references('id')->on('users');
+            $table->foreign('idJunta')->references('id')->on('juntas');
             $table->foreign('idRepresentacion')->references('id')->on('representaciones_gobierno');
         });
     }

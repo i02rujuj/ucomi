@@ -15,24 +15,28 @@ class MiembroGobiernoSeeder extends Seeder
     {
         $miembrosGobierno =[
             [
-                'idUsuario'=>4, 
-                'idCentro'=>1, 
-                'representacion'=>1
+                'idUsuario' => 4, 
+                'idCentro' => 1,
+                'idJunta' => 1, 
+                'representacion' => 1
             ],
             [
-                'idUsuario'=>3, 
-                'idCentro'=>1, 
-                'representacion'=>2
+                'idUsuario' => 3, 
+                'idCentro' => 1, 
+                'idJunta' => 1,
+                'representacion' => 2
             ],
             [
-                'idUsuario'=>2, 
-                'idCentro'=>9, 
-                'representacion'=>1
+                'idUsuario' => 2, 
+                'idCentro' => 9, 
+                'idJunta' => 2,
+                'representacion' => 1
             ],
             [
-                'idUsuario'=>1, 
-                'idCentro'=>9, 
-                'representacion'=>2
+                'idUsuario' => 1, 
+                'idCentro' => 9, 
+                'idJunta' => 2,
+                'representacion' => 2
             ],
         ];
 
@@ -40,6 +44,7 @@ class MiembroGobiernoSeeder extends Seeder
             $miembro = new MiembroGobierno();
             $miembro->idUsuario = $m['idUsuario'];
             $miembro->idCentro = $m['idCentro'];
+            $miembro->idJunta = $m['idJunta'];
             $miembro->fechaTomaPosesion = now();
             $miembro->fechaCese = null;
             $miembro->idRepresentacion = $m['representacion'];

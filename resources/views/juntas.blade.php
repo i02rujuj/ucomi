@@ -70,6 +70,38 @@ Juntas
                     </div>
                 </div>
 
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">
+                    <div class="left-side w-full">
+                        <div class="mb-2">
+                            <label for="nombreDirector" class="block text-sm text-gray-600 mb-1">
+                                Director/Decano 
+                                <span class="text-xs text-gray-600 mb-1">(Miembro nato del Equipo de Gobierno del centro)</span>
+                            </label>
+                            <input type="hidden" id="idDirector" name="idDirector" required/>
+                            <input id="nombreDirector" name="nombreDirector" type="text" class="readonly text-sm text-gray-600 border bg-gray-50 rounded-md px-2 py-1 w-full outline-none " autocomplete="off" required/>
+                            @error('idDirector')
+                                <p id="errorDirector" class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                            <p id="errorDirectorFront" class="text-red-500 text-xs mt-1"></p>
+                        </div>
+                    </div>
+
+                    <div class="left-side w-full">
+                        <div class="mb-2">
+                            <label for="nombreSecretario" class="block text-sm text-gray-600 mb-1">
+                                Secretario/a
+                                <span class="text-xs text-gray-600 mb-1">(Miembro nato del Equipo de Gobierno del centro)</span> 
+                            </label>
+                            <input type="hidden" id="idSecretario" name="idSecretario" required/>
+                            <input  id="nombreSecretario" name="nombreSecretario" type="text" class="readonly text-sm text-gray-600 border bg-gray-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
+                            @error('idSecretario')
+                                <p id="errorSecretario" class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                            <div id="errorSecretarioFront"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <button type="submit" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
                     Añadir Junta
                 </button>
@@ -102,6 +134,7 @@ Juntas
                     <div id="btn-editar-junta" data-junta-id="{{ $junta['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
                         <div class="flex items-start justify-between">
                             <div class="left-part truncate">
+
                                 <div class="flex items-center">
                                     <span class="material-icons-round scale-75">
                                         account_balance
@@ -109,6 +142,7 @@ Juntas
                                     &nbsp;
                                     <h2 class="text-base font-bold truncate">{{ $junta->centro->nombre }}</h2>
                                 </div>
+
                                 <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
                                     <div class="truncate flex items-center">
                                         <span class="material-icons-round scale-75">
@@ -125,7 +159,44 @@ Juntas
                                         </div>
                                     </div>
                                 </div>
+
+                                @foreach ($junta->directores as $d)
+                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                        <div class="truncate flex items-center">
+                                            <span class="material-icons-round scale-75">
+                                                person
+                                            </span>
+                                            <div class="truncate">
+                                                @if($junta->centro->tipo->id == config('constants.TIPOS_CENTRO.FACULTAD'))
+                                                    Decano/a:
+                                                @else
+                                                    Director/a:
+                                                @endif
+
+                                                {{ $d->usuario->name }}
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                                @foreach ($junta->secretarios as $s)
+                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                        <div class="truncate flex items-center">
+                                            <span class="material-icons-round scale-75">
+                                                person
+                                            </span>
+                                            <div class="truncate">
+                                                Secretario/a:
+
+                                                {{ $s->usuario->name }}
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
+
                         </div>
 
                         <div class="flex items-center gap-2 mt-2" >

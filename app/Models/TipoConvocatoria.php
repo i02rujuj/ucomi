@@ -20,6 +20,6 @@ class TipoConvocatoria extends Model
  
      public function convocatorias()
      {
-         return $this->hasMany(Convocatoria::class, 'id');
+         return $this->hasMany(Convocatoria::class, 'idTipo');
      }
 }

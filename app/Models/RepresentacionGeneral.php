@@ -20,6 +20,6 @@ class RepresentacionGeneral extends Model
 
     public function miembrosJunta()
     {
-        return $this->hasMany(MiembroJunta::class, 'id');
+        return $this->hasMany(MiembroJunta::class, 'idTipo');
     }
 }

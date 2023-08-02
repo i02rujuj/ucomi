@@ -16,7 +16,7 @@ class MiembroGobierno extends Model
     protected $primaryKey = 'id';
     
     //Campos
-    protected $fillable = ['idCentro','idUsuario', 'fechaTomaPosesion', 'fechaCese', 'idRepresentacion', 'estado'];
+    protected $fillable = ['idCentro','idUsuario', 'idJunta', 'fechaTomaPosesion', 'fechaCese', 'idRepresentacion', 'estado'];
 
     public function centro()
     {
@@ -28,8 +28,13 @@ class MiembroGobierno extends Model
         return $this->belongsTo(User::class, 'idUsuario');
     }
 
+    public function junta()
+    {
+        return $this->belongsTo(Junta::class, 'idJunta');
+    }
+
     public function representacion()
     {
         return $this->belongsTo(RepresentacionGobierno::class, 'idRepresentacion');
-    }
+    } 
 }

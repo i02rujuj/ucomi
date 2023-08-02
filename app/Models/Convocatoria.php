@@ -20,7 +20,7 @@ class Convocatoria extends Model
 
     public function comision()
     {
-        return $this->belongsTo(Comision::class, 'idCentro');
+        return $this->belongsTo(Comision::class, 'idComision');
     }
 
     public function junta()

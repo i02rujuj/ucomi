@@ -20,6 +20,6 @@ class TipoCentro extends Model
 
     public function centros()
     {
-        return $this->hasMany(Centro::class, 'id');
+        return $this->hasMany(Centro::class, 'idTipo');
     }
 }

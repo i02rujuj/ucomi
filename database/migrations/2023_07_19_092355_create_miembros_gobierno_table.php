@@ -24,7 +24,7 @@ return new class extends Migration
 
             $table->foreign('idCentro')->references('id')->on('centros');
             $table->foreign('idUsuario')->references('id')->on('users');
-            $table->foreign('idJunta')->references('id')->on('juntas');
+            $table->foreign('idJunta')->references('id')->on('juntas')->onUpdate('cascade');
             $table->foreign('idRepresentacion')->references('id')->on('representaciones_gobierno');
         });
     }

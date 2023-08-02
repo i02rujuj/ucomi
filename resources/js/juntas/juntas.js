@@ -166,7 +166,6 @@ const addEditEvent = (button) => {
                 try {
                     const result = await Swal.fire({
                         title: "¿Eliminar la junta?",
-                        text: "También se eliminarán todos los miembros de la junta",
                         icon: "warning",
                         showCancelButton: true,
                         confirmButtonColor: "#d33",
@@ -177,14 +176,25 @@ const addEditEvent = (button) => {
                     if (result.isConfirmed) {
 
                         const response = await DELETE_JUNTA_BBDD(dataToSend);
- 
-                        await Swal.fire(
-                            "Eliminado",
-                            "La junta y todos sus miembros fueron eliminados.",
-                            "success"
-                        );
-                        
-                        window.location.reload();
+
+                        if (response.status === 200) {
+
+                            await Swal.fire(
+                                "Eliminada",
+                                "La junta fue eliminada.",
+                                "success"
+                            );
+
+                            window.location.reload();
+
+                        } 
+                        else {
+                            await Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Ha ocurrido un error al eliminar la junta. " + response.error,
+                            });
+                        }
                     }
 
                 } catch (error) {

@@ -118,13 +118,18 @@ class JuntasController extends Controller
                 return response()->json(['error' => 'No se ha encontrado la junta.'], 404);
             }
 
-            $miembrosJunta = DB::table('miembros_junta')
-                ->where('idJunta', $junta->id)
-                ->update(['estado' => 0]);
+            if($junta->miembrosJunta->where('estado', 1)->count() > 0)
+                return response()->json(['error' => 'Existen miembros de junta asociadas a esta junta. Para borrar la junta es necesario eliminar todos sus miembros de junta.', 'status' => 404], 200);
+
+            if($junta->comisiones->where('estado', 1)->count() > 0)
+                return response()->json(['error' => 'Existen comisiones asociadas a esta junta. Para borrar la junta es necesario eliminar todas sus comisiones.', 'status' => 404], 200);
+
+            if($junta->convocatorias->where('estado', 1)->count() > 0)
+                return response()->json(['error' => 'Existen convocatorias asociadas a esta junta. Para borrar la junta es necesario eliminar todas sus convocatorias.', 'status' => 404], 200);
 
             $junta->estado = 0;
             $junta->save();
-            return response()->json($request);
+            return response()->json(['status' => 200], 200);
 
         } catch (\Throwable $th) {
             return response()->json(['error' => 'No se ha encontrado la junta.'], 404);

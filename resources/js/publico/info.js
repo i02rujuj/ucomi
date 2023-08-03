@@ -163,7 +163,11 @@ document.addEventListener("DOMContentLoaded", async (event) => {
    
         var chart = new OrgChart(document.getElementById("equipoGobierno"), {
             template: "diva",
-            nodeMouseClick: OrgChart.action.none,
+            nodeMouseClick: OrgChart.action.expandCollapse,
+            collapse: {
+                level: 2,
+                allChildren: true
+            },
             //mouseScrool: OrgChart.action.none,
             enableSearch: false,
             scaleInitial: 0.8,

@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MiembroGobierno extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     // Tabla
     protected $table = 'miembros_gobierno'; 
@@ -16,7 +20,7 @@ class MiembroGobierno extends Model
     protected $primaryKey = 'id';
     
     //Campos
-    protected $fillable = ['idCentro','idUsuario', 'idJunta', 'fechaTomaPosesion', 'fechaCese', 'idRepresentacion', 'estado'];
+    protected $fillable = ['idCentro','idUsuario', 'idJunta', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese'];
 
     public function centro()
     {

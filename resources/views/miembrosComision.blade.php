@@ -138,7 +138,6 @@ Miembros de Comisión
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                 @foreach ($miembrosComision as $miembro)
                     <div id="btn-editar-miembro" data-miembro-id="{{ $miembro['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
-                        <span class="hidden" id="card-status">{{ $miembro->estado == 1 ? 'Habilitado' : 'Deshabilitado' }}</span>
                         <div class="flex items-start justify-between">
                             <div class="left-part truncate">
 

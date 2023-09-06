@@ -108,10 +108,13 @@ class MiembrosComisionController extends Controller
     {
         try {
             $miembro = MiembroComision::where('id', $request->id)->first();
+
             if (!$miembro) {
                 return response()->json(['error' => 'No se ha encontrado el miembro de comisión.'], 404);
             }
+
             return response()->json($miembro);
+            
         } catch (\Throwable $th) {
             return response()->json(['error' => 'No se ha encontrado el miembro de comisión.'], 404);
         }

@@ -60,7 +60,6 @@ class MiembroGobiernoSeeder extends Seeder
             $miembro->fechaTomaPosesion = now();
             $miembro->fechaCese = null;
             $miembro->idRepresentacion = $m['representacion'];
-            $miembro->estado = true;
             $miembro->save();
         }
     }

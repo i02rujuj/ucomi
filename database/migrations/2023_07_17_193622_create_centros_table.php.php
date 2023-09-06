@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('idTipo');
             $table->boolean('estado');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('idTipo')->references('id')->on('tipos_centro');
         });

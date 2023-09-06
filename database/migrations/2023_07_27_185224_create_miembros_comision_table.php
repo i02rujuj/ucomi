@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('miembros_comision', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('idComision')->unique;
-            $table->unsignedBigInteger('idUsuario')->unique;
+            $table->unsignedBigInteger('idComision');
+            $table->unsignedBigInteger('idUsuario');
+
+            // No permitir duplicados en la combinación de los siguientes campos y que tampoco sea nullable (Simular clave primaria compuesta en laravel)
+            $table->unique(['idComision', 'idUsuario']);
+
             $table->date('fechaTomaPosesion');
             $table->date('fechaCese')->nullable();
             $table->unsignedBigInteger('idRepresentacion');

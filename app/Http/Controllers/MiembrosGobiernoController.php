@@ -20,8 +20,8 @@ class MiembrosGobiernoController extends Controller
             $users = User::select('id', 'name')->where('estado', 1)->get();
             $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->where('estado', 1)->get();
 
-            $miembrosGobierno = MiembroGobierno::where('estado', 1)
-            ->orderBy('fechaCese')
+            $miembrosGobierno = MiembroGobierno::
+            orderBy('fechaCese')
             ->orderBy('idCentro')
             ->orderBy('idRepresentacion')
             ->orderBy('idUsuario')
@@ -75,7 +75,6 @@ class MiembrosGobiernoController extends Controller
                         ->where('idCentro', $request->get('idCentro'))
                         ->where('idRepresentacion', config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR'))
                         ->where('fechaCese', null)
-                        ->where('estado', 1)
                         ->first();
     
                     if($director)
@@ -88,7 +87,6 @@ class MiembrosGobiernoController extends Controller
                         ->where('idCentro', $request->get('idCentro'))
                         ->where('idRepresentacion', config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO'))
                         ->where('fechaCese', null)
-                        ->where('estado', 1)
                         ->first();
     
                     if($secretario)
@@ -100,7 +98,6 @@ class MiembrosGobiernoController extends Controller
                         ->where('idCentro', $request->get('idCentro'))
                         ->where('idUsuario', $request->get('idUsuario'))
                         ->where('fechaCese', null)
-                        ->where('estado', 1)
                         ->first();
     
                     if($usuarioEnCentro)
@@ -122,7 +119,6 @@ class MiembrosGobiernoController extends Controller
                 "fechaTomaPosesion" => $request->fechaTomaPosesion,
                 "fechaCese" => $request->fechaCese,
                 "idRepresentacion" => $request->idRepresentacion,
-                'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
             ]);
 
             return redirect()->route('miembrosGobierno')->with('success', 'Miembro del Equipo de Gobierno creado correctamente.');
@@ -136,20 +132,18 @@ class MiembrosGobiernoController extends Controller
     {
         try {
             // Falta filtrar entre fechas y estado 
-            $director = DB::table('miembros_gobierno')
-                ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
+            $director = MiembroGobierno::
+                join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                 ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
                 ->where('miembros_gobierno.fechaCese', null)
-                ->where('miembros_gobierno.estado', 1)
                 ->whereIn('miembros_gobierno.idRepresentacion', [config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR')])
                 ->select('users.id', 'users.name')
                 ->first();
 
-            $secretario = DB::table('miembros_gobierno')
-                ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
+            $secretario = MiembroGobierno::
+                join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                 ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
                 ->where('miembros_gobierno.fechaCese', null)
-                ->where('miembros_gobierno.estado', 1)
                 ->whereIn('miembros_gobierno.idRepresentacion', [config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO')])
                 ->select('users.id', 'users.name')
                 ->first();
@@ -164,11 +158,15 @@ class MiembrosGobiernoController extends Controller
     public function get(Request $request)
     {
         try {
+
             $miembro = MiembroGobierno::where('id', $request->id)->first();
+
             if (!$miembro) {
                 return response()->json(['error' => 'No se ha encontrado el miembro de gobierno.'], 404);
             }
+            
             return response()->json($miembro);
+            
         } catch (\Throwable $th) {
             return response()->json(['error' => 'No se ha encontrado el miembro de gobierno.'], 404);
         }
@@ -183,8 +181,7 @@ class MiembrosGobiernoController extends Controller
                 return response()->json(['error' => 'No se ha encontrado el miembro de Gobierno.'], 404);
             }
 
-            $miembro->estado = 0;
-            $miembro->save();
+            $miembro->delete();
             return response()->json($request);
 
         } catch (\Throwable $th) {
@@ -206,7 +203,7 @@ class MiembrosGobiernoController extends Controller
                 $dateCese = new DateTime($request->data['fechaCese']);
 
                 if ($dateTomaPosesion>$dateCese) {
-                    return response()->json(['error' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 404], 200);
+                    return response()->json(['error' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 404]);
                 }    
             }
             else{
@@ -215,33 +212,31 @@ class MiembrosGobiernoController extends Controller
                 ->where('idCentro', $miembro->idCentro)
                 ->where('idUsuario', $miembro->idUsuario)
                 ->where('fechaCese', null)
-                ->where('estado', 1)
                 ->count();
 
                 if($miembroRepetido>1)
-                    return response()->json(['error' => 'No se pudo editar el miembro del equipo de gobierno: ya existe el usuario vigente en el centro seleccionado', 'status' => 404], 200);
+                    return response()->json(['error' => 'No se pudo editar el miembro del equipo de gobierno: ya existe el usuario vigente en el centro seleccionado', 'status' => 404]);
             }
 
             $miembro->idJunta = $request->data['idJunta'];
             $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
             $miembro->fechaCese = $request->data['fechaCese'];  
             $miembro->save();
-            return response()->json(['message' => 'El miembro de Gobierno se ha actualizado correctamente.', 'status' => 200], 200);
+            return response()->json(['message' => 'El miembro de Gobierno se ha actualizado correctamente.', 'status' => 200]);
             
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'Error al actualizar el miembro de gobierno.', 'status' => 404], 404);
+            return response()->json(['error' => 'Error al actualizar el miembro de gobierno. '.$th->getMessage(), 'status' => 404]);
         }
     }
 
     public function getByCentro(Request $request)
     {
         try {
-            $miembros = DB::table('miembros_gobierno')
-                ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
+            $miembros = MiembroGobierno::
+                join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                 ->join('representaciones_gobierno', 'miembros_gobierno.idRepresentacion', '=', 'representaciones_gobierno.id')
                 ->where('miembros_gobierno.idCentro', $request->get('id'))
                 ->where('miembros_gobierno.fechaCese', null)
-                ->where('miembros_gobierno.estado', 1)
                 ->select('users.id', 'users.name', 'users.email', 'miembros_gobierno.idRepresentacion', 'representaciones_gobierno.nombre')
                 ->get();
 

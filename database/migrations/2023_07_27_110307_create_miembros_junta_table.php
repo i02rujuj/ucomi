@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('miembros_junta', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('idJunta')->unique;
-            $table->unsignedBigInteger('idUsuario')->unique;
+            $table->unsignedBigInteger('idJunta');
+            $table->unsignedBigInteger('idUsuario');
+
+            // No permitir duplicados en la combinación de los siguientes campos y que tampoco sea nullable (Simular clave primaria compuesta en laravel)
+            $table->unique(['idJunta', 'idUsuario']);
+
             $table->date('fechaTomaPosesion');
             $table->date('fechaCese')->nullable();
             $table->unsignedBigInteger('idRepresentacion');

@@ -26,6 +26,8 @@ const addEditEvent = (button) => {
             // Obtenemos el miembro a editar
             const response = await GET_MIEMBROSGOBIERNO_BBDD(dataToSend);
 
+            console.log(response);
+
             const dataToSendCentro = {
                 id: response.idCentro,
             };

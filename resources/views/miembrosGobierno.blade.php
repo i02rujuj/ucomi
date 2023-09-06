@@ -209,7 +209,7 @@ Miembros de Gobierno
                         </div>
 
                         <div class="flex items-center gap-2 mt-2">
-                            <span class="text-xs bg-blue-100 {{ $miembro->centro->estado == 1 ? 'bg-blue-100' : 'bg-red-200' }} font-semibold px-2 rounded-lg truncate">
+                            <span class="text-xs bg-blue-100 font-semibold px-2 rounded-lg truncate">
                                 Miembro de Gobierno
                             </span>
 

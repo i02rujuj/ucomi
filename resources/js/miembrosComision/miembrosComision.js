@@ -79,6 +79,13 @@ const addEditEvent = (button) => {
                         <label for="fechaCese" class="block text-sm text-gray-600 w-32">Fecha cese:</label>
                         <input type="date" id="fechaCese" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.fechaCese}">
                     </div>
+                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
+                        <label for="responsable" class="block text-sm text-gray-600 mb-1 w-32">Responsable de centro:</label>
+                        <select id="responsable" class="miembro swal2-input tipo text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" ">                     
+                            <option value="0">No</option>
+                            <option value="1" ${((usuario.roles).find(rol=>{return rol.name === 'responsable_comision'})) ? 'selected' : '' }>Sí</option>
+                        </select>
+                    </div>  
                 `,
                 focusConfirm: false,
                 showDenyButton: true,

@@ -167,6 +167,13 @@ class MiembrosComisionController extends Controller
                     return response()->json(['error' => 'No se pudo editar el miembro de la comisión: ya existe el usuario vigente en la comisión seleccionada', 'status' => 404], 200);
             }
 
+            if($request->data['responsable'] == 0){
+                $miembro->usuario->removeRole('responsable_comision');
+            }
+            else{
+                $miembro->usuario->assignRole('responsable_comision');
+            }
+
             $miembro->idRepresentacion = $request->data['idRepresentacion'];
             $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
             $miembro->fechaCese = $request->data['fechaCese'];  

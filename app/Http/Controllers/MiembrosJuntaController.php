@@ -169,6 +169,13 @@ class MiembrosJuntaController extends Controller
                     return response()->json(['error' => 'No se pudo editar el miembro de la junta: ya existe el usuario vigente en la junta seleccionada', 'status' => 404], 200);
             }
 
+            if($request->data['responsable'] == 0){
+                $miembro->usuario->removeRole('responsable_junta');
+            }
+            else{
+                $miembro->usuario->assignRole('responsable_junta');
+            }
+
             $miembro->idRepresentacion = $request->data['idRepresentacion'];
             $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
             $miembro->fechaCese = $request->data['fechaCese'];  

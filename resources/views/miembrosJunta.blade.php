@@ -185,6 +185,17 @@ Miembros de Junta
                                     </div>
                                 </div>
                             </div>
+
+                            @if ($miembro->usuario->hasRole('responsable_junta'))
+                                <div class="right-part truncate">
+                                    <div class="flex items-center">
+                                        <span class="material-icons-round text-yellow-700">
+                                            workspace_premium
+                                        </span>
+                                    </div>
+                                </div>
+                            @endif
+
                         </div>
 
                         <div class="flex items-center gap-2 mt-2">
@@ -198,7 +209,6 @@ Miembros de Junta
                                 <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">No vigente</span>
                             @endif
                         </div>
-
                     </div>
                 @endforeach
             </div>

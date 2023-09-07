@@ -203,9 +203,18 @@ Miembros de Gobierno
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-                            
+
+                            @if ($miembro->usuario->hasRole('responsable_centro'))
+                                <div class="right-part truncate">
+                                    <div class="flex items-center">
+                                        <span class="material-icons-round text-yellow-700">
+                                            workspace_premium
+                                        </span>
+                                    </div>
+                                </div>
+                            @endif
+
                         </div>
 
                         <div class="flex items-center gap-2 mt-2">

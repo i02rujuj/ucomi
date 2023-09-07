@@ -218,7 +218,14 @@ class MiembrosGobiernoController extends Controller
                     return response()->json(['error' => 'No se pudo editar el miembro del equipo de gobierno: ya existe el usuario vigente en el centro seleccionado', 'status' => 404]);
             }
 
-            $miembro->idJunta = $request->data['idJunta'];
+            if($request->data['responsable'] == 0){
+                $miembro->usuario->removeRole('responsable_centro');
+            }
+            else{
+                $miembro->usuario->assignRole('responsable_centro');
+            }
+
+            //$miembro->idJunta = $request->data['idJunta'];
             $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
             $miembro->fechaCese = $request->data['fechaCese'];  
             $miembro->save();

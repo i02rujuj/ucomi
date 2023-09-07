@@ -8,6 +8,7 @@ use App\Models\Centro;
 use Illuminate\Http\Request;
 use App\Models\MiembroGobierno;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\RepresentacionGobierno;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,7 +17,22 @@ class MiembrosGobiernoController extends Controller
     public function index()
     {
         try {
-            $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
+
+            $user = Auth::user();
+
+            if($user->hasRole('admin')){
+                $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
+            }
+            
+            if($user->hasRole('responsable_centro')){
+                $centros = MiembroGobierno::where('miembros_gobierno.idUsuario', $user->id)
+                ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
+                ->join('centros', 'miembros_gobierno.idCentro', '=', 'centros.id')
+                ->where('centros.estado', 1)
+                ->select('centros.id', 'centros.nombre')
+                ->get();
+            }
+
             $users = User::select('id', 'name')->where('estado', 1)->get();
             $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->where('estado', 1)->get();
 

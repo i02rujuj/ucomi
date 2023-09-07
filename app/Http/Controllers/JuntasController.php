@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use DateTime;
 use App\Models\Junta;
 use App\Models\Centro;
-use App\Models\MiembroGobierno;
 use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
+use App\Models\MiembroGobierno;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class JuntasController extends Controller
@@ -23,7 +24,20 @@ class JuntasController extends Controller
             ->orderBy('fechaConstitucion')
             ->get();
 
-            $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
+            $user = Auth::user();
+
+            if($user->hasRole('admin')){
+                $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
+            }
+            
+            if($user->hasRole('responsable_centro')){
+                $centros = MiembroGobierno::where('miembros_gobierno.idUsuario', $user->id)
+                ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
+                ->join('centros', 'miembros_gobierno.idCentro', '=', 'centros.id')
+                ->where('centros.estado', 1)
+                ->select('centros.id', 'centros.nombre')
+                ->get();
+            }
 
             return view('juntas', ['juntas' => $juntas, 'centros' => $centros,]);
 
@@ -39,8 +53,8 @@ class JuntasController extends Controller
                 'idCentro' => 'required|integer|exists:App\Models\Centro,id',
                 'fechaConstitucion' => 'required|date',
                 'fechaDisolucion' => 'nullable|date',
-                'idDirector' => 'required|integer|exists:App\Models\MiembroGobierno,id',
-                'idSecretario' => 'required|integer|exists:App\Models\MiembroGobierno,id',
+                'idDirector' => 'required|integer|exists:App\Models\User,id',
+                'idSecretario' => 'required|integer|exists:App\Models\User,id',
             ], [
                 // Mensajes error idCentro
                 'idCentro.required' => 'El centro es obligatorio.',

@@ -18,34 +18,42 @@ class UserSeeder extends Seeder
             [
                 'nombre'=>'Manuel Cañas Ramírez', 
                 'email'=>'epsc.director@uco.es', 
+                'rol'=>'responsable_centro',
             ],
             [
                 'nombre'=>'Luis Manuel Fernández de Ahumada', 
                 'email'=>'epsc.secretaria@uco.es', 
+                'rol'=>'responsable_centro',
             ],
             [
                 'nombre'=>'Francisco Ramón Lara Raya', 
-                'email'=>'epsc.ord.acad@uco.es', 
+                'email'=>'epsc.ord.acad@uco.es',
+                'rol'=>'responsable_junta', 
             ],
             [
                 'nombre'=>'Joost van Duijn', 
                 'email'=>'epsc.relexteriores@uco.es', 
+                'rol'=>'responsable_junta',
             ],
             [
                 'nombre'=>'Isabel Moreno García', 
                 'email'=>'calidad.epsc@uco.es', 
+                'rol'=>'responsable_comision',
             ],
             [
                 'nombre'=>'Rosa María Relaño Luna', 
                 'email'=>'direccioneps@uco.es', 
+                'rol'=>'responsable_comision',
             ],
             [
                 'nombre'=>'José Luis Ávila Jiménez', 
                 'email'=>'jlavila@uco.es', 
+                'rol'=>'admin',
             ],
             [
                 'nombre'=>'Javier Ruiz Jurado', 
                 'email'=>'i02rujuj@uco.es', 
+                'rol'=>'admin',
             ],
         ];
 
@@ -58,6 +66,8 @@ class UserSeeder extends Seeder
             $u->remember_token = Str::random(10);
             $u->estado = true;
             $u->save();
+
+            $u->assignRole($user['rol']);
         }
 
         $users = User::factory()->count(100)->create();

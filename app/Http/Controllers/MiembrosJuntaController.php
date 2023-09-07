@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use DateTime;
 use App\Models\User;
 use App\Models\Junta;
+use App\Models\MiembroGobierno;
 use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\RepresentacionGeneral;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,19 +18,49 @@ class MiembrosJuntaController extends Controller
     public function index()
     {
         try {
-            $juntas = Junta::where('estado', 1)
-            ->where('fechaDisolucion', null)
-            ->get();
+
+            $user = Auth::user();
+
+            if($user->hasRole('admin')){
+                $juntas = Junta::where('estado', 1)
+                ->where('fechaDisolucion', null)
+                ->get();
+
+                $miembrosJunta = MiembroJunta::where('estado', 1)
+                ->orderBy('fechaCese')
+                ->orderBy('idJunta')
+                ->orderBy('idRepresentacion')
+                ->orderBy('idUsuario')
+                ->get();
+            }
+            
+            if($user->hasRole('responsable_centro')){
+
+                $centroResponsable = MiembroGobierno::where('idUsuario', $user->id)
+                ->select('idCentro')
+                ->first();
+
+                $juntas = Junta::where('estado', 1)
+                ->where('idCentro', $centroResponsable->idCentro)
+                ->where('fechaDisolucion', null)
+                ->get();
+
+                $miembrosJunta = MiembroJunta::select('miembros_junta.*')
+                ->where('miembros_junta.estado', 1)
+                ->join('juntas', 'juntas.id', '=', 'miembros_junta.idJunta')
+                ->where('juntas.idCentro', $centroResponsable->idCentro)
+                ->orderBy('miembros_junta.fechaCese')
+                ->orderBy('miembros_junta.idJunta')
+                ->orderBy('miembros_junta.idRepresentacion')
+                ->orderBy('miembros_junta.idUsuario')
+                ->get();
+
+            }
 
             $users = User::select('id', 'name')->where('estado', 1)->get();
             $representacionesGeneral = RepresentacionGeneral::select('id', 'nombre')->where('estado', 1)->get();
 
-            $miembrosJunta = MiembroJunta::where('estado', 1)
-            ->orderBy('fechaCese')
-            ->orderBy('idJunta')
-            ->orderBy('idRepresentacion')
-            ->orderBy('idUsuario')
-            ->get();
+            
 
             return view('miembrosJunta', ['juntas' => $juntas, 'users' => $users, 'representacionesGeneral' => $representacionesGeneral, 'miembrosJunta' => $miembrosJunta]);
         } catch (\Throwable $th) {

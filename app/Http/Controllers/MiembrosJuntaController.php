@@ -54,13 +54,30 @@ class MiembrosJuntaController extends Controller
                 ->orderBy('miembros_junta.idRepresentacion')
                 ->orderBy('miembros_junta.idUsuario')
                 ->get();
+            }
 
+            if($user->hasRole('responsable_junta')){
+                $juntaResponsable = MiembroJunta::where('idUsuario', $user->id)
+                ->select('idJunta')
+                ->first();
+
+                $juntas = Junta::where('estado', 1)
+                ->where('id', $juntaResponsable->idJunta)
+                ->where('fechaDisolucion', null)
+                ->get();
+
+                $miembrosJunta = MiembroJunta::select('miembros_junta.*')
+                ->where('miembros_junta.estado', 1)
+                ->where('miembros_junta.idJunta', $juntaResponsable->idJunta)
+                ->orderBy('miembros_junta.fechaCese')
+                ->orderBy('miembros_junta.idJunta')
+                ->orderBy('miembros_junta.idRepresentacion')
+                ->orderBy('miembros_junta.idUsuario')
+                ->get();
             }
 
             $users = User::select('id', 'name')->where('estado', 1)->get();
             $representacionesGeneral = RepresentacionGeneral::select('id', 'nombre')->where('estado', 1)->get();
-
-            
 
             return view('miembrosJunta', ['juntas' => $juntas, 'users' => $users, 'representacionesGeneral' => $representacionesGeneral, 'miembrosJunta' => $miembrosJunta]);
         } catch (\Throwable $th) {

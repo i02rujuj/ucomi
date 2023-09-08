@@ -22,26 +22,35 @@ class MiembrosGobiernoController extends Controller
 
             if($user->hasRole('admin')){
                 $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
-            }
+
+                $miembrosGobierno = MiembroGobierno::
+                orderBy('fechaCese')
+                ->orderBy('idCentro')
+                ->orderBy('idRepresentacion')
+                ->orderBy('idUsuario')
+                ->get();
+                }
             
             if($user->hasRole('responsable_centro')){
-                $centros = MiembroGobierno::where('miembros_gobierno.idUsuario', $user->id)
+                $centro = MiembroGobierno::where('miembros_gobierno.idUsuario', $user->id)
                 ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                 ->join('centros', 'miembros_gobierno.idCentro', '=', 'centros.id')
                 ->where('centros.estado', 1)
                 ->select('centros.id', 'centros.nombre')
+                ->first();
+
+                $miembrosGobierno = MiembroGobierno::where('idCentro', $centro->id)
+                ->orderBy('fechaCese')
+                ->orderBy('idCentro')
+                ->orderBy('idRepresentacion')
+                ->orderBy('idUsuario')
                 ->get();
+
+                $centros=array($centro);
             }
 
             $users = User::select('id', 'name')->where('estado', 1)->get();
-            $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->where('estado', 1)->get();
-
-            $miembrosGobierno = MiembroGobierno::
-            orderBy('fechaCese')
-            ->orderBy('idCentro')
-            ->orderBy('idRepresentacion')
-            ->orderBy('idUsuario')
-            ->get();
+            $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->where('estado', 1)->get();          
 
             return view('miembrosGobierno', ['centros' => $centros, 'users' => $users, 'representacionesGobierno' => $representacionesGobierno, 'miembrosGobierno' => $miembrosGobierno]);
         } catch (\Throwable $th) {

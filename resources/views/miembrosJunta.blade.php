@@ -154,7 +154,7 @@ Miembros de Junta
                                             account_balance
                                         </span>
                                         &nbsp;
-                                        <h2 class="truncate">{{ $miembro->junta->centro->nombre }} ({{ $junta->fechaConstitucion }})</h2>
+                                        <h2 class="truncate">{{ $miembro->junta->centro->nombre }} ({{ $miembro->junta->fechaConstitucion }})</h2>
                                     </div>
                                 </div>
 

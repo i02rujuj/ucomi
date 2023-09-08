@@ -17,29 +17,44 @@ class JuntasController extends Controller
     public function index()
     {
         try {
-            $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'estado')
-            ->where('estado', 1)
-            ->orderBy('fechaDisolucion')
-            ->orderBy('idCentro')
-            ->orderBy('fechaConstitucion')
-            ->get();
 
             $user = Auth::user();
 
             if($user->hasRole('admin')){
                 $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
+
+                $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'estado')
+                ->where('estado', 1)
+                ->orderBy('fechaDisolucion')
+                ->orderBy('idCentro')
+                ->orderBy('fechaConstitucion')
+                ->get();
             }
             
             if($user->hasRole('responsable_centro')){
-                $centros = MiembroGobierno::where('miembros_gobierno.idUsuario', $user->id)
+                $centro = MiembroGobierno::where('miembros_gobierno.idUsuario', $user->id)
                 ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                 ->join('centros', 'miembros_gobierno.idCentro', '=', 'centros.id')
                 ->where('centros.estado', 1)
                 ->select('centros.id', 'centros.nombre')
+                ->first();
+
+                $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'estado')
+                ->where('idCentro', $centro->id)
+                ->where('estado', 1)
+                ->orderBy('fechaDisolucion')
+                ->orderBy('idCentro')
+                ->orderBy('fechaConstitucion')
                 ->get();
+
+                $centros=array($centro);
             }
 
-            return view('juntas', ['juntas' => $juntas, 'centros' => $centros,]);
+            if($user->hasRole('responsable_junta')){
+           
+            }
+
+            return view('juntas', ['juntas' => $juntas, 'centros' => $centros]);
 
         } catch (\Throwable $th) {
             return redirect()->route('juntas')->with('error', 'No se pudieron obtener las juntas: ' . $th->getMessage());

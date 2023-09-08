@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use DateTime;
 use App\Models\User;
 use App\Models\Comision;
+use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
 use App\Models\MiembroComision;
+use Illuminate\Support\Facades\Auth;
 use App\Models\RepresentacionGeneral;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,19 +17,48 @@ class MiembrosComisionController extends Controller
     public function index()
     {
         try {
-            $comisiones = Comision::where('estado', 1)
-            ->where('fechaDisolucion', null)
-            ->get();
+
+            $user = Auth::user();
+
+            if($user->hasRole('admin')){
+                
+                $comisiones = Comision::where('estado', 1)
+                ->where('fechaDisolucion', null)
+                ->get();
+    
+                $miembrosComision = MiembroComision::where('estado',1)
+                ->orderBy('fechaCese')
+                ->orderBy('idComision')
+                ->orderBy('idRepresentacion')
+                ->orderBy('idUsuario')
+                ->get();
+            }
+
+            if($user->hasRole('responsable_junta')){
+
+                $juntaResponsable = MiembroJunta::where('idUsuario', $user->id)
+                ->select('idJunta')
+                ->first();
+
+                $comisiones = Comision::where('estado', 1)
+                ->where('idJunta', $juntaResponsable->idJunta)
+                ->where('fechaDisolucion', null)
+                ->get();
+    
+                $miembrosComision = MiembroComision::select('miembros_comision.*')
+                ->where('miembros_comision.estado', 1)
+                ->join('comisiones', 'comisiones.id', '=', 'miembros_comision.idComision')
+                ->where('comisiones.idJunta', $juntaResponsable->idJunta)
+                ->where('miembros_comision.estado',1)
+                ->orderBy('miembros_comision.fechaCese')
+                ->orderBy('miembros_comision.idComision')
+                ->orderBy('miembros_comision.idRepresentacion')
+                ->orderBy('miembros_comision.idUsuario')
+                ->get();
+            }
 
             $users = User::select('id', 'name')->where('estado', 1)->get();
             $representacionesGeneral = RepresentacionGeneral::select('id', 'nombre')->where('estado', 1)->get();
-
-            $miembrosComision = MiembroComision::where('estado',1)
-            ->orderBy('fechaCese')
-            ->orderBy('idComision')
-            ->orderBy('idRepresentacion')
-            ->orderBy('idUsuario')
-            ->get();
 
             return view('miembrosComision', ['comisiones' => $comisiones, 'users' => $users, 'representacionesGeneral' => $representacionesGeneral, 'miembrosComision' => $miembrosComision]);
         } catch (\Throwable $th) {

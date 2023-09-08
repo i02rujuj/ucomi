@@ -39,7 +39,7 @@ class MiembroJuntaSeeder extends Seeder
         }
 
         // Se hace así para que haga un commit en cada creación y permita no repetir miembros
-        for($i=0; $i<20; $i++){
+        for($i=0; $i<10; $i++){
             MiembroJunta::factory()->count(1)->create();
         }
     }

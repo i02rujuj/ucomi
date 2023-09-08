@@ -47,8 +47,88 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function miembrosGobierno()
-    {
+    public function miembrosGobierno(){
         return $this->hasMany(MiembroGobierno::class, 'id');
+    }
+
+    public function getRoleName(){
+
+        $res = '';
+        $roles = $this->getRoleNames();
+
+        foreach($roles as $rol){
+            $res .= $rol;
+        }
+
+        return $res;
+    }
+
+    public function getRoleNameType(){
+        $roles = $this->getRoleNames();
+
+        foreach($roles as $rol){
+
+            $res = '';
+
+            switch($rol){
+
+                case 'admin':
+                    $res =  'Todos los permisos';
+                    break;
+
+                case 'responsable_centro':
+
+                    $centros = MiembroGobierno::where('miembros_gobierno.idUsuario', $this->id)
+                    ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
+                    ->join('centros', 'miembros_gobierno.idCentro', '=', 'centros.id')
+                    ->where('miembros_gobierno.estado', 1)
+                    ->where('centros.estado', 1)
+                    ->select('centros.id', 'centros.nombre')
+                    ->get();
+
+                    foreach($centros as $c){
+                        $res .=  $c->nombre;
+                    }
+                    
+                    break;
+
+                case 'responsable_junta':
+
+                    $juntas = MiembroJunta::where('miembros_junta.idUsuario', $this->id)
+                    ->join('users', 'miembros_junta.idUsuario', '=', 'users.id')
+                    ->join('juntas', 'juntas.id', '=', 'miembros_junta.idJunta')
+                    ->join('centros', 'centros.id', '=', 'juntas.idCentro')
+                    ->where('miembros_junta.estado', 1)
+                    ->where('juntas.estado', 1)
+                    ->select('juntas.id', 'centros.nombre', 'juntas.fechaConstitucion')
+                    ->get();
+
+                    foreach($juntas as $j){
+                        $res .=  $j->nombre.' ('.$j->fechaConstitucion.')';
+                    }
+
+                    break;
+
+                case 'responsable_comision':
+
+                     $comisiones = MiembroComision::where('miembros_comision.idUsuario', $this->id)
+                    ->join('users', 'miembros_comision.idUsuario', '=', 'users.id')
+                    ->join('comisiones', 'comisiones.id', '=', 'miembros_comision.idComision')
+                    ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
+                    ->join('centros', 'centros.id', '=', 'juntas.idCentro')
+                    ->where('miembros_comision.estado', 1)
+                    ->where('juntas.estado', 1)
+                    ->select('comisiones.nombre as nombre_comision', 'centros.nombre as nombre_centro', 'juntas.fechaConstitucion')
+                    ->get();
+
+                    foreach($comisiones as $c){
+                        $res .=  $c->nombre_comision.' | '.$c->nombre_centro.' ('.$c->fechaConstitucion.')';
+                    }
+
+                    break;
+            }
+        }
+
+        return $res;
     }
 }

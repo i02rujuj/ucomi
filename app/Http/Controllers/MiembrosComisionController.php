@@ -8,6 +8,7 @@ use App\Models\Comision;
 use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
 use App\Models\MiembroComision;
+use App\Models\MiembroGobierno;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RepresentacionGeneral;
 use Illuminate\Support\Facades\Validator;
@@ -34,6 +35,34 @@ class MiembrosComisionController extends Controller
                 ->get();
             }
 
+            if($user->hasRole('responsable_centro')){
+
+                $centroResponsable = MiembroGobierno::where('idUsuario', $user->id)
+                ->select('idCentro')
+                ->first();
+
+                $comisiones = Comision::select('comisiones.*')
+                ->where('comisiones.estado', 1)
+                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
+                ->join('centros', 'centros.id', '=', 'juntas.idCentro')
+                ->where('juntas.idCentro', $centroResponsable->idCentro)
+                ->where('comisiones.fechaDisolucion', null)
+                ->get();
+    
+                $miembrosComision = MiembroComision::select('miembros_comision.*')
+                ->where('miembros_comision.estado', 1)
+                ->join('comisiones', 'comisiones.id', '=', 'miembros_comision.idComision')
+                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
+                ->join('centros', 'centros.id', '=', 'juntas.idCentro')
+                ->where('juntas.idCentro', $centroResponsable->idCentro)
+                ->where('miembros_comision.estado',1)
+                ->orderBy('miembros_comision.fechaCese')
+                ->orderBy('miembros_comision.idComision')
+                ->orderBy('miembros_comision.idRepresentacion')
+                ->orderBy('miembros_comision.idUsuario')
+                ->get();
+            }
+
             if($user->hasRole('responsable_junta')){
 
                 $juntaResponsable = MiembroJunta::where('idUsuario', $user->id)
@@ -49,6 +78,27 @@ class MiembrosComisionController extends Controller
                 ->where('miembros_comision.estado', 1)
                 ->join('comisiones', 'comisiones.id', '=', 'miembros_comision.idComision')
                 ->where('comisiones.idJunta', $juntaResponsable->idJunta)
+                ->where('miembros_comision.estado',1)
+                ->orderBy('miembros_comision.fechaCese')
+                ->orderBy('miembros_comision.idComision')
+                ->orderBy('miembros_comision.idRepresentacion')
+                ->orderBy('miembros_comision.idUsuario')
+                ->get();
+            }
+
+            if($user->hasRole('responsable_comision')){
+                $comisionResponsable = MiembroComision::where('idUsuario', $user->id)
+                ->select('idComision')
+                ->first();
+
+                $comisiones = Comision::where('estado', 1)
+                ->where('id', $comisionResponsable->idComision)
+                ->where('fechaDisolucion', null)
+                ->get();
+    
+                $miembrosComision = MiembroComision::select('miembros_comision.*')
+                ->where('miembros_comision.estado', 1)
+                ->where('miembros_comision.idComision', $comisionResponsable->idComision)
                 ->where('miembros_comision.estado',1)
                 ->orderBy('miembros_comision.fechaCese')
                 ->orderBy('miembros_comision.idComision')

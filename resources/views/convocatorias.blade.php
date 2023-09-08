@@ -26,6 +26,8 @@ Convocatorias
                 
                 @csrf
                 <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">
+                    
+                    @hasrole(['admin', 'responsable_centro', 'responsable_junta'])
                     <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="idJunta" class="block text-sm text-gray-600 mb-1">
@@ -44,15 +46,19 @@ Convocatorias
                             @enderror
                         </div>
                     </div>
+                    @endhasrole
 
                     <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="idComision" class="block text-sm text-gray-600 mb-1">
-                                Comisión (Vacío si la convocatoria es de Junta)
+                                Comisión
                             </label>
                             
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idComision" name="idComision">
                                 <option value="">-----</option>
+                                @foreach ($comisiones as $comision)
+                                <option value="{{ $comision['id'] }}" {{ (old("idComision")== $comision['id'] || app('request')->input('idComision') == $comision['id'] ? "selected":"") }}>{{ $comision->nombre }}</option>
+                            @endforeach
                             </select>
                            
                             @error('idComision')

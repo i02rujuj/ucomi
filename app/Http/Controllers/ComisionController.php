@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use DateTime;
 use App\Models\Junta;
 use App\Models\Comision;
+use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
+use App\Models\MiembroGobierno;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ComisionController extends Controller
@@ -13,16 +16,63 @@ class ComisionController extends Controller
     public function index()
     {
         try {
-            $comisiones = Comision::select('id', 'idJunta', 'nombre', 'descripcion', 'fechaConstitucion', 'fechaDisolucion', 'estado')
-            ->where('estado', 1)
-            ->orderBy('fechaDisolucion')          
-            ->orderBy('idJunta')
-            ->orderBy('fechaConstitucion')
-            ->get();
-            
-            $juntas = Junta::where('estado', 1)
-            ->where('fechaDisolucion', null)
-            ->get();
+
+            $user = Auth::user();
+
+            if($user->hasRole('admin')){
+                $comisiones = Comision::select('id', 'idJunta', 'nombre', 'descripcion', 'fechaConstitucion', 'fechaDisolucion', 'estado')
+                ->where('estado', 1)
+                ->orderBy('fechaDisolucion')          
+                ->orderBy('idJunta')
+                ->orderBy('fechaConstitucion')
+                ->get();
+                
+                $juntas = Junta::where('estado', 1)
+                ->where('fechaDisolucion', null)
+                ->get();
+            }
+
+            if($user->hasRole('responsable_centro')){
+
+                $centroResponsable = MiembroGobierno::where('idUsuario', $user->id)
+                ->select('idCentro')
+                ->first();
+
+                $comisiones = Comision::select('comisiones.*')
+                ->where('comisiones.estado', 1)
+                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
+                ->where('juntas.idCentro', $centroResponsable->idCentro)
+                ->where('juntas.estado', 1)
+                ->orderBy('comisiones.fechaDisolucion')          
+                ->orderBy('comisiones.idJunta')
+                ->orderBy('comisiones.fechaConstitucion')
+                ->get();
+                
+                $juntas = Junta::where('estado', 1)
+                ->where('idCentro', $centroResponsable->idCentro)
+                ->where('fechaDisolucion', null)
+                ->get();
+            }
+
+            if($user->hasRole('responsable_junta')){
+                $juntaResponsable = MiembroJunta::where('idUsuario', $user->id)
+                ->select('idJunta')
+                ->first();
+
+                $comisiones = Comision::select('comisiones.*')
+                ->where('comisiones.estado', 1)
+                ->where('idJunta', $juntaResponsable->idJunta)
+                ->orderBy('comisiones.fechaDisolucion')          
+                ->orderBy('comisiones.idJunta')
+                ->orderBy('comisiones.fechaConstitucion')
+                ->get();
+                
+                $juntas = Junta::where('estado', 1)
+                ->where('id', $juntaResponsable->idJunta)
+                ->where('fechaDisolucion', null)
+                ->get();
+            }
+
 
             return view('comisiones', ['comisiones' => $comisiones, 'juntas' => $juntas]);
         } catch (\Throwable $th) {

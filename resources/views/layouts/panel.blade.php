@@ -53,6 +53,8 @@
                     <img src="{{ asset('img/' . (Auth::user()->image ? Auth::user()->image : 'default_image.png')) }}" alt="Imagen de perfil" class="w-12 h-12 self-start ml-3 mb-1 justify-self-center rounded-full object-cover">
                     <h1 class="text-lg font-bold px-3">Bienvenido</h1>
                     <h3 class="text-xs text-gray-500 px-3 truncate">{{ auth()->user()->email }}</h3>
+                    <h3 class="text-xs text-gray-500 px-3 truncate">{{ auth()->user()->getRoleName() }}</h3>
+                    <h3 class="text-xs text-gray-500 px-3">{{ auth()->user()->getRoleNameType() }}</h3>
                 </div>
         
                 <hr class="my-4 border-gray-300" />
@@ -83,7 +85,7 @@
                     </li> 
                     @endhasrole
 
-                    @hasrole(['admin','responsable_junta'])
+                    @hasrole(['admin', 'responsable_centro', 'responsable_junta'])
                     <li @class(['mb-1 flex', request()->routeIs('comisiones') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="{{ route('comisiones') }}" class="text-gray-600 w-full flex justify-start items-center">
                             <span class="material-icons-round text-slate-600 ml-4 mr-1">
@@ -95,7 +97,7 @@
                     </li>
                     @endhasrole
 
-                    @hasrole(['admin','responsable_comision'])
+                    @hasrole(['admin', 'responsable_centro', 'responsable_junta', 'responsable_comision'])
                     <li @class(['mb-1 flex', request()->routeIs('convocatorias') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="{{ route('convocatorias') }}" class="text-gray-600 w-full flex justify-start items-center">
                             <span class="material-icons-round text-slate-600 ml-4 mr-1">
@@ -146,7 +148,7 @@
                         </li>
                         @endhasrole
 
-                        @hasrole(['admin','responsable_junta','responsable_comision'])
+                        @hasrole(['admin', 'responsable_centro', 'responsable_junta','responsable_comision'])
                         <li @class(['mb-1 flex', request()->routeIs('miembrosComision') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('miembrosComision') }}" class="text-gray-600 w-full flex justify-start items-center">
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">

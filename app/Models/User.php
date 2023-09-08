@@ -81,7 +81,6 @@ class User extends Authenticatable
                     $centros = MiembroGobierno::where('miembros_gobierno.idUsuario', $this->id)
                     ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                     ->join('centros', 'miembros_gobierno.idCentro', '=', 'centros.id')
-                    ->where('miembros_gobierno.estado', 1)
                     ->where('centros.estado', 1)
                     ->select('centros.id', 'centros.nombre')
                     ->get();

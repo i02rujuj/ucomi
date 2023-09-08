@@ -68,10 +68,9 @@ class ConvocatoriasController extends Controller
                 ->orderBy('convocatorias.hora')          
                 ->orderBy('convocatorias.idJunta')
                 ->orderBy('convocatorias.idComision')
-                ->orderBy('convocatorias.idTipo')
-                ->get();
+                ->orderBy('convocatorias.idTipo');
 
-                $convocatoriasComisiones = Convocatoria::select('convocatorias.*')
+                $convocatorias = Convocatoria::select('convocatorias.*')
                 ->where('convocatorias.estado', 1)
                 ->join('comisiones', 'comisiones.id', '=', 'convocatorias.idComision')
                 ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
@@ -82,9 +81,8 @@ class ConvocatoriasController extends Controller
                 ->orderBy('convocatorias.idJunta')
                 ->orderBy('convocatorias.idComision')
                 ->orderBy('convocatorias.idTipo')
+                ->union($convocatoriasJuntas)
                 ->get();
-
-                $convocatorias = array_merge($convocatoriasJuntas, $convocatoriasComisiones);
 
             }
 

@@ -50,70 +50,78 @@ Route::get('/logout', function () {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+Route::group(['middleware' => ['role:admin']], function () {
+    // CENTROS
+    Route::get('/centros', [CentrosController::class, 'index'])->name('centros');
+    Route::post('/centros', [CentrosController::class, 'store'])->name('centros.store');
+    Route::post('/centro/delete', [CentrosController::class, 'delete']);
+    Route::post('/centro/get', [CentrosController::class, 'get']);
+    Route::post('/centro/update', [CentrosController::class, 'update']);
+    Route::post('/centro/all', [CentrosController::class, 'all']);
 
-// TIPOS DE CENTROS
-Route::post('/tiposCentro', [TiposCentroController::class, 'index']);
+    // TIPOS DE CENTROS
+    Route::post('/tiposCentro', [TiposCentroController::class, 'index']);
+});
 
-// CENTROS
-Route::get('/centros', [CentrosController::class, 'index'])->name('centros');
-Route::post('/centros', [CentrosController::class, 'store'])->name('centros.store');
-Route::post('/centro/delete', [CentrosController::class, 'delete']);
-Route::post('/centro/get', [CentrosController::class, 'get']);
-Route::post('/centro/update', [CentrosController::class, 'update']);
-Route::post('/centro/all', [CentrosController::class, 'all']);
+Route::group(['middleware' => ['role:admin|responsable_centro']], function () {
+    // JUNTAS
+    Route::get('/juntas', [JuntasController::class, 'index'])->name('juntas');
+    Route::post('/juntas', [JuntasController::class, 'store'])->name('juntas.store');
+    Route::post('/junta/delete', [JuntasController::class, 'delete']);
+    Route::post('/junta/get', [JuntasController::class, 'get']);
+    Route::post('/junta/update', [JuntasController::class, 'update']);
+    Route::post('/junta/all', [JuntasController::class, 'all']);
 
-// JUNTAS
-Route::get('/juntas', [JuntasController::class, 'index'])->name('juntas');
-Route::post('/juntas', [JuntasController::class, 'store'])->name('juntas.store');
-Route::post('/junta/delete', [JuntasController::class, 'delete']);
-Route::post('/junta/get', [JuntasController::class, 'get']);
-Route::post('/junta/update', [JuntasController::class, 'update']);
-Route::post('/junta/all', [JuntasController::class, 'all']);
+    // MIEMBROS EQUIPO DE GOBIERNO
+    Route::get('/miembros_gobierno', [MiembrosGobiernoController::class, 'index'])->name('miembrosGobierno');
+    Route::post('/miembros_gobierno', [MiembrosGobiernoController::class, 'store'])->name('miembrosGobierno.store');
+    Route::post('/miembros_gobierno/getbycentro', [MiembrosGobiernoController::class, 'getByCentro']);
+    Route::post('/miembro_gobierno/delete', [MiembrosGobiernoController::class, 'delete']);
+    Route::post('/miembro_gobierno/get', [MiembrosGobiernoController::class, 'get']);
+    Route::post('/miembro_gobierno/update', [MiembrosGobiernoController::class, 'update']);
+    Route::post('/miembro_gobierno/getDirectivos', [MiembrosGobiernoController::class, 'getDirectivos']);
 
-// MIEMBROS EQUIPO DE GOBIERNO
-Route::get('/miembros_gobierno', [MiembrosGobiernoController::class, 'index'])->name('miembrosGobierno');
-Route::post('/miembros_gobierno', [MiembrosGobiernoController::class, 'store'])->name('miembrosGobierno.store');
-Route::post('/miembros_gobierno/getbycentro', [MiembrosGobiernoController::class, 'getByCentro']);
-Route::post('/miembro_gobierno/delete', [MiembrosGobiernoController::class, 'delete']);
-Route::post('/miembro_gobierno/get', [MiembrosGobiernoController::class, 'get']);
-Route::post('/miembro_gobierno/update', [MiembrosGobiernoController::class, 'update']);
-Route::post('/miembro_gobierno/getDirectivos', [MiembrosGobiernoController::class, 'getDirectivos']);
+    // REPRESENTACIONES GOBIERNO
+    Route::post('/representacion/get', [RepresentacionController::class, 'get']);
+}); 
 
-// MIEMBROS JUNTA
-Route::get('/miembros_junta', [MiembrosJuntaController::class, 'index'])->name('miembrosJunta');
-Route::post('/miembros_junta', [MiembrosJuntaController::class, 'store'])->name('miembrosJunta.store');
-Route::post('/miembros_junta/getbycentro', [MiembrosJuntaController::class, 'getByCentro']);
-Route::post('/miembro_junta/delete', [MiembrosJuntaController::class, 'delete']);
-Route::post('/miembro_junta/get', [MiembrosJuntaController::class, 'get']);
-Route::post('/miembro_junta/update', [MiembrosJuntaController::class, 'update']);
+Route::group(['middleware' => ['role:admin|responsable_centro|responsable_junta']], function () {
+    // COMISIONES
+    Route::get('/comisiones', [ComisionController::class, 'index'])->name('comisiones');
+    Route::post('/comisiones', [ComisionController::class, 'store'])->name('comisiones.store');
+    Route::post('/comision/delete', [ComisionController::class, 'delete']);
+    Route::post('/comision/get', [ComisionController::class, 'get']);
+    Route::post('/comision/update', [ComisionController::class, 'update']);
 
-// MIEMBROS COMISIÓN
-Route::get('/miembros_comision', [MiembrosComisionController::class, 'index'])->name('miembrosComision');
-Route::post('/miembros_comision', [MiembrosComisionController::class, 'store'])->name('miembrosComision.store');
-Route::post('/miembro_comision/delete', [MiembrosComisionController::class, 'delete']);
-Route::post('/miembro_comision/get', [MiembrosComisionController::class, 'get']);
-Route::post('/miembro_comision/update', [MiembrosComisionController::class, 'update']);
+    // MIEMBROS JUNTA
+    Route::get('/miembros_junta', [MiembrosJuntaController::class, 'index'])->name('miembrosJunta');
+    Route::post('/miembros_junta', [MiembrosJuntaController::class, 'store'])->name('miembrosJunta.store');
+    Route::post('/miembros_junta/getbycentro', [MiembrosJuntaController::class, 'getByCentro']);
+    Route::post('/miembro_junta/delete', [MiembrosJuntaController::class, 'delete']);
+    Route::post('/miembro_junta/get', [MiembrosJuntaController::class, 'get']);
+    Route::post('/miembro_junta/update', [MiembrosJuntaController::class, 'update']);
+});
 
-// CONVOCATORIAS
-Route::get('/convocatorias', [ConvocatoriasController::class, 'index'])->name('convocatorias');
-Route::post('/convocatorias', [ConvocatoriasController::class, 'store'])->name('convocatorias.store');
-Route::post('/convocatoria/delete', [ConvocatoriasController::class, 'delete']);
-Route::post('/convocatoria/get', [ConvocatoriasController::class, 'get']);
-Route::post('/convocatoria/update', [ConvocatoriasController::class, 'update']);
+Route::group(['middleware' => ['role:admin|responsable_centro|responsable_junta|responsable_comision']], function () {
+    // MIEMBROS COMISIÓN
+    Route::get('/miembros_comision', [MiembrosComisionController::class, 'index'])->name('miembrosComision');
+    Route::post('/miembros_comision', [MiembrosComisionController::class, 'store'])->name('miembrosComision.store');
+    Route::post('/miembro_comision/delete', [MiembrosComisionController::class, 'delete']);
+    Route::post('/miembro_comision/get', [MiembrosComisionController::class, 'get']);
+    Route::post('/miembro_comision/update', [MiembrosComisionController::class, 'update']);
 
-// USERS
-Route::post('/user/get', [UserController::class, 'get']);
+    // CONVOCATORIAS
+    Route::get('/convocatorias', [ConvocatoriasController::class, 'index'])->name('convocatorias');
+    Route::post('/convocatorias', [ConvocatoriasController::class, 'store'])->name('convocatorias.store');
+    Route::post('/convocatoria/delete', [ConvocatoriasController::class, 'delete']);
+    Route::post('/convocatoria/get', [ConvocatoriasController::class, 'get']);
+    Route::post('/convocatoria/update', [ConvocatoriasController::class, 'update']);
 
-// REPRESENTACIONES GOBIERNO
-Route::post('/representacion/get', [RepresentacionController::class, 'get']);
+    // REPRESENTACIONES GENERAL
+    Route::post('/representacion_general/get', [RepresentacionGeneralController::class, 'get']);
+    Route::post('/representacion_general/all', [RepresentacionGeneralController::class, 'all']);
 
-// REPRESENTACIONES GENERAL
-Route::post('/representacion_general/get', [RepresentacionGeneralController::class, 'get']);
-Route::post('/representacion_general/all', [RepresentacionGeneralController::class, 'all']);
+    // USERS
+    Route::post('/user/get', [UserController::class, 'get']);
+    });
 
-// COMISIONES
-Route::get('/comisiones', [ComisionController::class, 'index'])->name('comisiones');
-Route::post('/comisiones', [ComisionController::class, 'store'])->name('comisiones.store');
-Route::post('/comision/delete', [ComisionController::class, 'delete']);
-Route::post('/comision/get', [ComisionController::class, 'get']);
-Route::post('/comision/update', [ComisionController::class, 'update']);

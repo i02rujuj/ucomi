@@ -159,7 +159,20 @@
                             </a>
                         </li>
                         @endhasrole
+                        
                     </div>
+
+                    <hr class="my-4 border-gray-300" />
+
+                    <li @class(['mb-1 flex', request()->routeIs('perfil') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
+                        <a href="{{ route('perfil') }}" class="w-full flex justify-start items-center">
+                            <span class="material-icons-round ml-4 mr-2">
+                                account_box
+                            </span>
+                            &nbsp;
+                            Mi perfil
+                        </a>
+                    </li>
 
                     <li @class(['mb-1 flex', request()->routeIs('logout') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="{{ route('logout') }}" class="text-red-600 hover:text-red-700 w-full flex justify-start items-center">

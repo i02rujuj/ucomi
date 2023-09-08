@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JuntasController;
+use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\CentrosController;
 use App\Http\Controllers\PublicoController;
 use App\Http\Controllers\ComisionController;
@@ -47,6 +48,10 @@ Route::get('/logout', function () {
     Auth::logout();
     return redirect('/');
 })->name('logout');
+
+Route::get('/perfil', [UserController::class, 'index'])->name('perfil');
+Route::post('/perfil', [UserController::class, 'store'])->name('perfil.store');
+Route::post('/save_image_perfil', [UserController::class, 'saveImage']);
 
 ///////////////////////////////////////////////////////////////////////////////
 

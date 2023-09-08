@@ -13,7 +13,7 @@ use App\Models\TipoConvocatoria;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class ConvocatoriasController extends Controller
+class ConvocatoriasJuntaController extends Controller
 {
     public function index()
     {
@@ -27,11 +27,8 @@ class ConvocatoriasController extends Controller
                 ->where('fechaDisolucion', null)
                 ->get();
 
-                $comisiones = Comision::where('estado', 1)
-                ->where('fechaDisolucion', null)
-                ->get();
-
                 $convocatorias = Convocatoria::where('estado', 1)
+                ->whereNot('idJunta', null)
                 ->orderBy('fecha')  
                 ->orderBy('hora')          
                 ->orderBy('idJunta')
@@ -51,16 +48,9 @@ class ConvocatoriasController extends Controller
                 ->where('fechaDisolucion', null)
                 ->get();
 
-                $comisiones = Comision::select('comisiones.*')
-                ->where('comisiones.estado', 1)
-                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                ->where('juntas.idCentro', $centroResponsable->idCentro)
-                ->where('comisiones.estado', 1)
-                ->where('comisiones.fechaDisolucion', null)
-                ->get();
-
-                $convocatoriasJuntas = Convocatoria::select('convocatorias.*')
+                $convocatorias = Convocatoria::select('convocatorias.*')
                 ->where('convocatorias.estado', 1)
+                ->whereNot('convocatorias.idJunta', null)
                 ->join('juntas', 'juntas.id', '=', 'convocatorias.idJunta')
                 ->where('juntas.idCentro', $centroResponsable->idCentro)
                 ->where('juntas.estado', 1)
@@ -68,22 +58,8 @@ class ConvocatoriasController extends Controller
                 ->orderBy('convocatorias.hora')          
                 ->orderBy('convocatorias.idJunta')
                 ->orderBy('convocatorias.idComision')
-                ->orderBy('convocatorias.idTipo');
-
-                $convocatorias = Convocatoria::select('convocatorias.*')
-                ->where('convocatorias.estado', 1)
-                ->join('comisiones', 'comisiones.id', '=', 'convocatorias.idComision')
-                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                ->where('juntas.idCentro', $centroResponsable->idCentro)
-                ->where('juntas.estado', 1)
-                ->orderBy('convocatorias.fecha')  
-                ->orderBy('convocatorias.hora')          
-                ->orderBy('convocatorias.idJunta')
-                ->orderBy('convocatorias.idComision')
                 ->orderBy('convocatorias.idTipo')
-                ->union($convocatoriasJuntas)
                 ->get();
-
             }
 
             if($user->hasRole('responsable_junta')){
@@ -97,15 +73,8 @@ class ConvocatoriasController extends Controller
                 ->where('fechaDisolucion', null)
                 ->get();
 
-                $comisiones = Comision::select('comisiones.*')
-                ->where('comisiones.estado', 1)
-                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                ->where('juntas.id', $juntaResponsable->idJunta)
-                ->where('juntas.estado', 1)
-                ->where('comisiones.fechaDisolucion', null)
-                ->get();
-
                 $convocatorias = Convocatoria::where('estado', 1)
+                ->whereNot('idJunta', null)
                 ->where('idJunta', $juntaResponsable->idJunta)
                 ->orderBy('fecha')  
                 ->orderBy('hora')          
@@ -115,47 +84,20 @@ class ConvocatoriasController extends Controller
                 ->get();
 
             }
-
-            if($user->hasRole('responsable_comision')){
-
-               $comisionResponsable = MiembroComision::where('idUsuario', $user->id)
-                ->select('idComision')
-                ->first();
-
-                $juntas = Junta::where('estado', 1)
-                ->where('fechaDisolucion', null)
-                ->get();
-
-                $comisiones = Comision::select('comisiones.*')
-                ->where('comisiones.id', $comisionResponsable->idComision)
-                ->where('comisiones.estado', 1)
-                ->where('comisiones.fechaDisolucion', null)
-                ->get();
-
-                $convocatorias = Convocatoria::where('estado', 1)
-                ->where('idComision', $comisionResponsable->idComision)
-                ->orderBy('fecha')  
-                ->orderBy('hora')          
-                ->orderBy('idJunta')
-                ->orderBy('idComision')
-                ->orderBy('idTipo')
-                ->get();
-            }
             
             $tipos = TipoConvocatoria::where('estado', 1)->get();
 
-            return view('convocatorias', ['convocatorias' => $convocatorias, 'juntas' => $juntas, 'comisiones' => $comisiones, 'tipos' => $tipos]);
+            return view('convocatoriasJunta', ['convocatorias' => $convocatorias, 'juntas' => $juntas, 'tipos' => $tipos]);
         } catch (\Throwable $th) {
-            return redirect()->route('convocatorias')->with('error', 'No se pudieron obtener las convocatorias: ' . $th->getMessage());
+            return redirect()->route('convocatoriasJunta')->with('error', 'No se pudieron obtener las convocatorias: ' . $th->getMessage());
         }
     }
-
+    
     public function store(Request $request)
     {
         try {
             $validator = Validator::make($request->all(),[
-                'idJunta' => 'nullable|integer|exists:App\Models\Junta,id',
-                'idComision' => 'nullable|integer|exists:App\Models\Comision,id',
+                'idJunta' => 'required|integer|exists:App\Models\Junta,id',
                 'idTipo' => 'required|integer|exists:App\Models\TipoConvocatoria,id',
                 'lugar' => 'required|max:100|string',
                 'fecha' => 'required|date',
@@ -163,11 +105,9 @@ class ConvocatoriasController extends Controller
                 'acta' => 'nullable|max:100|string',
             ], [
                 // Mensajes error idJunta
+                'idJunta.required' => 'La junta es obligatoria.',
                 'idJunta.integer' => 'La junta debe ser un entero.',
                 'idJunta.exists' => 'La junta seleccionada no existe.',
-                // Mensajes error idComision
-                'idComision.integer' => 'La comisión debe ser un entero.',
-                'idComision.exists' => 'La comisión seleccionada no existe.',
                 // Mensajes error idTipo
                 'idTipo.integer' => 'El tipo de convocatoria debe ser un entero.',
                 'idTipo.exists' => 'El tipo de convocatoria seleccionado no existe.',
@@ -191,14 +131,9 @@ class ConvocatoriasController extends Controller
                 // Si la validación falla, redirige de vuelta con los errores
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-
-            if(!$request->idJunta && !$request->idComision){
-                return redirect()->route('convocatorias')->with('error', 'Debe seleccionar una junta o comisión para poder crear la convocatoria')->withInput();
-            }
            
             $convocatoria = Convocatoria::create([
                 "idJunta" => $request->idJunta,
-                "idComision" => $request->idComision,
                 "idTipo" => $request->idTipo,
                 "lugar" => $request->lugar,
                 "fecha" => $request->fecha,
@@ -206,10 +141,10 @@ class ConvocatoriasController extends Controller
                 "acta" => $request->acta,
                 'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
             ]);
-            return redirect()->route('convocatorias')->with('success', 'Convocatoria creada correctamente.');
+            return redirect()->route('convocatoriasJunta')->with('success', 'Convocatoria creada correctamente.');
 
         } catch (\Throwable $th) {
-            return redirect()->route('convocatorias')->with('error', 'No se pudo crear la convocatoria: ' . $th->getMessage());
+            return redirect()->route('convocatoriasJunta')->with('error', 'No se pudo crear la convocatoria: ' . $th->getMessage());
         }
     }
 }

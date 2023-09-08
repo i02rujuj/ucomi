@@ -11,11 +11,12 @@ use App\Http\Controllers\CentrosController;
 use App\Http\Controllers\PublicoController;
 use App\Http\Controllers\ComisionController;
 use App\Http\Controllers\TiposCentroController;
-use App\Http\Controllers\ConvocatoriasController;
 use App\Http\Controllers\MiembrosJuntaController;
 use App\Http\Controllers\RepresentacionController;
 use App\Http\Controllers\MiembrosComisionController;
 use App\Http\Controllers\MiembrosGobiernoController;
+use App\Http\Controllers\ConvocatoriasJuntaController;
+use App\Http\Controllers\ConvocatoriasComisionController;
 use App\Http\Controllers\RepresentacionGeneralController;
 
 /*
@@ -115,12 +116,19 @@ Route::group(['middleware' => ['role:admin|responsable_centro|responsable_junta|
     Route::post('/miembro_comision/get', [MiembrosComisionController::class, 'get']);
     Route::post('/miembro_comision/update', [MiembrosComisionController::class, 'update']);
 
-    // CONVOCATORIAS
-    Route::get('/convocatorias', [ConvocatoriasController::class, 'index'])->name('convocatorias');
-    Route::post('/convocatorias', [ConvocatoriasController::class, 'store'])->name('convocatorias.store');
-    Route::post('/convocatoria/delete', [ConvocatoriasController::class, 'delete']);
-    Route::post('/convocatoria/get', [ConvocatoriasController::class, 'get']);
-    Route::post('/convocatoria/update', [ConvocatoriasController::class, 'update']);
+    // CONVOCATORIAS JUNTA
+    Route::get('/convocatorias_junta', [ConvocatoriasJuntaController::class, 'index'])->name('convocatoriasJunta');
+    Route::post('/convocatorias_junta', [ConvocatoriasJuntaController::class, 'store'])->name('convocatoriasJunta.store');
+    Route::post('/convocatorias_junta/delete', [ConvocatoriasJuntaController::class, 'delete']);
+    Route::post('/convocatorias_junta/get', [ConvocatoriasJuntaController::class, 'get']);
+    Route::post('/convocatorias_junta/update', [ConvocatoriasJuntaController::class, 'update']);
+
+    // CONVOCATORIAS COMISION
+    Route::get('/convocatorias_comision', [ConvocatoriasComisionController::class, 'index'])->name('convocatoriasComision');
+    Route::post('/convocatorias_comision', [ConvocatoriasComisionController::class, 'store'])->name('convocatoriasComision.store');
+    Route::post('/convocatorias_comision/delete', [ConvocatoriasComisionController::class, 'delete']);
+    Route::post('/convocatorias_comision/get', [ConvocatoriasComisionController::class, 'get']);
+    Route::post('/convocatorias_comision/update', [ConvocatoriasComisionController::class, 'update']);
 
     // REPRESENTACIONES GENERAL
     Route::post('/representacion_general/get', [RepresentacionGeneralController::class, 'get']);

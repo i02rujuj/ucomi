@@ -98,15 +98,44 @@
                     @endhasrole
 
                     @hasrole(['admin', 'responsable_centro', 'responsable_junta', 'responsable_comision'])
-                    <li @class(['mb-1 flex', request()->routeIs('convocatorias') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
-                        <a href="{{ route('convocatorias') }}" class="text-gray-600 w-full flex justify-start items-center">
-                            <span class="material-icons-round text-slate-600 ml-4 mr-1">
-                                event
-                            </span>
-                            &nbsp;
+                    
+                    <button class="accordion-submenu text-gray-600 w-full flex justify-start items-center hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200">
+                        <span class="material-icons-round text-slate-600 ml-4 mr-2">
+                            event
+                        </span>
+                        
+                        &nbsp;
                             Convocatorias
-                        </a>
-                    </li>
+
+                        <span class="material-icons-round text-slate-600 ml-2">
+                            expand_more
+                        </span>
+                    </button>
+                    
+                    <div @class(['submenu', request()->routeIs('convocatoriasJunta') || request()->routeIs('convocatoriasComision') ? 'submenu-visible' : ''])>
+                    
+                        <li @class(['mb-1 flex', request()->routeIs('convocatoriasJunta') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
+                            <a href="{{ route('convocatoriasJunta') }}" class="text-gray-600 w-full flex justify-start items-center">
+                                <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                                    event
+                                </span>
+                                &nbsp;
+                                Junta
+                            </a>
+                        </li>
+
+                        <li @class(['mb-1 flex', request()->routeIs('convocatoriasComision') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
+                            <a href="{{ route('convocatoriasComision') }}" class="text-gray-600 w-full flex justify-start items-center">
+                                <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                                    event
+                                </span>
+                                &nbsp;
+                                Comisión
+                            </a>
+                        </li>
+
+                    </div>
+
                     @endhasrole
 
                     <button class="accordion-submenu text-gray-600 w-full flex justify-start items-center hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200">
@@ -128,7 +157,7 @@
                         <li @class(['mb-1 flex', request()->routeIs('miembrosGobierno') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('miembrosGobierno') }}" class="text-gray-600 w-full flex justify-start items-center">
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
-                                    school
+                                    manage_accounts
                                 </span>
                                 &nbsp;
                                 Gobierno
@@ -140,7 +169,7 @@
                         <li @class(['mb-1 flex', request()->routeIs('miembrosJunta') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('miembrosJunta') }}" class="text-gray-600 w-full flex justify-start items-center">
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
-                                    account_balance
+                                    manage_accounts
                                 </span>
                                 &nbsp;
                                 Junta
@@ -152,7 +181,7 @@
                         <li @class(['mb-1 flex', request()->routeIs('miembrosComision') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('miembrosComision') }}" class="text-gray-600 w-full flex justify-start items-center">
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
-                                    send
+                                    manage_accounts
                                 </span>
                                 &nbsp;
                                 Comisión

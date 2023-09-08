@@ -19,39 +19,19 @@ Convocatorias
             </div>
             @endif
 
-            <form method="POST" action="{{ route('convocatorias.store') }}" class="bg-white p-8 mb-6 rounded-lg shadow-md">
+            <form method="POST" action="{{ route('convocatoriasComision.store') }}" class="bg-white p-8 mb-6 rounded-lg shadow-md">
                 <div class="text-gray-600 font-bold mb-2">
-                    Añadir nueva convocatoria
+                    Añadir nueva convocatoria de comisión
                 </div>
                 
                 @csrf
                 <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">
                     
-                    @hasrole(['admin', 'responsable_centro', 'responsable_junta'])
-                    <div class="left-side w-full">
-                        <div class="mb-2">
-                            <label for="idJunta" class="block text-sm text-gray-600 mb-1">
-                                ¿A qué junta pertenece?
-                            </label>
-                            
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idJunta" name="idJunta">
-                                <option value="">-----</option>
-                                @foreach ($juntas as $junta)
-                                    <option value="{{ $junta['id'] }}" {{ (old("idJunta")== $junta['id'] || app('request')->input('idJunta') == $junta['id'] ? "selected":"") }}>{{ $junta->centro->nombre }}</option>
-                                @endforeach
-                            </select>
-                           
-                            @error('idJunta')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                    @endhasrole
-
+                    @hasrole(['admin', 'responsable_centro', 'responsable_junta', 'responsable_comision'])
                     <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="idComision" class="block text-sm text-gray-600 mb-1">
-                                Comisión
+                                Convocatoria de comisión
                             </label>
                             
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idComision" name="idComision">
@@ -66,6 +46,7 @@ Convocatorias
                             @enderror
                         </div>
                     </div>
+                    @endhasrole
 
                     <div class="left-side w-full">
                         <div class="mb-2">
@@ -172,24 +153,27 @@ Convocatorias
                     <div id="btn-editar-convocatoria" data-junta-id="{{ $convocatoria['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
                         <div class="flex items-start justify-between">
                             <div class="left-part truncate">
+
+                                <div class="flex items-center">
+                                    <span class="material-icons-round scale-75">
+                                        account_balance
+                                    </span>
+                                    &nbsp;
+                                    <h2 class="text-base font-bold truncate">{{ $convocatoria->comision->junta->centro->nombre }}</h2>
+                                </div>
+
+                                <div class="flex items-center">
+                                    &nbsp;
+                                    <h2 class="text-base font-bold truncate">({{ $convocatoria->comision->junta->fechaConstitucion }})</h2>
+                                </div>
                                 
-                                @if ($convocatoria['idJunta']!=null)
-                                    <div class="flex items-center">
-                                        <span class="material-icons-round scale-75">
-                                            account_balance
-                                        </span>
-                                        &nbsp;
-                                        <h2 class="text-base font-bold truncate">{{ $convocatoria->junta->centro->nombre }}</h2>
-                                    </div>
-                                @else
-                                    <div class="flex items-center">
-                                        <span class="material-icons-round scale-75">
-                                            send
-                                        </span>
-                                        &nbsp;
-                                        <h2 class="text-base font-bold truncate">{{ $convocatoria->$comision->nombre }}</h2>
-                                    </div>
-                                @endif
+                                <div class="flex items-center">
+                                    <span class="material-icons-round scale-75">
+                                        send
+                                    </span>
+                                    &nbsp;
+                                    <h2 class="text-base font-bold truncate">{{ $convocatoria->comision->nombre }}</h2>
+                                </div>
 
                                 <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
                                     <div class="flex items-center">

@@ -114,6 +114,8 @@
                     
                     <div @class(['submenu', request()->routeIs('convocatoriasJunta') || request()->routeIs('convocatoriasComision') ? 'submenu-visible' : ''])>
                     
+                        @hasrole(['admin', 'responsable_centro', 'responsable_junta'])
+
                         <li @class(['mb-1 flex', request()->routeIs('convocatoriasJunta') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('convocatoriasJunta') }}" class="text-gray-600 w-full flex justify-start items-center">
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
@@ -124,6 +126,10 @@
                             </a>
                         </li>
 
+                        @endhasrole
+
+                        @hasrole(['admin', 'responsable_centro', 'responsable_junta', 'responsable_comision'])
+
                         <li @class(['mb-1 flex', request()->routeIs('convocatoriasComision') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('convocatoriasComision') }}" class="text-gray-600 w-full flex justify-start items-center">
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
@@ -133,7 +139,8 @@
                                 Comisión
                             </a>
                         </li>
-
+                        @endhasrole
+                        
                     </div>
 
                     @endhasrole

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\User;
+use PDF;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
@@ -68,7 +70,7 @@ class UserController extends Controller
         }
     }
 
-    public function saveImage(Request $request)
+    public function saveImagePerfil(Request $request)
     {
         $user = Auth::user();
         $profile_image = $request->file('imagen');
@@ -99,4 +101,18 @@ class UserController extends Controller
             return $this->redirectBasedOnRole($user, 'Selecciona una imagen para actualizar tu perfil', 'error');
         }
     }
+
+    public function generarCertificado(Request $request)
+    {
+	    $data = [
+	            'title' => 'Tipo de certificado...',
+	            'date' => date('d/m/Y'),
+                'users' => User::get(),
+	    ];
+
+        $pdf = PDF::loadView('certificado', $data);
+        return $pdf->download('certificado.pdf');
+
+    }
+
 }

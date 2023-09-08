@@ -52,7 +52,9 @@ Route::get('/logout', function () {
 
 Route::get('/perfil', [UserController::class, 'index'])->name('perfil');
 Route::post('/perfil', [UserController::class, 'store'])->name('perfil.store');
-Route::post('/save_image_perfil', [UserController::class, 'saveImage']);
+Route::post('/save_image_perfil', [UserController::class, 'saveImagePerfil'])->name('saveImagePerfil');
+Route::post('/generar_certificado', [UserController::class, 'generarCertificado'])->name('generarCertificado');
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -99,6 +101,13 @@ Route::group(['middleware' => ['role:admin|responsable_centro|responsable_junta'
     Route::post('/comision/get', [ComisionController::class, 'get']);
     Route::post('/comision/update', [ComisionController::class, 'update']);
 
+    // CONVOCATORIAS JUNTA
+    Route::get('/convocatorias_junta', [ConvocatoriasJuntaController::class, 'index'])->name('convocatoriasJunta');
+    Route::post('/convocatorias_junta', [ConvocatoriasJuntaController::class, 'store'])->name('convocatoriasJunta.store');
+    Route::post('/convocatorias_junta/delete', [ConvocatoriasJuntaController::class, 'delete']);
+    Route::post('/convocatorias_junta/get', [ConvocatoriasJuntaController::class, 'get']);
+    Route::post('/convocatorias_junta/update', [ConvocatoriasJuntaController::class, 'update']);
+
     // MIEMBROS JUNTA
     Route::get('/miembros_junta', [MiembrosJuntaController::class, 'index'])->name('miembrosJunta');
     Route::post('/miembros_junta', [MiembrosJuntaController::class, 'store'])->name('miembrosJunta.store');
@@ -115,13 +124,6 @@ Route::group(['middleware' => ['role:admin|responsable_centro|responsable_junta|
     Route::post('/miembro_comision/delete', [MiembrosComisionController::class, 'delete']);
     Route::post('/miembro_comision/get', [MiembrosComisionController::class, 'get']);
     Route::post('/miembro_comision/update', [MiembrosComisionController::class, 'update']);
-
-    // CONVOCATORIAS JUNTA
-    Route::get('/convocatorias_junta', [ConvocatoriasJuntaController::class, 'index'])->name('convocatoriasJunta');
-    Route::post('/convocatorias_junta', [ConvocatoriasJuntaController::class, 'store'])->name('convocatoriasJunta.store');
-    Route::post('/convocatorias_junta/delete', [ConvocatoriasJuntaController::class, 'delete']);
-    Route::post('/convocatorias_junta/get', [ConvocatoriasJuntaController::class, 'get']);
-    Route::post('/convocatorias_junta/update', [ConvocatoriasJuntaController::class, 'update']);
 
     // CONVOCATORIAS COMISION
     Route::get('/convocatorias_comision', [ConvocatoriasComisionController::class, 'index'])->name('convocatoriasComision');

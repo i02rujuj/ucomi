@@ -1,86 +1,3 @@
-Ct - Ju
-Un centro podrá ser coordinado por varias Juntas a lo largo del tiempo.
-
-Una Junta será creada normalmente cada cierto tiempo, correspondiente al acta de constitución de la Junta realizada por el equipo de gobierno. No podrá haber más de una junta coordinando a un centro entre las mismas fechas.
-Una Junta no podrá ser creada si no existe  un miembro del equipo de gobierno en el centro de la Junta con representación de director y otro de secretario, ya que son los miembros natos de la Junta. (controlar en lógica de negocio)
-
-Ju - MiJu
-La Junta estará formada por quien ostente la dirección del centro, que la presidirá, y por la persona que ocupe la secretaría del centro (miembros del equipo de gobierno), más un número determinado de miembros distribuidos según reglamento. (miembros junta)
-
-Justificación muchas tablas es porque hay muchas posibilidades y de etsa manera las contemplamos todas ellas
-
-Más libertad, no tan restrictivo
-ocurrencias futuras
-Administrativo libre / error
-
-¿Todos los miembros de gobierno son miembros de una junta?
-
-Problemática índices únicos con NULL explicar
-Conclusión no unir tablas gobierno y junta miembros 
-Purgado periódico de datos
-
-Modelo EER acabar
-Transformar todo con softdeletes
-Ver belongstomany
-
-Argumentación claves primarias ids
-triggers laravel
-
-Controlar al añadir miembro junta que no exista en miembro gobierno
-
-Revisar impedir borrado si existen cosas colgando en todas las tablas
-
-Un secretario de Junta puede no pertenecer al equipo de gobierno que constituye esa junta?
-
-Página 404
-api para sus páginas web
-buscador de toda información UCO comisiones
-Restringir autenticado en web.php
-
-Eliminar de la BD
-Estado Deshabilitar
-Fecha cese/disolución
-Diferencias
-
-OrgChart Js
-
-Paginación en listados
-
-¿Puedes ser director de más de un centro?
-
-flowbite 
-Excepciones try catch
-Ajax axios
-Administrador es el rector
-Añadir rol director de equipo de gobierno de centro
-
-Director siempre será responsable de la comisión
-¿Asignar otro responsable de la comisión?
-
-Impedir dar de alta un director si hay algún otro director (comprobar con FechaCese)
-
-Falso delete en todo para tener un histórico de todo
-
-Google Analitycs
-
-Habilitado y Deshabilitado acceder a la aplicación
-Fecha Cese diferente, aunque cese estará habilitado como miembro
-
-Simplificar editar de miembro gobierno para evitar errores
-
-Comprobación fechas inicio y fin de miembros
-
-Fecha cese cambiar color a card
-
-Cointrolar actualizar fechas miembro si es directivo o secretario que no se pise con alguno que exista
-
-Todos los directores tienen que estar cesados para añadir uno nuevo.
-
-id/Existencia EER donde está el 1,1
-Todas las entidades débiles tienen una relación de existencia
-Todas las dependencias de identificación son especializaciones de dependecias de existencia
-
-
 PENDIENTE DOCUMENTACIÓN
 
 - Revisar esta lista
@@ -98,5 +15,69 @@ PENDIENTE DOCUMENTACIÓN
 - Explicar la gestión de los roles como se ha realizado con Laravel -> Tablas...
 - Redactar de otra forma algunos contenidos
 - CRUD convocatorias
+- Documentar código
            
-		   
+
+Ct - Ju
+Un centro podrá ser coordinado por varias Juntas a lo largo del tiempo.
+
+Una Junta será creada normalmente cada cierto tiempo, correspondiente al acta de constitución de la Junta realizada por el equipo de gobierno. No podrá haber más de una junta coordinando a un centro entre las mismas fechas.
+Una Junta no podrá ser creada si no existe  un miembro del equipo de gobierno en el centro de la Junta con representación de director y otro de secretario, ya que son los miembros natos de la Junta. (controlar en lógica de negocio)
+
+Ju - MiJu
+La Junta estará formada por quien ostente la dirección del centro, que la presidirá, y por la persona que ocupe la secretaría del centro (miembros del equipo de gobierno), más un número determinado de miembros distribuidos según reglamento. (miembros junta)
+
+Justificación muchas tablas es porque hay muchas posibilidades y de etsa manera las contemplamos todas ellas
+
+Problemática índices únicos con NULL explicar
+Conclusión no unir tablas gobierno y junta miembros 
+Purgado periódico de datos
+
+Transformar todo con softdeletes
+Falso delete en todo para tener un histórico de todo
+Ver belongstomany
+
+Argumentación claves primarias ids
+triggers laravel
+
+Controlar al añadir miembro junta que no exista en miembro gobierno
+Revisar impedir borrado si existen cosas colgando en todas las tablas
+
+Página 404
+api para sus páginas web
+buscador de toda información UCO comisiones
+Restringir autenticado en web.php
+
+Eliminar de la BD
+Estado Deshabilitar
+Fecha cese/disolución
+Diferencias
+Habilitado y Deshabilitado acceder a la aplicación
+Fecha Cese diferente, aunque cese estará habilitado como miembro
+
+OrgChart Js
+
+Paginación en listados
+
+flowbite 
+Excepciones try catch
+Ajax axios
+Administrador es el rector
+
+Director siempre será responsable de la comisión
+¿Asignar otro responsable de la comisión?
+
+Impedir dar de alta un director si hay algún otro director (comprobar con FechaCese)
+
+Google Analitycs
+
+Simplificar editar de miembro gobierno para evitar errores
+
+Comprobación fechas inicio y fin de miembros
+
+Controlar actualizar fechas miembro si es directivo o secretario que no se pise con alguno que exista
+
+Todos los directores tienen que estar cesados para añadir uno nuevo.
+
+Todas las entidades débiles tienen una relación de existencia
+Todas las dependencias de identificación son especializaciones de dependecias de existencia

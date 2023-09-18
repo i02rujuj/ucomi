@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 
 class MiembrosGobiernoController extends Controller
 {
+
     public function index()
     {
         try {
@@ -263,6 +264,7 @@ class MiembrosGobiernoController extends Controller
 
     public function getByCentro(Request $request)
     {
+        
         try {
             $miembros = MiembroGobierno::
                 join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')

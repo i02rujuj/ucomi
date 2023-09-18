@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
             photo: asset_global + '/miembro_junta.png'
         });
 
-    
+    console.log(gobierno);
         gobierno['miembros'].forEach(m => {
 
             var representacion = m.nombre;

@@ -60,7 +60,7 @@ class ComisionController extends Controller
                 ->first();
 
                 $comisiones = Comision::select('comisiones.*')
-                ->where('comisiones.estado', 1)
+                ->where('hola', 'like')
                 ->where('idJunta', $juntaResponsable->idJunta)
                 ->orderBy('comisiones.fechaDisolucion')          
                 ->orderBy('comisiones.idJunta')

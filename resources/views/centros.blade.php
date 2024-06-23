@@ -31,7 +31,7 @@ Centros
                             </label>
                             <input id="nombre" name="nombre" type="text" value="{{old("nombre")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
                             @error('nombre')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
@@ -65,7 +65,7 @@ Centros
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div> 
-                    </div>
+                    </div>  
                 </div>
                 <button type="submit" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
                     Añadir Centro

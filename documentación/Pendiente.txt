@@ -1,11 +1,12 @@
 PENDIENTE DOCUMENTACIÓN
 
-- Revisar esta lista
 - Definición sintáctica y formal -> Tabla con Valores autocalculados en el último apartado Diseño de datos
 - Indicar índices en modelo relacional -> Apartado Diseño de datos
 - Supuestos semánticos -> Apartado Análisis -> Especificación de requisitos
 - Apartado Diagrama de secuencia
 - Apartado Diseño Arquitectónico
+- Manual usuario -> despliegue aplicación
+- Apartado Diseño Clases
 - Apartado Interfaz
 - Apartado Pruebas
 - Tabla Asistentes con lo que ello implica
@@ -16,6 +17,11 @@ PENDIENTE DOCUMENTACIÓN
 - Redactar de otra forma algunos contenidos
 - CRUD convocatorias
 - Documentar código
+
+- Login español
+- login inicio mostrar infotrmaciòn
+- asisten, no asisten, excusan asistencia
+orden del día
            
 
 Ct - Ju

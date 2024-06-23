@@ -22,6 +22,13 @@
 
         "CACHE_DRIVER": "array",
         "LOG_CHANNEL": "stderr",
-        "SESSION_DRIVER": "cookie"
+        "SESSION_DRIVER": "cookie",
+
+        "DB_CONNECTION":"pgsql",
+        "DB_HOST":"ep-restless-breeze-a4t73nb4-pooler.us-east-1.aws.neon.tech",
+        "DB_PORT":"5432",
+        "DB_DATABASE":"verceldb",
+        "DB_USERNAME":"default",
+        "DB_PASSWORD":"LQlqek35rJgo"
     }
 }

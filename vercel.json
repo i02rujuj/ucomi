@@ -10,6 +10,14 @@
             "dest": "/public/build/assets/"
         },
         {
+            "src": "/resources/(.*)",
+            "dest": "/public/build/img/"
+        },
+        {
+            "src": "/favicon/(.*)",
+            "dest": "/public/build/img/"
+        },
+        {
             "src": "/(.*)",
             "dest": "/api/index.php"
         }

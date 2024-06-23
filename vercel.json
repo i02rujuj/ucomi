@@ -24,11 +24,6 @@
         "LOG_CHANNEL": "stderr",
         "SESSION_DRIVER": "cookie",
 
-        "DB_CONNECTION":"pgsql",
-        "DB_HOST":"ep-restless-breeze-a4t73nb4-pooler.us-east-1.aws.neon.tech",
-        "DB_PORT":"5432",
-        "DB_DATABASE":"verceldb",
-        "DB_USERNAME":"default",
-        "DB_PASSWORD":"endpoint=ep-restless-breeze-a4t73nb4;LQlqek35rJgo"
+        "DATABASE_URL":"postgres://default:endpoint=ep-restless-breeze-a4t73nb4;LQlqek35rJgo@ep-restless-breeze-a4t73nb4-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require"
     }
 }

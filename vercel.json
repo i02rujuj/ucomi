@@ -23,7 +23,5 @@
         "CACHE_DRIVER": "array",
         "LOG_CHANNEL": "stderr",
         "SESSION_DRIVER": "cookie",
-
-        "DATABASE_URL":"postgres://default:endpoint=ep-restless-breeze-a4t73nb4;LQlqek35rJgo@ep-restless-breeze-a4t73nb4-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require"
     }
 }

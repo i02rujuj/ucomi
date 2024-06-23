@@ -18,6 +18,10 @@
             "dest": "/public/js/"
         },
         {
+            "src": "/favicon.ico",
+            "dest": "/public/img/"
+        },
+        {
             "src": "/(.*)",
             "dest": "/api/index.php"
         }

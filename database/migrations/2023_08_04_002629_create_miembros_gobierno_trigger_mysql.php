@@ -14,7 +14,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert');
+        /*DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert');
         DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update');
         DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert');
         DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update');
@@ -65,7 +65,7 @@ return new class extends Migration
                                 SET NEW.activo = ADDTIME(NEW.deleted_at, DATE_FORMAT(CURRENT_TIMESTAMP(6), '.%f'));
                             END IF;
                         END
-                        ");
+                        ");*/
 
     }
 
@@ -74,9 +74,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert');
+        /*DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert');
         DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update');
         DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert');
-        DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update');
+        DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update');*/
     }
 };

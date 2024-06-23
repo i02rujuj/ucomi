@@ -10,12 +10,12 @@
             "dest": "/public/build/assets/"
         },
         {
-            "src": "/resources/(.*)",
-            "dest": "/public/build/img/"
+            "src": "/img/(.*)",
+            "dest": "/public/img/"
         },
         {
-            "src": "/favicon/(.*)",
-            "dest": "/public/build/img/"
+            "src": "/js/(.*)",
+            "dest": "/public/js/"
         },
         {
             "src": "/(.*)",

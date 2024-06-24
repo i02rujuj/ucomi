@@ -57,7 +57,7 @@ Comisiones
                             <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idJunta" name="idJunta" required>
                                 <option value="">-----</option>
                                 @foreach ($juntas as $junta)
-                                    <option value="{{ $junta['id'] }}">{{ $junta->centro->nombre }} ({{ $junta->fechaConstitucion }})</option>
+                                    <option value="{{ $junta['id'] }}">{{ $junta->fechaConstitucion }} - {{ $junta->centro->nombre }}</option>
                                 @endforeach
                             </select>
                            

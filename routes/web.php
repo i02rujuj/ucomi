@@ -56,6 +56,7 @@ Route::get('/logout', function () {
 Route::get('/perfil', [UserController::class, 'index'])->name('perfil');
 Route::post('/perfil', [UserController::class, 'store'])->name('perfil.store');
 Route::post('/save_image_perfil', [UserController::class, 'saveImagePerfil'])->name('saveImagePerfil');
+Route::get('/certificados', [UserController::class, 'certificados'])->name('certificados');
 Route::post('/generar_certificado', [UserController::class, 'generarCertificado'])->name('generarCertificado');
 Route::post('/centro/all', [CentrosController::class, 'all']);
 Route::post('/miembros_gobierno/getbycentro', [MiembrosGobiernoController::class, 'getByCentro']);

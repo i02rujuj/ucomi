@@ -38,6 +38,11 @@ class UserController extends Controller
         return view('perfil');
     }
 
+    public function certificados()
+    {
+        return view('certificados');
+    }
+
     public function store(Request $request)
     {
         try {

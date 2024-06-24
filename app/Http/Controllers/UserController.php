@@ -88,6 +88,7 @@ class UserController extends Controller
             }
 
             $profile_image->move(public_path('img/userImg/'), $filename);
+            
             //Image::make($profile_image)->resize(300, 300)->save($path);
             $user->image = $filename;
             $user->save();

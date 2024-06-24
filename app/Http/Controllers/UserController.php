@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\User;
 use PDF;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -87,8 +88,9 @@ class UserController extends Controller
                 }
             }
 
-            $profile_image->move(public_path('img/userImg/'), $filename);
-            
+            //$profile_image->move(public_path('assets/userImg/'), $filename);
+            //Storage::disk('local')->put($filename, $profile_image);
+            $profile_image->storeAs('public/userImages', $filename);
             //Image::make($profile_image)->resize(300, 300)->save($path);
             $user->image = $filename;
             $user->save();

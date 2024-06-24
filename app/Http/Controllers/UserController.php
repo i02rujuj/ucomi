@@ -93,8 +93,14 @@ class UserController extends Controller
             // Almacenamiento local en servidor
             //$profile_image->move(public_path('img/'), $filename);
             //$profile_image->storeAs('img', $filename,['disk' => 'public_uploads']);
-           
-            $result = $profile_image->storeOnCloudinary("userImages", $filename);
+            $result = cloudinary()->upload($profile_image->getRealPath(), [
+                'folder' => 'userImages',
+                'transformation' => [
+                          'width' => 112,
+                          'height' => 112
+                ]
+            ]);
+            //$result = $profile_image->storeOnCloudinary("userImages", $filename, ["width" => 112, "height"=>112]);
             $user->image = $result->getPublicId();
             $user->save();
             return redirect()->route('perfil')->with('success', 'Imagen de perfil actualizada correctamente');

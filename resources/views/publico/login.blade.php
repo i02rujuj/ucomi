@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
-@section('contentTop')
+@section('content')
     @include('auth.login')
 @endsection

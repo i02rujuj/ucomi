@@ -2,13 +2,13 @@
     <div class="w-full max-w-md">
         <div class="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4 mx-6 md:mx-0">
             <div class="text-center">
-                <h2 class="text-lg font-bold text-gray-900 mb-4">{{ __('Login') }}</h2>
+                <h2 class="text-lg font-bold text-gray-900 mb-4">{{ __('Iniciar sesión') }}</h2>
             </div>
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
                 <div class="mb-4">
-                    <label for="email" class="block text-gray-700 font-medium mb-2">{{ __('Email Address') }}</label>
+                    <label for="email" class="block text-gray-700 font-medium mb-2">{{ __('Correo electrónico') }}</label>
 
                     <input id="email" type="email" class="w-full p-1 outline-none bg-slate-100 rounded form-input @error('email') border-red-500 @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="password" class="block text-gray-700 font-medium mb-2">{{ __('Password') }}</label>
+                    <label for="password" class="block text-gray-700 font-medium mb-2">{{ __('Contraseña') }}</label>
 
                     <input id="password" type="password" class="w-full p-1 outline-none bg-slate-100 rounded form-input @error('password') border-red-500 @enderror" name="password" required autocomplete="current-password">
 
@@ -31,7 +31,7 @@
                     <input class="form-checkbox" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                     <label class="inline-block text-gray-700 font-medium ml-2" for="remember">
-                        {{ __('Remember Me') }}
+                        {{ __('Recuérdame') }}
                     </label>
                 </div>
 
@@ -42,7 +42,7 @@
 
                     @if (Route::has('password.request'))
                     <a class="inline-block align-baseline font-medium text-sm text-slate-400 hover:text-slate-800 underline ml-4 transition-all duration-200" href="{{ route('password.request') }}">
-                        {{ __('Forgot Your Password?') }}
+                        {{ __('¿Has olvidado tu contraseña?') }}
                     </a>
                     @endif
                 </div>

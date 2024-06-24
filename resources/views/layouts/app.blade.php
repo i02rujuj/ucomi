@@ -46,7 +46,7 @@
                 <div class="md:block">
                     <div class="ml-4 flex items-center md:ml-6"> 
                         @if (!Auth::check())
-                            <a href="{{ route('login') }}" class="ml-3 px-3 py-1 text-sm font-medium rounded-md hover:text-white hover:bg-gray-700">Login</a>
+                            <a href="{{ route('login') }}" class="ml-3 px-3 py-1 text-sm font-medium rounded-md hover:text-white hover:bg-gray-700">Iniciar sesión</a>
                         @else
                             <a href="{{ route('home') }}" class="ml-3 px-3 py-1 text-sm font-medium rounded-md hover:text-white hover:bg-gray-700">{{Auth::user()->name}}</a>
                         @endif
@@ -56,9 +56,13 @@
         </div>
     </nav>
 
+    
     <main>
         @yield('contentTop')
 
+        @yield('content')
+
+        @if (Route::is('welcome') || Route::is('infoPublica'))
         <!-- Sección búsqueda del centro -->
         <section class="bg-ucomi bg-cover lg:h-screen md:h-screen py-8">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full w-full flex items-center justify-center">
@@ -91,6 +95,7 @@
                 </div>
             </div>
         </section>
+        @endif
 
         @yield('contentBottom')
     </main>

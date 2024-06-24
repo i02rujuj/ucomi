@@ -87,7 +87,7 @@ class UserController extends Controller
                 }
             }
 
-            Image::make($profile_image)->resize(300, 300)->save($path);
+            Image::make($profile_image)->save($path);
             $user->image = $filename;
             $user->save();
             return redirect()->route('perfil')->with('success', 'Imagen de perfil actualizada correctamente');

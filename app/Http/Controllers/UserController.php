@@ -77,18 +77,19 @@ class UserController extends Controller
         $profile_image = $request->file('imagen');
         if ($profile_image) {
             $filename = time() . '.' . $profile_image->getClientOriginalExtension();
-            $path = public_path('img/userImg/' . $filename);
+            $path = public_path('img/' . $filename);
 
             // Verificar si el usuario ya tiene una imagen guardada
             if ($user->image) {
                 // Si tiene una imagen guardada, elimina el archivo de la imagen
-                $image_path = public_path('img/userImg/' . $user->image);
+                $image_path = public_path('img/' . $user->image);
                 if (file_exists($image_path)) {
                     unlink($image_path);
                 }
             }
 
-            $profile_image->storeAs('public', $filename);
+            $profile_image->move(public_path('img/'), $filename);
+            //$profile_image->storeAs('public/userImages', $filename);
             //Image::make($profile_image)->resize(300, 300)->save($path);
             $user->image = $filename;
             $user->save();

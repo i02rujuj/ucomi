@@ -29,7 +29,7 @@
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "true",
-        "APP_URL": "https://ucomi-git-main-jrj1987s-projects.vercel.app/",
+        "APP_URL": "https://ucomi.vercel.app",
 
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
@@ -40,7 +40,6 @@
 
         "CACHE_DRIVER": "array",
         "LOG_CHANNEL": "stderr",
-        "SESSION_DRIVER": "cookie",
-        "DB_CONNECTION":"pgsql"
+        "SESSION_DRIVER": "cookie"
     }
 }

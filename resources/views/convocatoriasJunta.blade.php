@@ -19,7 +19,7 @@ Convocatorias
             </div>
             @endif
 
-            <form method="POST" action="{{ route('convocatoriasJunta.store') }}" class="bg-white p-8 mb-6 rounded-lg shadow-md">
+            <form method="POST" action="{{ route('convocatoriasJunta.store') }}" enctype="multipart/form-data" class="bg-white p-8 mb-6 rounded-lg shadow-md">
                 <div class="text-gray-600 font-bold mb-2">
                     Añadir nueva convocatoria de junta
                 </div>

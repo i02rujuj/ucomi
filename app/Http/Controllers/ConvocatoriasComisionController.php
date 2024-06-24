@@ -132,7 +132,7 @@ class ConvocatoriasComisionController extends Controller
                 'lugar' => 'required|max:100|string',
                 'fecha' => 'required|date',
                 'hora' => 'required|date_format:H:i',
-                'acta' => 'nullable|max:100|string',
+                'acta' => 'nullable|max:1000|mimetypes:application/pdf',
             ], [
                 // Mensajes error idComision
                 'idComision.required' => 'La comisión es obligatoria.',
@@ -152,14 +152,23 @@ class ConvocatoriasComisionController extends Controller
                 'hora.required' => 'La hora es obligatoria.',
                 'hora.date_format' => 'La hora debe tener el formato hora HH:MM.',
                 // Mensajes error acta
-                'acta.string' => 'El acta no puede contener números ni caracteres especiales.',
-                'acta.max' => 'El acta no puede exceder los 100 caracteres.',
+                'acta.mimetypes' => 'El acta debe estar en formato pdf.',
+                'acta.max' => 'El nombre del acta no puede exceder los 1000 caracteres.',
                 
             ]);
 
             if ($validator->fails()) {
                 // Si la validación falla, redirige de vuelta con los errores
                 return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            $file_acta = $request->file('acta');
+            $result=null;
+
+            if ($file_acta) {
+                $result = cloudinary()->upload($file_acta->getRealPath(), [
+                    'folder' => 'actasComision'
+                ])->getPublicId();
             }
            
             $convocatoria = Convocatoria::create([
@@ -168,7 +177,7 @@ class ConvocatoriasComisionController extends Controller
                 "lugar" => $request->lugar,
                 "fecha" => $request->fecha,
                 "hora" => $request->hora,
-                "acta" => $request->acta,
+                "acta" => $result,
                 'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
             ]);
             return redirect()->route('convocatoriasComision')->with('success', 'Convocatoria creada correctamente.');

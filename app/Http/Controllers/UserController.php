@@ -85,7 +85,7 @@ class UserController extends Controller
             case 'save':
                 $profile_image = $request->file('imagen');
                 if ($profile_image) {
-                    $filename = time() . '.' . $profile_image->getClientOriginalExtension();
+                    //$filename = time() . '.' . $profile_image->getClientOriginalExtension();
                     //$path = public_path('img/' . $filename);
         
                     // Verificar si el usuario ya tiene una imagen guardada

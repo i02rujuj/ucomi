@@ -90,7 +90,7 @@ class UserController extends Controller
             Image::make($profile_image)->resize(300, 300)->save($path);
             $user->image = $filename;
             $user->save();
-            return $this->redirectBasedOnRole($user, 'Imagen de perfil actualizada correctamente');
+            return redirect()->route('perfil')->with('success', 'Imagen de perfil actualizada correctamente');
             
         } else {
             // Si el usuario no ha seleccionado una imagen, establece una imagen predeterminada
@@ -98,7 +98,7 @@ class UserController extends Controller
                 $user->image = 'default_image.jpg';
                 $user->save();
             }
-            return $this->redirectBasedOnRole($user, 'Selecciona una imagen para actualizar tu perfil', 'error');
+            return redirect()->route('perfil')->with('error', 'Selecciona una imagen para actualizar tu perfil');
         }
     }
 

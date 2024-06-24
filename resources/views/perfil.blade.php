@@ -119,7 +119,7 @@ Perfil
                 <div class="form-group flex flex-col gap-2">
                     <label for="imagen" class="font-bold text-slate-600">Seleccione una imagen:</label>
                     <hr class="border-t border-slate-200 my-2">
-                    <img src="{{ asset('img/' . (Auth::user()->image ? "userImg/".Auth::user()->image : 'default_image.png')) }}" alt="Imagen de perfil" class="w-28 h-28 self-start ml- mb-1 justify-self-center rounded-full object-cover">
+                    <img src="{{ asset('img/userImg/' . (Auth::user()->image ? Auth::user()->image : 'default_image.png')) }}" alt="Imagen de perfil" class="w-28 h-28 self-start ml- mb-1 justify-self-center rounded-full object-cover">
                     <input type="file" name="imagen" id="imagen" class="form-control-file" placeholder="Seleccione una imagen">
                 </div>
                 <button type="submit" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">

@@ -40,6 +40,15 @@
 
         "CACHE_DRIVER": "array",
         "LOG_CHANNEL": "stderr",
-        "SESSION_DRIVER": "cookie"
+        "SESSION_DRIVER": "cookie",
+
+        "MAIL_MAILER": "smtp",
+        "MAIL_HOST": "smtp.postmarkapp.com",
+        "MAIL_PORT": "2525",
+        "MAIL_USERNAME": "15ede3ac-654b-4101-9012-1983af704cba",
+        "MAIL_PASSWORD": "15ede3ac-654b-4101-9012-1983af704cba",
+        "MAIL_ENCRYPTION": "tls",
+        "MAIL_FROM_ADDRESS": "i02rujuj@uco.es",
+        "MAIL_FROM_NAME": "UCOMI"
     }
 }

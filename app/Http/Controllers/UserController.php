@@ -75,44 +75,55 @@ class UserController extends Controller
     public function saveImagePerfil(Request $request)
     {
         $user = Auth::user();
-        $profile_image = $request->file('imagen');
-        if ($profile_image) {
-            $filename = time() . '.' . $profile_image->getClientOriginalExtension();
-            //$path = public_path('img/' . $filename);
 
-            // Verificar si el usuario ya tiene una imagen guardada
-            if ($user->image) {
-                // Si tiene una imagen guardada, elimina el archivo de la imagen
-                //$image_path = public_path('img/' . $user->image);
-                //if (file_exists($image_path)) {
-                //    unlink($image_path);
-                //}
-                Cloudinary::destroy($user->image);
-            }
-
-            // Almacenamiento local en servidor
-            //$profile_image->move(public_path('img/'), $filename);
-            //$profile_image->storeAs('img', $filename,['disk' => 'public_uploads']);
-            $result = cloudinary()->upload($profile_image->getRealPath(), [
-                'folder' => 'userImages',
-                'transformation' => [
-                          'width' => 112,
-                          'height' => 112
-                ]
-            ]);
-            //$result = $profile_image->storeOnCloudinary("userImages", $filename, ["width" => 112, "height"=>112]);
-            $user->image = $result->getPublicId();
-            $user->save();
-            return redirect()->route('perfil')->with('success', 'Imagen de perfil actualizada correctamente');
-            
-        } else {
-            // Si el usuario no ha seleccionado una imagen, establece una imagen predeterminada
-            if (!$user->image) {
-                $user->image = 'default_image.jpg';
-                $user->save();
-            }
-            return redirect()->route('perfil')->with('error', 'Selecciona una imagen para actualizar tu perfil');
-        }
+        switch ($request->input('action')) {
+            case 'save':
+                $profile_image = $request->file('imagen');
+                if ($profile_image) {
+                    $filename = time() . '.' . $profile_image->getClientOriginalExtension();
+                    //$path = public_path('img/' . $filename);
+        
+                    // Verificar si el usuario ya tiene una imagen guardada
+                    if ($user->image) {
+                        // Si tiene una imagen guardada, elimina el archivo de la imagen
+                        //$image_path = public_path('img/' . $user->image);
+                        //if (file_exists($image_path)) {
+                        //    unlink($image_path);
+                        //}
+                        Cloudinary::destroy($user->image);
+                    }
+        
+                    // Almacenamiento local en servidor
+                    //$profile_image->move(public_path('img/'), $filename);
+                    //$profile_image->storeAs('img', $filename,['disk' => 'public_uploads']);
+                    $result = cloudinary()->upload($profile_image->getRealPath(), [
+                        'folder' => 'userImages',
+                        'transformation' => [
+                                  'width' => 112,
+                                  'height' => 112
+                        ]
+                    ]);
+                    //$result = $profile_image->storeOnCloudinary("userImages", $filename, ["width" => 112, "height"=>112]);
+                    $user->image = $result->getPublicId();
+                    $user->save();
+                    return redirect()->route('perfil')->with('success', 'Imagen de perfil actualizada correctamente');
+                    
+                } else {
+                    // Si el usuario no ha seleccionado una imagen, establece una imagen predeterminada
+                    if (!$user->image) {
+                        $user->image = 'default_image.jpg';
+                        $user->save();
+                    }
+                    return redirect()->route('perfil')->with('error', 'Selecciona una imagen para actualizar tu perfil');
+                }
+            break;
+    
+            case 'delete':
+                    $user->image = null;
+                    $user->save();
+                    return redirect()->route('perfil')->with('success', 'Imagen de perfil eliminada correctamente');
+                break;
+        } 
     }
 
     public function generarCertificado(Request $request)
@@ -125,7 +136,5 @@ class UserController extends Controller
 
         $pdf = PDF::loadView('certificado', $data);
         return $pdf->download('certificado.pdf');
-
     }
-
 }

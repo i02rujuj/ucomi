@@ -122,9 +122,14 @@ Perfil
                     <img src="{{ Auth::user()->image ? Cloudinary::getUrl(Auth::user()->image) : asset('img/default_image.png') }}" alt="Imagen de perfil" class="w-28 h-28 self-start ml- mb-1 justify-self-center rounded-full object-cover">
                     <input type="file" name="imagen" id="imagen" class="form-control-file" placeholder="Seleccione una imagen">
                 </div>
-                <button type="submit" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
+                <button type="submit" value="save" name="action" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
                     Guardar
                 </button>
+                @if(Auth::user()->image)
+                <button type="submit" value="delete" name="action" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
+                    Eliminar
+                </button>
+                @endif
             </form>
 
         </div>

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class UserController extends Controller
 {
@@ -77,24 +78,24 @@ class UserController extends Controller
         $profile_image = $request->file('imagen');
         if ($profile_image) {
             $filename = time() . '.' . $profile_image->getClientOriginalExtension();
-            $path = public_path('uploads/img/' . $filename);
+            //$path = public_path('img/' . $filename);
 
             // Verificar si el usuario ya tiene una imagen guardada
             if ($user->image) {
                 // Si tiene una imagen guardada, elimina el archivo de la imagen
-                $image_path = public_path('uploads/img/' . $user->image);
-                if (file_exists($image_path)) {
-                    unlink($image_path);
-                }
+                //$image_path = public_path('img/' . $user->image);
+                //if (file_exists($image_path)) {
+                //    unlink($image_path);
+                //}
+                Cloudinary::destroy($user->image);
             }
 
+            // Almacenamiento local en servidor
             //$profile_image->move(public_path('img/'), $filename);
             //$profile_image->storeAs('img', $filename,['disk' => 'public_uploads']);
            
-   
             $result = $profile_image->storeOnCloudinary("userImages", $filename);
-
-            $user->image = $result->getSecurePath();
+            $user->image = $result->getPublicId();
             $user->save();
             return redirect()->route('perfil')->with('success', 'Imagen de perfil actualizada correctamente');
             

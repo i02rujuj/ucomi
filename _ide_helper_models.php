@@ -29,6 +29,7 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroGobierno> $miembros
  * @property-read int|null $miembros_count
  * @property-read \App\Models\TipoCentro $tipo
+ * @method static \Illuminate\Database\Eloquent\Builder|Centro filters(\Illuminate\Http\Request $request)
  * @method static \Illuminate\Database\Eloquent\Builder|Centro newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Centro newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Centro onlyTrashed()

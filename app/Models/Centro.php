@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Models\TipoCentro;
+use Illuminate\Http\Request;
 use App\Models\MiembroGobierno;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -34,5 +36,18 @@ class Centro extends Model
     public function tipo()
     {
         return $this->belongsTo(TipoCentro::class, 'idTipo');
+    }
+
+    public function scopeFilters(Builder $query, Request $request){
+        return $query
+            ->when($request->has('filtroTipo') && $request->filtroTipo!=null, function($query) use ($request){
+                return $query->where('idTipo', $request->filtroTipo);
+            })
+            ->when($request->has('filtroNombre'), function($query) use ($request){
+                return $query->where('nombre', 'LIKE', "%{$request->filtroNombre}%");
+            })
+            ->when($request->has('filtroDireccion'), function($query) use ($request){
+                return $query->where('direccion', 'LIKE', "%{$request->filtroDireccion}%");
+            });
     }
 }

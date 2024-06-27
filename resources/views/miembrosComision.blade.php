@@ -222,4 +222,3 @@ Miembros de Comisión
     @endsection
 
 @vite(['resources/js/miembrosComision/miembrosComision.js'])
-@vite(['resources/js/filtros.js'])

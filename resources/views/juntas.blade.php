@@ -219,4 +219,3 @@ Juntas
     @endsection
 
 @vite(['resources/js/juntas/juntas.js'])
-@vite(['resources/js/filtros.js'])

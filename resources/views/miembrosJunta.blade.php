@@ -220,4 +220,3 @@ Miembros de Junta
     @endsection
 
 @vite(['resources/js/miembrosJunta/miembrosJunta.js'])
-@vite(['resources/js/filtros.js'])

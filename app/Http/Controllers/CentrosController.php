@@ -16,17 +16,25 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class CentrosController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
             $centros = Centro::select('id', 'nombre', 'direccion', 'idTipo', 'logo', 'estado')
+            ->filters($request)
             ->where('estado', 1)
             ->orderBy('idTipo')
             ->orderBy('nombre')
-            ->paginate(5);
+            ->paginate(10);
 
             $tiposCentro = TipoCentro::select('id', 'nombre')->get();
-            return view('centros', ['centros' => $centros, 'tiposCentro' => $tiposCentro]);
+
+            return view('centros', [
+                'centros' => $centros, 
+                'tiposCentro' => $tiposCentro,
+                'filtroTipo' => $request['filtroTipo'],
+                'filtroNombre' => $request['filtroNombre'],
+                'filtroDireccion' => $request['filtroDireccion']
+            ]);
 
         } catch (\Throwable $th) {
             return redirect()->route('centros')->with('error', 'No se pudieron obtener los centros: ' . $th->getMessage());

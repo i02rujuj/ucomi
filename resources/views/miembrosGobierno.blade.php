@@ -240,4 +240,3 @@ Miembros de Gobierno
     @endsection
 
 @vite(['resources/js/miembrosGobierno/miembrosGobierno.js'])
-@vite(['resources/js/filtros.js'])

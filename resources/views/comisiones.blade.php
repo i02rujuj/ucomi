@@ -187,4 +187,3 @@ Comisiones
     @endsection
 
 @vite(['resources/js/comisiones/comisiones.js'])
-@vite(['resources/js/filtros.js'])

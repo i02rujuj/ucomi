@@ -91,18 +91,39 @@ Centros
             <button class="accordion w-full text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">Filtros</button>
             <div class="panel">
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-2">
+                <form method="GET" action="{{ route('centros') }}">
+                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-2">
+                        <div class="left-side w-full"> 
+                            <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-full">
 
-                    <div class="left-side w-full"> 
+                                <label for="filtroNombre" class="block text-sm text-gray-600 mb-1">
+                                    Nombre:
+                                </label>
+                                <input id="filtroNombre" name="filtroNombre" type="text" value="{{app('request')->input('filtroNombre')}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none"/>
+                                
+                                <label for="filtroDireccion" class="block text-sm text-gray-600 mb-1">
+                                    Dirección:
+                                </label>
+                                <input id="filtroDireccion" name="filtroDireccion" type="text" value="{{app('request')->input('filtroDireccion')}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none"/>
+                               
+                               <label for="filtroTipo" class="block text-sm text-gray-600 mb-1">
+                                    Tipo:
+                                </label>
+                                
+                                <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" id="filtroTipo" name="filtroTipo">
+                                    <option value="">Todos</option>
+                                    @foreach ($tiposCentro as $tipo)
+                                        <option value="{{ $tipo['id'] }}" {{ (app('request')->input('filtroTipo') == $tipo['id'] ? "selected":"") }}>{{ $tipo['nombre'] }}</option>
+                                    @endforeach
+                                </select>
 
-                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-full">
-                            <span class="block text-sm text-gray-600 mb-1">
-                                Texto: 
-                            </span>
-                            <input type="text" id="search-input" class="text-sm text-gray-600 border py-1 w-full outline-none bg-white px-2 rounded form-input" placeholder="Buscar..." value="{{ request('centro') }}">
+                                <button type="submit" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
+                                    Filtrar
+                                </button>
+                            </div>          
                         </div>
-                    </div>          
-                </div>
+                    </div>
+                </form>
             </div>
 
 <!----------------------------- END FILTROS ---------------------------------->
@@ -139,11 +160,6 @@ Centros
 
                                 <div class="flex items-center gap-2 mt-2" >
                                     <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $centro->tipo->nombre }}</span>
-                                    @if ($centro['estado']==1)
-                                        <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Vigente</span>
-                                    @else
-                                        <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">No vigente</span>
-                                    @endif
                                 </div>
                             </div>
                         </div>         
@@ -155,7 +171,11 @@ Centros
 
 <!----------------------------- START PAGINACIÓN ---------------------------------->
 
-<div class="mt-5">{{$centros->links()}}</div>
+<div class="mt-5">{{$centros->appends([
+    'filtroTipo' => $filtroTipo,
+    'filtroNombre' => $filtroNombre,
+    'filtroDireccion' => $filtroDireccion,
+    ])->links()}}</div>
 
 <!----------------------------- END LISTADOS ---------------------------------->
 
@@ -168,4 +188,3 @@ Centros
     const default_image = "{{asset('img/default_image.png')}}"
 </script>
 @vite(['resources/js/centros/centros.js'])
-@vite(['resources/js/filtros.js'])

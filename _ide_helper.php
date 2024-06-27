@@ -13434,6 +13434,16 @@ namespace Illuminate\Support\Facades {
                     /**
          * 
          *
+         * @see \LaravelLang\Routes\ServiceProvider::boot()
+         * @param \Closure $callback
+         * @static 
+         */        public static function localizedGroup($callback)
+        {
+                        return \Illuminate\Routing\Router::localizedGroup($callback);
+        }
+                    /**
+         * 
+         *
          * @see \Laravel\Ui\AuthRouteMethods::auth()
          * @param mixed $options
          * @static 
@@ -19048,6 +19058,16 @@ namespace Illuminate\Routing {
      *
      * @mixin \Illuminate\Routing\RouteRegistrar
      */        class Router {
+                    /**
+         * 
+         *
+         * @see \LaravelLang\Routes\ServiceProvider::boot()
+         * @param \Closure $callback
+         * @static 
+         */        public static function localizedGroup($callback)
+        {
+                        return \Illuminate\Routing\Router::localizedGroup($callback);
+        }
                     /**
          * 
          *

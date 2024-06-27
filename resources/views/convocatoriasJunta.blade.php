@@ -214,4 +214,3 @@ Convocatorias
     @endsection
 
 @vite(['resources/js/convocatorias/convocatorias.js'])
-@vite(['resources/js/filtros.js'])

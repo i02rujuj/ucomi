@@ -4,16 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Centro;
 use App\Models\TipoCentro;
+use Cloudinary\Asset\Image;
+use Cloudinary\Tag\ImageTag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Cloudinary\Transformation\Format;
+use Cloudinary\Transformation\Resize;
+use Cloudinary\Transformation\Delivery;
 use Illuminate\Support\Facades\Validator;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class CentrosController extends Controller
 {
     public function index()
     {
         try {
-            $centros = Centro::select('id', 'nombre', 'direccion', 'idTipo', 'estado')
+            $centros = Centro::select('id', 'nombre', 'direccion', 'idTipo', 'logo', 'estado')
             ->where('estado', 1)
             ->orderBy('idTipo')
             ->orderBy('nombre')
@@ -34,6 +40,7 @@ class CentrosController extends Controller
                 'nombre' => 'required|max:100|string',
                 'direccion' => 'required|string|max:150',
                 'idTipo' => 'required|integer|exists:App\Models\TipoCentro,id',
+                'logo' => 'nullable|max:1000|mimes:png,jpg,jpeg',
             ], [
                 // Mensajes error nombre
                 'nombre.required' => 'El nombre es obligatorio.',
@@ -47,6 +54,9 @@ class CentrosController extends Controller
                 'idTipo.required' => 'El tipo es obligatorio.',
                 'idTipo.integer' => 'El tipo debe ser un entero',
                 'idTipo.exixts' => 'El tipo no existe.',
+                 // Mensajes error logo
+                 'logo.mimes' => 'El logo debe estar en formato jpeg, jpg ó png.',
+                 'logo.max' => 'El nombre del logo no puede exceder los 1000 caracteres.',
             ]);
 
             if ($validator->fails()) {
@@ -54,12 +64,16 @@ class CentrosController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
+            $url_image = subirImagenCloudinary($request->file('logo'), "logosCentros");
+
             $centro = Centro::create([
                 "nombre" => $request->nombre,
                 "direccion" => $request->direccion,
                 "idTipo" => $request->idTipo,
+                "logo" => $url_image,
                 'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
             ]);
+
             return redirect()->route('centros')->with('success', 'Centro creado correctamente.');
         } catch (\Throwable $th) {
             return redirect()->route('centros')->with('error', 'No se pudo crear el centro: ' . $th->getMessage());
@@ -95,7 +109,7 @@ class CentrosController extends Controller
             $centro = DB::table('centros')
             ->join('tipos_centro', 'centros.idTipo', '=', 'tipos_centro.id')
             ->where('centros.id', $request->id)
-            ->select('centros.id', 'centros.nombre', 'centros.direccion', 'centros.idTipo', 'centros.estado', 'tipos_centro.nombre as tipo')
+            ->select('centros.id', 'centros.nombre', 'centros.direccion', 'centros.idTipo', 'centros.logo', 'centros.estado', 'tipos_centro.nombre as tipo')
             ->first();
 
             if (!$centro) {
@@ -114,9 +128,13 @@ class CentrosController extends Controller
             if (!$centro) {
                 return response()->json(['error' => 'No se ha encontrado el centro.', 'status' => 404], 404);
             }
+
+            $url_image = subirImagenCloudinary($request->data['logo'], "logosCentros");
+
             $centro->nombre = $request->data['nombre'];
             $centro->direccion = $request->data['direccion'];
             $centro->idTipo = $request->data['idTipo'];
+            $centro->logo = $url_image;
             $centro->save();
             return response()->json(['message' => 'El centro se ha actualizado correctamente.', 'status' => 200], 200);
             

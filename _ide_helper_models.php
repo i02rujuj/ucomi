@@ -1,6 +1,7 @@
 <?php
 
 // @formatter:off
+// phpcs:ignoreFile
 /**
  * A helper file for your Eloquent Models
  * Copy the phpDocs from this file to the correct Model,
@@ -18,6 +19,7 @@ namespace App\Models{
  * @property string $nombre
  * @property string $direccion
  * @property int $idTipo
+ * @property string|null $logo
  * @property int $estado
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -37,6 +39,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Centro whereEstado($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Centro whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Centro whereIdTipo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Centro whereLogo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Centro whereNombre($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Centro whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Centro withTrashed()
@@ -363,6 +366,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property mixed $password
  * @property string|null $remember_token
+ * @property string|null $image
  * @property int $estado
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -387,6 +391,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEstado($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)

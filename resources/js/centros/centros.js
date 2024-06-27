@@ -1,6 +1,8 @@
 import { DELETE_CENTRO_BBDD, GET_CENTRO_BBDD, UPDATE_CENTRO_BBDD } from "./axiosTemplate.js";
 import { GET_TIPOSCENTRO_BBDD } from "../tiposCentro/axiosTemplate";
 import Swal from 'sweetalert2';
+import {Cloudinary} from "@cloudinary/url-gen";
+
 
 // EVENTO EDITAR
 const addEditEvent = (button) => {
@@ -17,6 +19,7 @@ const addEditEvent = (button) => {
 
             // Obtenemos el centro a editar
             const response = await GET_CENTRO_BBDD(dataToSend);
+            
             const result = await Swal.fire({
                 title: "Editar Centro",
                 html: `
@@ -41,6 +44,12 @@ const addEditEvent = (button) => {
                             ${options}
                         </select>
                     </div>
+                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
+                        <label for="" class="block text-sm text-gray-600 w-32">
+                            <img src="${response.logo? response.logo : default_image}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
+                        </label>
+                        <input id="logo" name="logo" type="file" class="centro w-60 text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none" autocomplete="off"/>
+                    </div>
                 `,
                 focusConfirm: false,
                 showDenyButton: true,
@@ -61,9 +70,14 @@ const addEditEvent = (button) => {
                 let error = 0;
 
                 inputs.forEach((input) => {
-                    valores[input.id] = input.value;
-                    if (input.value === "") {
-                        error++;
+                    if(input.id!='logo'){
+                        valores[input.id] = input.value;
+                        if (input.value === "") {
+                            error++;
+                        }
+                    }
+                    else{
+                        valores[input.id] = input.files[0]
                     }
                 });
                 

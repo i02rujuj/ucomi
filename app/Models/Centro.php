@@ -19,7 +19,7 @@ class Centro extends Model
     protected $primaryKey = 'id';
     
     //Campos
-    protected $fillable = ['nombre','direccion', 'idTipo', 'estado'];
+    protected $fillable = ['nombre','direccion', 'idTipo', 'estado', 'logo'];
 
     public function juntas()
     {

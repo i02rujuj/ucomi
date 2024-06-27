@@ -17,13 +17,16 @@ PENDIENTE DOCUMENTACIÓN
 - Redactar de otra forma algunos contenidos
 - CRUD convocatorias
 - Documentar código
-
-- Login español
-- login inicio mostrar infotrmaciòn
-- asisten, no asisten, excusan asistencia
-orden del día
+- Login inicio mostrar infotrmaciòn
+- Asisten, no asisten, excusan asistencia
+- Orden del día
+- Junta -> Seleccionar director y secretario - no automático
+- Filtros útiles
+- Convocatorias de junta
+- Mandar email
+- Editar y borrar convocatorias
+- Certificado filtrar por usuario
            
-
 Ct - Ju
 Un centro podrá ser coordinado por varias Juntas a lo largo del tiempo.
 
@@ -87,3 +90,8 @@ Todos los directores tienen que estar cesados para añadir uno nuevo.
 
 Todas las entidades débiles tienen una relación de existencia
 Todas las dependencias de identificación son especializaciones de dependecias de existencia
+
+
+
+
+

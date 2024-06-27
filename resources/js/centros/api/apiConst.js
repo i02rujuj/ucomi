@@ -31,8 +31,11 @@ const ENDPOINT_CENTRO_UPDATE_BBDD = {
     explanation: "This endpoint is used update centro of the server",
     transformResponse: (data) => JSON.parse(data),
     withCredentials: false,
+    processData: false,
+    contentType: false,
     headers: {
-        'content-type': 'application/json',
+        //'content-type': 'application/json',
+        'Content-Type': 'multipart/form-data'
     },
     data: [],
 };

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('direccion');
             $table->unsignedBigInteger('idTipo');
+            $table->string('logo')->nullable();
             $table->boolean('estado');
             $table->timestamps();
             $table->softDeletes();

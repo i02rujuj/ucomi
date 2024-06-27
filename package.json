@@ -18,5 +18,8 @@
         "sweetalert2": "^11.7.18",
         "tailwindcss": "^3.3.3",
         "vite": "^4.0.0"
+    },
+    "dependencies": {
+        "@cloudinary/url-gen": "^1.19.0"
     }
 }

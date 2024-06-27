@@ -19,7 +19,7 @@ Centros
             </div>
             @endif
 
-            <form method="POST" action="{{ route('centros.store') }}" class="bg-white p-8 mb-6 rounded-lg shadow-md">
+            <form method="POST" action="{{ route('centros.store') }}" enctype="multipart/form-data" class="bg-white p-8 mb-6 rounded-lg shadow-md">
                 <h2 class="text-gray-600 font-bold mb-2">Añadir nuevo centro</h2>
                 @csrf
                 <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-2">
@@ -47,7 +47,7 @@ Centros
                             @enderror
                         </div>
                     </div>
-
+                
                     <div class="left-side w-full">
                         <div class="mb-2">
                             <label for="idTipo" class="block text-sm text-gray-600 mb-1">
@@ -65,7 +65,19 @@ Centros
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div> 
-                    </div>  
+                    </div> 
+
+                    <div class="left-side w-full">
+                        <div class="mb-2">
+                            <label for="logo" class="block text-sm text-gray-600 mb-1">
+                                Logotipo:
+                            </label>
+                            <input id="logo" name="logo" type="file" value="{{old("logo")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off"/>
+                            @error('logo')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
                 <button type="submit" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
                     Añadir Centro
@@ -99,11 +111,14 @@ Centros
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                 @foreach ($centros as $centro)
-                    <div id="btn-editar-centro" data-centro-id="{{ $centro['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
-                        <div class="flex items-start justify-between">
-                            <div class="left-part truncate">
+                    <div id="btn-editar-centro" data-centro-id="{{ $centro['id'] }}" class="card bg-white p-4 rounded-lg shadow-md cursor-pointer">
+                        <div class="flex items-start">
+                            <div class="right-part w-full max-w-max">
+                                <img src="{{ $centro->logo ? $centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
+                            </div>
 
-                                <div class="flex items-center">
+                            <div class="left-part truncate w-full max-w-max pl-3">
+                                <div class="flex items-start">
                                     <span class="material-icons-round scale-75">
                                         school
                                     </span>
@@ -130,7 +145,6 @@ Centros
                                         <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">No vigente</span>
                                     @endif
                                 </div>
-
                             </div>
                         </div>         
                     </div>
@@ -143,5 +157,8 @@ Centros
     </div>
     @endsection
 
+<script>
+    const default_image = "{{asset('img/default_image.png')}}"
+</script>
 @vite(['resources/js/centros/centros.js'])
 @vite(['resources/js/filtros.js'])

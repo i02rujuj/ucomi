@@ -192,7 +192,8 @@ Convocatorias
 
                         <div class="flex items-center gap-2 mt-2" >
                             <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Convocatoria de {{$convocatoria['idJunta']==null ? 'Comisión' : 'Junta'}}</span>
-                            
+                        </div>
+                        <div class="flex items-center gap-2 mt-2" >
                             <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{$convocatoria->tipo->nombre}}</span>
                             
                             @if ($convocatoria['fecha']>now())

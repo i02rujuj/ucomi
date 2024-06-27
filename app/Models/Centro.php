@@ -44,10 +44,10 @@ class Centro extends Model
                 return $query->where('idTipo', $request->filtroTipo);
             })
             ->when($request->has('filtroNombre'), function($query) use ($request){
-                return $query->where('nombre', 'LIKE', "%{$request->filtroNombre}%");
+                return $query->whereRaw('LOWER(`nombre`) LIKE ? ', ['%'.trim(strtolower($request->filtroNombre)).'%']);
             })
             ->when($request->has('filtroDireccion'), function($query) use ($request){
-                return $query->where('direccion', 'LIKE', "%{$request->filtroDireccion}%");
+                return $query->whereRaw('LOWER(`direccion`) LIKE ? ', ['%'.trim(strtolower($request->filtroDireccion)).'%']);
             });
     }
 }

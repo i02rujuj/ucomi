@@ -23,7 +23,7 @@ class CentrosController extends Controller
             ->where('estado', 1)
             ->orderBy('idTipo')
             ->orderBy('nombre')
-            ->get();
+            ->paginate(5);
 
             $tiposCentro = TipoCentro::select('id', 'nombre')->get();
             return view('centros', ['centros' => $centros, 'tiposCentro' => $tiposCentro]);

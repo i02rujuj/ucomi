@@ -62,7 +62,7 @@ class JuntasController extends Controller
     }
 
     public function store(Request $request)
-    {
+    { 
         try {
             $validator = Validator::make($request->all(),[
                 'idCentro' => 'required|integer|exists:App\Models\Centro,id',

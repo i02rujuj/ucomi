@@ -5,126 +5,93 @@ Centros
 
 @section ('content')
     <div class="md:ml-64 lg:ml-64 mt-14">
-        <div class="mx-auto p-6">
-
-            @if (session()->has('success'))
-            <div class="mb-2 py-1 px-4 text-sm font-medium bg-green-100 text-slate-700 rounded" role="alert">
-                {{ session("success") }}
-            </div>
-            @endif
-            
-            @if (session()->has('error'))
-            <div class="my-2 py-1 px-4 text-sm font-medium bg-red-100 text-slate-700 rounded" role="alert">
-                {{ session("error") }}
-            </div>
-            @endif
-
-            <form method="POST" action="{{ route('centros.store') }}" enctype="multipart/form-data" class="bg-white p-8 mb-6 rounded-lg shadow-md">
-                <h2 class="text-gray-600 font-bold mb-2">Añadir nuevo centro</h2>
-                @csrf
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-2">
-
-                    <div class="left-side w-full">
-                        <div class="mb-2">
-                            <label for="nombre" class="block text-sm text-gray-600 mb-1">
-                                Nombre:
-                            </label>
-                            <input id="nombre" name="nombre" type="text" value="{{old("nombre")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
-                            @error('nombre')
-                                <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="left-side w-full">
-                        <div>
-                            <label for="direccion" class="block text-sm text-gray-600 mb-1">
-                                Dirección:
-                            </label>
-                            <input id="direccion" name="direccion" type="text" value="{{old("direccion")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
-                            @error('direccion')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                
-                    <div class="left-side w-full">
-                        <div class="mb-2">
-                            <label for="idTipo" class="block text-sm text-gray-600 mb-1">
-                                Tipo:
-                            </label>
-                            
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idTipo" name="idTipo" value="{{old("idTipo")}}">
-                                <option value="">-----</option>
-                                @foreach ($tiposCentro as $tipo)
-                                    <option value="{{ $tipo['id'] }}" {{ (old("idTipo")== $tipo['id'] || app('request')->input('idTipo') == $tipo['id'] ? "selected":"") }}>{{ $tipo['nombre'] }}</option>
-                                @endforeach
-                            </select>
-                        
-                            @error('idTipo')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div> 
-                    </div> 
-
-                    <div class="left-side w-full">
-                        <div class="mb-2">
-                            <label for="logo" class="block text-sm text-gray-600 mb-1">
-                                Logotipo:
-                            </label>
-                            <input id="logo" name="logo" type="file" value="{{old("logo")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off"/>
-                            @error('logo')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-                <button type="submit" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
-                    Añadir Centro
-                </button>
-            </form>
-
-            <hr className="my-6 border-t border-gray-300" />
+        <div class="mx-auto p-2">
 
 <!----------------------------- START FILTROS ---------------------------------->
 
-            <button class="accordion w-full text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">Filtros</button>
-            <div class="panel">
+            <div class="flex justify-between">
+                <div
+                    x-data="{
+                        open: false,
+                        toggle() {
+                            if (this.open) {
+                                return this.close()
+                            }
+            
+                            this.$refs.button.focus()
+                            this.open = true
+                        },
+                        close(focusAfter) {
+                            if (! this.open) return
+                            this.open = false
+                            focusAfter && focusAfter.focus()
+                        }
+                    }"
+                    x-on:keydown.escape.prevent.stop="close($refs.button)"
+                    x-on:focusin.window="! $refs.panel.contains($event.target) && close()"
+                    x-id="['dropdown-button']"
+                    class="relative"
+                >
+                    <!-- Button -->
+                    <button
+                        x-ref="button"
+                        x-on:click="toggle()"
+                        :aria-expanded="open"
+                        :aria-controls="$id('dropdown-button')"
+                        type="button"
+                        class="flex items-center gap-2 bg-white px-5 py-2.5 rounded-md shadow"
+                    >
+                        <span class="material-icons-round scale-75">
+                            filter_alt
+                        </span>
+                    </button>
+            
+                    <!-- Panel -->
+                    <div
+                        x-ref="panel"
+                        x-show="open"
+                        x-transition.origin.top.left
+                        x-on:click.outside="close($refs.button)"
+                        :id="$id('dropdown-button')"
+                        style="display: none;"
+                        class="absolute left-0 mt-2 w-60 rounded-md bg-white shadow-md z-20"
+                    >
+                        <form method="GET" action="{{ route('centros') }}">
+                            <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-2">
+                                <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-full">
 
-                <form method="GET" action="{{ route('centros') }}">
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-2">
-                        <div class="left-side w-full"> 
-                            <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-full">
+                                    <div class="left-part truncate mb-2">                              
+                                        <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1  outline-none" id="filtroTipo" name="filtroTipo">
+                                            <option value="">Todos</option>
+                                        </select>
+                                    </div>
 
-                                <label for="filtroNombre" class="block text-sm text-gray-600 mb-1">
-                                    Nombre:
-                                </label>
-                                <input id="filtroNombre" name="filtroNombre" type="text" value="{{app('request')->input('filtroNombre')}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none"/>
-                                
-                                <label for="filtroDireccion" class="block text-sm text-gray-600 mb-1">
-                                    Dirección:
-                                </label>
-                                <input id="filtroDireccion" name="filtroDireccion" type="text" value="{{app('request')->input('filtroDireccion')}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none"/>
-                               
-                               <label for="filtroTipo" class="block text-sm text-gray-600 mb-1">
-                                    Tipo:
-                                </label>
-                                
-                                <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" id="filtroTipo" name="filtroTipo">
-                                    <option value="">Todos</option>
-                                    @foreach ($tiposCentro as $tipo)
-                                        <option value="{{ $tipo['id'] }}" {{ (app('request')->input('filtroTipo') == $tipo['id'] ? "selected":"") }}>{{ $tipo['nombre'] }}</option>
-                                    @endforeach
-                                </select>
+                                    <input id="filtroNombre" name="filtroNombre" type="text" placeholder="Búsqueda" value="{{app('request')->input('filtroNombre')}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none"/>
 
-                                <button type="submit" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
-                                    Filtrar
-                                </button>
-                            </div>          
-                        </div>
+                                    <button type="submit" value="filtrar" name="action" class="w-full md:w-auto mt-3 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
+                                        Filtrar
+                                    </button>
+
+                                    <button type="submit" value="limpiar" name="action" class="w-full md:w-auto mt-3 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
+                                        Limpiar
+                                    </button>
+                                </div>          
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
+
+                <div>
+                    <div id="btn-add-centro" type="submit" class="flex items-center gap-2 bg-white px-5 py-2.5 rounded-md shadow cursor-pointer">
+                        <span class="material-icons-round scale-75">
+                            add_circle
+                        </span>
+                        Añadir centro
+                    </div>
+                </div>
             </div>
+
+            <hr class="my-4 border-t border-gray-300" />
 
 <!----------------------------- END FILTROS ---------------------------------->
 
@@ -138,7 +105,7 @@ Centros
                                 <img src="{{ $centro->logo ? $centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
                             </div>
 
-                            <div class="left-part truncate w-full max-w-max pl-3">
+                            <div class="left-part truncate w-full max-w-max pl-3 z-10">
                                 <div class="flex items-start">
                                     <span class="material-icons-round scale-75">
                                         school
@@ -174,12 +141,9 @@ Centros
 <div class="mt-5">{{$centros->appends([
     'filtroTipo' => $filtroTipo,
     'filtroNombre' => $filtroNombre,
-    'filtroDireccion' => $filtroDireccion,
     ])->links()}}</div>
 
-<!----------------------------- END LISTADOS ---------------------------------->
-
-
+<!----------------------------- END PAGINACIÓN ---------------------------------->
         </div>
     </div>
     @endsection

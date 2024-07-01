@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Centro;
+use App\Helpers\Helper;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -18,6 +20,7 @@ use App\Http\Controllers\MiembrosGobiernoController;
 use App\Http\Controllers\ConvocatoriasJuntaController;
 use App\Http\Controllers\ConvocatoriasComisionController;
 use App\Http\Controllers\RepresentacionGeneralController;
+use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +55,6 @@ Route::get('/logout', function () {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-
 Route::get('/perfil', [UserController::class, 'index'])->name('perfil');
 Route::post('/perfil', [UserController::class, 'store'])->name('perfil.store');
 Route::post('/save_image_perfil', [UserController::class, 'saveImagePerfil'])->name('saveImagePerfil');
@@ -63,13 +65,13 @@ Route::post('/miembros_gobierno/getbycentro', [MiembrosGobiernoController::class
 Route::post('/miembros_junta/getbycentro', [MiembrosJuntaController::class, 'getByCentro']);
 Route::post('/centro/get', [CentrosController::class, 'get']);
 
-
 Route::group(['middleware' => ['role:admin']], function () {
     // CENTROS
     Route::get('/centros', [CentrosController::class, 'index'])->name('centros');
-    Route::post('/centros', [CentrosController::class, 'store'])->name('centros.store');
+    Route::post('/centro/add', [CentrosController::class, 'store']);
     Route::post('/centro/delete', [CentrosController::class, 'delete']);
     Route::post('/centro/update', [CentrosController::class, 'update']);
+    Route::post('/centro/validate', [CentrosController::class, 'validateCentro']);
 
     // TIPOS DE CENTROS
     Route::post('/tiposCentro', [TiposCentroController::class, 'index']);

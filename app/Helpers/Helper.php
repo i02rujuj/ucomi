@@ -1,12 +1,15 @@
 <?php
 
+namespace App\Helpers; // Your helpers namespace 
+
 use Cloudinary\Asset\Image;
 use Cloudinary\Transformation\Format;
 use Cloudinary\Transformation\Resize;
 use Cloudinary\Transformation\Delivery;
 
-if (!function_exists('subirImagenCloudinary')) {
-    function subirImagenCloudinary($image, $folder)
+class Helper{
+  
+    static function subirImagenCloudinary($image, $folder)
     {
         $url_image=null;
 

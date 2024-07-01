@@ -1,56 +1,174 @@
-import { DELETE_CENTRO_BBDD, GET_CENTRO_BBDD, UPDATE_CENTRO_BBDD } from "./axiosTemplate.js";
+import { DELETE_CENTRO_BBDD, GET_CENTRO_BBDD, UPDATE_CENTRO_BBDD, ADD_CENTRO_BBDD } from "./axiosTemplate.js";
 import { GET_TIPOSCENTRO_BBDD } from "../tiposCentro/axiosTemplate";
 import Swal from 'sweetalert2';
-import {Cloudinary} from "@cloudinary/url-gen";
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
 
+let tiposCentro = null
+
+document.addEventListener("DOMContentLoaded", async (event) => {
+    // Obtener tipos centro
+    tiposCentro = await GET_TIPOSCENTRO_BBDD();
+    var select = document.querySelector('#filtroTipo');
+ 
+    // Rellenar select filtro tipoCentro
+    const searchParams = new URLSearchParams(window.location.search);
+    tiposCentro.forEach(tipo => {
+        var option = document.createElement("option");
+        option.text = tipo.nombre
+        option.value = tipo.id
+        if(tipo.id==searchParams.get('filtroTipo')){
+            option.selected = "selected"
+        }
+        select.add(option);
+    })
+})
+
+function renderHTMLCentro(response){
+
+    let options ="";
+
+    return  `
+        <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
+            <label for="nombre" class="block text-sm text-gray-600 w-32">Nombre *</label>
+            <input type="text" id="nombre" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none required" value="${response ? response.nombre : ""}">
+        </div>
+
+        <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
+            <label for="direccion" class="block text-sm text-gray-600 w-32">Direccion *</label>
+            <input type="text" id="direccion" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required" value="${response ? response.direccion: ""}">
+        </div>
+
+        <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
+            <label for="idTipo" class="block text-sm text-gray-600 mb-1 w-32 pr-6">Tipo *</label>
+            <select id="idTipo" class="swal2-input centro tipo text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required" >
+                <option value="">-----</option>
+                ${tiposCentro.forEach(tipo => {            
+                    options+='<option value="'+tipo.id+'" ';
+                    if(response && tipo.id == response.idTipo) 
+                        options+='selected';
+                    options+='>'+tipo.nombre+'</option>';                                               
+                })}
+                ${options}
+            </select>
+        </div>
+        <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
+            <label for="" class="block text-sm text-gray-600 w-32">
+                <img id="img_logo" name="img_logo" src="${response? response.logo : default_image}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
+            </label>
+            <input id="logo" name="logo" type="file" class="centro w-60 text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none" autocomplete="off"/>
+        </div>
+    `
+}
+
+const preConfirm = async(accion, id=null) => {
+    let valores = {};
+
+    const inputs = document.querySelectorAll(".centro");
+    inputs.forEach((input) => {
+        if(input.id!='logo'){
+            valores[input.id] = input.value;
+        }
+        else{
+            valores[input.id] = input.files[0]
+        }
+    });
+
+    let dataToSend, response, title, text = null
+
+    switch (accion) {
+        case 'add':
+            dataToSend = {
+                data: valores,
+            };
+            response = await ADD_CENTRO_BBDD(dataToSend)
+            title="Añadido"
+            text="Se ha añadido el centro"
+            break;
+    
+        case 'update':
+            dataToSend = {
+                id: id,
+                data: valores,
+            };
+            response = await UPDATE_CENTRO_BBDD(dataToSend)
+            title="Actualizado"
+            text="Se ha actualizado el centro"
+            break;
+    }
+
+    if (response.status === 200) {
+        if(response.errors){
+            let values = '';
+            (response.errors).forEach((value) => {
+                values += value
+            });
+            Swal.showValidationMessage(values)
+        }
+        else{
+            /*Toastify({
+                text: "Hello, I am toasted!!",
+                duration: 3000,
+                destination: "",
+                newWindow: true,
+                close: true,
+                gravity: "top", // `top` or `bottom`
+                position: "right", // `left`, `center` or `right`
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                },
+                onClick: function() {} // Callback after click
+            }).showToast();*/
+            
+            await Swal.fire({
+                icon: "success",
+                title: title,
+                text: text,
+            })
+            window.location.reload()
+        }
+    } 
+    else {
+        Swal.showValidationMessage(response.errors)
+    }
+}
+
+/**
+ * EVENTO AÑADIR
+ */
+const addButton = document.querySelector('#btn-add-centro');
+addButton.addEventListener("click", async (event) => {
+
+    const result = await Swal.fire({
+        title: "Añadir Centro",
+        html: renderHTMLCentro(null),
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: "Añadir",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        didRender: () => {
+            const logo = document.querySelector('#logo')
+            event_change_image(logo)
+        },
+        preConfirm: async () => preConfirm('add')
+    })
+})
 
 // EVENTO EDITAR
 const addEditEvent = (button) => {
     button.addEventListener("click", async (event) => {
-
         const dataToSend = {
             id: button.dataset.centroId,
         };
 
         try {
-            // Obtenemos los tipos de Centro
-            const tiposCentro = await GET_TIPOSCENTRO_BBDD();
-            var options ="";
-
-            // Obtenemos el centro a editar
             const response = await GET_CENTRO_BBDD(dataToSend);
-            
             const result = await Swal.fire({
                 title: "Editar Centro",
-                html: `
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
-                        <label for="nombre" class="block text-sm text-gray-600 w-32">Nombre:</label>
-                        <input type="text" id="nombre" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required value="${response.nombre}">
-                    </div>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
-                        <label for="direccion" class="block text-sm text-gray-600 w-32">Direccion:</label>
-                        <input type="text" id="direccion" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.direccion}">
-                    </div>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
-                        <label for="idTipo" class="block text-sm text-gray-600 mb-1 w-32">Tipo:</label>
-                        <select id="idTipo" class="centro swal2-input tipo text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required">
-                            <option value="">-----</option>
-                            ${tiposCentro.forEach(tipo => {            
-                                options+='<option value="'+tipo.id+'" ';
-                                if(tipo.id == response.idTipo) 
-                                    options+='selected';
-                                options+='>'+tipo.nombre+'</option>';                                               
-                            })}
-                            ${options}
-                        </select>
-                    </div>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
-                        <label for="" class="block text-sm text-gray-600 w-32">
-                            <img src="${response.logo? response.logo : default_image}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
-                        </label>
-                        <input id="logo" name="logo" type="file" class="centro w-60 text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none" autocomplete="off"/>
-                    </div>
-                `,
+                html: renderHTMLCentro(response),
                 focusConfirm: false,
                 showDenyButton: true,
                 showCancelButton: true,
@@ -60,63 +178,15 @@ const addEditEvent = (button) => {
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '',
                 denyButtonColor: '#d33',
+                didRender: function() {
+                    const logo = document.querySelector('#logo')
+                    event_change_image(logo)
+                },
+                preConfirm: async () => preConfirm('update', button.dataset.centroId)
             });
 
-            // BOTÓN ACTUALIZAR
-            if (result.isConfirmed) {
-
-                const inputs = document.querySelectorAll(".centro");
-                const valores = {};
-                let error = 0;
-
-                inputs.forEach((input) => {
-                    if(input.id!='logo'){
-                        valores[input.id] = input.value;
-                        if (input.value === "") {
-                            error++;
-                        }
-                    }
-                    else{
-                        valores[input.id] = input.files[0]
-                    }
-                });
-                
-                if (error > 0) {
-                    await Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Faltan campos por rellenar.",
-                    });
-                } 
-                else {
-
-                    const dataToSend = {
-                        id: button.dataset.centroId,
-                        data: valores,
-                    };
-
-                    const response = await UPDATE_CENTRO_BBDD(dataToSend);
-                    
-                    if (response.status === 200) {
-                        await Swal.fire({
-                            icon: "success",
-                            title: "Actualizado!",
-                            text: "Se ha editado el centro.",
-                        });
-                        window.location.reload();
-                    } 
-                    else {
-                        await Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Ha ocurrido un error al actualizar el centro.",
-                        });
-                    }
-                }
-            }
             // BOTÓN ELIMINAR
-            else if (result.isDenied) {
-
+            if (result.isDenied) {
                 try {
                     const result = await Swal.fire({
                         title: "¿Eliminar el centro?",
@@ -128,9 +198,7 @@ const addEditEvent = (button) => {
                     });
 
                     if (result.isConfirmed) {
-
                         const response = await DELETE_CENTRO_BBDD(dataToSend);
-
                         if (response.status === 200) {
                             await Swal.fire(
                                 "Eliminado",
@@ -147,9 +215,7 @@ const addEditEvent = (button) => {
                             });
                         }
                     }
-
                 } catch (error) {
-
                     await Swal.fire({
                         icon: "error",
                         title: "Oops...",
@@ -169,8 +235,20 @@ const addEditEvent = (button) => {
 };
 
 const editButtons = document.querySelectorAll('#btn-editar-centro');
-
 editButtons.forEach(button => {
     addEditEvent(button);
 });
+
+/**
+ * EVENTO CHANGE IMAGE 
+ */
+const event_change_image = (button) => {
+    button.addEventListener("change", async (event) => {
+
+        const logo = event.srcElement.files[0]
+        if (logo) {
+            document.querySelector('#img_logo').src = URL.createObjectURL(logo)
+        } 
+    })
+}
 

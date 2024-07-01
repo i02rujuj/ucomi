@@ -136,12 +136,16 @@ Miembros de Gobierno
 
 <!----------------------------- START LISTADO ---------------------------------->
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+            <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
                 @foreach ($miembrosGobierno as $miembro)
                     <div id="btn-editar-miembro" data-miembro-id="{{ $miembro['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
-                        <div class="flex items-start justify-between">
-                            <div class="left-part truncate">
+                        <div class="flex items-start gap-3">
 
+                            <div class="right-part w-full max-w-max">
+                                <img src="{{ $miembro->usuario->image ? $miembro->usuario->image : asset('img/default_image_profile.jpg') }}" alt="Imagen de usuario" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
+                            </div>
+                          
+                            <div class="left-part truncate">
                                 <div class="flex items-center">
                                     <span class="material-icons-round scale-75">
                                         person
@@ -206,7 +210,7 @@ Miembros de Gobierno
                             </div>
 
                             @if ($miembro->usuario->hasRole('responsable_centro'))
-                                <div class="right-part truncate">
+                                <div class="right-part">
                                     <div class="flex items-center">
                                         <span class="material-icons-round text-yellow-700">
                                             workspace_premium
@@ -217,11 +221,11 @@ Miembros de Gobierno
 
                         </div>
 
-                        <div class="flex items-center gap-2 mt-2">
+                        <div class="flex justify-end items-center gap-2 mt-4">
                             <span class="text-xs bg-blue-100 font-semibold px-2 rounded-lg truncate">
                                 Miembro de Gobierno
                             </span>
-
+                           
                             @if ($miembro['fechaCese']==null)
                                 <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Vigente</span>
                             @else

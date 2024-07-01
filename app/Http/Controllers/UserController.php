@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use PDF;
 use App\Models\User;
+use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
@@ -83,7 +84,7 @@ class UserController extends Controller
 
         switch ($request->input('action')) {
             case 'save':
-                $url_image = subirImagenCloudinary($request->file('imagen'), "userImages");
+                $url_image = Helper::subirImagenCloudinary($request->file('imagen'), "userImages");
                 $user->image = $url_image;
                 $user->save();
 

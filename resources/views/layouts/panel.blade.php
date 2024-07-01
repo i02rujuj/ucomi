@@ -240,7 +240,7 @@
 
     </div>
 
-    @vite(['resources/js/home.js'])
+    @vite(['resources/js/panel.js'])
 </body>
 
 </html>

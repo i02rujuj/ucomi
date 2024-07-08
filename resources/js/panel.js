@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    var acc = document.getElementsByClassName("accordion-submenu");
-    var i;
+    let acc = document.getElementsByClassName("accordion-submenu");
     
-    for (i = 0; i < acc.length; i++) {
+    for (let i = 0; i < acc.length; i++) {
       acc[i].addEventListener("click", function() {
         this.classList.toggle("submenu-active");
-        var submenu = this.nextElementSibling;
+        let submenu = this.nextElementSibling;
     
         if (submenu.style.maxHeight || submenu.classList.contains("submenu-visible")) {
             submenu.style.maxHeight = null;
@@ -16,31 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
       });
     }
-    
-    var acc = document.getElementsByClassName("accordion");
-    var i;
-    
-    for (i = 0; i < acc.length; i++) {
-      acc[i].addEventListener("click", function() {
-        this.classList.toggle("active");
-        var panel = this.nextElementSibling;
-        if (panel.style.maxHeight) {
-          panel.style.maxHeight = null;
-        } else {
-          panel.style.maxHeight = panel.scrollHeight + "px";
-        }
-      });
-    }
 })
 
-/* Responsive Menu */
-function toggleMenu() {
-  let menu = document.getElementById("menu");
-  menu.classList.toggle("-translate-x-full");
-  menu.classList.toggle("opacity-0");
-  menu.classList.toggle("invisible");
-}
-
-document.getElementById("mostrar_menu").addEventListener("click", toggleMenu);
+document.getElementById("mostrar_menu").addEventListener("click", () => {
+    let menu = document.getElementById("menu")
+    menu.classList.toggle("-translate-x-full")
+    menu.classList.toggle("opacity-0")
+    menu.classList.toggle("invisible")
+});
 
 

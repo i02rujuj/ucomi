@@ -1,19 +1,10 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.app')
 
-    <title>{{ config('app.name', 'Ucomi') }}</title>
-    <link rel="icon" type="image/ico" href="{{ asset('img/favicon.ico') }}"/>
+@section ('title')
+    {{ config('app.name', 'Ucomi') }} 
+@endsection
 
-    <meta name="robots" content="noindex, follow">
-
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-</head>  
-
-<body>
+@section('contentTop')
     <div id="notfound">
         <div class="notfound">
             <div class="notfound-404">
@@ -24,6 +15,4 @@
             <a href="/">Página de inicio</a>
         </div>
     </div>
-</body>
-
-</html>
+@endsection

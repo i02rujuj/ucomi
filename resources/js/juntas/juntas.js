@@ -1,219 +1,218 @@
-import { DELETE_JUNTA_BBDD, GET_JUNTA_BBDD, UPDATE_JUNTA_BBDD } from "./axiosTemplate.js";
-import {GET_CENTRO_BBDD} from '../centros/axiosTemplate';
-
+import { DELETE_JUNTA_BBDD, GET_JUNTA_BBDD, UPDATE_JUNTA_BBDD, ADD_JUNTA_BBDD, VALIDATE_JUNTA_BBDD } from "./axiosTemplate.js";
+import {GETALL_CENTRO_BBDD} from '../centros/axiosTemplate';
 import Swal from 'sweetalert2';
 
-// EVENTO EDITAR
+let centros = null
+
+document.addEventListener("DOMContentLoaded", async (event) => {
+    // Obtener centros
+    centros = await GETALL_CENTRO_BBDD();
+    var select = document.querySelector('#filtroCentro');
+ 
+    // Rellenar select filtro filtroCentro
+    const searchParams = new URLSearchParams(window.location.search);
+    centros.forEach(tipo => {
+        var option = document.createElement("option");
+        option.text = tipo.nombre
+        option.value = tipo.id
+        if(tipo.id==searchParams.get('filtroCentro')){
+            option.selected = "selected"
+        }
+        select.add(option);
+    })
+})
+
+function renderHTMLJunta(response){
+
+    let options ="";
+
+    return  `
+        <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-4 justify-center items-center">
+            <label for="idCentro" class="block text-sm text-gray-600 mb-1 w-36 pr-6">Centro asociado: *</label>
+            <select id="idCentro" class="swal2-input junta text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" ${response && response.idCentro ? 'disabled' : ""} ${response && response.estado==0 ? 'disabled' : ""}>
+                <option value="">-----</option>
+                ${centros.forEach(centro => {            
+                    options+='<option value="'+centro.id+'" ';
+                    if(response && centro.id == response.idCentro) 
+                        options+='selected';
+                    options+='>'+centro.nombre+'</option>';                                               
+                })}
+                ${options}
+            </select>
+        </div>
+        <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
+            <label for="fechaConstitucion" class="block text-sm text-gray-600 w-36">Fecha Constitución: *</label>
+            <input type="date" id="fechaConstitucion" class="swal2-input junta text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" value="${response ? response.fechaConstitucion : ""}" ${response && response.estado==0 ? 'disabled' : ""}>
+        </div>
+        <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
+            <label for="fechaDisolucion" class="block text-sm text-gray-600 w-36">Fecha Disolución:</label>
+            <input type="date" id="fechaDisolucion" class="junta swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response ? response.fechaDisolucion : ""}" ${response && response.estado==0 ? 'disabled' : ""}>
+        </div>     
+    `
+}
+
+const preConfirm = async(accion, id=null) => {
+    let valores = {};
+
+    const inputs = document.querySelectorAll(".junta");
+    inputs.forEach((input) => {
+        valores[input.id] = input.value;
+    });
+
+    if(!valores['fechaDisolucion']){
+        valores['fechaDisolucion']=null;
+    }
+
+    let dataToSend, response, title, text = null
+    let mostrar=true
+
+    switch (accion) {
+        case 'add':
+            dataToSend = {
+                data: valores,
+            };
+            response = await ADD_JUNTA_BBDD(dataToSend)
+            title="Añadido"
+            text="Se ha añadido la junta"
+            break;
+    
+        case 'update':
+
+            dataToSend = {
+                id: id,
+                accion: 'update',
+                data: valores,
+            };
+
+            response = await VALIDATE_JUNTA_BBDD(dataToSend)
+
+            if (response.status === 200) {
+                let confirmarCesarMiembros = false
+
+                // Avisar sobre poner fecha Cese como fecha disolución de la junta
+                if(valores['fechaDisolucion']!=null){
+                    const result2 = await Swal.fire({
+                        text: "Se ha indicado una fecha de disolución para la junta. Todos los miembros de la junta cesarán con la fecha de disolución indicada",
+                        focusConfirm: false,
+                        showCancelButton: true,
+                        confirmButtonText: "Aceptar",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '',
+                        preConfirm: async () => {confirmarCesarMiembros = true},
+                    })
+
+                    if(result2.isDismissed){mostrar=false}
+                }
+    
+                if(valores['fechaDisolucion']==null || confirmarCesarMiembros){
+        
+                    response = await UPDATE_JUNTA_BBDD(dataToSend);
+                    title="Actualizado"
+                    text="Se ha actualizado la junta"
+                    confirmarCesarMiembros ? text+=' y se han cesado a todos los miembros de la junta.' : ''
+                }
+            }
+            break
+
+        case 'delete':
+
+            dataToSend = {
+                id: id,
+                accion: 'delete',
+            }
+
+            response = await VALIDATE_JUNTA_BBDD(dataToSend);
+
+            if (response.status === 200) {
+                const result = await Swal.fire({
+                    title: "¿Eliminar la junta?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "",
+                    confirmButtonText: "Eliminar",
+                    preConfirm: async () => {        
+                        response = await DELETE_JUNTA_BBDD(dataToSend);
+                        title="Eliminado"
+                        text="Se ha eliminado la junta"
+                    }
+                })
+
+                if(result.isDismissed){mostrar=false}     
+            }
+            break
+    }
+
+    if(mostrar){
+        if (response.status === 200) {
+            await Swal.fire({
+                icon: "success",
+                title: title,
+                text: text,
+            })
+            window.location.reload()
+        } 
+        else {
+            Swal.showValidationMessage(response.errors)
+            return false
+        }
+    } 
+}
+
+/**
+ * EVENTO AÑADIR
+ */
+const addButton = document.querySelector('#btn-add-junta');
+addButton.addEventListener("click", async (event) => {
+
+    await Swal.fire({
+        title: "Añadir Junta",
+        html: renderHTMLJunta(null),
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: "Añadir",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        preConfirm: async () => preConfirm('add')
+    })
+})
+
+// EVENTO EDITAR Y ELIMINAR
 const addEditEvent = (button) => {
     button.addEventListener("click", async (event) => {
-        
-        const dataToSend = {
-            id: button.dataset.juntaId,
-        };
-
         try {
+            const dataToSend = {
+                id: button.dataset.juntaId,
+            };   
 
             // Obtenemos la junta a editar
-            const response = await GET_JUNTA_BBDD(dataToSend);
+            const response = await GET_JUNTA_BBDD(dataToSend)
 
-            const dataToSendCentro = {
-                id: response.idCentro,
-            };
-
-            const centro = await GET_CENTRO_BBDD(dataToSendCentro); 
-
-            const dataToSendUsuario = {
-                id: response.idUsuario,
-            };
-
-            const result = await Swal.fire({
-                title: "Editar Junta",
-                html: `
-                    <input type="hidden" id="idCentro" value="${centro.id}"/>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
-                        <label for="centro" class="block text-sm text-gray-600 w-32">Centro:</label>
-                        <input type="text" id="centro" class="swal2-input junta text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${centro.nombre}" readonly>
-                    </div>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
-                        <label for="fechaConstitucion" class="block text-sm text-gray-600 w-32">Fecha Constitución:</label>
-                        <input type="date" id="fechaConstitucion" class="swal2-input junta text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required value="${response.fechaConstitucion}">
-                    </div>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
-                        <label for="fechaDisolucion" class="block text-sm text-gray-600 w-32">Fecha Disolución:</label>
-                        <input type="date" id="fechaDisolucion" class="junta swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.fechaDisolucion}">
-                    </div>     
-                `,
+            await Swal.fire({
+                title: response && response.estado==0 ? 'Junta eliminada' : 'Editar Junta',
+                html: renderHTMLJunta(response),
                 focusConfirm: false,
-                showDenyButton: true,
-                showCancelButton: true,
+                showDenyButton: response && response.estado==0 ? false : true,
+                showCancelButton: response && response.estado==0 ? false : true,
+                showConfirmButton: response && response.estado==0 ? false : true,
                 denyButtonText: 'Eliminar',
                 confirmButtonText: "Actualizar",
                 cancelButtonText: "Cancelar",
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '',
                 denyButtonColor: '#d33',
+                preConfirm: async () => preConfirm('update', button.dataset.juntaId),
+                preDeny: async () => preConfirm('delete', button.dataset.juntaId),
             });
 
-            // BOTÓN ACTUALIZAR
-            if (result.isConfirmed) {
-
-                const inputs = document.querySelectorAll(".junta");
-                const valores = {};
-                let error = 0;
-
-                inputs.forEach((input) => {
-                    valores[input.id] = input.value;
-                    if (input.id!='fechaDisolucion' && input.value === "") {
-                        error++;
-                    }
-                });
-
-                // Si es vacío fechaDisolución, colocamos un null
-                if(!valores['fechaDisolucion']){
-                    valores['fechaDisolucion']=null;
-                }
-                
-                if (error > 0) {
-
-                    await Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Faltan campos por rellenar.",
-                    });
-
-                } else {
-
-                    // Avisar sobre poner fecha Cese como fecha disolución de la junta
-                    if(valores['fechaDisolucion']!=null){
-                        const result2 = await Swal.fire({
-                            text: "Se ha indicado una fecha de disolución para la junta. Todos los miembros de la junta cesarán con la fecha de disolución indicada",
-                            focusConfirm: false,
-                            showCancelButton: true,
-                            confirmButtonText: "Aceptar",
-                            cancelButtonText: "Cancelar",
-                            confirmButtonColor: '#d33',
-                            cancelButtonColor: '',
-                        });
-
-                        // BOTÓN ACTUALIZAR CESANDO A LOS MIEMBROS
-                        if (result2.isConfirmed) {
-
-                            const dataToSend = {
-                                id: button.dataset.juntaId,
-                                data: valores,
-                            };
-
-                            const response = await UPDATE_JUNTA_BBDD(dataToSend);
-
-                            if (response.status === 200) {
-
-                                await Swal.fire({
-                                    icon: "success",
-                                    title: "Updated!",
-                                    text: "Se ha editado la junta y se han cesado a todos los miembros de la junta.",
-                                });
-
-                                window.location.reload();
-
-                            } else {
-
-                                await Swal.fire({
-                                    icon: "error",
-                                    title: "Oops...",
-                                    text: response.error,
-                                });
-
-                            }
-                        }
-                    }
-                    else{
-                        // BOTÓN ACTUALIZAR
-                        if (result.isConfirmed) {
-
-                            const dataToSend = {
-                                id: button.dataset.juntaId,
-                                data: valores,
-                            };
-
-                            const response = await UPDATE_JUNTA_BBDD(dataToSend);
-
-                            if (response.status === 200) {
-
-                                await Swal.fire({
-                                    icon: "success",
-                                    title: "Updated!",
-                                    text: "Se ha editado la junta.",
-                                });
-
-                                window.location.reload();
-
-                            } else {
-
-                                await Swal.fire({
-                                    icon: "error",
-                                    title: "Oops...",
-                                    text: response.error,
-                                });
-
-                            }
-                        }
-                    }   
-                }
-            }
-            // BOTÓN ELIMINAR
-            else if (result.isDenied) {
-
-                try {
-                    const result = await Swal.fire({
-                        title: "¿Eliminar la junta?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#d33",
-                        cancelButtonColor: "",
-                        confirmButtonText: "Eliminar",
-                    });
-
-                    if (result.isConfirmed) {
-
-                        const response = await DELETE_JUNTA_BBDD(dataToSend);
-
-                        if (response.status === 200) {
-
-                            await Swal.fire(
-                                "Eliminada",
-                                "La junta fue eliminada.",
-                                "success"
-                            );
-
-                            window.location.reload();
-
-                        } 
-                        else {
-                            await Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Ha ocurrido un error al eliminar la junta. " + response.error,
-                            });
-                        }
-                    }
-
-                } catch (error) {
-
-                    await Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Ha ocurrido un error al eliminar la junta",
-                    });
-                }
-            }
         } catch (error) {
-
             await Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "Ha ocurrido un error al editar la junta.",
+                text: "Ha ocurrido un error al realizar una operación con la junta.",
             });
-
         }
     });
 };
@@ -222,64 +221,4 @@ const editButtons = document.querySelectorAll('#btn-editar-junta');
 
 editButtons.forEach(button => {
     addEditEvent(button);
-});
-
-// EVENTO COMPROBAR DIRECTOR Y SECRETARIO
-const selectJuntas = document.getElementById("idCentro");
-
-selectJuntas.addEventListener("change", async (event) => {
-
-    const idCentro = document.getElementById("idCentro").value;
-    const idDirector = document.getElementById("idDirector");
-    const idSecretario = document.getElementById("idSecretario");
-    const nombreDirector = document.getElementById("nombreDirector");
-    const nombreSecretario = document.getElementById("nombreSecretario");
-    const errorDirector = document.getElementById("errorDirector");
-    const errorSecretario = document.getElementById("errorSecretario");
-    const errorDirectorFront = document.getElementById("errorDirectorFront");
-    const errorSecretarioFront = document.getElementById("errorSecretarioFront");
-
-    if(errorDirector)
-        errorDirector.innerHTML="";
-    if(errorSecretario)
-        errorSecretario.innerHTML="";
-
-    errorDirectorFront.innerHTML="";
-    errorSecretarioFront.innerHTML="";
-
-    $.ajax({
-        type: "POST",
-        url: '/miembro_gobierno/getDirectivos',
-        data: {
-            _token: $("meta[name='csrf-token']").attr("content"),
-            idCentro: idCentro,
-        },
-        success: function (response) {
-            //director.value=response['director']?.id ?? "No existe directivo activo para el centro seleccionado";
-            //secretario.value=response['secretario']?.id ?? "---";
-
-            if(response['director'] && Object.hasOwn(response['director'], 'id')){
-                idDirector.value=response['director'].id;
-                nombreDirector.value=response['director'].name;
-            }
-            else{
-                idDirector.value="";
-                nombreDirector.value ="";
-                errorDirectorFront.innerHTML = '<span class="text-red-500 text-xs mt-1">No existe director/decano vigente para el centro seleccionado. <a class="inline-block w-full mt-1 md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" href="/miembros_gobierno?idCentro='+idCentro+'&idRepresentacion=1">Añadir director</a>';
-            }
-
-            if(response['secretario'] && Object.hasOwn(response['secretario'], 'id')){
-                idSecretario.value=response['secretario'].id;
-                nombreSecretario.value=response['secretario'].name;
-            }
-            else{
-                idSecretario.value="";
-                nombreSecretario.value = "";
-                errorSecretarioFront.innerHTML = '<span class="text-red-500 text-xs mt-1">No existe secretario vigente para el centro seleccionado. <a class="inline-block w-full mt-1 md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded" href="/miembros_gobierno?idCentro='+idCentro+'&idRepresentacion=2">Añadir secretario</a>';
-            }
-        },
-        error: function (errorMessage) {
-            $("#errorMessage").append("Error: " + errorMessage);
-        }
-    });
 });

@@ -20,7 +20,7 @@ Miembros de Gobierno
             @endif
 
             <form method="POST" action="{{ route('miembrosGobierno.store') }}" class="bg-white p-8 mb-6 rounded-lg shadow-md">
-                <h2 class="text-gray-600 font-bold mb-2">Añadir nuevo miembro de Gobierno</h2>
+                <h2 class="text-gray-600 font-bold mb-2">Añadir nuevo miembro de Centro</h2>
                 @csrf
                 <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">
 
@@ -223,7 +223,7 @@ Miembros de Gobierno
 
                         <div class="flex justify-end items-center gap-2 mt-4">
                             <span class="text-xs bg-blue-100 font-semibold px-2 rounded-lg truncate">
-                                Miembro de Gobierno
+                                Miembro de Centro
                             </span>
                            
                             @if ($miembro['fechaCese']==null)

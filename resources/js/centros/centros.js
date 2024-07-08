@@ -1,8 +1,6 @@
 import { DELETE_CENTRO_BBDD, GET_CENTRO_BBDD, UPDATE_CENTRO_BBDD, ADD_CENTRO_BBDD } from "./axiosTemplate.js";
 import { GET_TIPOSCENTRO_BBDD } from "../tiposCentro/axiosTemplate";
 import Swal from 'sweetalert2';
-import Toastify from 'toastify-js'
-import "toastify-js/src/toastify.css"
 
 let tiposCentro = null
 
@@ -31,17 +29,17 @@ function renderHTMLCentro(response){
     return  `
         <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
             <label for="nombre" class="block text-sm text-gray-600 w-32">Nombre *</label>
-            <input type="text" id="nombre" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none required" value="${response ? response.nombre : ""}">
+            <input type="text" id="nombre" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none required" value="${response ? response.nombre : ""}" ${response && response.estado==0 ? 'disabled' : ""}>
         </div>
 
         <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
             <label for="direccion" class="block text-sm text-gray-600 w-32">Direccion *</label>
-            <input type="text" id="direccion" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required" value="${response ? response.direccion: ""}">
+            <input type="text" id="direccion" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required" value="${response ? response.direccion: ""}" ${response && response.estado==0 ? 'disabled' : ""}>
         </div>
 
         <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
             <label for="idTipo" class="block text-sm text-gray-600 mb-1 w-32 pr-6">Tipo *</label>
-            <select id="idTipo" class="swal2-input centro tipo text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required" >
+            <select id="idTipo" class="swal2-input centro tipo text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required" ${response && response.estado==0 ? 'disabled' : ""}>
                 <option value="">-----</option>
                 ${tiposCentro.forEach(tipo => {            
                     options+='<option value="'+tipo.id+'" ';
@@ -56,7 +54,7 @@ function renderHTMLCentro(response){
             <label for="" class="block text-sm text-gray-600 w-32">
                 <img id="img_logo" name="img_logo" src="${response? response.logo : default_image}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
             </label>
-            <input id="logo" name="logo" type="file" class="centro w-60 text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none" autocomplete="off"/>
+            <input id="logo" name="logo" type="file" class="centro w-60 text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none" autocomplete="off" ${response && response.estado==0 ? 'disabled' : ""}/>
         </div>
     `
 }
@@ -95,39 +93,38 @@ const preConfirm = async(accion, id=null) => {
             title="Actualizado"
             text="Se ha actualizado el centro"
             break;
+
+        case 'delete':
+
+            const result = await Swal.fire({
+                title: "¿Eliminar el centro?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "",
+                confirmButtonText: "Eliminar",
+            });
+
+            if (result.isConfirmed) {
+
+                dataToSend = {
+                    id: id,
+                };
+
+                response = await DELETE_CENTRO_BBDD(dataToSend);
+                title="Eliminado"
+                text="Se ha eliminado el centro"
+            }
+            break;
     }
 
-    if (response.status === 200) {
-        if(response.errors){
-            let values = '';
-            (response.errors).forEach((value) => {
-                values += value
-            });
-            Swal.showValidationMessage(values)
-        }
-        else{
-            /*Toastify({
-                text: "Hello, I am toasted!!",
-                duration: 3000,
-                destination: "",
-                newWindow: true,
-                close: true,
-                gravity: "top", // `top` or `bottom`
-                position: "right", // `left`, `center` or `right`
-                stopOnFocus: true, // Prevents dismissing of toast on hover
-                style: {
-                    background: "linear-gradient(to right, #00b09b, #96c93d)",
-                },
-                onClick: function() {} // Callback after click
-            }).showToast();*/
-            
-            await Swal.fire({
-                icon: "success",
-                title: title,
-                text: text,
-            })
-            window.location.reload()
-        }
+    if (response.status === 200) {     
+        await Swal.fire({
+            icon: "success",
+            title: title,
+            text: text,
+        })
+        window.location.reload()
     } 
     else {
         Swal.showValidationMessage(response.errors)
@@ -140,7 +137,7 @@ const preConfirm = async(accion, id=null) => {
 const addButton = document.querySelector('#btn-add-centro');
 addButton.addEventListener("click", async (event) => {
 
-    const result = await Swal.fire({
+    await Swal.fire({
         title: "Añadir Centro",
         html: renderHTMLCentro(null),
         focusConfirm: false,
@@ -157,21 +154,22 @@ addButton.addEventListener("click", async (event) => {
     })
 })
 
-// EVENTO EDITAR
+// EVENTO EDITAR Y ELIMINAR
 const addEditEvent = (button) => {
     button.addEventListener("click", async (event) => {
-        const dataToSend = {
-            id: button.dataset.centroId,
-        };
-
         try {
+            const dataToSend = {
+                id: button.dataset.centroId,
+            }
+
             const response = await GET_CENTRO_BBDD(dataToSend);
-            const result = await Swal.fire({
-                title: "Editar Centro",
+            await Swal.fire({
+                title: response && response.estado==0 ? 'Centro eliminado' : 'Editar Centro',
                 html: renderHTMLCentro(response),
                 focusConfirm: false,
-                showDenyButton: true,
-                showCancelButton: true,
+                showDenyButton: response && response.estado==0 ? false : true,
+                showCancelButton: response && response.estado==0 ? false : true,
+                showConfirmButton: response && response.estado==0 ? false : true,
                 denyButtonText: 'Eliminar',
                 confirmButtonText: "Actualizar",
                 cancelButtonText: "Cancelar",
@@ -182,53 +180,15 @@ const addEditEvent = (button) => {
                     const logo = document.querySelector('#logo')
                     event_change_image(logo)
                 },
-                preConfirm: async () => preConfirm('update', button.dataset.centroId)
+                preConfirm: async () => preConfirm('update', button.dataset.centroId),
+                preDeny: async () => preConfirm('delete', button.dataset.centroId),
             });
 
-            // BOTÓN ELIMINAR
-            if (result.isDenied) {
-                try {
-                    const result = await Swal.fire({
-                        title: "¿Eliminar el centro?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#d33",
-                        cancelButtonColor: "",
-                        confirmButtonText: "Eliminar",
-                    });
-
-                    if (result.isConfirmed) {
-                        const response = await DELETE_CENTRO_BBDD(dataToSend);
-                        if (response.status === 200) {
-                            await Swal.fire(
-                                "Eliminado",
-                                "El centro fue eliminado.",
-                                "success"
-                            );
-                            window.location.reload();
-                        } 
-                        else {
-                            await Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Ha ocurrido un error al eliminar el centro. " + response.error,
-                            });
-                        }
-                    }
-                } catch (error) {
-                    await Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Ha ocurrido un error al eliminar el centro",
-                    });
-                }
-            }
         } catch (error) {
-            console.error(error);
             await Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "Ha ocurrido un error al editar el centro.",
+                text: "Ha ocurrido un error al realizar una operación con el centro.",
             });
         }
     });
@@ -251,4 +211,3 @@ const event_change_image = (button) => {
         } 
     })
 }
-

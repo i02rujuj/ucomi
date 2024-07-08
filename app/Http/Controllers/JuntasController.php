@@ -14,21 +14,35 @@ use Illuminate\Support\Facades\Validator;
 
 class JuntasController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
+
+            $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'estado');
+
+            switch ($request->input('action')) {
+                case 'limpiar':
+                    $request['filtroCentro']=null;
+                    $request['filtroVigente']=null;
+                    $request['filtroEstado']=null;
+                    break;
+                case 'filtrar':
+                    $juntas = $juntas->filters($request);
+                    break;
+                default:
+                    $juntas = $juntas->where('estado', 1);
+                    break;
+            }
 
             $user = Auth::user();
 
             if($user->hasRole('admin')){
                 $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
 
-                $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'estado')
-                ->where('estado', 1)
+                $juntas = $juntas->orderBy('estado', 'desc')
                 ->orderBy('fechaDisolucion')
-                ->orderBy('idCentro')
-                ->orderBy('fechaConstitucion')
-                ->get();
+                ->orderBy('fechaConstitucion', 'desc')
+                ->paginate(5);
             }
             
             if($user->hasRole('responsable_centro')){
@@ -39,129 +53,85 @@ class JuntasController extends Controller
                 ->select('centros.id', 'centros.nombre')
                 ->first();
 
-                $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'estado')
-                ->where('idCentro', $centro->id)
-                ->where('estado', 1)
+                $juntas = $juntas->where('idCentro', $centro->id)
+                ->orderBy('estado', 'desc')
                 ->orderBy('fechaDisolucion')
-                ->orderBy('idCentro')
-                ->orderBy('fechaConstitucion')
-                ->get();
+                ->orderBy('fechaConstitucion', 'desc')
+                ->paginate(5);
 
                 $centros=array($centro);
             }
 
             if($user->hasRole('responsable_junta')){
-           
+                /* ////////////////////////////////////*/
             }
 
-            return view('juntas', ['juntas' => $juntas, 'centros' => $centros]);
+            if($request->input('action')=='limpiar'){
+                return redirect()->route('juntas')->with([
+                    'juntas' => $juntas, 
+                    'centros' => $centros,
+                ]);
+            }
+
+            return view('juntas', [
+                'juntas' => $juntas, 
+                'centros' => $centros,
+                'filtroCentro' => $request['filtroCentro'],
+                'filtroVigente' => $request['filtroVigente'],
+                'filtroEstado' => $request['filtroEstado'],
+                'action' => $request['action'],
+            ]);
 
         } catch (\Throwable $th) {
-            return redirect()->route('juntas')->with('error', 'No se pudieron obtener las juntas: ' . $th->getMessage());
+            return redirect()->route('juntas')->with('errors', 'No se pudieron obtener las juntas: ' . $th->getMessage());
         }
     }
 
     public function store(Request $request)
     { 
         try {
-            $validator = Validator::make($request->all(),[
-                'idCentro' => 'required|integer|exists:App\Models\Centro,id',
-                'fechaConstitucion' => 'required|date',
-                'fechaDisolucion' => 'nullable|date',
-                'idDirector' => 'required|integer|exists:App\Models\User,id',
-                'idSecretario' => 'required|integer|exists:App\Models\User,id',
-            ], [
-                // Mensajes error idCentro
-                'idCentro.required' => 'El centro es obligatorio.',
-                'idCentro.integer' => 'El centro debe ser un entero.',
-                'idCentro.exists' => 'El centro seleccionado no existe.',
-                // Mensajes error fechaConstitucion
-                'fechaConstitucion.required' => 'La fecha de constitución es obligatoria.',
-                'fechaConstitucion.date' => 'La fecha de constitución debe tener el formato fecha DD/MM/YYYY.',
-                // Mensajes error fechaDisolucion
-                'fechaDisolucion.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
-                // Mensajes error director
-                'idDirector.required' => 'Es necesario que exista un director/decano actual en el equipo de gobierno del centro para crear una nueva junta.',
-                'idDirector.integer' => 'Es necesario que exista un director/decano actual en el equipo de gobierno del centro para crear una nueva junta.',
-                'idDirector.exists' => 'El director seleccionado no existe.',
-                // Mensajes error secretario
-                'idSecretario.required' => 'Es necesario que exista un secretario actual en el equipo de gobierno del centro para crear una nueva junta.',
-                'idSecretario.integer' => 'Es necesario que exista un secretario actual en el equipo de gobierno del centro para crear una nueva junta.',
-                'idSecretario.exists' => 'El secretario seleccionado no existe.',
-            ]);
-
-            if ($validator->fails()) {
-                // Si la validación falla, redirige de vuelta con los errores
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
-
-            if($request->fechaDisolucion!=null){
-                // Validar que fechaConstitución no pueda ser mayor a fechaDisolución
-                $dateConstitucion = new DateTime($request->fechaConstitucion);
-                $dateDisolucion = new DateTime($request->fechaDisolucion);
-
-                if ($dateConstitucion>$dateDisolucion) {
-                    return redirect()->route('juntas')->with('error', 'La fecha de disolución '.$request->fechaDisolucion.' no puede ser anterior a la fecha de constitución '. $request->fechaConstitucion)->withInput();
-                }
-            }
-            else{
-                // Comprobación existencia junta en activo para el centro seleccionado
-                $junta = Junta::select('id')
-                ->where('idCentro', $request->get('idCentro'))
-                ->where('fechaDisolucion', null)
-                ->where('estado', 1)
-                ->first();
-
-                if($junta)
-                    return redirect()->route('juntas')->with('error', 'No se pudo crear la junta: ya existe una junta en activo para el centro indicado')->withInput();
+            $request['accion']='add';
+            $validation = $this->validateJunta($request);
+            if($validation->original['status']!=200){
+                return $validation;
             }
            
             $junta = Junta::create([
-                "idCentro" => $request->idCentro,
-                "fechaConstitucion" => $request->fechaConstitucion,
-                "fechaDisolucion" => $request->fechaDisolucion,
+                "idCentro" => $request->data['idCentro'],
+                "fechaConstitucion" => $request->data['fechaConstitucion'],
+                "fechaDisolucion" => $request->data['fechaDisolucion'],
                 'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
             ]);
 
-            $director = DB::table('miembros_gobierno')
-            ->where('idUsuario', $request->idDirector)
-            ->update(['idJunta' => $junta->id]);
-
-            $secretario = DB::table('miembros_gobierno')
-            ->where('idUsuario', $request->idSecretario)
-            ->update(['idJunta' => $junta->id]);
-
-            return redirect()->route('juntas')->with('success', 'Junta creada correctamente.');
+            return response()->json(['message' => 'La junta se ha añadido correctamente.', 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return redirect()->route('juntas')->with('error', 'No se pudo crear la junta: ' . $th->getMessage());
+            return response()->json(['errors' => 'Error al añadir la junta.', 'status' => 422], 200);
         }
     }
 
     public function delete(Request $request)
     {
         try {
+
+            $request['accion']='delete';
+            $validation = $this->validateJunta($request);
+            if($validation->original['status']!=200){
+                return $validation;
+            }
+
             $junta = Junta::where('id', $request->id)->first();
 
             if (!$junta) {
-                return response()->json(['error' => 'No se ha encontrado la junta.'], 404);
+                return response()->json(['errors' => 'No se ha encontrado la junta.','status' => 422], 200);
             }
-
-            if($junta->miembrosJunta->where('estado', 1)->count() > 0)
-                return response()->json(['error' => 'Existen miembros de junta asociadas a esta junta. Para borrar la junta es necesario eliminar todos sus miembros de junta.', 'status' => 404], 200);
-
-            if($junta->comisiones->where('estado', 1)->count() > 0)
-                return response()->json(['error' => 'Existen comisiones asociadas a esta junta. Para borrar la junta es necesario eliminar todas sus comisiones.', 'status' => 404], 200);
-
-            if($junta->convocatorias->where('estado', 1)->count() > 0)
-                return response()->json(['error' => 'Existen convocatorias asociadas a esta junta. Para borrar la junta es necesario eliminar todas sus convocatorias.', 'status' => 404], 200);
 
             $junta->estado = 0;
             $junta->save();
             return response()->json(['status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se ha encontrado la junta.'], 404);
+            return response()->json(['errors' => 'No se ha encontrado la junta.','status' => 422], 200);
         }
     }
 
@@ -170,47 +140,30 @@ class JuntasController extends Controller
         try {
             $junta = Junta::where('id', $request->id)->first();
             if (!$junta) {
-                return response()->json(['error' => 'No se ha encontrado la junta.'], 404);
+                return response()->json(['errors' => 'No se ha encontrado la junta.','status' => 422], 200);
             }
             return response()->json($junta);
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se ha encontrado la junta.'], 404);
+            return response()->json(['errors' => 'No se ha encontrado la junta.','status' => 422], 200);
         }
     }
 
     public function update(Request $request)
     {
         try {
-            $junta = Junta::where('id', $request->id)->first();
+            $request['accion']='update';
+            $validation = $this->validateJunta($request);
+            if($validation->original['status']!=200){
+                return $validation;
+            }
+
+            $junta=Junta::where('id', $request->id)->first();
 
             if (!$junta) {
-                return response()->json(['error' => 'No se ha encontrado la junta.', 'status' => 404], 404);
+                return response()->json(['errors' => 'No se ha encontrado la junta.', 'status' => 422], 200);
             }
 
-            // Comprobar al actualizar que solamente puede haber una junta en activo (fechaDisolucion=null)
-            // O estaba ya a null o quiere convertirla en actual
-            if($request->data['fechaDisolucion']==null){
-                // Comprobación existencia junta en activo para el centro seleccionado que no sea la propia
-                $juntaActiva = Junta::select('id')
-                    ->where('idCentro', $junta->idCentro)
-                    ->where('fechaDisolucion', null)
-                    ->where('estado', 1)
-                    ->whereNot('id', $junta->id)
-                    ->first();
-
-                if ($juntaActiva) {
-                    return response()->json(['error' => 'No se pudo crear la junta: ya existe una junta vigente para el centro indicado', 'status' => 404], 200);
-                } 
-            }
-            else{
-                // Validar que fechaConstitución no pueda ser mayor a fechaDisolución
-                $dateConstitucion = new DateTime($request->data['fechaConstitucion']);
-                $dateDisolucion = new DateTime($request->data['fechaDisolucion']);
-
-                if ($dateConstitucion>$dateDisolucion) {
-                    return response()->json(['error' => 'La fecha de disolución no puede ser anterior a la fecha de constitución de la junta', 'status' => 404], 200);
-                } 
-
+            if($request->data['fechaDisolucion']!=null){
                 $miembrosJunta = DB::table('miembros_junta')
                 ->where('idJunta', $junta->id)
                 ->update(['fechaCese' => $request->data['fechaDisolucion']]);
@@ -222,7 +175,7 @@ class JuntasController extends Controller
             return response()->json(['message' => 'La junta se ha actualizado correctamente.', 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'Error al actualizar la junta.', 'status' => 404], 404);
+            return response()->json(['errors' => 'Error al actualizar la junta.', 'status' => 422], 200);
         }
     }
 
@@ -236,13 +189,100 @@ class JuntasController extends Controller
             ->get();
 
             if (!$juntas) {
-                return response()->json(['error' => 'No se han podido obtener las juntas.'], 404);
+                return response()->json(['errors' => 'No se han podido obtener las juntas.','status' => 422], 200);
             }
 
             return response()->json($juntas);
 
         } catch (\Throwable $th) {
-            return redirect()->route('juntas')->with('error', 'No se pudieron obtener las juntas: ' . $th->getMessage());
+            return response()->json(['errors' => 'No se han podido obtener las juntas.','status' => 422], 200);
         }
+    }
+
+    public function rules()
+    {
+        $rules = [
+            'idCentro' => 'required|integer|exists:App\Models\Centro,id',
+            'fechaConstitucion' => 'required|date',
+            'fechaDisolucion' => 'nullable|date',
+        ]; 
+        
+        $rules_message = [
+            // Mensajes error idCentro
+            'idCentro.required' => 'El centro es obligatorio.',
+            'idCentro.integer' => 'El centro debe ser un entero.',
+            'idCentro.exists' => 'El centro seleccionado no existe.',
+            // Mensajes error fechaConstitucion
+            'fechaConstitucion.required' => 'La fecha de constitución es obligatoria.',
+            'fechaConstitucion.date' => 'La fecha de constitución debe tener el formato fecha DD/MM/YYYY.',
+            // Mensajes error fechaDisolucion
+            'fechaDisolucion.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
+        ];
+
+        return [$rules, $rules_message];
+    }
+
+    public function validateJunta(Request $request){
+
+        if($request->accion=='delete'){
+            $junta = Junta::where('id', $request->id)->first();
+
+            if (!$junta) {
+                return response()->json(['errors' => 'No se ha encontrado la junta.','status' => 422], 200);
+            }
+
+            if($junta->miembrosJunta->where('estado', 1)->count() > 0)
+                return response()->json(['errors' => 'Existen miembros de junta asociadas a esta junta. Para borrar la junta es necesario eliminar todos sus miembros de junta.', 'status' => 422], 200);
+
+            if($junta->comisiones->where('estado', 1)->count() > 0)
+                return response()->json(['errors' => 'Existen comisiones asociadas a esta junta. Para borrar la junta es necesario eliminar todas sus comisiones.', 'status' => 422], 200);
+
+            if($junta->convocatorias->where('estado', 1)->count() > 0)
+                return response()->json(['errors' => 'Existen convocatorias asociadas a esta junta. Para borrar la junta es necesario eliminar todas sus convocatorias.', 'status' => 422], 200);
+
+        }
+        else{
+            $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
+            }
+            else{
+                if($request->data['fechaDisolucion']!=null){
+                    // Validar que fechaConstitución no pueda ser mayor a fechaDisolución
+                    $dateConstitucion = new DateTime($request->data['fechaConstitucion']);
+                    $dateDisolucion = new DateTime($request->data['fechaDisolucion']);
+    
+                    if ($dateConstitucion>$dateDisolucion) {
+                        return response()->json(['errors' => 'La fecha de disolución '.$request->fechaDisolucion.' no puede ser anterior a la fecha de constitución '. $request->fechaConstitucion, 'status' => 422], 200);
+                    }
+                }
+                else{
+                    switch($request->accion){
+                        case 'add':
+                            // Comprobación existencia junta en activo para el centro seleccionado
+                            $junta = Junta::select('id')
+                                ->where('idCentro', $request->data['idCentro'])
+                                ->where('fechaDisolucion', null)
+                                ->where('estado', 1)
+                                ->first();
+                            break;
+                        case 'update':
+                            $junta = Junta::select('id')
+                                ->where('idCentro', $request->data['idCentro'])
+                                ->where('fechaDisolucion', null)
+                                ->where('estado', 1)
+                                ->whereNot('id', $request->id)
+                                ->first();
+                            break;
+                    } 
+    
+                    if($junta){
+                        return response()->json(['errors' => 'No se pudo crear la junta. Ya existe una junta vigente para el centro indicado', 'status' => 422], 200);
+                    }
+                }
+            }
+        }
+        return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
     }
 }

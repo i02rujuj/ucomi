@@ -40,12 +40,16 @@ class Centro extends Model
 
     public function scopeFilters(Builder $query, Request $request){
         return $query
-            ->when($request->has('filtroTipo') && $request->filtroTipo!=null, function($query) use ($request){
-                return $query->where('idTipo', $request->filtroTipo);
-            })->when($request->has('filtroNombre') && $request->filtroNombre!=null, function($query) use ($request){
-                return $query
-                    ->whereRaw('LOWER(nombre) LIKE ? ', ['%'.trim(strtolower($request->filtroNombre)).'%'])
-                    ->orWhereRaw('LOWER(direccion) LIKE ? ', ['%'.trim(strtolower($request->filtroNombre)).'%']);
+            ->when($request->has('filtroTipo') && $request->filtroTipo!=null, function($builder) use ($request){
+                return $builder->where('idTipo', $request->filtroTipo);
+            })->when($request->has('filtroNombre') && $request->filtroNombre!=null, function($builder) use ($request){
+                return $builder
+                    ->where(function($builder) use ($request){
+                        $builder->whereRaw('LOWER(nombre) LIKE ? ', ['%'.trim(strtolower($request->filtroNombre)).'%'])
+                        ->orWhereRaw('LOWER(direccion) LIKE ? ', ['%'.trim(strtolower($request->filtroNombre)).'%']);
+                    });          
+            })->when($request->has('filtroEstado') && $request->filtroEstado!=null && $request->filtroEstado!=2, function($builder) use ($request){
+                return $builder->where('estado', $request->filtroEstado);
             });
     }
 }

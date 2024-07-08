@@ -10,7 +10,7 @@ class TiposCentroController extends Controller
     public function index()
     {
         try {
-            $tiposCentro = TipoCentro::select('id', 'nombre', 'estado')->get();
+            $tiposCentro = TipoCentro::select('id', 'nombre', 'estado')->where('estado', 1)->get();
 
             if (!$tiposCentro) {
                 return response()->json(['error' => 'No se han encontrado tipos de centro.'], 404);

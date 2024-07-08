@@ -38,7 +38,6 @@ Auth::routes();
 Route::get('/', [PublicoController::class, 'index'])->name('welcome');
 Route::get('/info', [PublicoController::class, 'info'])->name('infoPublica');
 Route::get('login', [PublicoController::class, 'login'])->name('login');
-
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -61,9 +60,9 @@ Route::post('/save_image_perfil', [UserController::class, 'saveImagePerfil'])->n
 Route::get('/certificados', [UserController::class, 'certificados'])->name('certificados');
 Route::post('/generar_certificado', [UserController::class, 'generarCertificado'])->name('generarCertificado');
 Route::post('/centro/all', [CentrosController::class, 'all']);
+Route::post('/centro/get', [CentrosController::class, 'get']);
 Route::post('/miembros_gobierno/getbycentro', [MiembrosGobiernoController::class, 'getByCentro']);
 Route::post('/miembros_junta/getbycentro', [MiembrosJuntaController::class, 'getByCentro']);
-Route::post('/centro/get', [CentrosController::class, 'get']);
 
 Route::group(['middleware' => ['role:admin']], function () {
     // CENTROS
@@ -71,7 +70,6 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::post('/centro/add', [CentrosController::class, 'store']);
     Route::post('/centro/delete', [CentrosController::class, 'delete']);
     Route::post('/centro/update', [CentrosController::class, 'update']);
-    Route::post('/centro/validate', [CentrosController::class, 'validateCentro']);
 
     // TIPOS DE CENTROS
     Route::post('/tiposCentro', [TiposCentroController::class, 'index']);
@@ -80,11 +78,13 @@ Route::group(['middleware' => ['role:admin']], function () {
 Route::group(['middleware' => ['role:admin|responsable_centro']], function () {
     // JUNTAS
     Route::get('/juntas', [JuntasController::class, 'index'])->name('juntas');
-    Route::post('/juntas', [JuntasController::class, 'store'])->name('juntas.store');
+    Route::post('/junta/add', [JuntasController::class, 'store'])->name('store');
     Route::post('/junta/delete', [JuntasController::class, 'delete']);
     Route::post('/junta/get', [JuntasController::class, 'get']);
     Route::post('/junta/update', [JuntasController::class, 'update']);
     Route::post('/junta/all', [JuntasController::class, 'all']);
+    Route::post('/junta/validate', [JuntasController::class, 'validateJunta']);
+
 
     // MIEMBROS EQUIPO DE GOBIERNO
     Route::get('/miembros_gobierno', [MiembrosGobiernoController::class, 'index'])->name('miembrosGobierno');
@@ -93,8 +93,6 @@ Route::group(['middleware' => ['role:admin|responsable_centro']], function () {
     Route::post('/miembro_gobierno/get', [MiembrosGobiernoController::class, 'get']);
     Route::post('/miembro_gobierno/update', [MiembrosGobiernoController::class, 'update']);
     Route::post('/miembro_gobierno/getDirectivos', [MiembrosGobiernoController::class, 'getDirectivos']);
-
-    
 }); 
 
 Route::group(['middleware' => ['role:admin|responsable_centro|responsable_junta']], function () {

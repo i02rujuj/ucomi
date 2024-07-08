@@ -143,6 +143,7 @@ namespace App\Models{
  * @property-read int|null $miembros_junta_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroGobierno> $secretarios
  * @property-read int|null $secretarios_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Junta filters(\Illuminate\Http\Request $request)
  * @method static \Illuminate\Database\Eloquent\Builder|Junta newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Junta newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Junta query()

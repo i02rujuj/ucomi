@@ -30,13 +30,13 @@
     
     <nav class="bg-white fixed top-0 w-full z-50 shadow-md">
         <div class="mx-auto max-w-full sm:px-4 lg:px-8">
-            <div class="flex justify-between md:justify-center items-center h-14">
+            <div class="flex justify-between lg:justify-center items-center h-14">
                 <div class="flex transition-all duration-200 ease-in-out">
                     <a href="{{ route('welcome') }}">
                         <img class="h-12" src="{{ asset('img/logo.png') }}" alt="logo_ucomi" />
                     </a>
                 </div> 
-                <button id="mostrar_menu" class="md:hidden mr-5 text-black">
+                <button id="mostrar_menu" class="lg:hidden mr-5 text-black">
                     <span class="material-icons-round scale-125">
                         menu
                     </span>
@@ -47,7 +47,7 @@
 
     <!-- Panel -->
     <div>
-        <div id="menu" class="select-none transform -translate-x-full md:translate-x-0 transition-all duration-200 ease-in-out opacity-0 md:opacity-100 invisible md:visible md:flex lg:flex h-screen fixed top-14 left-0 bg-gray-100 z-50">
+        <div id="menu" class="select-none transform -translate-x-full lg:translate-x-0 transition-all duration-200 ease-in-out opacity-0 lg:opacity-100 invisible lg:visible md:flex lg:flex h-screen fixed top-14 left-0 bg-gray-100 z-50">
             <div class="w-64 h-screen px-6 py-4 bg-white shadow-lg">
                 <div class="flex flex-col">
                     <img src="{{ Auth::user()->image ? Auth::user()->image : asset('img/default_image_profile.jpg') }}" alt="Imagen de perfil" class="w-12 h-12 self-start ml-3 mb-1 justify-self-center rounded-full object-cover">
@@ -167,7 +167,7 @@
                                     manage_accounts
                                 </span>
                                 &nbsp;
-                                Gobierno
+                                Centro
                             </a>
                         </li>
                         @endhasrole

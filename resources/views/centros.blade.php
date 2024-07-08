@@ -36,44 +36,50 @@ Centros
             <hr class="my-4 border-t border-gray-300" />
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
-                @foreach ($centros as $centro)
-                    <div id="btn-editar-centro" data-centro-id="{{ $centro['id'] }}" class="card bg-white p-4 rounded-lg shadow-md cursor-pointer">
-                        <div class="flex items-center">
-                            <div class="right-part w-full max-w-max">
-                                <img src="{{ $centro->logo ? $centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
-                            </div>
 
-                            <div class="left-part truncate w-full max-w-max pl-3 z-10">
-                                <div class="flex items-start">
-                                    <span class="material-icons-round scale-75">
-                                        school
-                                    </span>
-                                    &nbsp;
-                                    <h2 class="text-base font-bold truncate">{{ $centro['nombre'] }}</h2>
+                @if($centros && $centros[0])
+                    @foreach ($centros as $centro)
+                        <div id="btn-editar-centro" data-centro-id="{{ $centro['id'] }}" class="card bg-white p-4 rounded-lg shadow-md cursor-pointer">
+                            <div class="flex items-center">
+                                <div class="right-part w-full max-w-max">
+                                    <img src="{{ $centro->logo ? $centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
                                 </div>
 
-                                <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
-                                    <div class="truncate flex items-center">
+                                <div class="left-part truncate w-full max-w-max pl-3 z-10">
+                                    <div class="flex items-start">
                                         <span class="material-icons-round scale-75">
-                                            place
+                                            school
                                         </span>
-                                        <div class="direccion truncate">
-                                            {{ $centro->direccion }}
+                                        &nbsp;
+                                        <h2 class="text-base font-bold truncate">{{ $centro['nombre'] }}</h2>
+                                    </div>
+
+                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                        <div class="truncate flex items-center">
+                                            <span class="material-icons-round scale-75">
+                                                place
+                                            </span>
+                                            <div class="direccion truncate">
+                                                {{ $centro->direccion }}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="flex items-center gap-2 mt-2" >
-                                    <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $centro->tipo->nombre }}</span>
+                                    <div class="flex items-center gap-2 mt-2" >
+                                        <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $centro->tipo->nombre }}</span>
 
-                                    @if ($centro['estado']==0)    
-                                        <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Eliminado</span>
-                                    @endif
+                                        @if ($centro['estado']==0)    
+                                            <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Eliminado</span>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
-                        </div>         
-                    </div>
-                @endforeach
+                            </div>         
+                        </div>
+                    @endforeach
+                @else
+                    No se han encontrado centros
+                @endif
+
             </div>
 
             <div class="mt-5">{{$centros->appends([

@@ -12,26 +12,26 @@ class RepresentacionGeneralController extends Controller
         try {
             $rep = RepresentacionGeneral::where('id', $request->id)->first();
             if (!$rep) {
-                return response()->json(['error' => 'No se ha encontrado la representación.'], 404);
+                return response()->json(['errors' => 'No se ha encontrado la representación.', 'status' => 422], 200);
             }
             return response()->json($rep);
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se ha encontrado la representación.'], 404);
+            return response()->json(['errors' => 'No se ha encontrado la representación.', 'status' => 422], 200);
         }
     }
 
     public function all()
     {
         try {
-            $representaciones = RepresentacionGeneral::all()->where('estado',1);
+            $representaciones = RepresentacionGeneral::all();
 
             if (!$representaciones) {
-                return response()->json(['error' => 'No se han podido obtener las representaciones.'], 404);
+                return response()->json(['errors' => 'No se han podido obtener las representaciones.', 'status' => 422], 200);
             }
 
             return response()->json($representaciones);
         } catch (\Throwable $th) {
-            return redirect()->route('representaciones')->with('error', 'No se pudieron obtener las representaciones: ' . $th->getMessage());
+            return response()->json(['errors' => 'No se han podido obtener las representaciones.', 'status' => 422], 200);
         }
     }
 }

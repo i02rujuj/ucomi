@@ -136,7 +136,7 @@ class JuntasController extends Controller
     public function get(Request $request)
     {
         try {
-            $junta = Junta::where('id', $request->id)->first();
+            $junta = Junta::withTrashed()->where('id', $request->id)->first();
             if (!$junta) {
                 return response()->json(['errors' => 'No se ha encontrado la junta.','status' => 422], 200);
             }

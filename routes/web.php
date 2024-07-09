@@ -85,7 +85,6 @@ Route::group(['middleware' => ['role:admin|responsable_centro']], function () {
     Route::post('/junta/all', [JuntasController::class, 'all']);
     Route::post('/junta/validate', [JuntasController::class, 'validateJunta']);
 
-
     // MIEMBROS EQUIPO DE GOBIERNO
     Route::get('/miembros_gobierno', [MiembrosGobiernoController::class, 'index'])->name('miembrosGobierno');
     Route::post('/miembros_gobierno', [MiembrosGobiernoController::class, 'store'])->name('miembrosGobierno.store');
@@ -136,6 +135,10 @@ Route::group(['middleware' => ['role:admin|responsable_centro|responsable_junta|
     // REPRESENTACIONES GENERAL
     Route::post('/representacion_general/get', [RepresentacionGeneralController::class, 'get']);
     Route::post('/representacion_general/all', [RepresentacionGeneralController::class, 'all']);
+
+    // REPRESENTACIONES CENTRO
+    Route::post('/representacion/get', [RepresentacionController::class, 'get']);
+    Route::post('/representacion/all', [RepresentacionController::class, 'all']);
 
     // USERS
     Route::post('/user/get', [UserController::class, 'get']);

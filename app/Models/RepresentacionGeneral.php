@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class RepresentacionGeneral extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     // Tabla
     protected $table = 'representaciones_general'; 
@@ -16,7 +17,7 @@ class RepresentacionGeneral extends Model
     protected $primaryKey = 'id';
     
     //Campos
-    protected $fillable = ['nombre', 'estado'];
+    protected $fillable = ['nombre'];
 
     public function miembrosJunta()
     {

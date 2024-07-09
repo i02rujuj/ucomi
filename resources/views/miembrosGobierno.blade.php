@@ -127,6 +127,10 @@ Miembros de Gobierno
                                 @else
                                     <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">No vigente</span>
                                 @endif
+
+                                @if ($miembro['deleted_at']!=null)
+                                    <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Eliminado</span>
+                                @endif
                             </div>
                         </div>
                     @endforeach

@@ -4,11 +4,12 @@ namespace App\Models;
 
 use App\Models\MiembroGobierno;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class RepresentacionGobierno extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     // Tabla
     protected $table = 'representaciones_gobierno'; 
@@ -17,7 +18,7 @@ class RepresentacionGobierno extends Model
     protected $primaryKey = 'id';
     
     //Campos
-    protected $fillable = ['nombre', 'estado'];
+    protected $fillable = ['nombre'];
 
     public function miembrosGobierno()
     {

@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Date;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MiembroGobierno extends Model
@@ -20,7 +19,7 @@ class MiembroGobierno extends Model
     protected $primaryKey = 'id';
     
     //Campos
-    protected $fillable = ['idCentro', 'idUsuario', 'idJunta', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese'];
+    protected $fillable = ['idCentro', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese'];
 
     public function centro()
     {
@@ -32,13 +31,29 @@ class MiembroGobierno extends Model
         return $this->belongsTo(User::class, 'idUsuario');
     }
 
-    public function junta()
-    {
-        return $this->belongsTo(Junta::class, 'idJunta');
-    }
-
     public function representacion()
     {
         return $this->belongsTo(RepresentacionGobierno::class, 'idRepresentacion');
     } 
+
+    public function scopeFilters(Builder $query, Request $request){
+        return $query
+            ->when($request->has('filtroCentro') && $request->filtroCentro!=null, function($builder) use ($request){
+                return $builder->where('idCentro', $request->filtroCentro);       
+            })->when($request->has('filtroVigente') && $request->filtroVigente!=null, function($builder) use ($request){
+                if($request->filtroVigente==1){
+                    return $builder->whereNull('fechaCese');
+                }
+                elseif($request->filtroVigente==2){
+                    return $builder->whereNotNull('fechaCese');
+                }
+            })->when($request->has('filtroEstado') && $request->filtroEstado!=null && $request->filtroEstado!=2, function($builder) use ($request){
+                if($request->filtroEstado==0){
+                    return $builder->whereNotNull('deleted_at');
+                }
+                elseif($request->filtroEstado==1){
+                    return $builder->whereNull('deleted_at');
+                }
+            });
+    }
 }

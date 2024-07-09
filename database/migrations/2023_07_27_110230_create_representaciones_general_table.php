@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('representaciones_general', function (Blueprint $table) {
                 $table->id();
                 $table->string('nombre');
-                $table->boolean('estado');
                 $table->timestamps();
+                $table->softDeletes();
             });
     }
 

@@ -29,17 +29,17 @@ function renderHTMLCentro(response){
     return  `
         <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
             <label for="nombre" class="block text-sm text-gray-600 w-32">Nombre *</label>
-            <input type="text" id="nombre" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none required" value="${response ? response.nombre : ""}" ${response && response.estado==0 ? 'disabled' : ""}>
+            <input type="text" id="nombre" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none required" value="${response ? response.nombre : ""}" ${response && response.deleted_at!=null ? 'disabled' : ""}>
         </div>
 
         <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
             <label for="direccion" class="block text-sm text-gray-600 w-32">Direccion *</label>
-            <input type="text" id="direccion" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required" value="${response ? response.direccion: ""}" ${response && response.estado==0 ? 'disabled' : ""}>
+            <input type="text" id="direccion" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required" value="${response ? response.direccion: ""}" ${response && response.deleted_at!=null ? 'disabled' : ""}>
         </div>
 
         <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
             <label for="idTipo" class="block text-sm text-gray-600 mb-1 w-32 pr-6">Tipo *</label>
-            <select id="idTipo" class="swal2-input centro tipo text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required" ${response && response.estado==0 ? 'disabled' : ""}>
+            <select id="idTipo" class="swal2-input centro tipo text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required" ${response && response.deleted_at!=null ? 'disabled' : ""}>
                 <option value="">-----</option>
                 ${tiposCentro.forEach(tipo => {            
                     options+='<option value="'+tipo.id+'" ';
@@ -54,7 +54,7 @@ function renderHTMLCentro(response){
             <label for="" class="block text-sm text-gray-600 w-32">
                 <img id="img_logo" name="img_logo" src="${response? response.logo : default_image}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
             </label>
-            <input id="logo" name="logo" type="file" class="centro w-60 text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none" autocomplete="off" ${response && response.estado==0 ? 'disabled' : ""}/>
+            <input id="logo" name="logo" type="file" class="centro w-60 text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none" autocomplete="off" ${response && response.deleted_at!=null ? 'disabled' : ""}/>
         </div>
     `
 }
@@ -164,12 +164,12 @@ const addEditEvent = (button) => {
 
             const response = await GET_CENTRO_BBDD(dataToSend);
             await Swal.fire({
-                title: response && response.estado==0 ? 'Centro eliminado' : 'Editar Centro',
+                title: response && response.deleted_at!=null ? 'Centro eliminado' : 'Editar Centro',
                 html: renderHTMLCentro(response),
                 focusConfirm: false,
-                showDenyButton: response && response.estado==0 ? false : true,
-                showCancelButton: response && response.estado==0 ? false : true,
-                showConfirmButton: response && response.estado==0 ? false : true,
+                showDenyButton: response && response.deleted_at!=null ? false : true,
+                showCancelButton: response && response.deleted_at!=null ? false : true,
+                showConfirmButton: response && response.deleted_at!=null ? false : true,
                 denyButtonText: 'Eliminar',
                 confirmButtonText: "Actualizar",
                 cancelButtonText: "Cancelar",

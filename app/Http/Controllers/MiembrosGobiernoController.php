@@ -19,7 +19,7 @@ class MiembrosGobiernoController extends Controller
     {
         try {
 
-            $miembrosGobierno = MiembroGobierno::select('id', 'idCentro', 'idUsuario', 'idJunta', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese');
+            $miembrosGobierno = MiembroGobierno::select('id', 'idCentro', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'deleted_at');
 
             switch ($request->input('action')) {
                 case 'limpiar':
@@ -28,46 +28,48 @@ class MiembrosGobiernoController extends Controller
                     $request['filtroEstado']=null;
                     break;
                 case 'filtrar':
-                    $miembrosGobierno = $miembrosGobierno->filters($request);
+                    $miembrosGobierno = $miembrosGobierno->withTrashed()->filters($request);
                     break;
                 default:
-                    $miembrosGobierno = $miembrosGobierno->where('estado', 1);
+                    $miembrosGobierno = $miembrosGobierno->whereNull('deleted_at');
                     break;
             }
 
             $user = Auth::user();
 
             if($user->hasRole('admin')){
-                $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
+                $centros = Centro::select('id', 'nombre')->get();
 
-                $miembrosGobierno = MiembroGobierno::
-                orderBy('fechaCese')
+                $miembrosGobierno = $miembrosGobierno
+                ->orderBy('deleted_at')
+                ->orderBy('fechaCese')
                 ->orderBy('idCentro')
                 ->orderBy('idRepresentacion')
                 ->orderBy('idUsuario')
-                ->get();
+                ->paginate(5);
                 }
             
             if($user->hasRole('responsable_centro')){
                 $centro = MiembroGobierno::where('miembros_gobierno.idUsuario', $user->id)
                 ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                 ->join('centros', 'miembros_gobierno.idCentro', '=', 'centros.id')
-                ->where('centros.estado', 1)
                 ->select('centros.id', 'centros.nombre')
                 ->first();
 
-                $miembrosGobierno = MiembroGobierno::where('idCentro', $centro->id)
+                $miembrosGobierno = $miembrosGobierno
+                ->where('idCentro', $centro->id)
+                ->orderBy('deleted_at')
                 ->orderBy('fechaCese')
                 ->orderBy('idCentro')
                 ->orderBy('idRepresentacion')
                 ->orderBy('idUsuario')
-                ->get();
+                ->paginate(5);
 
                 $centros=array($centro);
             }
 
-            $users = User::select('id', 'name')->where('estado', 1)->get();
-            $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->where('estado', 1)->get();    
+            $users = User::select('id', 'name')->get();
+            $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->get();    
             
             if($request->input('action')=='limpiar'){
                 return redirect()->route('miembrosGobierno')->with([
@@ -286,7 +288,6 @@ class MiembrosGobiernoController extends Controller
                 $miembro->usuario->assignRole('responsable_centro');
             }
 
-            //$miembro->idJunta = $request->data['idJunta'];
             $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
             $miembro->fechaCese = $request->data['fechaCese'];  
             $miembro->save();

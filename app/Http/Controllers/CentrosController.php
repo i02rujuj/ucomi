@@ -21,6 +21,7 @@ class CentrosController extends Controller
                     $request['filtroNombre']=null;
                     $request['filtroTipo']=null;
                     $request['filtroEstado']=null;
+                    break;
                 case 'filtrar':
                     $centros = $centros->withTrashed()->filters($request);
                     break;
@@ -109,7 +110,7 @@ class CentrosController extends Controller
             $centro = DB::table('centros')
             ->join('tipos_centro', 'centros.idTipo', '=', 'tipos_centro.id')
             ->where('centros.id', $request->id)
-            ->select('centros.id', 'centros.nombre', 'centros.direccion', 'centros.idTipo', 'centros.logo', 'tipos_centro.nombre as tipo')
+            ->select('centros.id', 'centros.nombre', 'centros.direccion', 'centros.idTipo', 'centros.logo', 'tipos_centro.nombre as tipo', 'centros.deleted_at')
             ->first();
 
             if (!$centro) {

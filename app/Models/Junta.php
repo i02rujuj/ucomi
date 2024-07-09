@@ -48,14 +48,14 @@ class Junta extends Model
 
     public function directores()
     {
-        return $this->hasMany(MiembroGobierno::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR'));
+        return $this->hasMany(MiembroJunta::class, 'idJunta')
+            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.DIRECTOR'));
     }
 
     public function secretarios()
     {
-        return $this->hasMany(MiembroGobierno::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO'));
+        return $this->hasMany(MiembroJunta::class, 'idJunta')
+            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.SECRETARIO'));
     }
 
     public function scopeFilters(Builder $query, Request $request){
@@ -69,7 +69,6 @@ class Junta extends Model
                 elseif($request->filtroVigente==2){
                     return $builder->whereNotNull('fechaDisolucion');
                 }
-                return $builder->where('fechaDisolucion', null);
             })->when($request->has('filtroEstado') && $request->filtroEstado!=null && $request->filtroEstado!=2, function($builder) use ($request){
                 if($request->filtroEstado==0){
                     return $builder->whereNotNull('deleted_at');

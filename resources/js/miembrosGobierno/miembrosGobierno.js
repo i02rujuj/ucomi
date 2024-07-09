@@ -5,11 +5,11 @@ import {GET_USER_BBDD} from '../users/axiosTemplate';
 import {GET_REPRESENTACION_BBDD} from '../representaciones/axiosTemplate';
 
 import Swal from 'sweetalert2';
-
 import $ from 'jquery';
 import select2 from 'select2';
 //Hook up select2 to jQuery
 select2($);
+
 document.addEventListener("DOMContentLoaded", $('#idUsuario').select2());
 
 // EVENTO EDITAR
@@ -45,7 +45,6 @@ const addEditEvent = (button) => {
             const centro = await GET_CENTRO_BBDD(dataToSendCentro); 
 
             const usuario = await GET_USER_BBDD(dataToSendUsuario); 
-            console.log(usuario);
 
             const representacion = await GET_REPRESENTACION_BBDD(dataToSendRepresentacion); 
 
@@ -57,17 +56,17 @@ const addEditEvent = (button) => {
                     <input type="hidden" id="idCentro" value="${centro.id}"/>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
                         <label for="centro" class="block text-sm text-gray-600 w-32">Centro:</label>
-                        <input type="text" id="centro" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${centro.nombre}" readonly>
+                        <input type="text" id="centro" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${centro.nombre}" disabled>
                     </div>
                     <input type="hidden" id="idUsuario" value="${usuario.id}"/>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
                         <label for="usuario" class="block text-sm text-gray-600 w-32">Usuario:</label>
-                        <input type="text" id="usuario" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${usuario.name}" readonly>
+                        <input type="text" id="usuario" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${usuario.name}" disabled>
                     </div>
                     <input type="hidden" id="idRepresentacion" value="${representacion.id}"/>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
                         <label for="representacion" class="block text-sm text-gray-600 w-32">Representación:</label>
-                        <input type="text" id="representacion" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${representacion.nombre}" readonly>
+                        <input type="text" id="representacion" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${representacion.nombre}" disabled>
                     </div>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
                         <label for="fechaTomaPosesion" class="block text-sm text-gray-600 w-32">Fecha Toma posesión:</label>
@@ -77,21 +76,6 @@ const addEditEvent = (button) => {
                         <label for="fechaCese" class="block text-sm text-gray-600 w-32">Fecha cese:</label>
                         <input type="date" id="fechaCese" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.fechaCese}">
                     </div>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
-                        <label for="idJunta" class="block text-sm text-gray-600 mb-1 w-32">Junta que representa:</label>
-                        <select id="idJunta" class="miembro swal2-input tipo text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" ">
-                            <option value="">-----</option>
-                            ${juntas.forEach(j => { 
-                                if(j.idCentro == response.idCentro){
-                                    options+='<option value="'+j.id+'" ';
-                                    if(j.id == response.idJunta) 
-                                        options+='selected';
-                                    options+='>'+j.nombre+' ('+j.fechaConstitucion+')</option>';
-                                }
-                            })}
-                            ${options}
-                        </select>
-                    </div>  
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
                         <label for="responsable" class="block text-sm text-gray-600 mb-1 w-32">Responsable de centro:</label>
                         <select id="responsable" class="miembro swal2-input tipo text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" ">                     
@@ -204,7 +188,6 @@ const addEditEvent = (button) => {
                 }
             }
         } catch (error) {
-            console.error(error);
             await Swal.fire({
                 icon: "error",
                 title: "Oops...",

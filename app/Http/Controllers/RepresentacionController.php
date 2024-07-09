@@ -12,11 +12,24 @@ class RepresentacionController extends Controller
         try {
             $rep = RepresentacionGobierno::where('id', $request->id)->first();
             if (!$rep) {
-                return response()->json(['error' => 'No se ha encontrado la representación.'], 404);
+                return response()->json(['errors' => 'No se ha encontrado la representación.', 'status' => 422], 200);
             }
             return response()->json($rep);
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se ha encontrado la representación.'], 404);
+            return response()->json(['errors' => 'No se ha encontrado la representación.', 'status' => 422], 200);
+        }
+    }
+
+    public function all()
+    {
+        try {
+            $representaciones = RepresentacionGobierno::all();
+            if (!$representaciones) {
+                return response()->json(['errors' => 'No se han podido obtener las representaciones.', 'status' => 422], 200);
+            }
+            return response()->json($representaciones);
+        } catch (\Throwable $th) {
+            return response()->json(['errors' => 'No se han podido obtener las representaciones.', 'status' => 422], 200);
         }
     }
 }

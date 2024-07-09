@@ -1,7 +1,7 @@
 @extends ('layouts.filtros')
 
 @section ('filtro')
-    <form method="GET" action="{{ route('juntas') }}">
+    <form method="GET" action="{{ route('miembrosGobierno') }}">
         <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-2">
             <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md w-full">
                 

@@ -87,7 +87,7 @@ Route::group(['middleware' => ['role:admin|responsable_centro']], function () {
 
     // MIEMBROS EQUIPO DE GOBIERNO
     Route::get('/miembros_gobierno', [MiembrosGobiernoController::class, 'index'])->name('miembrosGobierno');
-    Route::post('/miembros_gobierno', [MiembrosGobiernoController::class, 'store'])->name('miembrosGobierno.store');
+    Route::post('/miembros_gobierno/add', [MiembrosGobiernoController::class, 'store'])->name('store');
     Route::post('/miembro_gobierno/delete', [MiembrosGobiernoController::class, 'delete']);
     Route::post('/miembro_gobierno/get', [MiembrosGobiernoController::class, 'get']);
     Route::post('/miembro_gobierno/update', [MiembrosGobiernoController::class, 'update']);
@@ -142,5 +142,6 @@ Route::group(['middleware' => ['role:admin|responsable_centro|responsable_junta|
 
     // USERS
     Route::post('/user/get', [UserController::class, 'get']);
+    Route::post('/user/all', [UserController::class, 'all']);
     });
 

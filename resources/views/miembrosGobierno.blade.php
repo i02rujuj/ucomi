@@ -19,8 +19,7 @@ Miembros de Gobierno
             </div>
             @endif
 
-            <div class="flex justify-between">
-                
+            <div class="flex justify-between"> 
                 @include('components.filtros.miembrosFiltro')
 
                 <div>
@@ -31,6 +30,54 @@ Miembros de Gobierno
                         Añadir miembro
                     </div>
                 </div>
+            </div>
+
+            <div id="modal_add" name="modal_add" class="hidden">
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-4 justify-center items-center">
+                    <label for="idCentro" class="block text-sm text-gray-600 mb-1 w-36 pr-6 text-right">Centro asociado: *</label>
+                    <select id="idCentro" class="swal2-input miembro text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none bg-blue-50" >
+                            <option value="">-----</option>
+                            @foreach ($centros as $centro)
+                                <option value="{{$centro->id}}">{{$centro->nombre}}</option>
+                            @endforeach
+                    </select>
+                </div>
+        
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-4 justify-center items-center">
+                    <label for="idUsuario" class="block text-sm text-gray-600 w-36 pr-6 text-right">Usuario: *</label>
+                    <select id="idUsuario" class="swal2-input miembro text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none bg-blue-50" >
+                        <option value="">Selecciona un usuario</option>
+                        @foreach ($users as $user)
+                            <option value="{{$user->id}}">{{$user->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                    
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mt-4 justify-center items-center">
+                    <label for="idRepresentacion" class="block text-sm text-gray-600 w-36 pr-6 text-right">Representación: *</label>
+                    <select id="idRepresentacion" class="swal2-input miembro text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none bg-blue-50" >
+                        <option value="">-----</option>
+                        @foreach ($representacionesGobierno as $rep)
+                            <option value="{{$rep->id}}">{{$rep->nombre}}</option>
+                        @endforeach
+                    </select>
+                </div>
+        
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
+                    <label for="fechaTomaPosesion" class="block text-sm text-gray-600 w-36 text-right">Toma posesión: *</label>
+                    <input type="date" id="fechaTomaPosesion" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none">
+                </div>
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
+                    <label for="fechaCese" class="block text-sm text-gray-600 w-36 text-right">Fecha cese:</label>
+                    <input type="date" id="fechaCese" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none">
+                </div>
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mt-3 justify-center items-center">
+                    <label for="responsable" class="block text-sm text-gray-600 w-36 pr-6 text-right">Responsable:</label>
+                    <select id="responsable" class="miembro swal2-input tipo text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none">                     
+                        <option value="0">No</option>
+                        <option value="1">Sí</option>
+                    </select>
+                </div>        
             </div>
 
             <hr class="my-4 border-t border-gray-300" />

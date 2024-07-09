@@ -22,7 +22,7 @@ class UserController extends Controller
         try {
             $user = User::where('id', $request->id)->first();
             if (!$user) {
-                return response()->json(['error' => 'No se ha encontrado el usuario.'], 404);
+                return response()->json(['errors' => 'No se ha encontrado el usuario.', 'status' => 422], 200);
             }
 
             $user['roles'] = $user->getRoleNames();
@@ -30,7 +30,20 @@ class UserController extends Controller
             return response()->json($user);
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se ha encontrado el usuario.'], 404);
+            return response()->json(['errors' => 'No se ha encontrado el usuario.', 'status' => 422], 200);
+        }
+    }
+
+    public function all()
+    {
+        try {
+            $usuarios = User::all();
+            if (!$usuarios) {
+                return response()->json(['errors' => 'No se han podido obtener los usuarios.', 'status' => 422], 200);
+            }
+            return response()->json($usuarios);
+        } catch (\Throwable $th) {
+            return response()->json(['errors' => 'No se han podido obtener los usuarios.', 'status' => 422], 200);
         }
     }
 

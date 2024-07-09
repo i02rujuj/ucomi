@@ -46,7 +46,7 @@ class MiembrosGobiernoController extends Controller
                 ->orderBy('idCentro')
                 ->orderBy('idRepresentacion')
                 ->orderBy('idUsuario')
-                ->paginate(5);
+                ->paginate(10);
                 }
             
             if($user->hasRole('responsable_centro')){
@@ -63,7 +63,7 @@ class MiembrosGobiernoController extends Controller
                 ->orderBy('idCentro')
                 ->orderBy('idRepresentacion')
                 ->orderBy('idUsuario')
-                ->paginate(5);
+                ->paginate(10);
 
                 $centros=array($centro);
             }
@@ -99,95 +99,24 @@ class MiembrosGobiernoController extends Controller
     public function store(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(),[
-                'idCentro' => 'required|integer|exists:App\Models\Centro,id',
-                'idUsuario' => 'required|integer|exists:App\Models\User,id',
-                'fechaTomaPosesion' => 'required|date',
-                'fechaCese' => 'nullable|date',
-                'idRepresentacion' => 'required|integer|exists:App\Models\RepresentacionGobierno,id',
-            ], [
-                // Mensajes error idCentro
-                'idCentro.required' => 'El centro es obligatorio.',
-                'idCentro.integer' => 'El centro debe ser un entero.',
-                'idCentro.exists' => 'El centro seleccionado no existe.',
-                // Mensajes error idUsuario
-                'idUsuario.required' => 'El usuario es obligatorio.',
-                'idUsuario.integer' => 'El usuario debe ser un entero.',
-                'idUsuario.exists' => 'El usuario seleccionado no existe.',
-                // Mensajes error fechaTomaPosesión
-                'fechaTomaPosesion.required' => 'La fecha de toma de posesión es obligatoria.',
-                'fechaTomaPosesion.date' => 'La fecha de toma de posesión debe tener el formato fecha DD/MM/YYYY.',
-                // Mensajes error fechaCese
-                'fechaCese.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
-                // Mensajes error idRepresentacion
-                'idRepresentacion.required' => 'La representación es obligatoria.',
-                'idRepresentacion.integer' => 'La representación debe ser un entero.',
-                'idRepresentacion.exists' => 'La representación seleccionada no existe.',
-            ]);
-
-            if ($validator->fails()) {
-                // Si la validación falla, redirige de vuelta con los errores
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
-
-            if($request->fechaCese==null){
-
-                /// Comprobación existencia director actual en el centro
-                if($request->idRepresentacion==config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR')){
-                    $director = MiembroGobierno::select('id')
-                        ->where('idCentro', $request->get('idCentro'))
-                        ->where('idRepresentacion', config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR'))
-                        ->where('fechaCese', null)
-                        ->first();
-    
-                    if($director)
-                        return redirect()->route('miembrosGobierno')->with('error', 'No se pudo crear el miembro del equipo de gobierno: ya existe un Director/a | Decano/a vigente en el centro seleccionado')->withInput();
-                }
-    
-                // Comprobación existencia secretario actual en el centro
-                if($request->idRepresentacion==config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO')){
-                    $secretario = MiembroGobierno::select('id')
-                        ->where('idCentro', $request->get('idCentro'))
-                        ->where('idRepresentacion', config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO'))
-                        ->where('fechaCese', null)
-                        ->first();
-    
-                    if($secretario)
-                        return redirect()->route('miembrosGobierno')->with('error', 'No se pudo crear el miembro del equipo de gobierno: ya existe un Secretario/a vigente en el centro seleccionado')->withInput();
-                }
-
-                // Comprobación existencia usuario en el centro
-                    $usuarioEnCentro = MiembroGobierno::select('id')
-                        ->where('idCentro', $request->get('idCentro'))
-                        ->where('idUsuario', $request->get('idUsuario'))
-                        ->where('fechaCese', null)
-                        ->first();
-    
-                    if($usuarioEnCentro)
-                        return redirect()->route('miembrosGobierno')->with('error', 'No se pudo crear el miembro del equipo de gobierno: ya existe el usuario vigente en el centro seleccionado')->withInput();
-            }
-            else{
-                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-                $dateTomaPosesion = new DateTime($request->fechaTomaPosesion);
-                $dateCese = new DateTime($request->fechaCese);
-
-                if ($dateTomaPosesion>$dateCese) {
-                    return redirect()->route('miembrosGobierno')->with('error', 'La fecha de cese no puede ser anterior a la toma de posesión')->withInput();
-                }  
-            }
+            $request['accion']='add';
+            $validation = $this->validateMiembro($request);
+            if($validation->original['status']!=200){
+                return $validation;
+            }          
 
             $miembroGobierno = MiembroGobierno::create([
-                "idCentro" => $request->idCentro,
-                "idUsuario" => $request->idUsuario,
-                "fechaTomaPosesion" => $request->fechaTomaPosesion,
-                "fechaCese" => $request->fechaCese,
-                "idRepresentacion" => $request->idRepresentacion,
+                "idCentro" => $request->data['idCentro'],
+                "idUsuario" => $request->data['idUsuario'],
+                "fechaTomaPosesion" => $request->data['fechaTomaPosesion'],
+                "fechaCese" => $request->data['fechaCese'],
+                "idRepresentacion" => $request->data['idRepresentacion'],
             ]);
 
-            return redirect()->route('miembrosGobierno')->with('success', 'Miembro del Equipo de Gobierno creado correctamente.');
+            return response()->json(['message' => 'Miembro de centro creado correctamente.', 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return redirect()->route('miembrosGobierno')->with('error', 'No se pudo crear el miembro del equipo de gobierno: ' . $th->getMessage());
+            return response()->json(['errors' => 'No se pudo crear el miembro de centro.', 'status' => 422], 200);
         }
     }
 
@@ -315,6 +244,100 @@ class MiembrosGobiernoController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['error' => 'No se han encontrado miembros de gobierno para el centro seleccionado.'], 404);
         }    
+    }
+
+    public function rules()
+    {
+        $rules = [
+            'idCentro' => 'required|integer|exists:App\Models\Centro,id',
+            'idUsuario' => 'required|integer|exists:App\Models\User,id',
+            'idRepresentacion' => 'required|integer|exists:App\Models\RepresentacionGobierno,id',
+            'fechaTomaPosesion' => 'required|date',
+            'fechaCese' => 'nullable|date',
+            'responsable' => 'nullable|integer'
+        ]; 
+        
+        $rules_message = [
+            // Mensajes error idCentro
+            'idCentro.required' => 'El centro es obligatorio.',
+            'idCentro.integer' => 'El centro debe ser un entero.',
+            'idCentro.exists' => 'El centro seleccionado no existe.',
+            // Mensajes error idUsuario
+            'idUsuario.required' => 'El usuario es obligatorio.',
+            'idUsuario.integer' => 'El usuario debe ser un entero.',
+            'idUsuario.exists' => 'El usuario seleccionado no existe.',
+            // Mensajes error idRepresentacion
+            'idRepresentacion.required' => 'La representación es obligatoria.',
+            'idRepresentacion.integer' => 'La representación debe ser un entero.',
+            'idRepresentacion.exists' => 'La representación seleccionada no existe.',
+            // Mensajes error fechaTomaPosesión
+            'fechaTomaPosesion.required' => 'La fecha de toma de posesión es obligatoria.',
+            'fechaTomaPosesion.date' => 'La fecha de toma de posesión debe tener el formato fecha DD/MM/YYYY.',
+            // Mensajes error fechaCese
+            'fechaCese.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
+            // Mensajes error responsable
+            'responsable.integer' => 'El responsable seleccionado no es correcto.',
+        ];
+
+        return [$rules, $rules_message];
+    }
+
+    public function validateMiembro(Request $request){
+
+        $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
+        }
+        else{
+            if($request->data['fechaCese']==null){
+
+                /// Comprobación existencia director actual en el centro
+                if($request->data['idRepresentacion']==config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR')){
+                    $director = MiembroGobierno::select('id')
+                        ->where('idCentro', $request->data['idCentro'])
+                        ->where('idRepresentacion', config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR'))
+                        ->where('fechaCese', null)
+                        ->first();
+    
+                    if($director)
+                        return response()->json(['errors' => 'No se pudo añadir el miembro de centro: ya existe un Director/a | Decano/a vigente en el centro seleccionado', 'status' => 422], 200);
+                }
+    
+                // Comprobación existencia secretario actual en el centro
+                if($request->data['idRepresentacion']==config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO')){
+                    $secretario = MiembroGobierno::select('id')
+                        ->where('idCentro', $request->data['idCentro'])
+                        ->where('idRepresentacion', config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO'))
+                        ->where('fechaCese', null)
+                        ->first();
+    
+                    if($secretario)
+                        return response()->json(['errors' => 'No se pudo añadir el miembro de centro: ya existe un Secretario/a vigente en el centro seleccionado', 'status' => 422], 200);
+                }
+
+                // Comprobación existencia usuario en el centro
+                    $usuarioEnCentro = MiembroGobierno::select('id')
+                        ->where('idCentro', $request->data['idCentro'])
+                        ->where('idUsuario', $request->data['idUsuario'])
+                        ->where('fechaCese', null)
+                        ->first();
+    
+                    if($usuarioEnCentro)
+                        return response()->json(['errors' => 'No se pudo añadir el miembro de centro: ya existe el usuario vigente en el centro seleccionado', 'status' => 422], 200);
+            }
+            else{
+                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
+                $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
+                $dateCese = new DateTime($request->data['fechaCese']);
+
+                if ($dateTomaPosesion>$dateCese) {
+                    return response()->json(['errors' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 422], 200);
+                }  
+            }
+        }
+        
+        return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
     }
 
 }

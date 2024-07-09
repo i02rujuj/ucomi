@@ -28,8 +28,8 @@ function renderHTMLJunta(response){
 
     return  `
         <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-4 justify-center items-center">
-            <label for="idCentro" class="block text-sm text-gray-600 mb-1 w-36 pr-6">Centro asociado: *</label>
-            <select id="idCentro" class="swal2-input junta text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" ${response && response.idCentro ? 'disabled' : ""} ${response && response.deleted_at!=null ? 'disabled' : ""}>
+            <label for="idCentro" class="block text-sm text-gray-600 w-36 pr-6 text-right">Centro asociado: *</label>
+            <select id="idCentro" class="swal2-input junta text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none ${response && response.idCentro ? ' bg-red-50' : " bg-blue-50"}" ${response && response.idCentro ? ' disabled' : ""} ${response && response.deleted_at!=null ? ' disabled' : ""}>
                 <option value="">-----</option>
                 ${centros.forEach(centro => {            
                     options+='<option value="'+centro.id+'" ';
@@ -40,13 +40,13 @@ function renderHTMLJunta(response){
                 ${options}
             </select>
         </div>
-        <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
-            <label for="fechaConstitucion" class="block text-sm text-gray-600 w-36">Fecha Constitución: *</label>
-            <input type="date" id="fechaConstitucion" class="swal2-input junta text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" value="${response ? response.fechaConstitucion : ""}" ${response && response.deleted_at!=null ? 'disabled' : ""}>
+        <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-1 justify-center items-center">
+            <label for="fechaConstitucion" class="block text-sm text-gray-600 w-36 text-right">Fecha Constitución: *</label>
+            <input type="date" id="fechaConstitucion" class="swal2-input junta text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" value="${response ? response.fechaConstitucion : ""}" ${response && response.deleted_at!=null ? ' disabled' : ""}>
         </div>
-        <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
-            <label for="fechaDisolucion" class="block text-sm text-gray-600 w-36">Fecha Disolución:</label>
-            <input type="date" id="fechaDisolucion" class="junta swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response ? response.fechaDisolucion : ""}" ${response && response.deleted_at!=null ? 'disabled' : ""}>
+        <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-3 justify-center items-center">
+            <label for="fechaDisolucion" class="block text-sm text-gray-600 w-36 text-right">Fecha Disolución:</label>
+            <input type="date" id="fechaDisolucion" class="junta swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" value="${response ? response.fechaDisolucion : ""}" ${response && response.deleted_at!=null ? ' disabled' : ""}>
         </div>     
     `
 }
@@ -165,7 +165,6 @@ const preConfirm = async(accion, id=null) => {
  */
 const addButton = document.querySelector('#btn-add-junta');
 addButton.addEventListener("click", async (event) => {
-
     await Swal.fire({
         title: "Añadir Junta",
         html: renderHTMLJunta(null),

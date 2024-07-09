@@ -15,9 +15,25 @@ use Illuminate\Support\Facades\Validator;
 class MiembrosGobiernoController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         try {
+
+            $miembrosGobierno = MiembroGobierno::select('id', 'idCentro', 'idUsuario', 'idJunta', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese');
+
+            switch ($request->input('action')) {
+                case 'limpiar':
+                    $request['filtroCentro']=null;
+                    $request['filtroVigente']=null;
+                    $request['filtroEstado']=null;
+                    break;
+                case 'filtrar':
+                    $miembrosGobierno = $miembrosGobierno->filters($request);
+                    break;
+                default:
+                    $miembrosGobierno = $miembrosGobierno->where('estado', 1);
+                    break;
+            }
 
             $user = Auth::user();
 
@@ -51,11 +67,30 @@ class MiembrosGobiernoController extends Controller
             }
 
             $users = User::select('id', 'name')->where('estado', 1)->get();
-            $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->where('estado', 1)->get();          
+            $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->where('estado', 1)->get();    
+            
+            if($request->input('action')=='limpiar'){
+                return redirect()->route('miembrosGobierno')->with([
+                    'centros' => $centros, 
+                    'users' => $users, 
+                    'representacionesGobierno' => $representacionesGobierno, 
+                    'miembrosGobierno' => $miembrosGobierno,
+                ]);
+            }
 
-            return view('miembrosGobierno', ['centros' => $centros, 'users' => $users, 'representacionesGobierno' => $representacionesGobierno, 'miembrosGobierno' => $miembrosGobierno]);
+            return view('miembrosGobierno', [
+                'centros' => $centros, 
+                'users' => $users, 
+                'representacionesGobierno' => $representacionesGobierno, 
+                'miembrosGobierno' => $miembrosGobierno,
+                'filtroCentro' => $request['filtroCentro'],
+                'filtroVigente' => $request['filtroVigente'],
+                'filtroEstado' => $request['filtroEstado'],
+                'action' => $request['action'],
+            ]);
+        
         } catch (\Throwable $th) {
-            return redirect()->route('miembrosGobierno')->with('error', 'No se pudieron obtener algunos datos referentes a los miembros de Gobierno: ' . $th->getMessage());
+            return redirect()->route('miembrosGobierno')->with('errors', 'No se pudieron obtener los miembros de centro: ' . $th->getMessage());
         }
     }
 

@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('idCentro');
             $table->date('fechaConstitucion');
             $table->date('fechaDisolucion')->nullable();
-            $table->boolean('estado');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('idCentro')->references('id')->on('centros');
         });

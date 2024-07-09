@@ -18,7 +18,7 @@ class JuntasController extends Controller
     {
         try {
 
-            $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'estado');
+            $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'deleted_at');
 
             switch ($request->input('action')) {
                 case 'limpiar':
@@ -27,19 +27,20 @@ class JuntasController extends Controller
                     $request['filtroEstado']=null;
                     break;
                 case 'filtrar':
-                    $juntas = $juntas->filters($request);
+                    $juntas = $juntas->withTrashed()->filters($request);
                     break;
                 default:
-                    $juntas = $juntas->where('estado', 1);
+                    $juntas = $juntas->whereNull('deleted_at');
                     break;
             }
 
             $user = Auth::user();
 
             if($user->hasRole('admin')){
-                $centros = Centro::select('id', 'nombre')->where('estado', 1)->get();
+                $centros = Centro::select('id', 'nombre')->get();
 
-                $juntas = $juntas->orderBy('estado', 'desc')
+                $juntas = $juntas
+                ->orderBy('deleted_at')
                 ->orderBy('fechaDisolucion')
                 ->orderBy('fechaConstitucion', 'desc')
                 ->paginate(5);
@@ -49,12 +50,11 @@ class JuntasController extends Controller
                 $centro = MiembroGobierno::where('miembros_gobierno.idUsuario', $user->id)
                 ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                 ->join('centros', 'miembros_gobierno.idCentro', '=', 'centros.id')
-                ->where('centros.estado', 1)
                 ->select('centros.id', 'centros.nombre')
                 ->first();
 
                 $juntas = $juntas->where('idCentro', $centro->id)
-                ->orderBy('estado', 'desc')
+                ->orderBy('deleted_at')
                 ->orderBy('fechaDisolucion')
                 ->orderBy('fechaConstitucion', 'desc')
                 ->paginate(5);
@@ -100,7 +100,6 @@ class JuntasController extends Controller
                 "idCentro" => $request->data['idCentro'],
                 "fechaConstitucion" => $request->data['fechaConstitucion'],
                 "fechaDisolucion" => $request->data['fechaDisolucion'],
-                'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
             ]);
 
             return response()->json(['message' => 'La junta se ha añadido correctamente.', 'status' => 200], 200);
@@ -126,8 +125,7 @@ class JuntasController extends Controller
                 return response()->json(['errors' => 'No se ha encontrado la junta.','status' => 422], 200);
             }
 
-            $junta->estado = 0;
-            $junta->save();
+            $junta->delete();
             return response()->json(['status' => 200], 200);
 
         } catch (\Throwable $th) {
@@ -184,7 +182,6 @@ class JuntasController extends Controller
         try {
             $juntas = DB::table('juntas')
             ->join('centros', 'juntas.idCentro', '=', 'centros.id')
-            ->where('juntas.estado', 1)
             ->select('juntas.id', 'juntas.fechaConstitucion', 'centros.id as idCentro', 'centros.nombre')
             ->get();
 
@@ -231,13 +228,13 @@ class JuntasController extends Controller
                 return response()->json(['errors' => 'No se ha encontrado la junta.','status' => 422], 200);
             }
 
-            if($junta->miembrosJunta->where('estado', 1)->count() > 0)
+            if($junta->miembrosJunta->count() > 0)
                 return response()->json(['errors' => 'Existen miembros de junta asociadas a esta junta. Para borrar la junta es necesario eliminar todos sus miembros de junta.', 'status' => 422], 200);
 
-            if($junta->comisiones->where('estado', 1)->count() > 0)
+            if($junta->comisiones->count() > 0)
                 return response()->json(['errors' => 'Existen comisiones asociadas a esta junta. Para borrar la junta es necesario eliminar todas sus comisiones.', 'status' => 422], 200);
 
-            if($junta->convocatorias->where('estado', 1)->count() > 0)
+            if($junta->convocatorias->count() > 0)
                 return response()->json(['errors' => 'Existen convocatorias asociadas a esta junta. Para borrar la junta es necesario eliminar todas sus convocatorias.', 'status' => 422], 200);
 
         }
@@ -264,14 +261,12 @@ class JuntasController extends Controller
                             $junta = Junta::select('id')
                                 ->where('idCentro', $request->data['idCentro'])
                                 ->where('fechaDisolucion', null)
-                                ->where('estado', 1)
                                 ->first();
                             break;
                         case 'update':
                             $junta = Junta::select('id')
                                 ->where('idCentro', $request->data['idCentro'])
                                 ->where('fechaDisolucion', null)
-                                ->where('estado', 1)
                                 ->whereNot('id', $request->id)
                                 ->first();
                             break;

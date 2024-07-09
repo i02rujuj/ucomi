@@ -146,6 +146,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Junta filters(\Illuminate\Http\Request $request)
  * @method static \Illuminate\Database\Eloquent\Builder|Junta newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Junta newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Junta onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Junta query()
  * @method static \Illuminate\Database\Eloquent\Builder|Junta whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Junta whereEstado($value)
@@ -154,6 +155,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Junta whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Junta whereIdCentro($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Junta whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Junta withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Junta withoutTrashed()
  */
 	class Junta extends \Eloquent {}
 }

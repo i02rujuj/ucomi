@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Junta extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
      // Tabla
      protected $table = 'juntas'; 
@@ -18,7 +19,7 @@ class Junta extends Model
      protected $primaryKey = 'id';
      
      //Campos
-     protected $fillable = ['idCentro','fechaConstitucion', 'fechaDisolucion', 'estado'];
+     protected $fillable = ['idCentro','fechaConstitucion', 'fechaDisolucion'];
 
      public function centro()
     {
@@ -70,7 +71,12 @@ class Junta extends Model
                 }
                 return $builder->where('fechaDisolucion', null);
             })->when($request->has('filtroEstado') && $request->filtroEstado!=null && $request->filtroEstado!=2, function($builder) use ($request){
-                return $builder->where('estado', $request->filtroEstado);
+                if($request->filtroEstado==0){
+                    return $builder->whereNotNull('deleted_at');
+                }
+                elseif($request->filtroEstado==1){
+                    return $builder->whereNull('deleted_at');
+                }
             });
     }
 }

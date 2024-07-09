@@ -106,7 +106,6 @@ class CentroSeeder extends Seeder
             $centro->direccion = $c['direccion'];
             $centro->idTipo = $c['tipo'];
             $centro->logo = $c['logo'];
-            $centro->estado = true;
             $centro->save();
         }
     }

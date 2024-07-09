@@ -24,7 +24,6 @@ class JuntaSeeder extends Seeder
             $junta->idCentro = $j['idCentro'];
             $junta->fechaConstitucion = now();
             $junta->fechaDisolucion= null;
-            $junta->estado = true;
             $junta->save();
         }
 

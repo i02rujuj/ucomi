@@ -21,7 +21,7 @@ class Centro extends Model
     protected $primaryKey = 'id';
     
     //Campos
-    protected $fillable = ['nombre','direccion', 'idTipo', 'estado', 'logo'];
+    protected $fillable = ['nombre','direccion', 'idTipo', 'logo'];
 
     public function juntas()
     {
@@ -49,7 +49,12 @@ class Centro extends Model
                         ->orWhereRaw('LOWER(direccion) LIKE ? ', ['%'.trim(strtolower($request->filtroNombre)).'%']);
                     });          
             })->when($request->has('filtroEstado') && $request->filtroEstado!=null && $request->filtroEstado!=2, function($builder) use ($request){
-                return $builder->where('estado', $request->filtroEstado);
+                if($request->filtroEstado==0){
+                    return $builder->whereNotNull('deleted_at');
+                }
+                elseif($request->filtroEstado==1){
+                    return $builder->whereNull('deleted_at');
+                }
             });
     }
 }

@@ -10,11 +10,13 @@ return [
             'SECRETARIO_DIRECCION' => 5,
         ],
         'GENERAL'=> [
-            'DOCENTE' => 1, 
-            'DOCENTE_OTRO' => 2, 
-            'PAS' => 3, 
-            'ALUMNADO' => 4, 
-            'LIBRE' => 5, 
+            'DIRECTOR' => 1, 
+            'SECRETARIO' => 2,
+            'DOCENTE' => 3, 
+            'DOCENTE_OTRO' => 4, 
+            'PAS' => 5, 
+            'ALUMNADO' => 6, 
+            'LIBRE' => 7, 
         ],
     ],
     'TIPOS_CENTRO' => [

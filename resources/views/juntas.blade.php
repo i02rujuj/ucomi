@@ -128,7 +128,7 @@ Juntas
                                             <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">No vigente</span>
                                         @endif
 
-                                        @if ($junta['estado']==0)
+                                        @if ($junta['deleted_at']!=null)
                                             <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Eliminado</span>
                                         @endif
                                     </div>
@@ -154,7 +154,4 @@ Juntas
     </div>
     @endsection
 
-<script>
-    const default_image = "{{asset('img/default_image.png')}}"
-</script>
 @vite(['resources/js/juntas/juntas.js'])

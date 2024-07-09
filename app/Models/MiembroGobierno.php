@@ -20,7 +20,7 @@ class MiembroGobierno extends Model
     protected $primaryKey = 'id';
     
     //Campos
-    protected $fillable = ['idCentro','idUsuario', 'idJunta', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese'];
+    protected $fillable = ['idCentro', 'idUsuario', 'idJunta', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese'];
 
     public function centro()
     {

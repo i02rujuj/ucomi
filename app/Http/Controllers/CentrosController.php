@@ -14,7 +14,7 @@ class CentrosController extends Controller
     public function index(Request $request)
     {
         try {
-            $centros = Centro::select('id', 'nombre', 'direccion', 'idTipo', 'logo', 'estado');
+            $centros = Centro::select('id', 'nombre', 'direccion', 'idTipo', 'logo', 'deleted_at');
 
             switch ($request->input('action')) {
                 case 'limpiar':
@@ -22,15 +22,15 @@ class CentrosController extends Controller
                     $request['filtroTipo']=null;
                     $request['filtroEstado']=null;
                 case 'filtrar':
-                    $centros = $centros->filters($request);
+                    $centros = $centros->withTrashed()->filters($request);
                     break;
                 default:
-                    $centros = $centros->where('estado', 1);
+                    $centros = $centros->whereNull('deleted_at');
                     break;
             }     
             
             $centros=$centros
-                ->orderBy('estado', 'desc')
+                ->orderBy('deleted_at')
                 ->orderBy('idTipo')
                 ->orderBy('nombre')
                 ->paginate(10);
@@ -73,7 +73,6 @@ class CentrosController extends Controller
                 "direccion" => $request->data['direccion'],
                 "idTipo" => $request->data['idTipo'],
                 "logo" => $url_image,
-                'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
             ]);
 
             return response()->json(['message' => 'El centro se ha añadido correctamente.', 'status' => 200], 200);
@@ -90,14 +89,13 @@ class CentrosController extends Controller
             if (!$centro) 
                 return response()->json(['errors' => 'No se ha encontrado el centro.','status' => 422], 200);
 
-            if($centro->juntas->where('estado', 1)->count() > 0)
+            if($centro->juntas->count() > 0)
                 return response()->json(['errors' => 'Existen juntas asociadas a este centro. Para borrar el centro es necesario eliminar todas sus juntas.', 'status' => 422], 200);
 
-            if($centro->miembros->where('estado', 1)->count() > 0)
+            if($centro->miembros->count() > 0)
                 return response()->json(['errors' => 'Existen miembros de gobierno asociados a este centro. Para borrar el centro es necesario eliminar todos sus miembros de gobierno.', 'status' => 422], 200);
 
-            $centro->estado = 0;
-            $centro->save();
+            $centro->delete();
             return response()->json(['status' => 200], 200);
 
         } catch (\Throwable $th) {
@@ -111,7 +109,7 @@ class CentrosController extends Controller
             $centro = DB::table('centros')
             ->join('tipos_centro', 'centros.idTipo', '=', 'tipos_centro.id')
             ->where('centros.id', $request->id)
-            ->select('centros.id', 'centros.nombre', 'centros.direccion', 'centros.idTipo', 'centros.logo', 'centros.estado', 'tipos_centro.nombre as tipo')
+            ->select('centros.id', 'centros.nombre', 'centros.direccion', 'centros.idTipo', 'centros.logo', 'tipos_centro.nombre as tipo')
             ->first();
 
             if (!$centro) {
@@ -157,7 +155,7 @@ class CentrosController extends Controller
     {
         try {
             
-            $centros = Centro::select('id', 'nombre')->where('estado',1)->get();
+            $centros = Centro::select('id', 'nombre')->get();
 
             if (!$centros) {
                 return response()->json(['errors' => 'No se han podido obtener los centros.','status' => 422], 200);

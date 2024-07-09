@@ -14,6 +14,16 @@ class RepresentacionGeneralSeeder extends Seeder
     public function run(): void
     {
         $representacion = new RepresentacionGeneral();
+        $representacion->nombre = 'Director/a | Decano/a';
+        $representacion->estado = true;
+        $representacion->save();
+
+        $representacion = new RepresentacionGeneral();
+        $representacion->nombre = 'Secretario/a';
+        $representacion->estado = true;
+        $representacion->save();
+
+        $representacion = new RepresentacionGeneral();
         $representacion->nombre = 'Profesorado vinculación permanente';
         $representacion->estado = true;
         $representacion->save();

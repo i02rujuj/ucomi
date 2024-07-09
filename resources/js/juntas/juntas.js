@@ -30,7 +30,7 @@ function renderHTMLJunta(response){
         <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-4 justify-center items-center">
             <label for="idCentro" class="block text-sm text-gray-600 w-36 pr-6 text-right">Centro asociado: *</label>
             <select id="idCentro" class="swal2-input junta text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none ${response && response.idCentro ? ' bg-red-50' : " bg-blue-50"}" ${response && response.idCentro ? ' disabled' : ""} ${response && response.deleted_at!=null ? ' disabled' : ""}>
-                <option value="">-----</option>
+                <option value="" selected disabled>Selecciona una junta</option>
                 ${centros.forEach(centro => {            
                     options+='<option value="'+centro.id+'" ';
                     if(response && centro.id == response.idCentro) 

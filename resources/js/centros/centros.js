@@ -40,7 +40,7 @@ function renderHTMLCentro(response){
         <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
             <label for="idTipo" class="block text-sm text-gray-600 mb-1 w-32 pr-7 text-right">Tipo *</label>
             <select id="idTipo" class="swal2-input centro tipo text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required" ${response && response.deleted_at!=null ? 'disabled' : ""}>
-                <option value="">-----</option>
+                <option value="" selected disabled>Selecciona un tipo</option>
                 ${tiposCentro.forEach(tipo => {            
                     options+='<option value="'+tipo.id+'" ';
                     if(response && tipo.id == response.idTipo) 

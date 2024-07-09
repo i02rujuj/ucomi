@@ -87,11 +87,13 @@ Route::group(['middleware' => ['role:admin|responsable_centro']], function () {
 
     // MIEMBROS EQUIPO DE GOBIERNO
     Route::get('/miembros_gobierno', [MiembrosGobiernoController::class, 'index'])->name('miembrosGobierno');
-    Route::post('/miembros_gobierno/add', [MiembrosGobiernoController::class, 'store'])->name('store');
+    Route::post('/miembro_gobierno/add', [MiembrosGobiernoController::class, 'store'])->name('store');
     Route::post('/miembro_gobierno/delete', [MiembrosGobiernoController::class, 'delete']);
     Route::post('/miembro_gobierno/get', [MiembrosGobiernoController::class, 'get']);
     Route::post('/miembro_gobierno/update', [MiembrosGobiernoController::class, 'update']);
     Route::post('/miembro_gobierno/getDirectivos', [MiembrosGobiernoController::class, 'getDirectivos']);
+    Route::post('/miembro_gobierno/validate', [MiembrosGobiernoController::class, 'validateMiembro']);
+
 }); 
 
 Route::group(['middleware' => ['role:admin|responsable_centro|responsable_junta']], function () {

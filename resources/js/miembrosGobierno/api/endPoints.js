@@ -2,12 +2,14 @@ const MIEMBROSGOBIERNO_DELETE_URL = "miembro_gobierno/delete"
 const MIEMBROSGOBIERNO_GET_URL = "miembro_gobierno/get"
 const MIEMBROSGOBIERNO_UPDATE_URL = "miembro_gobierno/update"
 const MIEMBROSGOBIERNO_GETBYCENTRO_URL = "miembros_gobierno/getbycentro"
-const MIEMBROSGOBIERNO_ADD_URL = "miembros_gobierno/add"
+const MIEMBROSGOBIERNO_ADD_URL = "miembro_gobierno/add"
+const MIEMBROSGOBIERNO_VALIDATE_URL = "miembro_gobierno/validate"
 
 export {
     MIEMBROSGOBIERNO_DELETE_URL,
     MIEMBROSGOBIERNO_GET_URL,
     MIEMBROSGOBIERNO_UPDATE_URL,
     MIEMBROSGOBIERNO_GETBYCENTRO_URL,
-    MIEMBROSGOBIERNO_ADD_URL
+    MIEMBROSGOBIERNO_ADD_URL,
+    MIEMBROSGOBIERNO_VALIDATE_URL,
 }

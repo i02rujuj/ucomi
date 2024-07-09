@@ -113,6 +113,13 @@ class MiembrosGobiernoController extends Controller
                 "idRepresentacion" => $request->data['idRepresentacion'],
             ]);
 
+            if($request->data['responsable'] == 0){
+                $miembroGobierno->usuario->removeRole('responsable_centro');
+            }
+            else{
+                $miembroGobierno->usuario->assignRole('responsable_centro');
+            }
+
             return response()->json(['message' => 'Miembro de centro creado correctamente.', 'status' => 200], 200);
 
         } catch (\Throwable $th) {
@@ -120,47 +127,16 @@ class MiembrosGobiernoController extends Controller
         }
     }
 
-    public function getDirectivos(Request $request)
-    {
-        try {
-            // Falta filtrar entre fechas y estado 
-            $director = MiembroGobierno::
-                join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
-                ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
-                ->where('miembros_gobierno.fechaCese', null)
-                ->whereIn('miembros_gobierno.idRepresentacion', [config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR')])
-                ->select('users.id', 'users.name')
-                ->first();
-
-            $secretario = MiembroGobierno::
-                join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
-                ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
-                ->where('miembros_gobierno.fechaCese', null)
-                ->whereIn('miembros_gobierno.idRepresentacion', [config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO')])
-                ->select('users.id', 'users.name')
-                ->first();
-
-            return response()->json(['director'=>$director, 'secretario'=>$secretario]);
-
-        } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se han encontrado directivos para el centro seleccionado.'], 404);
-        }    
-    }
-
     public function get(Request $request)
     {
         try {
-
-            $miembro = MiembroGobierno::where('id', $request->id)->first();
-
+            $miembro = MiembroGobierno::withTrashed()->where('id', $request->id)->first();
             if (!$miembro) {
-                return response()->json(['error' => 'No se ha encontrado el miembro de gobierno.'], 404);
+                return response()->json(['errors' => 'No se ha encontrado el miembro de centro.','status' => 422], 200);
             }
-            
             return response()->json($miembro);
-            
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se ha encontrado el miembro de gobierno.'], 404);
+            return response()->json(['errors' => 'No se ha encontrado el miembro de centro.','status' => 422], 200);
         }
     }
 
@@ -170,44 +146,30 @@ class MiembrosGobiernoController extends Controller
             $miembro = MiembroGobierno::where('id', $request->id)->first();
 
             if (!$miembro) {
-                return response()->json(['error' => 'No se ha encontrado el miembro de Gobierno.'], 404);
+                return response()->json(['errors' => 'No se ha encontrado el miembro de centro.','status' => 422], 200);
             }
 
             $miembro->delete();
-            return response()->json($request);
+            return response()->json(['status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se ha encontrado el miembro de Gobierno.'], 404);
+            return response()->json(['errors' => 'No se ha encontrado el miembro de centro.','status' => 422], 200);
         }
     }
 
     public function update(Request $request)
     {
         try {
+
+            $request['accion']='update';
+            $validation = $this->validateMiembro($request);
+            if($validation->original['status']!=200){
+                return $validation;
+            }
+
             $miembro = MiembroGobierno::where('id', $request->id)->first();
             if (!$miembro) {
-                return response()->json(['error' => 'No se ha encontrado el miembro de Gobierno', 'status' => 404], 200);
-            }
-
-            if($request->data['fechaCese'] != null){
-                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-                $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
-                $dateCese = new DateTime($request->data['fechaCese']);
-
-                if ($dateTomaPosesion>$dateCese) {
-                    return response()->json(['error' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 404]);
-                }    
-            }
-            else{
-                // Comprobación existencia usuario vigente en el centro
-                $miembroRepetido = MiembroGobierno::select('id')
-                ->where('idCentro', $miembro->idCentro)
-                ->where('idUsuario', $miembro->idUsuario)
-                ->where('fechaCese', null)
-                ->count();
-
-                if($miembroRepetido>1)
-                    return response()->json(['error' => 'No se pudo editar el miembro del equipo de gobierno: ya existe el usuario vigente en el centro seleccionado', 'status' => 404]);
+                return response()->json(['errors' => 'No se ha encontrado el miembro de centro.', 'status' => 422], 200);
             }
 
             if($request->data['responsable'] == 0){
@@ -217,33 +179,15 @@ class MiembrosGobiernoController extends Controller
                 $miembro->usuario->assignRole('responsable_centro');
             }
 
+            $miembro->idRepresentacion = $request->data['idRepresentacion'];
             $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
             $miembro->fechaCese = $request->data['fechaCese'];  
             $miembro->save();
-            return response()->json(['message' => 'El miembro de Gobierno se ha actualizado correctamente.', 'status' => 200]);
+            return response()->json(['message' => 'El miembro de centro se ha actualizado correctamente.', 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'Error al actualizar el miembro de gobierno. '.$th->getMessage(), 'status' => 404]);
+            return response()->json(['errors' => 'Error al actualizar el miembro de centro.', 'status' => 422], 200);
         }
-    }
-
-    public function getByCentro(Request $request)
-    {
-        
-        try {
-            $miembros = MiembroGobierno::
-                join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
-                ->join('representaciones_gobierno', 'miembros_gobierno.idRepresentacion', '=', 'representaciones_gobierno.id')
-                ->where('miembros_gobierno.idCentro', $request->get('id'))
-                ->where('miembros_gobierno.fechaCese', null)
-                ->select('users.id', 'users.name', 'users.email', 'miembros_gobierno.idRepresentacion', 'representaciones_gobierno.nombre')
-                ->get();
-
-            return response()->json(['miembros'=>$miembros]);
-
-        } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se han encontrado miembros de gobierno para el centro seleccionado.'], 404);
-        }    
     }
 
     public function rules()
@@ -298,6 +242,7 @@ class MiembrosGobiernoController extends Controller
                         ->where('idCentro', $request->data['idCentro'])
                         ->where('idRepresentacion', config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR'))
                         ->where('fechaCese', null)
+                        ->whereNot('id', $request->id)
                         ->first();
     
                     if($director)
@@ -310,6 +255,7 @@ class MiembrosGobiernoController extends Controller
                         ->where('idCentro', $request->data['idCentro'])
                         ->where('idRepresentacion', config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO'))
                         ->where('fechaCese', null)
+                        ->whereNot('id', $request->id)
                         ->first();
     
                     if($secretario)
@@ -321,6 +267,7 @@ class MiembrosGobiernoController extends Controller
                         ->where('idCentro', $request->data['idCentro'])
                         ->where('idUsuario', $request->data['idUsuario'])
                         ->where('fechaCese', null)
+                        ->whereNot('id', $request->id)
                         ->first();
     
                     if($usuarioEnCentro)
@@ -340,4 +287,48 @@ class MiembrosGobiernoController extends Controller
         return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
     }
 
+    public function getDirectivos(Request $request)
+    {
+        try {
+            // Falta filtrar entre fechas y estado 
+            $director = MiembroGobierno::
+                join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
+                ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
+                ->where('miembros_gobierno.fechaCese', null)
+                ->whereIn('miembros_gobierno.idRepresentacion', [config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR')])
+                ->select('users.id', 'users.name')
+                ->first();
+
+            $secretario = MiembroGobierno::
+                join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
+                ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
+                ->where('miembros_gobierno.fechaCese', null)
+                ->whereIn('miembros_gobierno.idRepresentacion', [config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO')])
+                ->select('users.id', 'users.name')
+                ->first();
+
+            return response()->json(['director'=>$director, 'secretario'=>$secretario]);
+
+        } catch (\Throwable $th) {
+            return response()->json(['errors' => 'No se han encontrado directivos para el centro seleccionado.','status' => 422], 200);
+        }    
+    }
+
+    public function getByCentro(Request $request)
+    {
+        try {
+            $miembros = MiembroGobierno::
+                join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
+                ->join('representaciones_gobierno', 'miembros_gobierno.idRepresentacion', '=', 'representaciones_gobierno.id')
+                ->where('miembros_gobierno.idCentro', $request->get('id'))
+                ->where('miembros_gobierno.fechaCese', null)
+                ->select('users.id', 'users.name', 'users.email', 'miembros_gobierno.idRepresentacion', 'representaciones_gobierno.nombre')
+                ->get();
+
+            return response()->json(['miembros'=>$miembros]);
+
+        } catch (\Throwable $th) {
+            return response()->json(['errors' => 'No se han encontrado miembros de gobierno para el centro seleccionado.','status' => 422], 200);
+        }    
+    }
 }

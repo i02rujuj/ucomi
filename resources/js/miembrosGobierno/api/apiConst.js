@@ -63,10 +63,24 @@ const ENDPOINT_MIEMBROSGOBIERNO_ADD_BBDD = {
     data: [],
 };
 
+const ENDPOINT_MIEMBROSGOBIERNO_VALIDATE_BBDD = {
+    method: 'POST',
+    url: "",
+    comment: "Endpoint add miembros gobierno por centro",
+    explanation: "This endpoint is used validate miembros gobierno por centro of the server",
+    transformResponse: (data) => JSON.parse(data),
+    withCredentials: false,
+    headers: {
+        'content-type': 'application/json',
+    },
+    data: [],
+};
+
 export {
     ENDPOINT_MIEMBROSGOBIERNO_DELETE_BBDD,
     ENDPOINT_MIEMBROSGOBIERNO_GET_BBDD,
     ENDPOINT_MIEMBROSGOBIERNO_UPDATE_BBDD,
     ENDPOINT_MIEMBROSGOBIERNO_GETBYCENTRO_BBDD,
     ENDPOINT_MIEMBROSGOBIERNO_ADD_BBDD,
+    ENDPOINT_MIEMBROSGOBIERNO_VALIDATE_BBDD,
 }

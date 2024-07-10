@@ -23,14 +23,16 @@ Centros
                 
                 @include('components.filtros.centroFiltro')
 
-                <div>
-                    <div id="btn-add-centro" type="submit" class="flex items-center gap-2 bg-white px-5 py-2.5 rounded-md shadow cursor-pointer">
-                        <span class="material-icons-round scale-75">
-                            add_circle
-                        </span>
-                        Añadir centro
+                @if($permitirAcciones = Auth::user()->esResponsable('admin'))
+                    <div>
+                        <div id="btn-add-centro" type="submit" class="flex items-center gap-2 bg-white px-5 py-2.5 rounded-md shadow cursor-pointer">
+                            <span class="material-icons-round scale-75">
+                                add_circle
+                            </span>
+                            Añadir centro
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
 
             <div id="modal_add" name="modal_add" class="hidden">
@@ -124,6 +126,7 @@ Centros
 
 <script>
     const default_image = "{{asset('img/default_image.png')}}"
+    const permitirAcciones = "{{$permitirAcciones}}"
     const centros = @json($centros)
 </script>
 

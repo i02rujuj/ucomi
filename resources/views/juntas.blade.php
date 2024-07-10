@@ -23,14 +23,16 @@ Juntas
                 
                 @include('components.filtros.juntasFiltro')
 
-                <div>
-                    <div id="btn-add-junta" type="submit" class="flex items-center gap-2 bg-white px-5 py-2.5 rounded-md shadow cursor-pointer">
-                        <span class="material-icons-round scale-75">
-                            add_circle
-                        </span>
-                        Añadir junta
+                @if($permitirAcciones = Auth::user()->esResponsable('admin|centro'))
+                    <div>
+                        <div id="btn-add-junta" type="submit" class="flex items-center gap-2 bg-white px-5 py-2.5 rounded-md shadow cursor-pointer">
+                            <span class="material-icons-round scale-75">
+                                add_circle
+                            </span>
+                            Añadir junta
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
 
             <div id="modal_add" name="modal_add" class="hidden">
@@ -177,6 +179,7 @@ Juntas
     @endsection
 
 <script>
+    const permitirAcciones = "{{$permitirAcciones}}"
     const juntas = @json($juntas)
 </script>
 

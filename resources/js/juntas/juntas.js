@@ -151,19 +151,21 @@ const preConfirm = async(accion, id=null) => {
  * EVENTO AÑADIR
  */
 const addButton = document.querySelector('#btn-add-junta');
-addButton.addEventListener("click", async (event) => {
-    await Swal.fire({
-        title: "Añadir Junta",
-        html: renderHTMLJunta(null),
-        focusConfirm: false,
-        showCancelButton: true,
-        confirmButtonText: "Añadir",
-        cancelButtonText: "Cancelar",
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        preConfirm: async () => preConfirm('add')
+if(addButton){
+    addButton.addEventListener("click", async (event) => {
+        await Swal.fire({
+            title: "Añadir Junta",
+            html: renderHTMLJunta(null),
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: "Añadir",
+            cancelButtonText: "Cancelar",
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            preConfirm: async () => preConfirm('add')
+        })
     })
-})
+}
 
 // EVENTO EDITAR Y ELIMINAR
 const addEditEvent = (button) => {
@@ -184,7 +186,7 @@ const addEditEvent = (button) => {
                 title: response && response.deleted_at!=null ? 'Junta eliminada' : 'Editar Junta',
                 html: renderHTMLJunta(response),
                 focusConfirm: false,
-                showDenyButton: response && response.deleted_at!=null ? false : true,
+                showDenyButton: (response && response.deleted_at!=null) || !permitirAcciones ? false : true,
                 showCancelButton: response && response.deleted_at!=null ? false : true,
                 showConfirmButton: response && response.deleted_at!=null ? false : true,
                 denyButtonText: 'Eliminar',
@@ -194,7 +196,7 @@ const addEditEvent = (button) => {
                 cancelButtonColor: '',
                 denyButtonColor: '#d33',
                 preConfirm: async () => preConfirm('update', button.dataset.juntaId),
-                preDeny: async () => preConfirm('delete', button.dataset.juntaId),
+                preDeny: permitirAcciones ? async () => preConfirm('delete', button.dataset.juntaId) : null,
             });
 
         } catch (error) {

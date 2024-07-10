@@ -116,27 +116,29 @@ const preConfirm = async(accion, id=null) => {
  * EVENTO AÑADIR
  */
 const addButton = document.querySelector('#btn-add-centro');
-addButton.addEventListener("click", async (event) => {
+if(addButton){
+    addButton.addEventListener("click", async (event) => {
 
-    await Swal.fire({
-        title: "Añadir Centro",
-        html: renderHTMLCentro(null),
-        focusConfirm: false,
-        showCancelButton: true,
-        confirmButtonText: "Añadir",
-        cancelButtonText: "Cancelar",
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        didRender: () => {
-            modal_add.querySelector('#logo').addEventListener("change", async (event) => {
-                if (event.srcElement.files[0]) {
-                    modal_add.querySelector('#img_logo').src = URL.createObjectURL(event.srcElement.files[0])
-                }  
-            })
-        },
-        preConfirm: async () => preConfirm('add')
+        await Swal.fire({
+            title: "Añadir Centro",
+            html: renderHTMLCentro(null),
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: "Añadir",
+            cancelButtonText: "Cancelar",
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            didRender: () => {
+                modal_add.querySelector('#logo').addEventListener("change", async (event) => {
+                    if (event.srcElement.files[0]) {
+                        modal_add.querySelector('#img_logo').src = URL.createObjectURL(event.srcElement.files[0])
+                    }  
+                })
+            },
+            preConfirm: async () => preConfirm('add')
+        })
     })
-})
+}
 
 // EVENTO EDITAR Y ELIMINAR
 const addEditEvent = (button) => {
@@ -158,7 +160,7 @@ const addEditEvent = (button) => {
                 title: response && response.deleted_at!=null ? 'Centro eliminado' : 'Editar Centro',
                 html: renderHTMLCentro(response),
                 focusConfirm: false,
-                showDenyButton: response && response.deleted_at!=null ? false : true,
+                showDenyButton: (response && response.deleted_at!=null) || !permitirAcciones ? false : true,
                 showCancelButton: response && response.deleted_at!=null ? false : true,
                 showConfirmButton: response && response.deleted_at!=null ? false : true,
                 denyButtonText: 'Eliminar',
@@ -175,7 +177,7 @@ const addEditEvent = (button) => {
                     })
                 },
                 preConfirm: async () => preConfirm('update', button.dataset.centroId),
-                preDeny: async () => preConfirm('delete', button.dataset.centroId),
+                preDeny: permitirAcciones ? async () => preConfirm('delete', button.dataset.centroId) : null,
             });
 
         } catch (error) {

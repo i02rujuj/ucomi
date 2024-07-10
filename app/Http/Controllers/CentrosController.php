@@ -7,6 +7,7 @@ use App\Helpers\Helper;
 use App\Models\TipoCentro;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CentrosController extends Controller
@@ -14,7 +15,13 @@ class CentrosController extends Controller
     public function index(Request $request)
     {
         try {
+            
             $centros = Centro::select('id', 'nombre', 'direccion', 'idTipo', 'logo', 'deleted_at');
+
+            if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
+                $centros = $centros
+                ->whereIn('id', $datosResponsableCentro['idCentros']);
+            }
 
             switch ($request->input('action')) {
                 case 'limpiar':

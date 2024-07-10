@@ -21,9 +21,10 @@ return new class extends Migration
 
             $table->date('fechaTomaPosesion');
             $table->date('fechaCese')->nullable();
+            $table->integer('responsable')->default(0);;
             $table->unsignedBigInteger('idRepresentacion');
-            $table->boolean('estado');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('idComision')->references('id')->on('comisiones');
             $table->foreign('idUsuario')->references('id')->on('users');

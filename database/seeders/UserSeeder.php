@@ -16,44 +16,61 @@ class UserSeeder extends Seeder
     {
         $usuarios = [
             [
+                'id' => 1,
                 'nombre'=>'Manuel Cañas Ramírez', 
                 'email'=>'epsc.director@uco.es', 
-                'rol'=>'responsable_centro',
             ],
             [
+                'id' => 2,
                 'nombre'=>'Luis Manuel Fernández de Ahumada', 
                 'email'=>'epsc.secretaria@uco.es', 
-                'rol'=>'responsable_centro',
             ],
             [
+                'id' => 3,
                 'nombre'=>'Francisco Ramón Lara Raya', 
                 'email'=>'epsc.ord.acad@uco.es',
-                'rol'=>'responsable_junta', 
             ],
             [
+                'id' => 4,
                 'nombre'=>'Joost van Duijn', 
                 'email'=>'epsc.relexteriores@uco.es', 
-                'rol'=>'responsable_junta',
             ],
             [
+                'id' => 5,
                 'nombre'=>'Isabel Moreno García', 
                 'email'=>'calidad.epsc@uco.es', 
-                'rol'=>'responsable_comision',
             ],
             [
+                'id' => 6,
                 'nombre'=>'Rosa María Relaño Luna', 
                 'email'=>'direccioneps@uco.es', 
-                'rol'=>'responsable_comision',
             ],
             [
+                'id' => 7,
                 'nombre'=>'José Luis Ávila Jiménez', 
                 'email'=>'jlavila@uco.es', 
                 'rol'=>'admin',
             ],
             [
+                'id' => 8,
                 'nombre'=>'Javier Ruiz Jurado', 
                 'email'=>'i02rujuj@uco.es', 
                 'rol'=>'admin',
+            ],
+            [
+                'id' => 9,
+                'nombre'=>'Paula Cebrián Navarro', 
+                'email'=>'miembrocentro@uco.es', 
+            ],
+            [
+                'id' => 10,
+                'nombre'=>'Rocío Ruiz Jurado', 
+                'email'=>'miembrojunta@uco.es', 
+            ],
+            [
+                'id' => 11,
+                'nombre'=>'Rafael Jurado Torres', 
+                'email'=>'miembrocomision@uco.es', 
             ],
         ];
 
@@ -64,13 +81,14 @@ class UserSeeder extends Seeder
             $u->email_verified_at = now();
             $u->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; /* Contraseña: password */
             $u->remember_token = Str::random(10);
-            $u->estado = true;
             $u->save();
 
-            $u->assignRole($user['rol']);
+            if(isset($user['rol'])){
+                $u->assignRole($user['rol']);
+            }
         }
 
-        $users = User::factory()->count(100)->create();
+        User::factory()->count(100)->create();
 
     }
 }

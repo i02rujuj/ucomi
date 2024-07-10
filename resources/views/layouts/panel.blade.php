@@ -61,7 +61,7 @@
         
                 <ul class="text-sm mt-2 leading-8">
 
-                    @hasrole('admin')
+                    @if(auth()->user()->esResponsable('admin|centro'))
                     <li @class(['mb-1 flex', request()->routeIs('centros') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="{{ route('centros') }}" class="text-gray-600 w-full flex justify-start items-center">
                             <span class="material-icons-round text-slate-600 ml-4 mr-1">
@@ -71,9 +71,9 @@
                             Centros
                         </a>
                     </li>
-                    @endhasrole
+                    @endif
 
-                    @hasrole(['admin', 'responsable_centro'])
+                    @if(auth()->user()->esResponsable('admin|centro|junta'))
                     <li @class(['mb-1 flex', request()->routeIs('juntas') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="{{ route('juntas') }}" class="text-gray-600 w-full flex justify-start items-center">
                             <span class="material-icons-round text-slate-600 ml-4 mr-1">
@@ -83,9 +83,9 @@
                             Juntas
                         </a>
                     </li> 
-                    @endhasrole
+                    @endif
 
-                    @hasrole(['admin', 'responsable_centro', 'responsable_junta'])
+                    @if(auth()->user()->esResponsable('admin|centro|junta|comision'))
                     <li @class(['mb-1 flex', request()->routeIs('comisiones') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="{{ route('comisiones') }}" class="text-gray-600 w-full flex justify-start items-center">
                             <span class="material-icons-round text-slate-600 ml-4 mr-1">
@@ -95,9 +95,9 @@
                             Comisiones
                         </a>
                     </li>
-                    @endhasrole
+                    @endif
 
-                    @hasrole(['admin', 'responsable_centro', 'responsable_junta', 'responsable_comision'])
+                    @if(auth()->user()->esResponsable('admin|centro|junta|comision'))
                     
                     <button class="accordion-submenu text-gray-600 w-full flex justify-start items-center hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200">
                         <span class="material-icons-round text-slate-600 ml-4 mr-2">
@@ -114,7 +114,7 @@
                     
                     <div @class(['submenu', request()->routeIs('convocatoriasJunta') || request()->routeIs('convocatoriasComision') ? 'submenu-visible' : ''])>
                     
-                        @hasrole(['admin', 'responsable_centro', 'responsable_junta'])
+                        @if(auth()->user()->esResponsable('admin|centro|junta'))
 
                         <li @class(['mb-1 flex', request()->routeIs('convocatoriasJunta') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('convocatoriasJunta') }}" class="text-gray-600 w-full flex justify-start items-center">
@@ -126,9 +126,9 @@
                             </a>
                         </li>
 
-                        @endhasrole
+                        @endif
 
-                        @hasrole(['admin', 'responsable_centro', 'responsable_junta', 'responsable_comision'])
+                        @if(auth()->user()->esResponsable('admin|centro|junta|comision'))
 
                         <li @class(['mb-1 flex', request()->routeIs('convocatoriasComision') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('convocatoriasComision') }}" class="text-gray-600 w-full flex justify-start items-center">
@@ -139,12 +139,13 @@
                                 Comisión
                             </a>
                         </li>
-                        @endhasrole
+                        @endif
                         
                     </div>
 
-                    @endhasrole
+                    @endif
 
+                    @if(auth()->user()->esResponsable('admin|centro|junta|comision'))
                     <button class="accordion-submenu text-gray-600 w-full flex justify-start items-center hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200">
                         <span class="material-icons-round text-slate-600 ml-4 mr-2">
                             manage_accounts
@@ -159,8 +160,8 @@
                     </button>
 
                     <div @class(['submenu', request()->routeIs('miembrosGobierno') || request()->routeIs('miembrosJunta') || request()->routeIs('miembrosComision') ? 'submenu-visible' : ''])>
-                        
-                        @hasrole(['admin','responsable_centro'])
+
+                        @if(auth()->user()->esResponsable('admin|centro'))
                         <li @class(['mb-1 flex', request()->routeIs('miembrosGobierno') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('miembrosGobierno') }}" class="text-gray-600 w-full flex justify-start items-center">
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
@@ -170,9 +171,9 @@
                                 Centro
                             </a>
                         </li>
-                        @endhasrole
+                        @endif
 
-                        @hasrole(['admin','responsable_centro','responsable_junta'])
+                        @if(auth()->user()->esResponsable('admin|centro|junta'))
                         <li @class(['mb-1 flex', request()->routeIs('miembrosJunta') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('miembrosJunta') }}" class="text-gray-600 w-full flex justify-start items-center">
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
@@ -182,9 +183,9 @@
                                 Junta
                             </a>
                         </li>
-                        @endhasrole
+                        @endif
 
-                        @hasrole(['admin', 'responsable_centro', 'responsable_junta','responsable_comision'])
+                        @if(auth()->user()->esResponsable('admin|centro|junta|comision'))
                         <li @class(['mb-1 flex', request()->routeIs('miembrosComision') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('miembrosComision') }}" class="text-gray-600 w-full flex justify-start items-center">
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
@@ -194,9 +195,10 @@
                                 Comisión
                             </a>
                         </li>
-                        @endhasrole
+                        @endif
                         
                     </div>
+                    @endif
 
                     <hr class="my-4 border-gray-300" />
 

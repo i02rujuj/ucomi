@@ -19,7 +19,14 @@ class MiembrosGobiernoController extends Controller
     {
         try {
 
-            $miembrosGobierno = MiembroGobierno::select('id', 'idCentro', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'deleted_at');
+            $miembrosGobierno = MiembroGobierno::select('id', 'idCentro', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'deleted_at');
+            $centros = Centro::select('id', 'nombre');
+
+            if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
+                $centros = $centros->where('id', $datosResponsableCentro['idCentros']);
+                $miembrosGobierno = $miembrosGobierno
+                ->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+            }
 
             switch ($request->input('action')) {
                 case 'limpiar':
@@ -36,38 +43,15 @@ class MiembrosGobiernoController extends Controller
                     break;
             }
 
-            $user = Auth::user();
+            $centros = $centros->get();
 
-            if($user->hasRole('admin')){
-                $centros = Centro::select('id', 'nombre')->get();
-
-                $miembrosGobierno = $miembrosGobierno
-                ->orderBy('deleted_at')
-                ->orderBy('fechaCese')
-                ->orderBy('idCentro')
-                ->orderBy('idRepresentacion')
-                ->orderBy('idUsuario')
-                ->paginate(10);
-                }
-            
-            if($user->hasRole('responsable_centro')){
-                $centro = MiembroGobierno::where('miembros_gobierno.idUsuario', $user->id)
-                ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
-                ->join('centros', 'miembros_gobierno.idCentro', '=', 'centros.id')
-                ->select('centros.id', 'centros.nombre')
-                ->first();
-
-                $miembrosGobierno = $miembrosGobierno
-                ->where('idCentro', $centro->id)
-                ->orderBy('deleted_at')
-                ->orderBy('fechaCese')
-                ->orderBy('idCentro')
-                ->orderBy('idRepresentacion')
-                ->orderBy('idUsuario')
-                ->paginate(10);
-
-                $centros=array($centro);
-            }
+            $miembrosGobierno = $miembrosGobierno
+            ->orderBy('deleted_at')
+            ->orderBy('fechaCese')
+            ->orderBy('idCentro')
+            ->orderBy('idRepresentacion')
+            ->orderBy('idUsuario')
+            ->paginate(10);
 
             $users = User::select('id', 'name')->get();
             $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->get();    
@@ -113,14 +97,8 @@ class MiembrosGobiernoController extends Controller
                 "fechaTomaPosesion" => $request->data['fechaTomaPosesion'],
                 "fechaCese" => $request->data['fechaCese'],
                 "idRepresentacion" => $request->data['idRepresentacion'],
+                "responsable" => $request->data['responsable'],
             ]);
-
-            if($request->data['responsable'] == 0){
-                $miembroGobierno->usuario->removeRole('responsable_centro');
-            }
-            else{
-                $miembroGobierno->usuario->assignRole('responsable_centro');
-            }
 
             return response()->json(['message' => 'Miembro de centro creado correctamente.', 'status' => 200], 200);
 
@@ -174,16 +152,11 @@ class MiembrosGobiernoController extends Controller
                 return response()->json(['errors' => 'No se ha encontrado el miembro de centro.', 'status' => 422], 200);
             }
 
-            if($request->data['responsable'] == 0){
-                $miembro->usuario->removeRole('responsable_centro');
-            }
-            else{
-                $miembro->usuario->assignRole('responsable_centro');
-            }
-
             $miembro->idRepresentacion = $request->data['idRepresentacion'];
             $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
             $miembro->fechaCese = $request->data['fechaCese'];  
+            $miembro->responsable = $request->data['responsable'];  
+
             $miembro->save();
             return response()->json(['message' => 'El miembro de centro se ha actualizado correctamente.', 'status' => 200], 200);
             

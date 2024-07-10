@@ -33,7 +33,6 @@ Miembros de Centro
             </div>
 
             <div id="modal_add" name="modal_add" class="hidden">
-
                 <div id='user'>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-4 justify-center items-center">
                         <label for="idUsuario" class="block text-sm text-gray-600 w-36 pr-6 text-right">Usuario: *</label>
@@ -162,11 +161,10 @@ Miembros de Centro
 
                             <div class="flex justify-end items-center gap-2 mt-4">
                                 <span class="flex items-center text-xs bg-blue-100 font-semibold px-2 rounded-lg truncate">
-                                    @if ($miembro->usuario->hasRole('responsable_centro'))
+                                    @if ($miembro->responsable==1)
                                     <span class="material-icons-round text-yellow-700">
                                         workspace_premium
                                     </span>
-                                    
                                     Responsable de Centro
                                     @else
                                         Miembro de Centro

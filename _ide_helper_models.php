@@ -168,26 +168,31 @@ namespace App\Models{
  * @property int $idUsuario
  * @property string $fechaTomaPosesion
  * @property string|null $fechaCese
+ * @property int $responsable
  * @property int $idRepresentacion
- * @property int $estado
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Comision $comision
  * @property-read \App\Models\RepresentacionGeneral $representacion
  * @property-read \App\Models\User $usuario
  * @method static \Database\Factories\MiembroComisionFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision query()
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereEstado($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereFechaCese($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereFechaTomaPosesion($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereIdComision($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereIdRepresentacion($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereIdUsuario($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereResponsable($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision withoutTrashed()
  */
 	class MiembroComision extends \Eloquent {}
 }
@@ -202,6 +207,7 @@ namespace App\Models{
  * @property int $idRepresentacion
  * @property string $fechaTomaPosesion
  * @property string|null $fechaCese
+ * @property int $responsable
  * @property string $vigente
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -224,6 +230,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereIdCentro($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereIdRepresentacion($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereIdUsuario($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereResponsable($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereVigente($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno withTrashed()
@@ -241,26 +248,31 @@ namespace App\Models{
  * @property int $idUsuario
  * @property string $fechaTomaPosesion
  * @property string|null $fechaCese
+ * @property int $responsable
  * @property int $idRepresentacion
- * @property int $estado
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Junta $junta
  * @property-read \App\Models\RepresentacionGeneral $representacion
  * @property-read \App\Models\User $usuario
  * @method static \Database\Factories\MiembroJuntaFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta query()
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta whereEstado($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta whereFechaCese($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta whereFechaTomaPosesion($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta whereIdJunta($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta whereIdRepresentacion($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta whereIdUsuario($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta whereResponsable($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta withoutTrashed()
  */
 	class MiembroJunta extends \Eloquent {}
 }
@@ -374,11 +386,15 @@ namespace App\Models{
  * @property mixed $password
  * @property string|null $remember_token
  * @property string|null $image
- * @property int $estado
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroComision> $miembrosComision
+ * @property-read int|null $miembros_comision_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroGobierno> $miembrosGobierno
  * @property-read int|null $miembros_gobierno_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $miembrosJunta
+ * @property-read int|null $miembros_junta_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
@@ -390,19 +406,22 @@ namespace App\Models{
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEstado($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|User withoutTrashed()
  */
 	class User extends \Eloquent {}
 }

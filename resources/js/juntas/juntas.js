@@ -7,19 +7,6 @@ let centros = null
 document.addEventListener("DOMContentLoaded", async (event) => {
     // Obtener centros
     centros = await GETALL_CENTRO_BBDD();
-    var select = document.querySelector('#filtroCentro');
- 
-    // Rellenar select filtro filtroCentro
-    const searchParams = new URLSearchParams(window.location.search);
-    centros.forEach(tipo => {
-        var option = document.createElement("option");
-        option.text = tipo.nombre
-        option.value = tipo.id
-        if(tipo.id==searchParams.get('filtroCentro')){
-            option.selected = "selected"
-        }
-        select.add(option);
-    })
 })
 
 function renderHTMLJunta(response){

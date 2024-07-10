@@ -19,6 +19,17 @@ class JuntasController extends Controller
         try {
 
             $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'deleted_at');
+            $centros = Centro::select('id', 'nombre');
+
+            if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
+                $centros = $centros->where('id', $datosResponsableCentro['idCentros']);
+                $juntas = $juntas->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+            }
+
+            if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
+                $centros = $centros->whereIn('id', $datosResponsableJunta['idCentros']);
+                $juntas = $juntas->whereIn('id', $datosResponsableJunta['idJuntas']);
+            }
 
             switch ($request->input('action')) {
                 case 'limpiar':
@@ -34,37 +45,12 @@ class JuntasController extends Controller
                     break;
             }
 
-            $user = Auth::user();
-
-            if($user->hasRole('admin')){
-                $centros = Centro::select('id', 'nombre')->get();
-
-                $juntas = $juntas
-                ->orderBy('deleted_at')
-                ->orderBy('fechaDisolucion')
-                ->orderBy('fechaConstitucion', 'desc')
-                ->paginate(5);
-            }
-            
-            if($user->hasRole('responsable_centro')){
-                $centro = MiembroGobierno::where('miembros_gobierno.idUsuario', $user->id)
-                ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
-                ->join('centros', 'miembros_gobierno.idCentro', '=', 'centros.id')
-                ->select('centros.id', 'centros.nombre')
-                ->first();
-
-                $juntas = $juntas->where('idCentro', $centro->id)
-                ->orderBy('deleted_at')
-                ->orderBy('fechaDisolucion')
-                ->orderBy('fechaConstitucion', 'desc')
-                ->paginate(5);
-
-                $centros=array($centro);
-            }
-
-            if($user->hasRole('responsable_junta')){
-                /* ////////////////////////////////////*/
-            }
+            $centros=$centros->get();
+            $juntas = $juntas
+            ->orderBy('deleted_at')
+            ->orderBy('fechaDisolucion')
+            ->orderBy('fechaConstitucion', 'desc')
+            ->paginate(5);
 
             if($request->input('action')=='limpiar'){
                 return redirect()->route('juntas')->with([

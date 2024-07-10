@@ -29,8 +29,7 @@ class MiembroJuntaFactory extends Factory
             'idJunta' => 1,
             'fechaTomaPosesion' => now(),
             'fechaCese' => null,
-            'idRepresentacion' => $this->faker->randomElement(RepresentacionGeneral::all())['id'],
-            'estado' => 1
+            'idRepresentacion' => $this->faker->randomElement([3,4,5,6]),
         ];
     }
 }

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('idRepresentacion');
             $table->date('fechaTomaPosesion');
             $table->date('fechaCese')->nullable();
+            $table->integer('responsable')->default(0);;
             $table->string('vigente'); // Mantenida por trigger
             $table->timestamps();
             $table->softDeletes();

@@ -10,11 +10,12 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
     use HasRoles;
 
     /**
@@ -27,8 +28,6 @@ class User extends Authenticatable
         'email',
         'password',
         'image',
-        'estado'
- 
     ];
 
     /**
@@ -55,6 +54,128 @@ class User extends Authenticatable
         return $this->hasMany(MiembroGobierno::class, 'id');
     }
 
+    public function miembrosJunta(){
+        return $this->hasMany(MiembroJunta::class, 'id');
+    }
+
+    public function miembrosComision(){
+        return $this->hasMany(MiembroComision::class, 'id');
+    }
+
+    public function esResponsableDatos($lista){
+
+        $resultado=[
+            'centros' => [],
+            'juntas' => [],
+            'comisiones' => [],
+        ];
+
+        $lista = explode("|", $lista);
+
+        foreach ($lista as $r) {
+
+            switch($r){
+                case 'centro':
+                    foreach ($this->miembrosGobierno as $miembro) {
+                        if($miembro->responsable==1){
+                            $resultado['centros']['idCentros'][]=$miembro->idCentro;
+                        }
+                    }              
+                    break;
+                case 'junta':
+                    foreach ($this->miembrosJunta as $miembro) {
+                        if($miembro->responsable==1){
+                            $resultado['juntas']['idJuntas'][]=$miembro->idJunta;
+                            $resultado['juntas']['idCentros'][]=$miembro->junta->idCentro;
+                        }
+                    }  
+                    break;
+                case 'comision':
+                    foreach ($this->miembrosComision as $miembro) {
+                        if($miembro->responsable==1){
+                            $resultado['comisiones']['idComisiones'][]=$miembro->idComision;
+                        }
+                    }  
+                    break;
+            }
+        }
+
+        return $resultado;
+    }
+
+    public function esResponsable($lista){
+
+        $lista = explode("|", $lista);
+
+        foreach ($lista as $t) {
+
+            switch($t){
+                case 'admin':
+                    if($this->hasRole('admin')){
+                        return true;
+                    }
+                    break;
+                case 'centro':
+                    foreach ($this->miembrosGobierno as $miembro) {
+                        if($miembro->responsable==1){
+                            return true;
+                        }
+                    }               
+                    break;
+                case 'junta':
+                    foreach ($this->miembrosJunta as $miembro) {
+                        if($miembro->responsable==1){
+                            return true;
+                        }
+                    }   
+                    break;
+                case 'comision':
+                    foreach ($this->miembrosComision as $miembro) {
+                        if($miembro->responsable==1){
+                            return true;
+                        }
+                    }     
+                    break;
+            }
+        }
+
+        return false;
+    }
+
+
+    public function esMiembro($lista){
+
+        $lista = explode("|", $lista);
+
+        foreach ($lista as $t) {
+
+            switch($t){
+                case 'admin':
+                    if($this->hasRole('admin')){
+                        return true;
+                    }
+                    break;
+                case 'centro':
+                    if(isset($this->miembrosGobierno)) {
+                            return true;
+                    }              
+                    break;
+                case 'junta':
+                    if(isset($this->miembrosJunta)) {
+                        return true;
+                    } 
+                    break;
+                case 'comision':
+                    if(isset($this->miembrosComision)) {
+                        return true;
+                    }   
+                    break;
+            }
+        }
+
+        return false;
+    }
+
     public function getRoleName(){
 
         $res = '';
@@ -68,11 +189,11 @@ class User extends Authenticatable
     }
 
     public function getRoleNameType(){
+        
         $roles = $this->getRoleNames();
+        $res = '';
 
         foreach($roles as $rol){
-
-            $res = '';
 
             switch($rol){
 
@@ -85,7 +206,6 @@ class User extends Authenticatable
                     $centros = MiembroGobierno::where('miembros_gobierno.idUsuario', $this->id)
                     ->join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
                     ->join('centros', 'miembros_gobierno.idCentro', '=', 'centros.id')
-                    ->where('centros.estado', 1)
                     ->select('centros.id', 'centros.nombre')
                     ->get();
 
@@ -101,8 +221,6 @@ class User extends Authenticatable
                     ->join('users', 'miembros_junta.idUsuario', '=', 'users.id')
                     ->join('juntas', 'juntas.id', '=', 'miembros_junta.idJunta')
                     ->join('centros', 'centros.id', '=', 'juntas.idCentro')
-                    ->where('miembros_junta.estado', 1)
-                    ->where('juntas.estado', 1)
                     ->select('juntas.id', 'centros.nombre', 'juntas.fechaConstitucion')
                     ->get();
 
@@ -119,8 +237,6 @@ class User extends Authenticatable
                     ->join('comisiones', 'comisiones.id', '=', 'miembros_comision.idComision')
                     ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
                     ->join('centros', 'centros.id', '=', 'juntas.idCentro')
-                    ->where('miembros_comision.estado', 1)
-                    ->where('juntas.estado', 1)
                     ->select('comisiones.nombre as nombre_comision', 'centros.nombre as nombre_centro', 'juntas.fechaConstitucion')
                     ->get();
 

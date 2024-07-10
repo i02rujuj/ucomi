@@ -36,7 +36,6 @@ class MiembroComisionFactory extends Factory
             'fechaTomaPosesion' => now(),
             'fechaCese' => null,
             'idRepresentacion' => $usuario['idRepresentacion'],
-            'estado' => 1
         ];
     }
 }

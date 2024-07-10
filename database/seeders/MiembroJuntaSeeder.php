@@ -16,14 +16,22 @@ class MiembroJuntaSeeder extends Seeder
 
         $miembrosJunta =[
             [
-                'idUsuario' => 3, 
+                'idUsuario' => 1, 
                 'idJunta' => 1,
-                'representacion' => 4
+                'representacion' => 1,
+                'responsable' => 1
             ],
             [
-                'idUsuario' => 4, 
+                'idUsuario' => 2, 
                 'idJunta' => 1,
-                'representacion' => 4
+                'representacion' => 2,
+                'responsable' => 1
+            ],
+            [
+                'idUsuario' => 3, 
+                'idJunta' => 1, 
+                'representacion' => 4,
+                'responsable' => 1,
             ],
         ];
 
@@ -34,7 +42,7 @@ class MiembroJuntaSeeder extends Seeder
             $miembro->fechaTomaPosesion = now();
             $miembro->fechaCese = null;
             $miembro->idRepresentacion = $m['representacion'];
-            $miembro->estado = 1;
+            $miembro->responsable = $m['responsable'];
             $miembro->save();
         }
 

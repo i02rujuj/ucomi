@@ -8,18 +8,18 @@
                 <div class="left-part truncate mb-2">                              
                     <select class="w-full text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none" id="filtroCentro" name="filtroCentro">
                         <option value="">Filtrar por centro</option>
-                            @foreach ($centros as $centro)
-                                <option value="{{ $centro['id'] }}" {{ app('request')->input('filtroCentro') == $centro['id'] ? "selected":"" }}>{{ $centro['nombre'] }}</option>
-                            @endforeach
+                        @foreach ($centros as $centro)
+                            <option value="{{ $centro['id'] }}" {{ app('request')->input('filtroCentro') == $centro['id'] ? "selected":"" }}>{{ $centro['nombre'] }}</option>
+                        @endforeach
                     </select>
                 </div>
 
                 <div class="left-part truncate mb-2">                              
                     <select class="w-full text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none" id="filtroRepresentacion" name="filtroRepresentacion">
                         <option value="">Filtrar por representación</option>
-                            @foreach ($representacionesGobierno as $representacion)
-                                <option value="{{ $representacion['id'] }}" {{ app('request')->input('filtroRepresentacion') == $representacion['id'] ? "selected":"" }}>{{ $representacion['nombre'] }}</option>
-                            @endforeach
+                        @foreach ($representacionesGobierno as $representacion)
+                            <option value="{{ $representacion['id'] }}" {{ app('request')->input('filtroRepresentacion') == $representacion['id'] ? "selected":"" }}>{{ $representacion['nombre'] }}</option>
+                        @endforeach
                     </select>
                 </div>
 

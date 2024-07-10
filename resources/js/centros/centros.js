@@ -2,61 +2,42 @@ import { DELETE_CENTRO_BBDD, GET_CENTRO_BBDD, UPDATE_CENTRO_BBDD, ADD_CENTRO_BBD
 import { GET_TIPOSCENTRO_BBDD } from "../tiposCentro/axiosTemplate";
 import Swal from 'sweetalert2';
 
-let tiposCentro = null
+let modal_add = null
+let modal_edit = null
 
 document.addEventListener("DOMContentLoaded", async (event) => {
-    // Obtener tipos centro
-    tiposCentro = await GET_TIPOSCENTRO_BBDD();
-    var select = document.querySelector('#filtroTipo');
- 
-    // Rellenar select filtro tipoCentro
-    const searchParams = new URLSearchParams(window.location.search);
-    tiposCentro.forEach(tipo => {
-        var option = document.createElement("option");
-        option.text = tipo.nombre
-        option.value = tipo.id
-        if(tipo.id==searchParams.get('filtroTipo')){
-            option.selected = "selected"
-        }
-        select.add(option);
-    })
+    modal_add = document.querySelector('#modal_add')
 })
 
 function renderHTMLCentro(response){
 
-    let options ="";
+    modal_add.querySelector('#nombre').value=""
+    modal_add.querySelector('#direccion').value=""
+    modal_add.querySelector('#idTipo').value=""
+    modal_add.querySelector('#logo').value=""
+    modal_add.querySelector('#img_logo').src=default_image
 
-    return  `
-        <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mt-1 justify-center items-center">
-            <label for="nombre" class="block text-sm text-gray-600 w-32 text-right">Nombre *</label>
-            <input type="text" id="nombre" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none required" value="${response ? response.nombre : ""}" ${response && response.deleted_at!=null ? 'disabled' : ""}>
-        </div>
 
-        <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-3 justify-center items-center">
-            <label for="direccion" class="block text-sm text-gray-600 w-32 text-right">Direccion *</label>
-            <input type="text" id="direccion" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required" value="${response ? response.direccion: ""}" ${response && response.deleted_at!=null ? 'disabled' : ""}>
-        </div>
+    if(response){
+        modal_edit = modal_add.cloneNode(true);
+        modal_edit.classList.remove('hidden')
+        modal_edit.querySelector('#nombre').value=response.nombre
+        modal_edit.querySelector('#direccion').value=response.direccion
+        modal_edit.querySelector('#idTipo').value=response.idTipo
+        modal_edit.querySelector('#img_logo').src=response.logo
 
-        <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
-            <label for="idTipo" class="block text-sm text-gray-600 mb-1 w-32 pr-7 text-right">Tipo *</label>
-            <select id="idTipo" class="swal2-input centro tipo text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required" ${response && response.deleted_at!=null ? 'disabled' : ""}>
-                <option value="" selected disabled>Selecciona un tipo</option>
-                ${tiposCentro.forEach(tipo => {            
-                    options+='<option value="'+tipo.id+'" ';
-                    if(response && tipo.id == response.idTipo) 
-                        options+='selected';
-                    options+='>'+tipo.nombre+'</option>';                                               
-                })}
-                ${options}
-            </select>
-        </div>
-        <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
-            <label for="img_logo" class="block text-sm text-gray-600 w-32 text-right">
-                <img id="img_logo" name="img_logo" src="${response? response.logo : default_image}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
-            </label>
-            <input id="logo" name="logo" type="file" class="centro w-60 text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none" autocomplete="off" ${response && response.deleted_at!=null ? 'disabled' : ""}/>
-        </div>
-    `
+        if(response.deleted_at!=null){
+            modal_edit.querySelector('#nombre').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#direccion').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#idTipo').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#logo').setAttribute('disabled', 'disabled')
+        }
+        return modal_edit    
+    }
+    else{
+        modal_add.classList.remove('hidden')
+        return modal_add
+    }
 }
 
 const preConfirm = async(accion, id=null) => {
@@ -147,8 +128,11 @@ addButton.addEventListener("click", async (event) => {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         didRender: () => {
-            const logo = document.querySelector('#logo')
-            event_change_image(logo)
+            modal_add.querySelector('#logo').addEventListener("change", async (event) => {
+                if (event.srcElement.files[0]) {
+                    modal_add.querySelector('#img_logo').src = URL.createObjectURL(event.srcElement.files[0])
+                }  
+            })
         },
         preConfirm: async () => preConfirm('add')
     })
@@ -158,11 +142,18 @@ addButton.addEventListener("click", async (event) => {
 const addEditEvent = (button) => {
     button.addEventListener("click", async (event) => {
         try {
-            const dataToSend = {
-                id: button.dataset.centroId,
+            let response = null
+
+            for(let c in centros.data){
+                if(centros.data[c].id==button.dataset.centroId){
+                    response = centros.data[c]
+                    break
+                }
             }
 
-            const response = await GET_CENTRO_BBDD(dataToSend);
+            if(!response)
+                throw "Error, centro no encontrado"
+
             await Swal.fire({
                 title: response && response.deleted_at!=null ? 'Centro eliminado' : 'Editar Centro',
                 html: renderHTMLCentro(response),
@@ -176,9 +167,12 @@ const addEditEvent = (button) => {
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '',
                 denyButtonColor: '#d33',
-                didRender: function() {
-                    const logo = document.querySelector('#logo')
-                    event_change_image(logo)
+                didRender: () => {
+                    modal_edit.querySelector('#logo').addEventListener("change", async (event) => {
+                        if (event.srcElement.files[0]) {
+                            modal_edit.querySelector('#img_logo').src = URL.createObjectURL(event.srcElement.files[0])
+                        } 
+                    })
                 },
                 preConfirm: async () => preConfirm('update', button.dataset.centroId),
                 preDeny: async () => preConfirm('delete', button.dataset.centroId),
@@ -198,16 +192,3 @@ const editButtons = document.querySelectorAll('#btn-editar-centro');
 editButtons.forEach(button => {
     addEditEvent(button);
 });
-
-/**
- * EVENTO CHANGE IMAGE 
- */
-const event_change_image = (button) => {
-    button.addEventListener("change", async (event) => {
-
-        const logo = event.srcElement.files[0]
-        if (logo) {
-            document.querySelector('#img_logo').src = URL.createObjectURL(logo)
-        } 
-    })
-}

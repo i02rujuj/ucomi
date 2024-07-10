@@ -12,6 +12,9 @@
                 <div class="mb-2">   
                     <select class="w-full text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none" id="filtroTipo" name="filtroTipo">
                         <option value="">Filtrar por tipo</option>
+                        @foreach ($tiposCentro as $tipo)
+                            <option value="{{ $tipo['id'] }}" {{ app('request')->input('filtroTipo') == $tipo['id'] ? "selected":"" }}>{{ $tipo['nombre'] }}</option>
+                        @endforeach
                     </select>
                 </div>
 

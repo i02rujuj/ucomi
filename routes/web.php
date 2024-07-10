@@ -1,14 +1,10 @@
 <?php
 
-use App\Models\Centro;
-use App\Helpers\Helper;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JuntasController;
-use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\CentrosController;
 use App\Http\Controllers\PublicoController;
 use App\Http\Controllers\ComisionController;
@@ -20,7 +16,6 @@ use App\Http\Controllers\MiembrosGobiernoController;
 use App\Http\Controllers\ConvocatoriasJuntaController;
 use App\Http\Controllers\ConvocatoriasComisionController;
 use App\Http\Controllers\RepresentacionGeneralController;
-use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,14 +30,7 @@ use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 
 Auth::routes();
 
-Route::get('/', [PublicoController::class, 'index'])->name('welcome');
-Route::get('/info', [PublicoController::class, 'info'])->name('infoPublica');
-Route::get('login', [PublicoController::class, 'login'])->name('login');
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-///////////////////////////////////////////////////////////////////////////////
 // Modificamos las rutas por defecto(vendor/laravel/ui/src/AuthRouteMethods.php) para que al entrar a login o register envíe a welcome
-
 Route::get('register', function () {
     return redirect()->route('welcome');
 })->name('register');
@@ -52,38 +40,37 @@ Route::get('/logout', function () {
     return redirect('/');
 });
 
-///////////////////////////////////////////////////////////////////////////////
-
-Route::get('/perfil', [UserController::class, 'index'])->name('perfil');
-Route::post('/perfil', [UserController::class, 'store'])->name('perfil.store');
-Route::post('/save_image_perfil', [UserController::class, 'saveImagePerfil'])->name('saveImagePerfil');
-Route::get('/certificados', [UserController::class, 'certificados'])->name('certificados');
-Route::post('/generar_certificado', [UserController::class, 'generarCertificado'])->name('generarCertificado');
+// PÚBLICO
+Route::get('/', [PublicoController::class, 'index'])->name('welcome');
+Route::get('/info', [PublicoController::class, 'info'])->name('infoPublica');
+Route::get('login', [PublicoController::class, 'login'])->name('login');
 Route::post('/centro/all', [CentrosController::class, 'all']);
 Route::post('/centro/get', [CentrosController::class, 'get']);
 Route::post('/miembros_gobierno/getbycentro', [MiembrosGobiernoController::class, 'getByCentro']);
 Route::post('/miembros_junta/getbycentro', [MiembrosJuntaController::class, 'getByCentro']);
 
-Route::group(['middleware' => ['role:admin']], function () {
+Route::group(['middleware' => ['auth']], function () {
+    // USERS
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::post('/user/get', [UserController::class, 'get']);
+    Route::post('/user/all', [UserController::class, 'all']);
+    Route::get('/perfil', [UserController::class, 'index'])->name('perfil');
+    Route::post('/perfil', [UserController::class, 'store'])->name('perfil.store');
+    Route::post('/save_image_perfil', [UserController::class, 'saveImagePerfil'])->name('saveImagePerfil');
+    Route::get('/certificados', [UserController::class, 'certificados'])->name('certificados');
+    Route::post('/generar_certificado', [UserController::class, 'generarCertificado'])->name('generarCertificado');
+});
+
+Route::group(['middleware' => ['responsable:admin|centro']], function () {
+
     // CENTROS
     Route::get('/centros', [CentrosController::class, 'index'])->name('centros');
-    Route::post('/centro/add', [CentrosController::class, 'store']);
-    Route::post('/centro/delete', [CentrosController::class, 'delete']);
+    Route::post('/centro/add', [CentrosController::class, 'store'])->middleware('responsable:admin');
+    Route::post('/centro/delete', [CentrosController::class, 'delete'])->middleware('responsable:admin');;
     Route::post('/centro/update', [CentrosController::class, 'update']);
 
     // TIPOS DE CENTROS
     Route::post('/tiposCentro', [TiposCentroController::class, 'index']);
-});
-
-Route::group(['middleware' => ['role:admin|responsable_centro']], function () {
-    // JUNTAS
-    Route::get('/juntas', [JuntasController::class, 'index'])->name('juntas');
-    Route::post('/junta/add', [JuntasController::class, 'store'])->name('store');
-    Route::post('/junta/delete', [JuntasController::class, 'delete']);
-    Route::post('/junta/get', [JuntasController::class, 'get']);
-    Route::post('/junta/update', [JuntasController::class, 'update']);
-    Route::post('/junta/all', [JuntasController::class, 'all']);
-    Route::post('/junta/validate', [JuntasController::class, 'validateJunta']);
 
     // MIEMBROS EQUIPO DE GOBIERNO
     Route::get('/miembros_gobierno', [MiembrosGobiernoController::class, 'index'])->name('miembrosGobierno');
@@ -96,13 +83,16 @@ Route::group(['middleware' => ['role:admin|responsable_centro']], function () {
 
 }); 
 
-Route::group(['middleware' => ['role:admin|responsable_centro|responsable_junta']], function () {
-    // COMISIONES
-    Route::get('/comisiones', [ComisionController::class, 'index'])->name('comisiones');
-    Route::post('/comisiones', [ComisionController::class, 'store'])->name('comisiones.store');
-    Route::post('/comision/delete', [ComisionController::class, 'delete']);
-    Route::post('/comision/get', [ComisionController::class, 'get']);
-    Route::post('/comision/update', [ComisionController::class, 'update']);
+Route::group(['middleware' => ['responsable:admin|centro|junta']], function () {
+
+    // JUNTAS
+    Route::get('/juntas', [JuntasController::class, 'index'])->name('juntas');
+    Route::post('/junta/add', [JuntasController::class, 'store'])->name('store')->middleware('responsable:admin|centro');
+    Route::post('/junta/delete', [JuntasController::class, 'delete'])->middleware('responsable:admin|centro');
+    Route::post('/junta/get', [JuntasController::class, 'get']);
+    Route::post('/junta/update', [JuntasController::class, 'update']);
+    Route::post('/junta/all', [JuntasController::class, 'all'])->middleware('responsable:admin|centro');
+    Route::post('/junta/validate', [JuntasController::class, 'validateJunta']);
 
     // CONVOCATORIAS JUNTA
     Route::get('/convocatorias_junta', [ConvocatoriasJuntaController::class, 'index'])->name('convocatoriasJunta');
@@ -119,7 +109,15 @@ Route::group(['middleware' => ['role:admin|responsable_centro|responsable_junta'
     Route::post('/miembro_junta/update', [MiembrosJuntaController::class, 'update']);
 });
 
-Route::group(['middleware' => ['role:admin|responsable_centro|responsable_junta|responsable_comision']], function () {
+Route::group(['middleware' => ['responsable:admin|centro|junta|comision']], function () {
+
+    // COMISIONES
+    Route::get('/comisiones', [ComisionController::class, 'index'])->name('comisiones');
+    Route::post('/comisiones', [ComisionController::class, 'store'])->name('comisiones.store')->middleware('responsable:admin|centro|junta');
+    Route::post('/comision/delete', [ComisionController::class, 'delete'])->middleware('responsable:admin|centro|junta');
+    Route::post('/comision/get', [ComisionController::class, 'get']);
+    Route::post('/comision/update', [ComisionController::class, 'update']);
+
     // MIEMBROS COMISIÓN
     Route::get('/miembros_comision', [MiembrosComisionController::class, 'index'])->name('miembrosComision');
     Route::post('/miembros_comision', [MiembrosComisionController::class, 'store'])->name('miembrosComision.store');
@@ -141,9 +139,5 @@ Route::group(['middleware' => ['role:admin|responsable_centro|responsable_junta|
     // REPRESENTACIONES CENTRO
     Route::post('/representacion/get', [RepresentacionController::class, 'get']);
     Route::post('/representacion/all', [RepresentacionController::class, 'all']);
-
-    // USERS
-    Route::post('/user/get', [UserController::class, 'get']);
-    Route::post('/user/all', [UserController::class, 'all']);
-    });
+});
 

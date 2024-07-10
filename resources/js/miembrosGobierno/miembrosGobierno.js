@@ -19,31 +19,38 @@ document.addEventListener("DOMContentLoaded",  (event) => {
 
 function renderHTMLMiembro(response){
 
-    if(response){
-        let modal_add_clone = modal_add.cloneNode(true);
+    $(modal_add).find("#idUsuario").val('').trigger('change');
+    modal_add.querySelector('#idCentro').value=""
+    modal_add.querySelector('#idRepresentacion').value=""
+    modal_add.querySelector('#fechaTomaPosesion').value=""
+    modal_add.querySelector('#fechaCese').value=""
+    modal_add.querySelector('#responsable').value=0
 
-        modal_add_clone.classList.remove('hidden')
-        modal_add_clone.querySelector('#user').innerHTML= `
+    if(response){
+        let modal_edit = modal_add.cloneNode(true);
+
+        modal_edit.classList.remove('hidden')
+        modal_edit.querySelector('#user').innerHTML= `
             <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
                 <label for="usuario" class="block text-sm text-gray-600 w-36 text-right">Usuario: *</label>
                 <input class="miembro" type="hidden" id="idUsuario" value="${response.usuario.id}"/>
                 <input type="text" id="usuario" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.usuario.name}" disabled>
             </div>`
-        modal_add_clone.querySelector('#idCentro').value=response.centro.id
-        modal_add_clone.querySelector('#idCentro').setAttribute('disabled', 'disabled')
-        modal_add_clone.querySelector('#idCentro').classList.add('bg-red-50')
-        modal_add_clone.querySelector('#idRepresentacion').value=response.representacion.id
-        modal_add_clone.querySelector('#fechaTomaPosesion').value=response.fechaTomaPosesion
-        modal_add_clone.querySelector('#fechaCese').value=response.fechaCese
-        modal_add_clone.querySelector('#responsable').value=((response.usuario.roles).find(rol=>{return rol.name === 'responsable_centro'})) ? 1 : 0
+        modal_edit.querySelector('#idCentro').value=response.centro.id
+        modal_edit.querySelector('#idCentro').setAttribute('disabled', 'disabled')
+        modal_edit.querySelector('#idCentro').classList.add('bg-red-50')
+        modal_edit.querySelector('#idRepresentacion').value=response.representacion.id
+        modal_edit.querySelector('#fechaTomaPosesion').value=response.fechaTomaPosesion
+        modal_edit.querySelector('#fechaCese').value=response.fechaCese
+        modal_edit.querySelector('#responsable').value=response.responsable
 
         if(response.deleted_at!=null){
-            modal_add_clone.querySelector('#idRepresentacion').setAttribute('disabled', 'disabled')
-            modal_add_clone.querySelector('#fechaTomaPosesion').setAttribute('disabled', 'disabled')
-            modal_add_clone.querySelector('#fechaCese').setAttribute('disabled', 'disabled')
-            modal_add_clone.querySelector('#responsable').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#idRepresentacion').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#fechaTomaPosesion').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#fechaCese').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#responsable').setAttribute('disabled', 'disabled')
         }
-        return modal_add_clone        
+        return modal_edit        
     }
     else{
         modal_add.classList.remove('hidden')

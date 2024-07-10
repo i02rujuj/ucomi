@@ -17,12 +17,14 @@ class MiembroGobiernoSeeder extends Seeder
             [
                 'idUsuario' => 1, 
                 'idCentro' => 9, 
-                'representacion' => 1
+                'representacion' => 1,
+                'responsable' => 1,
             ],
             [
                 'idUsuario' => 2, 
                 'idCentro' => 9, 
-                'representacion' => 2
+                'representacion' => 2,
+                'responsable' => 1,
             ],
             [
                 'idUsuario' => 3, 
@@ -53,6 +55,9 @@ class MiembroGobiernoSeeder extends Seeder
             $miembro->fechaTomaPosesion = now();
             $miembro->fechaCese = null;
             $miembro->idRepresentacion = $m['representacion'];
+            if(isset($m['responsable'])){
+                $miembro->responsable = $m['responsable'];
+            }
             $miembro->save();
         }
     }

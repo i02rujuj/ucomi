@@ -24,6 +24,7 @@ class MiembrosGobiernoController extends Controller
             switch ($request->input('action')) {
                 case 'limpiar':
                     $request['filtroCentro']=null;
+                    $request['filtroRepresentacion']=null;
                     $request['filtroVigente']=null;
                     $request['filtroEstado']=null;
                     break;
@@ -86,6 +87,7 @@ class MiembrosGobiernoController extends Controller
                 'representacionesGobierno' => $representacionesGobierno, 
                 'miembrosGobierno' => $miembrosGobierno,
                 'filtroCentro' => $request['filtroCentro'],
+                'filtroRepresentacion' => $request['filtroRepresentacion'],
                 'filtroVigente' => $request['filtroVigente'],
                 'filtroEstado' => $request['filtroEstado'],
                 'action' => $request['action'],

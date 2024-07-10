@@ -40,6 +40,8 @@ class MiembroGobierno extends Model
         return $query
             ->when($request->has('filtroCentro') && $request->filtroCentro!=null, function($builder) use ($request){
                 return $builder->where('idCentro', $request->filtroCentro);       
+            })->when($request->has('filtroRepresentacion') && $request->filtroRepresentacion!=null, function($builder) use ($request){
+                return $builder->where('idRepresentacion', $request->filtroRepresentacion);       
             })->when($request->has('filtroVigente') && $request->filtroVigente!=null, function($builder) use ($request){
                 if($request->filtroVigente==1){
                     return $builder->whereNull('fechaCese');

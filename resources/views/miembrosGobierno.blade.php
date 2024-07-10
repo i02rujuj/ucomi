@@ -192,6 +192,7 @@ Miembros de Centro
 
             <div class="mt-5">{{$miembrosGobierno->appends([
                 'filtroCentro' => $filtroCentro,
+                'filtroRepresentacion' => $filtroRepresentacion,
                 'filtroVigente' => $filtroVigente,
                 'filtroEstado' => $filtroEstado,
                 'action' => $action,

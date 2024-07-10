@@ -33,6 +33,28 @@ Juntas
                 </div>
             </div>
 
+            <div id="modal_add" name="modal_add" class="hidden">
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-4 justify-center items-center">
+                    <label for="idCentro" class="block text-sm text-gray-600 w-36 pr-6 text-right">Centro asociado: *</label>
+                    <select id="idCentro" class="swal2-input junta text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none" >
+                        <option value="" selected disabled>Selecciona un centro</option>
+                        @foreach ($centros as $centro)
+                            <option value="{{$centro->id}}">{{$centro->nombre}}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-1 justify-center items-center">
+                    <label for="fechaConstitucion" class="block text-sm text-gray-600 w-36 text-right">Fecha Constitución: *</label>
+                    <input type="date" id="fechaConstitucion" class="swal2-input junta text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none">
+                </div>
+
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-3 justify-center items-center">
+                    <label for="fechaDisolucion" class="block text-sm text-gray-600 w-36 text-right">Fecha Disolución:</label>
+                    <input type="date" id="fechaDisolucion" class="junta swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none">
+                </div>     
+            </div>
+
             <hr class="my-4 border-t border-gray-300" />
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
@@ -153,5 +175,9 @@ Juntas
         </div>
     </div>
     @endsection
+
+<script>
+    const juntas = @json($juntas)
+</script>
 
 @vite(['resources/js/juntas/juntas.js'])

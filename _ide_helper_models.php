@@ -94,7 +94,7 @@ namespace App\Models{
  * @property int $id
  * @property string $lugar
  * @property string $fecha
- * @property string $hora
+ * @property \Illuminate\Support\Carbon $hora
  * @property int $idTipo
  * @property int|null $idComision
  * @property int|null $idJunta
@@ -105,6 +105,7 @@ namespace App\Models{
  * @property-read \App\Models\Comision|null $comision
  * @property-read \App\Models\Junta|null $junta
  * @property-read \App\Models\TipoConvocatoria $tipo
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria filters(\Illuminate\Http\Request $request)
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria onlyTrashed()

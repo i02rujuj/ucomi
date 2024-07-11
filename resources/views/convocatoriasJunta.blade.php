@@ -4,7 +4,7 @@ Convocatorias
 @endsection
 
 @section ('content')
-    <div class="md:ml-64 lg:ml-64 mt-14">
+    <div class="lg:ml-64 mt-14">
         <div class="mx-auto p-6">
 
             @if (session()->has('success'))
@@ -19,198 +19,148 @@ Convocatorias
             </div>
             @endif
 
-            <form method="POST" action="{{ route('convocatoriasJunta.store') }}" enctype="multipart/form-data" class="bg-white p-8 mb-6 rounded-lg shadow-md">
-                <div class="text-gray-600 font-bold mb-2">
-                    Añadir nueva convocatoria de junta
-                </div>
-                
-                @csrf
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">
-                    
-                    @hasrole(['admin', 'responsable_centro', 'responsable_junta'])
-                    <div class="left-side w-full">
-                        <div class="mb-2">
-                            <label for="idJunta" class="block text-sm text-gray-600 mb-1">
-                                Convocatoria de junta                            
-                            </label>
-                            
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idJunta" name="idJunta">
-                                <option value="">-----</option>
-                                @foreach ($juntas as $junta)
-                                    <option value="{{ $junta['id'] }}" {{ (old("idJunta")== $junta['id'] || app('request')->input('idJunta') == $junta['id'] ? "selected":"") }}>{{ $junta->fechaConstitucion }} - {{ $junta->centro->nombre }}</option>
-                                @endforeach
-                            </select>
-                           
-                            @error('idJunta')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                    @endhasrole
+            <div class="flex justify-between">
+                @include('components.filtros.convocatoriasFiltro')
 
-                    <div class="left-side w-full">
-                        <div class="mb-2">
-                            <label for="idtipo" class="block text-sm text-gray-600 mb-1">
-                                Tipo
-                            </label>
-                            
-                            <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" id="idTipo" name="idTipo" required>
-                                <option value="">-----</option>
-                                @foreach ($tipos as $tipo)
-                                    <option value="{{ $tipo['id'] }}" {{ (old("idTipo")== $tipo['id'] || app('request')->input('idTipo') == $tipo['id'] ? "selected":"") }}>{{ $tipo['nombre'] }}</option>
-                                @endforeach
-                            </select>
-                        
-                            @error('idTipo')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
- 
-                </div>
-
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full gap-6">
-
-                    <div class="left-side w-full">
-                        <div class="mb-2">
-                            <label for="lugar" class="block text-sm text-gray-600 mb-1">
-                                Lugar:
-                            </label>
-                            <input id="lugar" name="lugar" type="text" value="{{old("lugar")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
-                            @error('lugar')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="left-side w-full">
-                        <div class="mb-2">
-                            <label for="fecha" class="block text-sm text-gray-600 mb-1">
-                                Fecha:
-                            </label>
-                            <input id="fecha" name="fecha" type="date" value="{{old("fecha")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
-                            @error('fecha')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="left-side w-full">
-                        <div class="mb-2">
-                            <label for="hora" class="block text-sm text-gray-600 mb-1">
-                                Hora:
-                            </label>
-                            <input id="hora" name="hora" type="time" value="{{old("hora")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
-                            @error('hora')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="left-side w-full">
-                        <div class="mb-2">
-                            <label for="acta" class="block text-sm text-gray-600 mb-1">
-                                Acta:
-                            </label>
-                            <input id="acta" name="acta" type="file" value="{{old("acta")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off"/>
-                            @error('acta')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                    
-                </div>
-
-                <button type="submit" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
-                    Añadir Convocatoria
-                </button>
-            </form>
-
-            <hr className="my-6 border-t border-gray-300" />
-
-<!----------------------------- START FILTROS ---------------------------------->
-
-            <button class="accordion w-full text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">Filtros</button>
-            <div class="panel">
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap gap-2">
-
-                    <div class="left-side w-full">
-                        <div class="mt-2 bg-white px-6 py-4 rounded-lg shadow-md">
-                            <span class="block text-sm text-gray-600 mb-1">
-                                Texto:
+                @if($permitirAcciones = Auth::user()->esResponsable('admin|centro|junta|comision'))
+                    <div>
+                        <div id="btn-add-convocatoria" type="submit" class="flex items-center gap-2 bg-white px-5 py-2.5 rounded-md shadow cursor-pointer">
+                            <span class="material-icons-round scale-75">
+                                add_circle
                             </span>
-                            <input type="text" id="search-input" class="text-sm text-gray-600 border py-1 w-full outline-none bg-white px-2 rounded form-input" placeholder="Buscar..." value="{{ request('junta') }}">
+                            Añadir convocatoria
                         </div>
-                    </div>        
-                </div>
+                    </div>
+                @endif
             </div>
 
-<!----------------------------- END FILTROS ---------------------------------->
+            <div id="modal_add" name="modal_add" class="hidden">
+                
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mt-2 justify-center items-center">
+                    <label for="idJunta" class="block text-sm text-gray-600 w-36 pr-12 text-right">Junta: *</label>
+                    <select id="idJunta" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" >
+                        <option value="" selected disabled>Selecciona una junta</option>
+                        @foreach ($juntas as $junta)
+                            <option value="{{$junta->id}}">{{$junta->fechaConstitucion}} | {{$junta->centro->nombre}}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-<!----------------------------- START LISTADO ---------------------------------->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-                @foreach ($convocatorias as $convocatoria)
-                    <div id="btn-editar-convocatoria" data-junta-id="{{ $convocatoria['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
-                        <div class="flex items-start justify-between">
-                            <div class="left-part truncate">
-                                
-                                <div class="flex items-center">
-                                    <span class="material-icons-round scale-75">
-                                        account_balance
-                                    </span>
-                                    &nbsp;
-                                    <h2 class="text-base font-bold truncate">{{ $convocatoria->junta->centro->nombre }}</h2>
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mt-4 justify-center items-center">
+                    <label for="idTipo" class="block text-sm text-gray-600 w-36 pr-12 text-right">Tipo: *</label>
+                    <select id="idTipo" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" >
+                        <option value="" selected disabled>Selecciona un tipo</option>
+                        @foreach ($tipos as $tipo)
+                            <option value="{{$tipo->id}}">{{$tipo->nombre}}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
+                    <label for="lugar" class="block text-sm text-gray-600 w-36 pr-5 text-right">Lugar: *</label>
+                    <input id="lugar" name="lugar" type="text" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none"/>
+                </div>
+
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
+                    <label for="fecha" class="block text-sm text-gray-600 w-36 pr-5 text-right">Fecha: *</label>
+                    <input id="fecha" name="fecha" type="date" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" />
+                </div>
+
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
+                    <label for="hora" class="block text-sm text-gray-600 w-36 pr-5 text-right">Hora: *</label>
+                    <input id="hora" name="hora" type="time" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none"/>
+                </div>   
+                
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
+                    <label for="acta" class="block text-sm text-gray-600 w-36 pr-5 text-right">Acta:</label>
+                    <input id="acta" name="acta" type="file" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" autocomplete="off"/>
+                </div> 
+            </div>
+
+            <hr class="my-4 border-t border-gray-300" />
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
+                @if($convocatorias && $convocatorias[0])
+                    @foreach ($convocatorias as $convocatoria)
+                        <div id="btn-editar-convocatoria" data-convocatoria-id="{{ $convocatoria['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
+                            <div class="flex items-center">
+                                <div class="right-part w-full max-w-max">
+                                    <img src="{{ $convocatoria->junta->centro->logo ? $convocatoria->junta->centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
                                 </div>
 
-                                <div class="flex items-center">
-                                    &nbsp;
-                                    <h2 class="text-base font-bold truncate">({{ $convocatoria->junta->fechaConstitucion }})</h2>
-                                </div>
+                                <div class="left-part truncate w-full max-w-max pl-3 z-10">
 
-                                <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
-                                    <div class="flex items-center">
+                                    {{--<div class="flex items-center">
                                         <span class="material-icons-round scale-75">
-                                            place
+                                            send
                                         </span>
                                         &nbsp;
-                                        <h2 class="truncate">{{ $convocatoria->lugar }}</h2>
-                                    </div>
-                                </div>
+                                        <h2 class="text-base font-bold truncate">{{ $convocatoria->junta->fechaConstitucion }} | {{ $convocatoria->junta->centro->nombre }}</h2>
+                                    </div>--}}
 
-                                <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
-                                    <div class="flex items-center ">
+                                    <div class="truncate flex items-center">
                                         <span class="material-icons-round scale-75">
-                                            schedule
+                                            location_on
                                         </span>
-                                        &nbsp;
-                                        <h2 class="truncate">Fecha: {{ $convocatoria->fecha }} | Hora: {{ $convocatoria->hora }}</h2>
+                                        <div class="font-bold truncate">
+                                            {{ $convocatoria->lugar }} 
+                                        </div>
                                     </div>
-                                </div>
 
+                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                        <div class="truncate flex items-center">
+                                            <span class="material-icons-round scale-75">
+                                                event
+                                            </span>
+                                            <div class="font-bold truncate">
+                                                {{ $convocatoria->fecha }} 
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                        <div class="truncate flex items-center">
+                                            <span class="material-icons-round scale-75">
+                                                schedule
+                                            </span>
+                                            <div class="font-bold truncate">
+                                                {{ $convocatoria->hora }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex justify-start items-center gap-2 mt-3" >
+                                        <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Convocatoria Junta</span>
+
+                                        <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $convocatoria->tipo->nombre }}</span>
+
+                                        @if ($convocatoria['deleted_at']!=null)
+                                            <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Eliminado</span>
+                                        @endif
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
-
-                        <div class="flex items-center gap-2 mt-2" >
-                            <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Convocatoria de {{$convocatoria['idJunta']==null ? 'Comisión' : 'Junta'}}</span>
-                        </div>
-                        <div class="flex items-center gap-2 mt-2" >
-                            <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{$convocatoria->tipo->nombre}}</span>
-                            
-                            @if ($convocatoria['fecha']>now())
-                                <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Pendiente</span>
-                            @else
-                                <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Realizada</span>
-                            @endif
-                        </div>
-
-                    </div>
-                @endforeach
+                    @endforeach
+                @else
+                    No se han encontrado convocatorias
+                @endif
             </div>
 
-<!----------------------------- END LISTADO ---------------------------------->
-
+            <div class="mt-5">{{$convocatorias->appends([
+                'filtroJunta' => $filtroJunta,
+                'filtroVigente' => $filtroVigente,
+                'filtroEstado' => $filtroEstado,
+                'action' => $action,
+                ])->links()}}
+            </div>
         </div>
     </div>
     @endsection
 
-@vite(['resources/js/convocatorias/convocatorias.js'])
+<script>
+    const permitirAcciones = "{{$permitirAcciones}}"
+    const convocatorias = @json($convocatorias)
+</script>
+@vite(['resources/js/convocatoriasJunta/convocatoriasJunta.js'])

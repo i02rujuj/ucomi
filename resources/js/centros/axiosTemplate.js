@@ -44,7 +44,6 @@ function GETALL_CENTRO_BBDD(data) {
 
 function ADD_CENTRO_BBDD(data) {
     ENDPOINT_CENTRO_ADD_BBDD.url = CENTRO_ADD_URL;
-
     ENDPOINT_CENTRO_ADD_BBDD.data = data;
     return ADD_CENTRO_AXIOS().then((response) => {
         return response.data;

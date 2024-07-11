@@ -95,11 +95,12 @@ Route::group(['middleware' => ['responsable:admin|centro|junta']], function () {
     Route::post('/junta/validate', [JuntasController::class, 'validateJunta']);
 
     // CONVOCATORIAS JUNTA
-    Route::get('/convocatorias_junta', [ConvocatoriasJuntaController::class, 'index'])->name('convocatoriasJunta');
-    Route::post('/convocatorias_junta', [ConvocatoriasJuntaController::class, 'store'])->name('convocatoriasJunta.store');
-    Route::post('/convocatorias_junta/delete', [ConvocatoriasJuntaController::class, 'delete']);
-    Route::post('/convocatorias_junta/get', [ConvocatoriasJuntaController::class, 'get']);
-    Route::post('/convocatorias_junta/update', [ConvocatoriasJuntaController::class, 'update']);
+    Route::get('/convocatorias_junta', [ConvocatoriasJuntaController::class, 'index'])->name('convocatoriasJunta')->middleware('responsable:admin|centro|junta');
+    Route::post('/convocatoria_junta/add', [ConvocatoriasJuntaController::class, 'store'])->name('store')->middleware('responsable:admin|centro|junta');
+    Route::post('/convocatoria_junta/delete', [ConvocatoriasJuntaController::class, 'delete'])->middleware('responsable:admin|centro|junta');
+    Route::post('/convocatoria_junta/get', [ConvocatoriasJuntaController::class, 'get'])->middleware('responsable:admin|centro|junta');
+    Route::post('/convocatoria_junta/update', [ConvocatoriasJuntaController::class, 'update'])->middleware('responsable:admin|centro|junta');
+    Route::post('/convocatoria_junta/validate', [ConvocatoriasJuntaController::class, 'validateConvocatoria'])->middleware('responsable:admin|centro|junta');
 
     // MIEMBROS JUNTA
     Route::get('/miembros_junta', [MiembrosJuntaController::class, 'index'])->name('miembrosJunta');

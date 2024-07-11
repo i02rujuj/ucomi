@@ -20,7 +20,6 @@ Comisiones
             @endif
 
             <div class="flex justify-between">
-                
                 @include('components.filtros.comisionesFiltro')
 
                 @if($permitirAcciones = Auth::user()->esResponsable('admin|centro|junta'))
@@ -34,7 +33,6 @@ Comisiones
                     </div>
                 @endif
             </div>
-
 
             <div id="modal_add" name="modal_add" class="hidden">
                 

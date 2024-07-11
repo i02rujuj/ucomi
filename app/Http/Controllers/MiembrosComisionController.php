@@ -24,33 +24,27 @@ class MiembrosComisionController extends Controller
             $comisiones = Comision::select('id', 'nombre', 'descripcion', 'idJunta', 'fechaConstitucion', 'fechaConstitucion');
 
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
-                $comisiones = $comisiones
+                $miembrosComision = $miembrosComision
                 ->join('comisiones', 'comisiones.id', '=', 'miembros_comision.idComision')
                 ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
                 ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
 
-                $miembrosComision = $miembrosComision
-                ->join('comisiones', 'comisiones.id', '=', 'miembros_comision.idComision')
+                $comisiones = $comisiones
                 ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
                 ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
             }
 
             if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
-
-                $comisiones = $comisiones
-                ->join('comisiones', 'comisiones.id', '=', 'miembros_comision.idComision')
-                ->whereIn('comisiones.idJunta', $datosResponsableJunta['idJuntas']);
-
                 $miembrosComision = $miembrosComision
                 ->join('comisiones', 'comisiones.id', '=', 'miembros_comision.idComision')
                 ->whereIn('comisiones.idJunta', $datosResponsableJunta['idJuntas']);
+
+                $comisiones = $comisiones->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
             }
 
             if($datosResponsableComision = Auth::user()->esResponsableDatos('comision')['comisiones']){
-
-                $comisiones = $comisiones->whereIn('idComision', $datosResponsableComision['idComisiones']);
-
                 $miembrosComision = $miembrosComision->whereIn('idComision', $datosResponsableComision['idComisiones']);
+                $comisiones = $comisiones->whereIn('id', $datosResponsableComision['idComisiones']);
             }
 
             switch ($request->input('action')) {

@@ -20,22 +20,20 @@ class ComisionController extends Controller
             $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion');
 
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
-                $juntas = $juntas
-                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
                 $comisiones = $comisiones
                 ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
                 ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
+                $juntas = $juntas->whereIn('idCentro', $datosResponsableCentro['idCentros']);
             }
 
             if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
-                $juntas = $juntas->whereIn('id', $datosResponsableJunta['idJuntas']);
                 $comisiones = $comisiones->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
+                $juntas = $juntas->whereIn('id', $datosResponsableJunta['idJuntas']);
             }
 
             if($datosResponsableComision = Auth::user()->esResponsableDatos('comision')['comisiones']){
-                $juntas = $juntas->whereIn('id', $datosResponsableComision['idJuntas']);
                 $comisiones = $comisiones->whereIn('idJunta', $datosResponsableComision['idJuntas']);
+                $juntas = $juntas->whereIn('id', $datosResponsableComision['idJuntas']);
             }
 
             switch ($request->input('action')) {

@@ -19,13 +19,13 @@ class JuntasController extends Controller
             $centros = Centro::select('id', 'nombre');
 
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
-                $centros = $centros->where('id', $datosResponsableCentro['idCentros']);
                 $juntas = $juntas->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+                $centros = $centros->where('id', $datosResponsableCentro['idCentros']);
             }
 
             if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
-                $centros = $centros->whereIn('id', $datosResponsableJunta['idCentros']);
                 $juntas = $juntas->whereIn('id', $datosResponsableJunta['idJuntas']);
+                $centros = $centros->whereIn('id', $datosResponsableJunta['idCentros']);
             }
 
             switch ($request->input('action')) {

@@ -103,10 +103,11 @@ Route::group(['middleware' => ['responsable:admin|centro|junta']], function () {
 
     // MIEMBROS JUNTA
     Route::get('/miembros_junta', [MiembrosJuntaController::class, 'index'])->name('miembrosJunta');
-    Route::post('/miembros_junta', [MiembrosJuntaController::class, 'store'])->name('miembrosJunta.store');
+    Route::post('/miembro_junta/add', [MiembrosJuntaController::class, 'store'])->name('store');
     Route::post('/miembro_junta/delete', [MiembrosJuntaController::class, 'delete']);
     Route::post('/miembro_junta/get', [MiembrosJuntaController::class, 'get']);
     Route::post('/miembro_junta/update', [MiembrosJuntaController::class, 'update']);
+    Route::post('/miembro_junta/validate', [MiembrosJuntaController::class, 'validateMiembro']);
 });
 
 Route::group(['middleware' => ['responsable:admin|centro|junta|comision']], function () {

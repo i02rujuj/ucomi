@@ -16,7 +16,7 @@ class CentrosController extends Controller
     {
         try {
             
-            $centros = Centro::select('id', 'nombre', 'direccion', 'idTipo', 'logo', 'deleted_at');
+            $centros = Centro::select('id', 'nombre', 'direccion', 'idTipo', 'logo', 'updated_at', 'deleted_at');
 
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
                 $centros = $centros
@@ -39,6 +39,7 @@ class CentrosController extends Controller
             
             $centros=$centros
                 ->orderBy('deleted_at')
+                ->orderBy('updated_at','desc')
                 ->orderBy('idTipo')
                 ->orderBy('nombre')
                 ->paginate(10);

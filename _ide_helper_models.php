@@ -257,6 +257,7 @@ namespace App\Models{
  * @property-read \App\Models\RepresentacionGeneral $representacion
  * @property-read \App\Models\User $usuario
  * @method static \Database\Factories\MiembroJuntaFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta filters(\Illuminate\Http\Request $request)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroJunta onlyTrashed()

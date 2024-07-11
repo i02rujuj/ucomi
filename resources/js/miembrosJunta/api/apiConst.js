@@ -41,7 +41,33 @@ const ENDPOINT_MIEMBROSJUNTA_GETBYCENTRO_BBDD = {
     method: 'POST',
     url: "",
     comment: "Endpoint obtener todos los miembros junta por centro",
-    explanation: "This endpoint is used get all miebros junta por centro of the server",
+    explanation: "This endpoint is used get all miembros junta por centro of the server",
+    transformResponse: (data) => JSON.parse(data),
+    withCredentials: false,
+    headers: {
+        'content-type': 'application/json',
+    },
+    data: [],
+};
+
+const ENDPOINT_MIEMBROSJUNTA_ADD_BBDD = {
+    method: 'POST',
+    url: "",
+    comment: "Endpoint obtener todos los miembros junta por centro",
+    explanation: "This endpoint is used add miembros junta por centro of the server",
+    transformResponse: (data) => JSON.parse(data),
+    withCredentials: false,
+    headers: {
+        'content-type': 'application/json',
+    },
+    data: [],
+};
+
+const ENDPOINT_MIEMBROSJUNTA_VALIDATE_BBDD = {
+    method: 'POST',
+    url: "",
+    comment: "Endpoint obtener todos los miembros junta por centro",
+    explanation: "This endpoint is used validate miembros junta por centro of the server",
     transformResponse: (data) => JSON.parse(data),
     withCredentials: false,
     headers: {
@@ -54,6 +80,7 @@ export {
     ENDPOINT_MIEMBROSJUNTA_DELETE_BBDD,
     ENDPOINT_MIEMBROSJUNTA_GET_BBDD,
     ENDPOINT_MIEMBROSJUNTA_UPDATE_BBDD,
-    ENDPOINT_MIEMBROSJUNTA_GETBYCENTRO_BBDD
-
+    ENDPOINT_MIEMBROSJUNTA_GETBYCENTRO_BBDD,
+    ENDPOINT_MIEMBROSJUNTA_ADD_BBDD,
+    ENDPOINT_MIEMBROSJUNTA_VALIDATE_BBDD
 }

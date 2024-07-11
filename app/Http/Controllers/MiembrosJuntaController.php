@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use DateTime;
 use App\Models\User;
 use App\Models\Junta;
-use App\Models\MiembroGobierno;
 use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,155 +14,116 @@ use Illuminate\Support\Facades\Validator;
 
 class MiembrosJuntaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
+            $miembrosJunta = MiembroJunta::select('id', 'idJunta', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at');
+            $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaConstitucion');
 
-            $user = Auth::user();
-
-            if($user->hasRole('admin')){
-                $juntas = Junta::where('estado', 1)
-                ->where('fechaDisolucion', null)
-                ->get();
-
-                $miembrosJunta = MiembroJunta::where('estado', 1)
-                ->orderBy('fechaCese')
-                ->orderBy('idJunta')
-                ->orderBy('idRepresentacion')
-                ->orderBy('idUsuario')
-                ->get();
-            }
-            
-            if($user->hasRole('responsable_centro')){
-
-                $centroResponsable = MiembroGobierno::where('idUsuario', $user->id)
-                ->select('idCentro')
-                ->first();
-
-                $juntas = Junta::where('estado', 1)
-                ->where('idCentro', $centroResponsable->idCentro)
-                ->where('fechaDisolucion', null)
-                ->get();
-
-                $miembrosJunta = MiembroJunta::select('miembros_junta.*')
-                ->where('miembros_junta.estado', 1)
+            if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
+                $juntas = $juntas->where('idCentro', $datosResponsableCentro['idCentros']);
+                $miembrosJunta = $miembrosJunta
                 ->join('juntas', 'juntas.id', '=', 'miembros_junta.idJunta')
-                ->where('juntas.idCentro', $centroResponsable->idCentro)
-                ->orderBy('miembros_junta.fechaCese')
-                ->orderBy('miembros_junta.idJunta')
-                ->orderBy('miembros_junta.idRepresentacion')
-                ->orderBy('miembros_junta.idUsuario')
-                ->get();
+                ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
             }
 
-            if($user->hasRole('responsable_junta')){
-                $juntaResponsable = MiembroJunta::where('idUsuario', $user->id)
-                ->select('idJunta')
-                ->first();
-
-                $juntas = Junta::where('estado', 1)
-                ->where('id', $juntaResponsable->idJunta)
-                ->where('fechaDisolucion', null)
-                ->get();
-
-                $miembrosJunta = MiembroJunta::select('miembros_junta.*')
-                ->where('miembros_junta.estado', 1)
-                ->where('miembros_junta.idJunta', $juntaResponsable->idJunta)
-                ->orderBy('miembros_junta.fechaCese')
-                ->orderBy('miembros_junta.idJunta')
-                ->orderBy('miembros_junta.idRepresentacion')
-                ->orderBy('miembros_junta.idUsuario')
-                ->get();
+            if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
+                $juntas = $juntas->where('id', $datosResponsableJunta['idJuntas']);
+                $miembrosJunta = $miembrosJunta
+                ->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
             }
 
-            $users = User::select('id', 'name')->where('estado', 1)->get();
-            $representacionesGeneral = RepresentacionGeneral::select('id', 'nombre')->where('estado', 1)->get();
+            switch ($request->input('action')) {
+                case 'limpiar':
+                    $request['filtroJunta']=null;
+                    $request['filtroRepresentacion']=null;
+                    $request['filtroVigente']=null;
+                    $request['filtroEstado']=null;
+                    break;
+                case 'filtrar':
+                    $miembrosJunta = $miembrosJunta->withTrashed()->filters($request);
+                    break;
+                default:
+                    $miembrosJunta = $miembrosJunta->whereNull('deleted_at');
+                    break;
+            }
 
-            return view('miembrosJunta', ['juntas' => $juntas, 'users' => $users, 'representacionesGeneral' => $representacionesGeneral, 'miembrosJunta' => $miembrosJunta]);
+            $juntas = $juntas
+            ->get();
+
+            $miembrosJunta = $miembrosJunta
+            ->orderBy('deleted_at')
+            ->orderBy('fechaCese')
+            ->orderBy('updated_at','desc')
+            ->orderBy('idJunta')
+            ->orderBy('idRepresentacion')
+            ->orderBy('idUsuario')
+            ->paginate(10);
+
+            $users = User::select('id', 'name')->get();
+            $representacionesGeneral = RepresentacionGeneral::select('id', 'nombre')->get();    
+            
+            if($request->input('action')=='limpiar'){
+                return redirect()->route('miembrosJunta')->with([
+                    'juntas' => $juntas, 
+                    'users' => $users, 
+                    'representacionesGeneral' => $representacionesGeneral, 
+                    'miembrosJunta' => $miembrosJunta,
+                ]);
+            }
+
+            return view('miembrosJunta', [
+                'juntas' => $juntas, 
+                'users' => $users, 
+                'representacionesGeneral' => $representacionesGeneral, 
+                'miembrosJunta' => $miembrosJunta,
+                'filtroJunta' => $request['filtroJunta'],
+                'filtroRepresentacion' => $request['filtroRepresentacion'],
+                'filtroVigente' => $request['filtroVigente'],
+                'filtroEstado' => $request['filtroEstado'],
+                'action' => $request['action'],
+            ]);
+        
         } catch (\Throwable $th) {
-            return redirect()->route('miembrosJunta')->with('error', 'No se pudieron obtener algunos datos referentes a los miembros de Junta: ' . $th->getMessage());
+            return redirect()->route('miembrosJunta')->with('errors', 'No se pudieron obtener los miembros de junta: ' . $th->getMessage());
         }
     }
 
     public function store(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(),[
-                'idJunta' => 'required|integer|exists:App\Models\Junta,id',
-                'idUsuario' => 'required|integer|exists:App\Models\User,id',
-                'fechaTomaPosesion' => 'required|date',
-                'fechaCese' => 'nullable|date',
-                'idRepresentacion' => 'required|integer|exists:App\Models\RepresentacionGeneral,id',
-            ], [
-                // Mensajes error idJunta
-                'idJunta.required' => 'La junta es obligatoria.',
-                'idJunta.integer' => 'La junta debe ser un entero.',
-                'idJunta.exists' => 'La junta seleccionada no existe.',
-                // Mensajes error idUsuario
-                'idUsuario.required' => 'El usuario es obligatorio.',
-                'idUsuario.integer' => 'El usuario debe ser un entero.',
-                'idUsuario.exists' => 'El usuario seleccionado no existe.',
-                // Mensajes error fechaTomaPosesión
-                'fechaTomaPosesion.required' => 'La fecha de toma de posesión es obligatoria.',
-                'fechaTomaPosesion.date' => 'La fecha de toma de posesión debe tener el formato fecha DD/MM/YYYY.',
-                // Mensajes error fechaCese
-                'fechaCese.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
-                // Mensajes error idRepresentacion
-                'idRepresentacion.required' => 'La representación es obligatoria.',
-                'idRepresentacion.integer' => 'La representación debe ser un entero.',
-                'idRepresentacion.exists' => 'La representación seleccionada no existe.',
-            ]);
-
-            if ($validator->fails()) {
-                // Si la validación falla, redirige de vuelta con los errores
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
-
-            if($request->fechaCese==null){
-                // Comprobación existencia miembro repetido en la misma junta
-                $miembroRepetido = MiembroJunta::select('id')
-                ->where('idJunta', $request->get('idJunta'))
-                ->where('idUsuario', $request->get('idUsuario'))
-                ->where('fechaCese', null)
-                ->where('estado', 1)
-                ->first();
-
-                if($miembroRepetido)
-                    return redirect()->route('miembrosJunta')->with('error', 'No se pudo crear el miembro de Junta: ya existe un miembro vigente para la junta seleccionada')->withInput();
-            }
-            else{
-                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-                $dateTomaPosesion = new DateTime($request->fechaTomaPosesion);
-                $dateCese = new DateTime($request->fechaCese);
-
-                if ($dateTomaPosesion>$dateCese) 
-                    return redirect()->route('miembrosJunta')->with('error', 'La fecha de cese no puede ser anterior a la toma de posesión')->withInput();
-            }
+            $request['accion']='add';
+            $validation = $this->validateMiembro($request);
+            if($validation->original['status']!=200){
+                return $validation;
+            } 
 
             $miembroJunta = MiembroJunta::create([
-                "idJunta" => $request->idJunta,
-                "idUsuario" => $request->idUsuario,
-                "fechaTomaPosesion" => $request->fechaTomaPosesion,
-                "fechaCese" => $request->fechaCese,
-                "idRepresentacion" => $request->idRepresentacion,
-                'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
+                "idJunta" => $request->data['idJunta'],
+                "idUsuario" => $request->data['idUsuario'],
+                "fechaTomaPosesion" => $request->data['fechaTomaPosesion'],
+                "fechaCese" => $request->data['fechaCese'],
+                "idRepresentacion" => $request->data['idRepresentacion'],
+                "responsable" => $request->data['responsable'],
             ]);
-            return redirect()->route('miembrosJunta')->with('success', 'Miembro de Junta creado correctamente.');
+
+            return response()->json(['message' => 'Miembro de junta creado correctamente.', 'status' => 200], 200);
+
         } catch (\Throwable $th) {
-            return redirect()->route('miembrosJunta')->with('error', 'No se pudo crear el miembro de junta: ' . $th->getMessage());
+            return response()->json(['errors' => 'No se pudo crear el miembro de junta.', 'status' => 422], 200);
         }
     }
 
     public function get(Request $request)
     {
         try {
-            $miembro = MiembroJunta::where('id', $request->id)->first();
+            $miembro = MiembroJunta::withTrashed()->where('id', $request->id)->first();
             if (!$miembro) {
-                return response()->json(['error' => 'No se ha encontrado el miembro de junta.'], 404);
+                return response()->json(['errors' => 'No se ha encontrado el miembro de junta.','status' => 422], 200);
             }
             return response()->json($miembro);
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se ha encontrado el miembro de junta.'], 404);
+            return response()->json(['errors' => 'No se ha encontrado el miembro de junta.','status' => 422], 200);
         }
     }
 
@@ -173,67 +133,145 @@ class MiembrosJuntaController extends Controller
             $miembro = MiembroJunta::where('id', $request->id)->first();
 
             if (!$miembro) {
-                return response()->json(['error' => 'No se ha encontrado el miembro de Junta.'], 404);
+                return response()->json(['errors' => 'No se ha encontrado el miembro de junta.','status' => 422], 200);
             }
 
-            $miembro->estado = 0;
-            $miembro->save();
-            return response()->json($request);
+            $miembro->delete();
+            return response()->json(['status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se ha encontrado el miembro de Junta.'], 404);
+            return response()->json(['errors' => 'No se ha encontrado el miembro de junta.','status' => 422], 200);
         }
     }
 
     public function update(Request $request)
     {
         try {
+            $request['accion']='update';
+            $validation = $this->validateMiembro($request);
+            if($validation->original['status']!=200){
+                return $validation;
+            }
+
             $miembro = MiembroJunta::where('id', $request->id)->first();
             if (!$miembro) {
-                return response()->json(['error' => 'No se ha encontrado el miembro de Junta', 'status' => 404], 200);
-            }
-
-            // Comprobar que la junta a la que pertenece esté vigente
-            if($miembro->junta->fechaDisolucion!=null)
-                return response()->json(['error' => 'No se puede editar un miembro de junta en la que se junta se encuentra caducada', 'status' => 404], 200);
-
-            if($request->data['fechaCese'] != null){
-                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-                $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
-                $dateCese = new DateTime($request->data['fechaCese']);
-
-                if ($dateTomaPosesion>$dateCese) 
-                    return response()->json(['error' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 404], 200);
-            }
-            else{
-                // Comprobación existencia usuario vigente en la junta
-                $miembroRepetido = MiembroJunta::select('id')
-                ->where('idJunta', $miembro->idJunta)
-                ->where('idUsuario', $miembro->idUsuario)
-                ->where('fechaCese', null)
-                ->where('estado', 1)
-                ->count();
-
-                if($miembroRepetido>1)
-                    return response()->json(['error' => 'No se pudo editar el miembro de la junta: ya existe el usuario vigente en la junta seleccionada', 'status' => 404], 200);
-            }
-
-            if($request->data['responsable'] == 0){
-                $miembro->usuario->removeRole('responsable_junta');
-            }
-            else{
-                $miembro->usuario->assignRole('responsable_junta');
+                return response()->json(['errors' => 'No se ha encontrado el miembro de junta.', 'status' => 422], 200);
             }
 
             $miembro->idRepresentacion = $request->data['idRepresentacion'];
             $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
             $miembro->fechaCese = $request->data['fechaCese'];  
+            $miembro->responsable = $request->data['responsable'];  
+
             $miembro->save();
-            return response()->json(['message' => 'El miembro de Junta se ha actualizado correctamente.', 'status' => 200], 200);
+            return response()->json(['message' => 'El miembro de junta se ha actualizado correctamente.', 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'Error al actualizar el miembro de junta.', 'status' => 404], 404);
+            return response()->json(['errors' => 'Error al actualizar el miembro de junta.', 'status' => 422], 200);
         }
+    }
+
+    public function rules(){
+        $rules = [
+            'idJunta' => 'required|integer|exists:App\Models\Junta,id',
+            'idUsuario' => 'required|integer|exists:App\Models\User,id',
+            'idRepresentacion' => 'required|integer|exists:App\Models\RepresentacionGeneral,id',
+            'fechaTomaPosesion' => 'required|date',
+            'fechaCese' => 'nullable|date',
+        ];
+
+        $rules_message = [
+            // Mensajes error idJunta
+            'idJunta.required' => 'La junta es obligatoria.',
+            'idJunta.integer' => 'La junta debe ser un entero.',
+            'idJunta.exists' => 'La junta seleccionada no existe.',
+            // Mensajes error idUsuario
+            'idUsuario.required' => 'El usuario es obligatorio.',
+            'idUsuario.integer' => 'El usuario debe ser un entero.',
+            'idUsuario.exists' => 'El usuario seleccionado no existe.',
+            // Mensajes error idRepresentacion
+            'idRepresentacion.required' => 'La representación es obligatoria.',
+            'idRepresentacion.integer' => 'La representación debe ser un entero.',
+            'idRepresentacion.exists' => 'La representación seleccionada no existe.',
+            // Mensajes error fechaTomaPosesión
+            'fechaTomaPosesion.required' => 'La fecha de toma de posesión es obligatoria.',
+            'fechaTomaPosesion.date' => 'La fecha de toma de posesión debe tener el formato fecha DD/MM/YYYY.',
+            // Mensajes error fechaCese
+            'fechaCese.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
+        ];
+
+        return [$rules, $rules_message];
+    }
+
+    public function validateMiembro(Request $request){
+
+        $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
+        }
+        else{
+            if($request->data['fechaCese']==null){
+                /// Comprobación existencia director actual en la junta
+                if($request->data['idRepresentacion']==config('constants.REPRESENTACIONES.GENERAL.DIRECTOR')){
+                    $director = MiembroJunta::select('id')
+                        ->where('idJunta', $request->data['idJunta'])
+                        ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.DIRECTOR'))
+                        ->where('fechaCese', null)
+                        ->whereNot('id', $request->id)
+                        ->first();
+    
+                    if($director)
+                        return response()->json(['errors' => 'No se pudo añadir el miembro de junta: ya existe un Director/a | Decano/a vigente en el centro seleccionado', 'status' => 422], 200);
+                }
+    
+                // Comprobación existencia secretario actual en la junta
+                if($request->data['idRepresentacion']==config('constants.REPRESENTACIONES.GENERAL.SECRETARIO')){
+                    $secretario = MiembroJunta::select('id')
+                        ->where('idJunta', $request->data['idJunta'])
+                        ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.SECRETARIO'))
+                        ->where('fechaCese', null)
+                        ->whereNot('id', $request->id)
+                        ->first();
+    
+                    if($secretario)
+                        return response()->json(['errors' => 'No se pudo añadir el miembro de junta: ya existe un Secretario/a vigente en el centro seleccionado', 'status' => 422], 200);
+                }
+
+                // Comprobación existencia usuario en la junta
+                $usuarioEnJunta = MiembroJunta::select('id')
+                    ->where('idJunta', $request->data['idJunta'])
+                    ->where('idUsuario', $request->data['idUsuario'])
+                    ->where('fechaCese', null)
+                    ->whereNot('id', $request->id)
+                    ->first();
+
+                if($usuarioEnJunta)
+                    return response()->json(['errors' => 'No se pudo añadir el miembro de junta: ya existe el usuario vigente en el centro seleccionado', 'status' => 422], 200);
+            
+                if($request->accion=='update'){
+                    // Comprobación existencia junta vigente
+                    $juntaVigenteMiembro = Junta::where('id', $request->data['idJunta'])
+                    ->whereNotNull('fechaDisolucion')
+                    ->first();
+
+                    if($juntaVigenteMiembro)
+                        return response()->json(['errors' => 'No se pudo actualizar el miembro de junta: la junta no está vigente', 'status' => 422], 200);
+                }
+                
+            }
+            else{
+                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
+                $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
+                $dateCese = new DateTime($request->data['fechaCese']);
+
+                if ($dateTomaPosesion>$dateCese) {
+                    return response()->json(['errors' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 422], 200);
+                }  
+            }
+        }
+        
+        return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
     }
 
     public function getByCentro(Request $request)
@@ -252,7 +290,7 @@ class MiembrosJuntaController extends Controller
             return response()->json(['miembros'=>$miembros]);
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se han encontrado miembros de la junta para el centro seleccionado.'], 404);
+            return response()->json(['errors' => 'No se han encontrado miembros de la junta para el centro seleccionado.', 'status' => 422], 200);
         }    
     }
 }

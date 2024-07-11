@@ -18,7 +18,7 @@ class JuntasController extends Controller
     {
         try {
 
-            $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'deleted_at');
+            $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'updated_at', 'deleted_at');
             $centros = Centro::select('id', 'nombre');
 
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
@@ -49,6 +49,7 @@ class JuntasController extends Controller
             $juntas = $juntas
             ->orderBy('deleted_at')
             ->orderBy('fechaDisolucion')
+            ->orderBy('updated_at','desc')
             ->orderBy('fechaConstitucion', 'desc')
             ->paginate(5);
 

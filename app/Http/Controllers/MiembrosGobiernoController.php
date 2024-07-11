@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\Centro;
 use Illuminate\Http\Request;
 use App\Models\MiembroGobierno;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RepresentacionGobierno;
 use Illuminate\Support\Facades\Validator;
@@ -18,8 +17,7 @@ class MiembrosGobiernoController extends Controller
     public function index(Request $request)
     {
         try {
-
-            $miembrosGobierno = MiembroGobierno::select('id', 'idCentro', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'deleted_at');
+            $miembrosGobierno = MiembroGobierno::select('id', 'idCentro', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at');
             $centros = Centro::select('id', 'nombre');
 
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
@@ -48,6 +46,7 @@ class MiembrosGobiernoController extends Controller
             $miembrosGobierno = $miembrosGobierno
             ->orderBy('deleted_at')
             ->orderBy('fechaCese')
+            ->orderBy('updated_at','desc')
             ->orderBy('idCentro')
             ->orderBy('idRepresentacion')
             ->orderBy('idUsuario')
@@ -140,7 +139,6 @@ class MiembrosGobiernoController extends Controller
     public function update(Request $request)
     {
         try {
-
             $request['accion']='update';
             $validation = $this->validateMiembro($request);
             if($validation->original['status']!=200){
@@ -210,7 +208,6 @@ class MiembrosGobiernoController extends Controller
         }
         else{
             if($request->data['fechaCese']==null){
-
                 /// Comprobación existencia director actual en el centro
                 if($request->data['idRepresentacion']==config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR')){
                     $director = MiembroGobierno::select('id')
@@ -260,33 +257,6 @@ class MiembrosGobiernoController extends Controller
         }
         
         return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
-    }
-
-    public function getDirectivos(Request $request)
-    {
-        try {
-            // Falta filtrar entre fechas y estado 
-            $director = MiembroGobierno::
-                join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
-                ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
-                ->where('miembros_gobierno.fechaCese', null)
-                ->whereIn('miembros_gobierno.idRepresentacion', [config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR')])
-                ->select('users.id', 'users.name')
-                ->first();
-
-            $secretario = MiembroGobierno::
-                join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
-                ->where('miembros_gobierno.idCentro', $request->get('idCentro'))
-                ->where('miembros_gobierno.fechaCese', null)
-                ->whereIn('miembros_gobierno.idRepresentacion', [config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO')])
-                ->select('users.id', 'users.name')
-                ->first();
-
-            return response()->json(['director'=>$director, 'secretario'=>$secretario]);
-
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se han encontrado directivos para el centro seleccionado.','status' => 422], 200);
-        }    
     }
 
     public function getByCentro(Request $request)

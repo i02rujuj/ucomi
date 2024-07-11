@@ -20,7 +20,7 @@ Miembros de Centro
             @endif
 
             <div class="flex justify-between"> 
-                @include('components.filtros.miembrosFiltro')
+                @include('components.filtros.miembrosGobiernoFiltro')
 
                 <div>
                     <div id="btn-add-miembro" type="submit" class="flex items-center gap-2 bg-white px-5 py-2.5 rounded-md shadow cursor-pointer">

@@ -196,7 +196,7 @@ class JuntasController extends Controller
             'fechaConstitucion.required' => 'La fecha de constitución es obligatoria.',
             'fechaConstitucion.date' => 'La fecha de constitución debe tener el formato fecha DD/MM/YYYY.',
             // Mensajes error fechaDisolucion
-            'fechaDisolucion.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
+            'fechaDisolucion.date' => 'La fecha de disolución debe tener el formato fecha DD/MM/YYYY.',
         ];
 
         return [$rules, $rules_message];

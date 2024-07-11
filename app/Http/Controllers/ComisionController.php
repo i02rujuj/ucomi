@@ -7,6 +7,7 @@ use App\Models\Junta;
 use App\Models\Centro;
 use App\Models\Comision;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -95,7 +96,9 @@ class ComisionController extends Controller
                 return $validation;
             }
            
-            $junta = Comision::create([
+            Comision::create([
+                "nombre" => $request->data['nombre'],
+                "descripcion" => $request->data['descripcion'],
                 "idJunta" => $request->data['idJunta'],
                 "fechaConstitucion" => $request->data['fechaConstitucion'],
                 "fechaDisolucion" => $request->data['fechaDisolucion'],
@@ -146,24 +149,48 @@ class ComisionController extends Controller
 
     public function update(Request $request)
     {
-        
+        try {
+            $request['accion']='update';
+            $validation = $this->validateComision($request);
+            if($validation->original['status']!=200){
+                return $validation;
+            }
+
+            $comision=Comision::where('id', $request->id)->first();
+
+            if (!$comision) {
+                return response()->json(['errors' => 'No se ha encontrado la comisión.', 'status' => 422], 200);
+            }
+
+            if($request->data['fechaDisolucion']!=null){
+                DB::table('miembros_comision')
+                ->where('idComision', $comision->id)
+                ->update(['fechaCese' => $request->data['fechaDisolucion']]);
+            }
+
+            $comision->nombre = $request->data['nombre'];
+            $comision->descripcion = $request->data['descripcion'];
+            $comision->fechaConstitucion = $request->data['fechaConstitucion'];
+            $comision->fechaDisolucion = $request->data['fechaDisolucion'];
+            $comision->save();
+            return response()->json(['message' => 'La comisión se ha actualizado correctamente.', 'status' => 200], 200);
+            
+        } catch (\Throwable $th) {
+            return response()->json(['errors' => 'Error al actualizar la comisión.', 'status' => 422], 200);
+        }
     }
 
     public function rules()
     {
         $rules = [
-            'idJunta' => 'required|integer|exists:App\Models\Junta,id',
             'nombre' => 'required|max:100|string',
             'descripcion' => 'nullable|string|max:250',
+            'idJunta' => 'required|integer|exists:App\Models\Junta,id',
             'fechaConstitucion' => 'required|date',
             'fechaDisolucion' => 'nullable|date',
         ]; 
         
         $rules_message = [
-            // Mensajes error idJunta
-            'idJunta.required' => 'La junta es obligatoria.',
-            'idJunta.integer' => 'La junta debe ser un entero.',
-            'idJunta.exists' => 'La junta seleccionado no existe.',
             // Mensajes error nombre
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.string' => 'El nombre no puede contener números ni caracteres especiales.',
@@ -171,11 +198,15 @@ class ComisionController extends Controller
             // Mensajes error descripcion
             'descripcion.string' => 'La descripcion debe ser una cadena de texto.',
             'descripcion.max' => 'La descripcion no puede exceder los 250 carácteres.',
+            // Mensajes error idJunta
+            'idJunta.required' => 'La junta es obligatoria.',
+            'idJunta.integer' => 'La junta debe ser un entero.',
+            'idJunta.exists' => 'La junta seleccionado no existe.',
             // Mensajes error fechaConstitucion
             'fechaConstitucion.required' => 'La fecha de constitución es obligatoria.',
             'fechaConstitucion.date' => 'La fecha de constitución debe tener el formato fecha DD/MM/YYYY.',
             // Mensajes error fechaDisolucion
-            'fechaDisolucion.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
+            'fechaDisolucion.date' => 'La fecha de disolución debe tener el formato fecha DD/MM/YYYY.',
         ];
 
         return [$rules, $rules_message];
@@ -212,29 +243,7 @@ class ComisionController extends Controller
                         return response()->json(['errors' => 'La fecha de disolución '.$request->fechaDisolucion.' no puede ser anterior a la fecha de constitución '. $request->fechaConstitucion, 'status' => 422], 200);
                     }
                 }
-                else{
-                    switch($request->accion){
-                        case 'add':
-                            // Comprobación existencia junta en activo para la comisión seleccionado
-                            $comision = Comision::select('id')
-                                ->where('idJunta', $request->data['idJunta'])
-                                ->where('fechaDisolucion', null)
-                                ->first();
-                            break;
-                        case 'update':
-                            $comision = Comision::select('id')
-                                ->where('idJunta', $request->data['idJunta'])
-                                ->where('fechaDisolucion', null)
-                                ->whereNot('id', $request->id)
-                                ->first();
-                            break;
-                    } 
-    
-                    if($comision){
-                        return response()->json(['errors' => 'No se pudo crear la comisión. Ya existe una comisión vigente para la junta indicada', 'status' => 422], 200);
-                    }
-                }
-            }
+            }   
         }
         return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
     }

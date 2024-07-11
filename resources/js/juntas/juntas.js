@@ -1,5 +1,4 @@
-import { DELETE_JUNTA_BBDD, GET_JUNTA_BBDD, UPDATE_JUNTA_BBDD, ADD_JUNTA_BBDD, VALIDATE_JUNTA_BBDD } from "./axiosTemplate.js";
-import {GETALL_CENTRO_BBDD} from '../centros/axiosTemplate';
+import { DELETE_JUNTA_BBDD, UPDATE_JUNTA_BBDD, ADD_JUNTA_BBDD, VALIDATE_JUNTA_BBDD } from "./axiosTemplate.js";
 import Swal from 'sweetalert2';
 
 let modal_add = null
@@ -180,7 +179,7 @@ const addEditEvent = (button) => {
                 }
             }
             if(!response)
-                throw "Error, miembro no encontrado"
+                throw "Error, junta no encontrada"
 
             await Swal.fire({
                 title: response && response.deleted_at!=null ? 'Junta eliminada' : 'Editar Junta',

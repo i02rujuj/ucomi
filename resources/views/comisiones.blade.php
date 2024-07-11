@@ -38,19 +38,19 @@ Comisiones
 
             <div id="modal_add" name="modal_add" class="hidden">
                 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-4 justify-center items-center">
-                    <label for="nombre" class="block text-sm text-gray-600 w-36 text-right">Nombre:</label>
-                    <input id="nombre" name="nombre" type="text" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" required/>
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mt-2 justify-center items-center">
+                    <label for="nombre" class="block text-sm text-gray-600 w-36 pr-6 text-right">Nombre: *</label>
+                    <input id="nombre" name="nombre" type="text" class="comision swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none"/>
                 </div>
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-4 justify-center items-center">
-                    <label for="descripcion" class="block text-sm text-gray-600 w-36 text-right">Descripción:</label>
-                    <input id="descripcion" name="descripcion" type="textarea" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off"/>
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
+                    <label for="descripcion" class="block text-sm text-gray-600 w-36 pr-6 text-right">Descripción:</label>
+                    <input id="descripcion" name="descripcion" type="text" class="comision swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none"/>
                 </div>
                 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-4 justify-center items-center">
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
                     <label for="idJunta" class="block text-sm text-gray-600 w-36 pr-6 text-right">Junta asociada: *</label>
-                    <select id="idJunta" class="swal2-input junta text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none" >
+                    <select id="idJunta" class="comision swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" >
                         <option value="" selected disabled>Selecciona una junta</option>
                         @foreach ($juntas as $junta)
                             <option value="{{$junta->id}}">{{$junta->fechaConstitucion}} | {{$junta->centro->nombre}}</option>
@@ -58,14 +58,14 @@ Comisiones
                     </select>
                 </div>
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-1 justify-center items-center">
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
                     <label for="fechaConstitucion" class="block text-sm text-gray-600 w-36 text-right">Fecha Constitución: *</label>
-                    <input type="date" id="fechaConstitucion" class="swal2-input junta text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none">
+                    <input type="date" id="fechaConstitucion" class="swal2-input comision text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none">
                 </div>
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-3 justify-center items-center">
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
                     <label for="fechaDisolucion" class="block text-sm text-gray-600 w-36 text-right">Fecha Disolución:</label>
-                    <input type="date" id="fechaDisolucion" class="junta swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none">
+                    <input type="date" id="fechaDisolucion" class="comision swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none">
                 </div>     
             </div>
 

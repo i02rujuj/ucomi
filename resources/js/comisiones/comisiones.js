@@ -1,177 +1,216 @@
-import { DELETE_COMISION_BBDD, GET_COMISION_BBDD, UPDATE_COMISION_BBDD } from "./axiosTemplate.js";
-import {GET_CENTRO_BBDD} from '../centros/axiosTemplate.js';
-import {GETALL_JUNTA_BBDD} from '../juntas/axiosTemplate.js';
-
+import { DELETE_COMISION_BBDD, UPDATE_COMISION_BBDD, ADD_COMISION_BBDD, VALIDATE_COMISION_BBDD } from "./axiosTemplate.js";
 import Swal from 'sweetalert2';
 
-// EVENTO EDITAR
-const addEditEvent = (button) => {
-    button.addEventListener("click", async (event) => {
+let modal_add = null
+
+document.addEventListener("DOMContentLoaded", async (event) => {
+    modal_add = document.querySelector('#modal_add')
+})
+
+function renderHTMLComision(response){
+
+    modal_add.querySelector('#nombre').value=""
+    modal_add.querySelector('#descripcion').value=""
+    modal_add.querySelector('#idJunta').value=""
+    modal_add.querySelector('#fechaConstitucion').value=""
+    modal_add.querySelector('#fechaDisolucion').value=""
+
+    if(response){
+        let modal_edit = modal_add.cloneNode(true);
+
+        modal_edit.classList.remove('hidden')
         
-        const dataToSend = {
-            id: button.dataset.comisionId,
-        };
+        modal_edit.querySelector('#nombre').value=response.nombre
+        modal_edit.querySelector('#descripcion').value=response.descripcion
+        modal_edit.querySelector('#idJunta').value=response.idJunta
+        modal_edit.querySelector('#idJunta').setAttribute('disabled', 'disabled')
+        modal_edit.querySelector('#idJunta').classList.add('bg-red-50')
+        modal_edit.querySelector('#fechaConstitucion').value=response.fechaConstitucion
+        modal_edit.querySelector('#fechaDisolucion').value=response.fechaDisolucion
 
-        try {
+        if(response.deleted_at!=null){
+            modal_edit.querySelector('#nombre').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#descripcion').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#idJunta').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#fechaConstitucion').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#fechaDisolucion').setAttribute('disabled', 'disabled')
+        }
+        return modal_edit        
+    }
+    else{
+        modal_add.classList.remove('hidden')
+        return modal_add
+    }
+}
 
-            var options ="";
+const preConfirm = async(accion, id=null) => {
+    let valores = {};
 
-            // Obtenemos la comisión a editar
-            const response = await GET_COMISION_BBDD(dataToSend);
+    const inputs = document.querySelectorAll(".comision");
+    inputs.forEach((input) => {
+        valores[input.id] = input.value;
+    });
 
-            const dataToSendJunta = {
-                id: response.idJunta,
+    if(!valores['fechaDisolucion']){
+        valores['fechaDisolucion']=null;
+    }
+
+    let dataToSend, response, title, text = null
+    let mostrar=true
+
+    switch (accion) {
+        case 'add':
+            dataToSend = {
+                data: valores,
+            };
+            response = await ADD_COMISION_BBDD(dataToSend)
+            title="Añadido"
+            text="Se ha añadido la comisión"
+            break;
+    
+        case 'update':
+
+            dataToSend = {
+                id: id,
+                accion: 'update',
+                data: valores,
             };
 
-            const juntas = await GETALL_JUNTA_BBDD(dataToSendJunta); 
+            response = await VALIDATE_COMISION_BBDD(dataToSend)
 
-            const result = await Swal.fire({
-                title: "Editar Comisión",
-                html: `
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
-                        <label for="nombre" class="block text-sm text-gray-600 w-32">Nombre:</label>
-                        <input type="text" id="nombre" class="swal2-input comision text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required value="${response.nombre}">
-                    </div>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
-                        <label for="descripcion" class="block text-sm text-gray-600 w-32">Descripción:</label>
-                        <input type="text" id="descripcion" class="swal2-input comision text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${(response.descripcion == null) ? '' : response.descripcion}">
-                    </div>
+            if (response.status === 200) {
+                let confirmarCesarMiembros = false
 
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
-                        <label for="idJunta" class="block text-sm text-gray-600 mb-1 w-32">Junta que gestiona la comisión:</label>
-                        <select id="idJunta" class="comision swal2-input text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required">
-                            <option value="">-----</option>
-                            ${juntas.forEach(junta => {  
-                                options+='<option value="'+junta.id+'" ';
-                                if(junta.id == response.idJunta) 
-                                    options+='selected';
-                                options+='>'+junta.nombre+' ('+junta.fechaConstitucion+')</option>';                                               
-                            })}
-                            ${options}
-                        </select>
-                    </div>
+                // Avisar sobre poner fecha Cese como fecha disolución de la comisión
+                if(valores['fechaDisolucion']!=null){
+                    const result2 = await Swal.fire({
+                        text: "Se ha indicado una fecha de disolución para la comisión. Todos los miembros de la comisión cesarán con la fecha de disolución indicada",
+                        focusConfirm: false,
+                        showCancelButton: true,
+                        confirmButtonText: "Aceptar",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '',
+                        preConfirm: async () => {confirmarCesarMiembros = true},
+                    })
 
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
-                        <label for="fechaConstitucion" class="block text-sm text-gray-600 w-32">Fecha Constitución:</label>
-                        <input type="date" id="fechaConstitucion" class="swal2-input comision text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required value="${response.fechaConstitucion}">
-                    </div>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
-                        <label for="fechaDisolucion" class="block text-sm text-gray-600 w-32">Fecha Disolución:</label>
-                        <input type="date" id="fechaDisolucion" class="comision swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.fechaDisolucion}">
-                    </div>     
-                `,
+                    if(result2.isDismissed){mostrar=false}
+                }
+    
+                if(valores['fechaDisolucion']==null || confirmarCesarMiembros){
+        
+                    response = await UPDATE_COMISION_BBDD(dataToSend);
+                    title="Actualizado"
+                    text="Se ha actualizado la comisión"
+                    confirmarCesarMiembros ? text+=' y se han cesado a todos los miembros de la comisión.' : ''
+                }
+            }
+            break
+
+        case 'delete':
+
+            dataToSend = {
+                id: id,
+                accion: 'delete',
+            }
+
+            response = await VALIDATE_COMISION_BBDD(dataToSend);
+
+            if (response.status === 200) {
+                const result = await Swal.fire({
+                    title: "¿Eliminar la comisión?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "",
+                    confirmButtonText: "Eliminar",
+                    preConfirm: async () => {        
+                        response = await DELETE_COMISION_BBDD(dataToSend);
+                        title="Eliminado"
+                        text="Se ha eliminado la comisión"
+                    }
+                })
+
+                if(result.isDismissed){mostrar=false}     
+            }
+            break
+    }
+
+    if(mostrar){
+        if (response.status === 200) {
+            await Swal.fire({
+                icon: "success",
+                title: title,
+                text: text,
+            })
+            window.location.reload()
+        } 
+        else {
+            Swal.showValidationMessage(response.errors)
+            return false
+        }
+    } 
+}
+
+/**
+ * EVENTO AÑADIR
+ */
+const addButton = document.querySelector('#btn-add-comision');
+if(addButton){
+    addButton.addEventListener("click", async (event) => {
+        await Swal.fire({
+            title: "Añadir Comisión",
+            html: renderHTMLComision(null),
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: "Añadir",
+            cancelButtonText: "Cancelar",
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            preConfirm: async () => preConfirm('add')
+        })
+    })
+}
+
+// EVENTO EDITAR Y ELIMINAR
+const addEditEvent = (button) => {
+    button.addEventListener("click", async (event) => {
+        try {
+            let response = null
+
+            for(let c in comisiones.data){
+                if(comisiones.data[c].id==button.dataset.comisionId){
+                    response = comisiones.data[c]
+                    break;
+                }
+            }
+            if(!response)
+                throw "Error, comisión no encontrada"
+
+            await Swal.fire({
+                title: response && response.deleted_at!=null ? 'Comisión eliminada' : 'Editar Comisión',
+                html: renderHTMLComision(response),
                 focusConfirm: false,
-                showDenyButton: true,
-                showCancelButton: true,
+                showDenyButton: (response && response.deleted_at!=null) || !permitirAcciones ? false : true,
+                showCancelButton: response && response.deleted_at!=null ? false : true,
+                showConfirmButton: response && response.deleted_at!=null ? false : true,
                 denyButtonText: 'Eliminar',
                 confirmButtonText: "Actualizar",
                 cancelButtonText: "Cancelar",
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '',
                 denyButtonColor: '#d33',
+                preConfirm: async () => preConfirm('update', button.dataset.comisionId),
+                preDeny: permitirAcciones ? async () => preConfirm('delete', button.dataset.comisionId) : null,
             });
 
-            if (result.isConfirmed) {
-
-                const inputs = document.querySelectorAll(".comision");
-                const valores = {};
-                let error = 0;
-
-                inputs.forEach((input) => {
-                    valores[input.id] = input.value;
-                    if (input.id!='fechaDisolucion' && input.id!='descripcion' && input.value === "") {
-                        error++;
-                    }
-                });
-
-                // Si es vacío fechaDisolución, colocamos un null
-                if(!valores['fechaDisolucion']){
-                    valores['fechaDisolucion']=null;
-                }
-                
-                if (error > 0) {
-
-                    await Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Faltan campos por rellenar.",
-                    });
-
-                } else {
-
-                    const dataToSend = {
-                        id: button.dataset.comisionId,
-                        data: valores,
-                    };
-
-                    const response = await UPDATE_COMISION_BBDD(dataToSend);
-
-                    if (response.status === 200) {
-                        await Swal.fire({
-                            icon: "success",
-                            title: "Updated!",
-                            text: "Se ha editado la comision.",
-                        });
-
-                        window.location.reload();
-
-                    } else {
-
-                        await Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: response.error,
-                        });
-
-                    }
-                }
-            }
-            // BOTÓN ELIMINAR
-            else if (result.isDenied) {
-
-                try {
-                    const result = await Swal.fire({
-                        title: "¿Eliminar la comisión?",
-                        text: "",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#d33",
-                        cancelButtonColor: "",
-                        confirmButtonText: "Eliminar",
-                    });
-
-                    if (result.isConfirmed) {
-
-                        const response = await DELETE_COMISION_BBDD(dataToSend);
- 
-                        await Swal.fire(
-                            "Eliminado",
-                            "La comisión se ha eliminado.",
-                            "success"
-                        );
-                        
-                        window.location.reload();
-                    }
-
-                } catch (error) {
-
-                    await Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Ha ocurrido un error al eliminar la comisión",
-                    });
-                }
-            }
         } catch (error) {
-
             await Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "Ha ocurrido un error al editar la comisión.",
+                text: "Ha ocurrido un error al realizar una operación con la comisión.",
             });
-
         }
-
     });
 };
 

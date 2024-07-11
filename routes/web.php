@@ -114,10 +114,11 @@ Route::group(['middleware' => ['responsable:admin|centro|junta|comision']], func
 
     // COMISIONES
     Route::get('/comisiones', [ComisionController::class, 'index'])->name('comisiones');
-    Route::post('/comisiones', [ComisionController::class, 'store'])->name('comisiones.store')->middleware('responsable:admin|centro|junta');
+    Route::post('/comision/add', [ComisionController::class, 'store'])->name('store')->middleware('responsable:admin|centro|junta');
     Route::post('/comision/delete', [ComisionController::class, 'delete'])->middleware('responsable:admin|centro|junta');
     Route::post('/comision/get', [ComisionController::class, 'get']);
     Route::post('/comision/update', [ComisionController::class, 'update']);
+    Route::post('/comision/validate', [ComisionController::class, 'validateComision']);
 
     // MIEMBROS COMISIÓN
     Route::get('/miembros_comision', [MiembrosComisionController::class, 'index'])->name('miembrosComision');

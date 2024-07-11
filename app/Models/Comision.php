@@ -39,7 +39,7 @@ class Comision extends Model
     public function presidentes()
     {
         return $this->hasMany(MiembroComision::class, 'idComision')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.DIRECTOR'));
+            ->where('presidente', 1);
     }
 
     public function scopeFilters(Builder $query, Request $request){
@@ -49,9 +49,6 @@ class Comision extends Model
                 ->whereHas('junta', function($query) use ($request){
                     $query->where('idCentro', $request->filtroCentro);
                 });
-                /*join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                    ->where('juntas.idCentro', $request->filtroCentro)
-                    ->whereNull('juntas.deleted_at');       */
             })->when($request->has('filtroJunta') && $request->filtroJunta!=null, function($builder) use ($request){
                 return $builder->where('idJunta', $request->filtroJunta);       
             })->when($request->has('filtroVigente') && $request->filtroVigente!=null, function($builder) use ($request){

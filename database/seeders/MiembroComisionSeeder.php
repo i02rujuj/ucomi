@@ -19,13 +19,15 @@ class MiembroComisionSeeder extends Seeder
                 'idUsuario' => 5, 
                 'idComision' => 1, 
                 'representacion' => 4,
-                'responsable' => 1
+                'responsable' => 1,
+                'presidente' => 0
             ],
             [
                 'idUsuario' => 6, 
                 'idComision' => 1, 
                 'representacion' => 5,
-                'responsable' => 1
+                'responsable' => 1,
+                'presidente' => 0
             ],
         ];
 
@@ -37,6 +39,7 @@ class MiembroComisionSeeder extends Seeder
             $miembro->fechaCese = null;
             $miembro->idRepresentacion = $m['representacion'];
             $miembro->responsable = $m['responsable'];
+            $miembro->presidente = $m['presidente'];
             $miembro->save();
         }
         // Se hace así para que haga un commit en cada creación y permita no repetir miembros

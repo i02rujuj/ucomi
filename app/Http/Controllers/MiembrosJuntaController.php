@@ -212,7 +212,7 @@ class MiembrosJuntaController extends Controller
         }
         else{
             if($request->data['fechaCese']==null){
-                /// Comprobación existencia director actual en la junta
+                // Comprobación existencia director actual en la junta
                 if($request->data['idRepresentacion']==config('constants.REPRESENTACIONES.GENERAL.DIRECTOR')){
                     $director = MiembroJunta::select('id')
                         ->where('idJunta', $request->data['idJunta'])
@@ -222,7 +222,7 @@ class MiembrosJuntaController extends Controller
                         ->first();
     
                     if($director)
-                        return response()->json(['errors' => 'No se pudo añadir el miembro de junta: ya existe un Director/a | Decano/a vigente en el centro seleccionado', 'status' => 422], 200);
+                        return response()->json(['errors' => 'No se pudo añadir el miembro de junta: ya existe un Director/a | Decano/a vigente en la junta seleccionada', 'status' => 422], 200);
                 }
     
                 // Comprobación existencia secretario actual en la junta
@@ -247,7 +247,7 @@ class MiembrosJuntaController extends Controller
                     ->first();
 
                 if($usuarioEnJunta)
-                    return response()->json(['errors' => 'No se pudo añadir el miembro de junta: ya existe el usuario vigente en el centro seleccionado', 'status' => 422], 200);
+                    return response()->json(['errors' => 'No se pudo añadir el miembro de junta: ya existe el usuario vigente en la junta seleccionado', 'status' => 422], 200);
             
                 if($request->accion=='update'){
                     // Comprobación existencia junta vigente

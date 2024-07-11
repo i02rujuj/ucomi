@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use DateTime;
 use App\Models\User;
+use App\Models\Junta;
+use App\Models\Centro;
 use App\Models\Comision;
 use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
@@ -15,189 +17,142 @@ use Illuminate\Support\Facades\Validator;
 
 class MiembrosComisionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
+            $miembrosComision = MiembroComision::select('id', 'idComision', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'presidente', 'updated_at', 'deleted_at');
+            $comisiones = Comision::select('id', 'nombre', 'descripcion', 'idJunta', 'fechaConstitucion', 'fechaConstitucion');
 
-            $user = Auth::user();
-
-            if($user->hasRole('admin')){
-                
-                $comisiones = Comision::where('estado', 1)
-                ->where('fechaDisolucion', null)
-                ->get();
-    
-                $miembrosComision = MiembroComision::where('estado',1)
-                ->orderBy('fechaCese')
-                ->orderBy('idComision')
-                ->orderBy('idRepresentacion')
-                ->orderBy('idUsuario')
-                ->get();
-            }
-
-            if($user->hasRole('responsable_centro')){
-
-                $centroResponsable = MiembroGobierno::where('idUsuario', $user->id)
-                ->select('idCentro')
-                ->first();
-
-                $comisiones = Comision::select('comisiones.*')
-                ->where('comisiones.estado', 1)
-                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                ->join('centros', 'centros.id', '=', 'juntas.idCentro')
-                ->where('juntas.idCentro', $centroResponsable->idCentro)
-                ->where('comisiones.fechaDisolucion', null)
-                ->get();
-    
-                $miembrosComision = MiembroComision::select('miembros_comision.*')
-                ->where('miembros_comision.estado', 1)
+            if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
+                $comisiones = $comisiones
                 ->join('comisiones', 'comisiones.id', '=', 'miembros_comision.idComision')
                 ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                ->join('centros', 'centros.id', '=', 'juntas.idCentro')
-                ->where('juntas.idCentro', $centroResponsable->idCentro)
-                ->where('miembros_comision.estado',1)
-                ->orderBy('miembros_comision.fechaCese')
-                ->orderBy('miembros_comision.idComision')
-                ->orderBy('miembros_comision.idRepresentacion')
-                ->orderBy('miembros_comision.idUsuario')
-                ->get();
-            }
+                ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
 
-            if($user->hasRole('responsable_junta')){
-
-                $juntaResponsable = MiembroJunta::where('idUsuario', $user->id)
-                ->select('idJunta')
-                ->first();
-
-                $comisiones = Comision::where('estado', 1)
-                ->where('idJunta', $juntaResponsable->idJunta)
-                ->where('fechaDisolucion', null)
-                ->get();
-    
-                $miembrosComision = MiembroComision::select('miembros_comision.*')
-                ->where('miembros_comision.estado', 1)
+                $miembrosComision = $miembrosComision
                 ->join('comisiones', 'comisiones.id', '=', 'miembros_comision.idComision')
-                ->where('comisiones.idJunta', $juntaResponsable->idJunta)
-                ->where('miembros_comision.estado',1)
-                ->orderBy('miembros_comision.fechaCese')
-                ->orderBy('miembros_comision.idComision')
-                ->orderBy('miembros_comision.idRepresentacion')
-                ->orderBy('miembros_comision.idUsuario')
-                ->get();
+                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
+                ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
             }
 
-            if($user->hasRole('responsable_comision')){
-                $comisionResponsable = MiembroComision::where('idUsuario', $user->id)
-                ->select('idComision')
-                ->first();
+            if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
 
-                $comisiones = Comision::where('estado', 1)
-                ->where('id', $comisionResponsable->idComision)
-                ->where('fechaDisolucion', null)
-                ->get();
-    
-                $miembrosComision = MiembroComision::select('miembros_comision.*')
-                ->where('miembros_comision.estado', 1)
-                ->where('miembros_comision.idComision', $comisionResponsable->idComision)
-                ->where('miembros_comision.estado',1)
-                ->orderBy('miembros_comision.fechaCese')
-                ->orderBy('miembros_comision.idComision')
-                ->orderBy('miembros_comision.idRepresentacion')
-                ->orderBy('miembros_comision.idUsuario')
-                ->get();
+                $comisiones = $comisiones
+                ->join('comisiones', 'comisiones.id', '=', 'miembros_comision.idComision')
+                ->whereIn('comisiones.idJunta', $datosResponsableJunta['idJuntas']);
+
+                $miembrosComision = $miembrosComision
+                ->join('comisiones', 'comisiones.id', '=', 'miembros_comision.idComision')
+                ->whereIn('comisiones.idJunta', $datosResponsableJunta['idJuntas']);
             }
 
-            $users = User::select('id', 'name')->where('estado', 1)->get();
-            $representacionesGeneral = RepresentacionGeneral::select('id', 'nombre')->where('estado', 1)->get();
+            if($datosResponsableComision = Auth::user()->esResponsableDatos('comision')['comisiones']){
 
-            return view('miembrosComision', ['comisiones' => $comisiones, 'users' => $users, 'representacionesGeneral' => $representacionesGeneral, 'miembrosComision' => $miembrosComision]);
+                $comisiones = $comisiones->whereIn('idComision', $datosResponsableComision['idComisiones']);
+
+                $miembrosComision = $miembrosComision->whereIn('idComision', $datosResponsableComision['idComisiones']);
+            }
+
+            switch ($request->input('action')) {
+                case 'limpiar':
+                    $request['filtroCentro']=null;
+                    $request['filtroJunta']=null;
+                    $request['filtroRepresentacion']=null;
+                    $request['filtroVigente']=null;
+                    $request['filtroEstado']=null;
+                    break;
+                case 'filtrar':
+                    $miembrosComision = $miembrosComision->withTrashed()->filters($request);
+                    break;
+                default:
+                    $miembrosComision = $miembrosComision->whereNull('deleted_at');
+                    break;
+            }
+
+            $comisiones = $comisiones->get();
+            
+            $miembrosComision = $miembrosComision
+            ->orderBy('deleted_at')
+            ->orderBy('fechaCese')
+            ->orderBy('updated_at','desc')
+            ->orderBy('idComision')
+            ->orderBy('idRepresentacion')
+            ->orderBy('idUsuario')
+            ->paginate(10);
+
+            $users = User::select('id', 'name')->get();
+            $representacionesGeneral = RepresentacionGeneral::select('id', 'nombre')->get();   
+            $centros = Centro::select('id', 'nombre')->get();
+            $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion')->get(); 
+            
+            if($request->input('action')=='limpiar'){
+                return redirect()->route('miembrosComision')->with([
+                    'miembrosComision' => $miembrosComision,
+                    'comisiones' => $comisiones, 
+                    'users' => $users, 
+                    'representacionesGeneral' => $representacionesGeneral, 
+                    'centros' => $centros, 
+                    'juntas' => $juntas,
+                ]);
+            }
+
+            return view('miembrosComision', [
+                'miembrosComision' => $miembrosComision,
+                'comisiones' => $comisiones, 
+                'users' => $users, 
+                'representacionesGeneral' => $representacionesGeneral, 
+                'centros' => $centros, 
+                'juntas' => $juntas, 
+                'filtroCentro' => $request['filtroCentro'],
+                'filtroJunta' => $request['filtroJunta'],
+                'filtroComision' => $request['filtroComision'],
+                'filtroRepresentacion' => $request['filtroRepresentacion'],
+                'filtroVigente' => $request['filtroVigente'],
+                'filtroEstado' => $request['filtroEstado'],
+                'action' => $request['action'],
+            ]);
+        
         } catch (\Throwable $th) {
-            return redirect()->route('miembrosComision')->with('error', 'No se pudieron obtener algunos datos referentes a los miembros de Comisión: ' . $th->getMessage());
+            return redirect()->route('miembrosComision')->with('errors', 'No se pudieron obtener los miembros de comisión: ' . $th->getMessage());
         }
     }
 
     public function store(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(),[
-                'idComision' => 'required|integer|exists:App\Models\Comision,id',
-                'idUsuario' => 'required|integer|exists:App\Models\User,id',
-                'fechaTomaPosesion' => 'required|date',
-                'fechaCese' => 'nullable|date',
-                'idRepresentacion' => 'required|integer|exists:App\Models\RepresentacionGeneral,id',
-            ], [
-                // Mensajes error idComision
-                'idComision.required' => 'La comisión es obligatoria.',
-                'idComision.integer' => 'La comisión debe ser un entero.',
-                'idComision.exists' => 'La comisión seleccionada no existe.',
-                // Mensajes error idUsuario
-                'idUsuario.required' => 'El usuario es obligatorio.',
-                'idUsuario.integer' => 'El usuario debe ser un entero.',
-                'idUsuario.exists' => 'El usuario seleccionado no existe.',
-                // Mensajes error fechaTomaPosesión
-                'fechaTomaPosesion.required' => 'La fecha de toma de posesión es obligatoria.',
-                'fechaTomaPosesion.date' => 'La fecha de toma de posesión debe tener el formato fecha DD/MM/YYYY.',
-                // Mensajes error fechaCese
-                'fechaCese.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
-                // Mensajes error idRepresentacion
-                'idRepresentacion.required' => 'La representación es obligatoria.',
-                'idRepresentacion.integer' => 'La representación debe ser un entero.',
-                'idRepresentacion.exists' => 'La representación seleccionada no existe.',
+            $request['accion']='add';
+            $validation = $this->validateMiembro($request);
+            if($validation->original['status']!=200){
+                return $validation;
+            } 
+
+            MiembroComision::create([
+                "idComision" => $request->data['idComision'],
+                "idUsuario" => $request->data['idUsuario'],
+                "fechaTomaPosesion" => $request->data['fechaTomaPosesion'],
+                "fechaCese" => $request->data['fechaCese'],
+                "idRepresentacion" => $request->data['idRepresentacion'],
+                "responsable" => $request->data['responsable'],
+                "presidente" => $request->data['presidente'],
             ]);
 
-            if ($validator->fails()) {
-                // Si la validación falla, redirige de vuelta con los errores
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
+            return response()->json(['message' => 'Miembro de comisión creado correctamente.', 'status' => 200], 200);
 
-            if($request->fechaCese != null){
-                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-                $dateTomaPosesion = new DateTime($request->fechaTomaPosesion);
-                $dateCese = new DateTime($request->fechaCese);
-
-                if ($dateTomaPosesion>$dateCese) 
-                    return redirect()->route('miembrosComision')->with('error', 'La fecha de cese no puede ser anterior a la toma de posesión')->withInput();
-            }
-
-            // Comprobación existencia miembro repetido en la misma comisión
-            $miembroRepetido = MiembroComision::select('id')
-                        ->where('idComision', $request->get('idComision'))
-                        ->where('idUsuario', $request->get('idUsuario'))
-                        ->where('fechaCese', null)
-                        ->where('estado', 1)
-                        ->first();
-    
-            if($miembroRepetido)
-                return redirect()->route('miembrosComision')->with('error', 'No se pudo crear el miembro de Comisión: ya existe un miembro en activo para la comisión seleccionada')->withInput();
-                
-
-            $miembrosComision = MiembroComision::create([
-                "idComision" => $request->idComision,
-                "idUsuario" => $request->idUsuario,
-                "fechaTomaPosesion" => $request->fechaTomaPosesion,
-                "fechaCese" => $request->fechaCese,
-                "idRepresentacion" => $request->idRepresentacion,
-                'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
-            ]);
-            return redirect()->route('miembrosComision')->with('success', 'Miembro de Comisión creado correctamente.');
         } catch (\Throwable $th) {
-            return redirect()->route('miembrosComision')->with('error', 'No se pudo crear el miembro de comisión: ' . $th->getMessage());
+            return response()->json(['errors' => 'No se pudo crear el miembro de comisión.', 'status' => 422], 200);
         }
     }
 
     public function get(Request $request)
     {
         try {
-            $miembro = MiembroComision::where('id', $request->id)->first();
-
+            $miembro = MiembroComision::withTrashed()->where('id', $request->id)->first();
             if (!$miembro) {
-                return response()->json(['error' => 'No se ha encontrado el miembro de comisión.'], 404);
+                return response()->json(['errors' => 'No se ha encontrado el miembro de comisión.','status' => 422], 200);
             }
-
             return response()->json($miembro);
-            
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se ha encontrado el miembro de comisión.'], 404);
+            return response()->json(['errors' => 'No se ha encontrado el miembro de comisión.','status' => 422], 200);
         }
     }
 
@@ -207,62 +162,133 @@ class MiembrosComisionController extends Controller
             $miembro = MiembroComision::where('id', $request->id)->first();
 
             if (!$miembro) {
-                return response()->json(['error' => 'No se ha encontrado el miembro de Comisión.'], 404);
+                return response()->json(['errors' => 'No se ha encontrado el miembro de comisión.','status' => 422], 200);
             }
 
-            $miembro->estado = 0;
-            $miembro->save();
-            return response()->json($request);
+            $miembro->delete();
+            return response()->json(['status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se ha encontrado el miembro de Comisión.'], 404);
+            return response()->json(['errors' => 'No se ha encontrado el miembro de comisión.','status' => 422], 200);
         }
     }
 
     public function update(Request $request)
     {
         try {
+            $request['accion']='update';
+            $validation = $this->validateMiembro($request);
+            if($validation->original['status']!=200){
+                return $validation;
+            }
+
             $miembro = MiembroComision::where('id', $request->id)->first();
             if (!$miembro) {
-                return response()->json(['error' => 'No se ha encontrado el miembro de Comisión', 'status' => 404], 200);
-            }
-
-            if($request->data['fechaCese'] != null){
-                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-                $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
-                $dateCese = new DateTime($request->data['fechaCese']);
-
-                if ($dateTomaPosesion>$dateCese) 
-                    return response()->json(['error' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 404], 200);
-            }
-            else{
-                // Comprobación existencia usuario vigente en la comisión
-                $miembroRepetido = MiembroComision::select('id')
-                ->where('idComision', $miembro->idComision)
-                ->where('idUsuario', $miembro->idUsuario)
-                ->where('fechaCese', null)
-                ->where('estado', 1)
-                ->count();
-
-                if($miembroRepetido>1)
-                    return response()->json(['error' => 'No se pudo editar el miembro de la comisión: ya existe el usuario vigente en la comisión seleccionada', 'status' => 404], 200);
-            }
-
-            if($request->data['responsable'] == 0){
-                $miembro->usuario->removeRole('responsable_comision');
-            }
-            else{
-                $miembro->usuario->assignRole('responsable_comision');
+                return response()->json(['errors' => 'No se ha encontrado el miembro de comisión.', 'status' => 422], 200);
             }
 
             $miembro->idRepresentacion = $request->data['idRepresentacion'];
             $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
             $miembro->fechaCese = $request->data['fechaCese'];  
+            $miembro->responsable = $request->data['responsable'];  
+            $miembro->presidente = $request->data['presidente'];  
+
             $miembro->save();
-            return response()->json(['message' => 'El miembro de Comisión se ha actualizado correctamente.', 'status' => 200], 200);
+            return response()->json(['message' => 'El miembro de junta se ha actualizado correctamente.', 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'Error al actualizar el miembro de comisión.', 'status' => 404], 404);
+            return response()->json(['errors' => 'Error al actualizar el miembro de junta.', 'status' => 422], 200);
         }
+    }
+
+    public function rules(){
+        $rules = [
+            'idComision' => 'required|integer|exists:App\Models\Comision,id',
+            'idUsuario' => 'required|integer|exists:App\Models\User,id',
+            'idRepresentacion' => 'required|integer|exists:App\Models\RepresentacionGeneral,id',
+            'fechaTomaPosesion' => 'required|date',
+            'fechaCese' => 'nullable|date',
+            'idRepresentacion' => 'required|integer|exists:App\Models\RepresentacionGeneral,id',
+        ];
+
+        $rules_message = [
+            // Mensajes error idComision
+            'idComision.required' => 'La comisión es obligatoria.',
+            'idComision.integer' => 'La comisión debe ser un entero.',
+            'idComision.exists' => 'La comisión seleccionada no existe.',
+            // Mensajes error idUsuario
+            'idUsuario.required' => 'El usuario es obligatorio.',
+            'idUsuario.integer' => 'El usuario debe ser un entero.',
+            'idUsuario.exists' => 'El usuario seleccionado no existe.',
+            // Mensajes error idRepresentacion
+            'idRepresentacion.required' => 'La representación es obligatoria.',
+            'idRepresentacion.integer' => 'La representación debe ser un entero.',
+            'idRepresentacion.exists' => 'La representación seleccionada no existe.',
+            // Mensajes error fechaTomaPosesión
+            'fechaTomaPosesion.required' => 'La fecha de toma de posesión es obligatoria.',
+            'fechaTomaPosesion.date' => 'La fecha de toma de posesión debe tener el formato fecha DD/MM/YYYY.',
+            // Mensajes error fechaCese
+            'fechaCese.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
+        ];
+
+        return [$rules, $rules_message];
+    }
+
+    public function validateMiembro(Request $request){
+
+        $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
+        }
+        else{
+            if($request->data['fechaCese']==null){
+
+                // Comprobación existencia presidente actual en la comisión
+                if($request->data['presidente']==1){
+                    $presidente = MiembroComision::select('id')
+                        ->where('idComision', $request->data['idComision'])
+                        ->where('presidente', 1)
+                        ->where('fechaCese', null)
+                        ->whereNot('id', $request->id)
+                        ->first();
+
+                    if($presidente)
+                        return response()->json(['errors' => 'No se pudo añadir el miembro de comisión: ya existe un presidente vigente en la comisión seleccionada', 'status' => 422], 200);
+                }
+
+                // Comprobación existencia usuario en la comisión
+                $usuarioEnComision = MiembroComision::select('id')
+                    ->where('idComision', $request->data['idComision'])
+                    ->where('idUsuario', $request->data['idUsuario'])
+                    ->where('fechaCese', null)
+                    ->whereNot('id', $request->id)
+                    ->first();
+
+                if($usuarioEnComision)
+                    return response()->json(['errors' => 'No se pudo añadir el miembro de comisión: ya existe el usuario vigente en la comisión seleccionada', 'status' => 422], 200);
+            
+                if($request->accion=='update'){
+                    // Comprobación existencia comisión vigente
+                    $comisionVigenteMiembro = Comision::where('id', $request->data['idComision'])
+                    ->whereNotNull('fechaDisolucion')
+                    ->first();
+
+                    if($comisionVigenteMiembro)
+                        return response()->json(['errors' => 'No se pudo actualizar el miembro de comisión: la comisión no está vigente', 'status' => 422], 200);
+                }
+            }
+            else{
+                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
+                $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
+                $dateCese = new DateTime($request->data['fechaCese']);
+
+                if ($dateTomaPosesion>$dateCese) {
+                    return response()->json(['errors' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 422], 200);
+                }  
+            }
+        }
+        
+        return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
     }
 }

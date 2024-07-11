@@ -244,6 +244,16 @@ class MiembrosGobiernoController extends Controller
     
                     if($usuarioEnCentro)
                         return response()->json(['errors' => 'No se pudo añadir el miembro de centro: ya existe el usuario vigente en el centro seleccionado', 'status' => 422], 200);
+        
+                    if($request->accion=='update'){
+                        // Comprobación existencia centro vigente
+                        $centroVigenteMiembro = Centro::where('id', $request->data['idCentro'])
+                        ->whereNotNull('fechaDisolucion')
+                        ->first();
+    
+                        if($centroVigenteMiembro)
+                            return response()->json(['errors' => 'No se pudo actualizar el miembro de centro: el centro no está vigente', 'status' => 422], 200);
+                    }
             }
             else{
                 // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese

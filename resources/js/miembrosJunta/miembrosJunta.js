@@ -39,7 +39,7 @@ function renderHTMLMiembro(response){
         modal_edit.querySelector('#idJunta').value=response.junta.id
         modal_edit.querySelector('#idJunta').setAttribute('disabled', 'disabled')
         modal_edit.querySelector('#idJunta').classList.add('bg-red-50')
-        modal_edit.querySelector('#idRepresentacion').value=response.representacion.id
+        modal_edit.querySelector('#idRepresentacion').value=response.idRepresentacion
         modal_edit.querySelector('#fechaTomaPosesion').value=response.fechaTomaPosesion
         modal_edit.querySelector('#fechaCese').value=response.fechaCese
         modal_edit.querySelector('#responsable').value=response.responsable

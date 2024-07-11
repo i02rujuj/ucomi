@@ -159,10 +159,10 @@ Miembros de Centro
                                 </div>
                             </div>
 
-                            <div class="flex justify-end items-center gap-2 mt-4">
+                            <div class="flex justify-end items-center gap-2 mt-2">
                                 <span class="flex items-center text-xs bg-blue-100 font-semibold px-2 rounded-lg truncate">
                                     @if ($miembro->responsable==1)
-                                    <span class="material-icons-round text-yellow-700">
+                                    <span class="text-sm material-icons-round text-yellow-700">
                                         workspace_premium
                                     </span>
                                     Responsable de Centro

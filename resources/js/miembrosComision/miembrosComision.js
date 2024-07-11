@@ -1,200 +1,206 @@
-import { DELETE_MIEMBROSCOMISION_BBDD, GET_MIEMBROSCOMISION_BBDD, UPDATE_MIEMBROSCOMISION_BBDD } from "./axiosTemplate.js";
-import {GET_COMISION_BBDD} from '../comisiones/axiosTemplate.js';
-import {GET_USER_BBDD} from '../users/axiosTemplate.js';
-import {GETALL_REPRESENTACION_BBDD} from '../representacionesGeneral/axiosTemplate.js';
-
-import Swal from 'sweetalert2';
+import { DELETE_MIEMBROSCOMISION_BBDD, UPDATE_MIEMBROSCOMISION_BBDD, ADD_MIEMBROSCOMISION_BBDD, VALIDATE_MIEMBROSCOMISION_BBDD } from "./axiosTemplate.js";
 
 import $ from 'jquery';
 import select2 from 'select2';
 //Hook up select2 to jQuery
 select2($);
-document.addEventListener("DOMContentLoaded", $('#idUsuario').select2());
+import Swal from 'sweetalert2';
 
-// EVENTO EDITAR
-const addEditEvent = (button) => {
-    button.addEventListener("click", async (event) => {
-        const dataToSend = {
-            id: button.dataset.miembroId,
-        };
+let modal_add = null
 
-        try {
+document.addEventListener("DOMContentLoaded",  (event) => {
+    $('#idUsuario').select2({
+        placeholder: 'Selecciona un usuario',
+        dropdownParent: $('#modal_add')
+    });
+   
+    modal_add = document.querySelector('#modal_add')
+})
 
-            var options ="";
+function renderHTMLMiembro(response){
 
-            // Obtenemos el miembro a editar
-            const response = await GET_MIEMBROSCOMISION_BBDD(dataToSend);
+    $(modal_add).find("#idUsuario").val('').trigger('change');
+    modal_add.querySelector('#idComision').value=""
+    modal_add.querySelector('#idRepresentacion').value=""
+    modal_add.querySelector('#fechaTomaPosesion').value=""
+    modal_add.querySelector('#fechaCese').value=""
+    modal_add.querySelector('#responsable').value=0
+    modal_add.querySelector('#presidente').value=0
 
-            const dataToSendComision = {
-                id: response.idComision,
+    if(response){
+        console.log(response)
+        let modal_edit = modal_add.cloneNode(true);
+
+        modal_edit.classList.remove('hidden')
+        modal_edit.querySelector('#user').innerHTML= `
+            <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
+                <label for="usuario" class="block text-sm text-gray-600 w-36 text-right">Usuario: *</label>
+                <input class="miembro" type="hidden" id="idUsuario" value="${response.usuario.id}"/>
+                <input type="text" id="usuario" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.usuario.name}" disabled>
+            </div>`
+        modal_edit.querySelector('#idComision').value=response.comision.id
+        modal_edit.querySelector('#idComision').setAttribute('disabled', 'disabled')
+        modal_edit.querySelector('#idComision').classList.add('bg-red-50')
+        modal_edit.querySelector('#idRepresentacion').value=response.idRepresentacion
+        modal_edit.querySelector('#fechaTomaPosesion').value=response.fechaTomaPosesion
+        modal_edit.querySelector('#fechaCese').value=response.fechaCese
+        modal_edit.querySelector('#responsable').value=response.responsable
+        modal_edit.querySelector('#presidente').value=response.presidente
+
+        if(response.deleted_at!=null){
+            modal_edit.querySelector('#idRepresentacion').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#fechaTomaPosesion').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#fechaCese').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#responsable').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#presidente').setAttribute('disabled', 'disabled')
+        }
+        return modal_edit        
+    }
+    else{
+        modal_add.classList.remove('hidden')
+        return modal_add
+    }
+}
+
+const preConfirm = async(accion, id=null) => {
+    let valores = {};
+
+    const inputs = document.querySelectorAll(".miembro");
+    inputs.forEach((input) => {
+        valores[input.id] = input.value;
+    });
+
+    if(!valores['fechaCese']){
+        valores['fechaCese']=null;
+    }
+
+    let dataToSend, response, title, text = null
+    let mostrar=true
+
+    switch (accion) {
+        case 'add':
+            dataToSend = {
+                data: valores,
             };
+            response = await ADD_MIEMBROSCOMISION_BBDD(dataToSend)
+            title="Añadido"
+            text="Se ha añadido el miembro de comisión"
+            break
     
-            const dataToSendUsuario = {
-                id: response.idUsuario,
+        case 'update':
+
+            dataToSend = {
+                id: id,
+                accion: 'update',
+                data: valores,
             };
-    
-            const dataToSendRepresentacion = {
-                id: response.idRepresentacion,
-            };
 
-            const comision = await GET_COMISION_BBDD(dataToSendComision);
+            response = await VALIDATE_MIEMBROSCOMISION_BBDD(dataToSend)
 
-            const usuario = await GET_USER_BBDD(dataToSendUsuario); 
+            if (response.status === 200) {
+                response = await UPDATE_MIEMBROSCOMISION_BBDD(dataToSend);
+                title="Actualizado"
+                text="Se ha actualizado el miembro de comisión"
+            }
+            break
 
-            const representaciones = await GETALL_REPRESENTACION_BBDD(dataToSendRepresentacion); 
+        case 'delete':
 
             const result = await Swal.fire({
-                title: "Editar Miembro Comisión",
-                html: `
-                    <input type="hidden" id="idComision" value="${comision.id}"/>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
-                        <label for="comision" class="block text-sm text-gray-600 w-32">Comisión:</label>
-                        <input type="text" id="comision" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${comision.nombre}" readonly>
-                    </div>
-                    <input type="hidden" id="idUsuario" value="${usuario.id}"/>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 justify-center items-center">
-                        <label for="usuario" class="block text-sm text-gray-600 w-32">Usuario:</label>
-                        <input type="text" id="usuario" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${usuario.name}" readonly>
-                    </div>
-
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
-                        <label for="idRepresentacion" class="block text-sm text-gray-600 mb-1 w-32">Tipo:</label>
-                        <select id="idRepresentacion" class="miembro swal2-input tipo text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required">
-                            <option value="">-----</option>
-                            ${representaciones.forEach(rep => {            
-                                options+='<option value="'+rep.id+'" ';
-                                if(rep.id == response.idRepresentacion) 
-                                    options+='selected';
-                                options+='>'+rep.nombre+'</option>';                                               
-                            })}
-                            ${options}
-                        </select>
-                    </div>
-
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-1 justify-center items-center">
-                        <label for="fechaTomaPosesion" class="block text-sm text-gray-600 w-32">Fecha Toma posesión:</label>
-                        <input type="date" id="fechaTomaPosesion" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" required value="${response.fechaTomaPosesion}">
-                    </div>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-5 justify-center items-center">
-                        <label for="fechaCese" class="block text-sm text-gray-600 w-32">Fecha cese:</label>
-                        <input type="date" id="fechaCese" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.fechaCese}">
-                    </div>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
-                        <label for="responsable" class="block text-sm text-gray-600 mb-1 w-32">Responsable de comisión:</label>
-                        <select id="responsable" class="miembro swal2-input tipo text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none" ">                     
-                            <option value="0">No</option>
-                            <option value="1" ${((usuario.roles).find(rol=>{return rol.name === 'responsable_comision'})) ? 'selected' : '' }>Sí</option>
-                        </select>
-                    </div>  
-                `,
-                focusConfirm: false,
-                showDenyButton: true,
+                title: "¿Eliminar el miembro de comisión?",
+                icon: "warning",
                 showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "",
+                confirmButtonText: "Eliminar",
+                preConfirm: async () => {  
+                    dataToSend = {
+                        id: id,
+                        accion: 'delete',
+                    }
+                    
+                    response = await DELETE_MIEMBROSCOMISION_BBDD(dataToSend);
+                    title="Eliminado"
+                    text="Se ha eliminado el miembro de comisión"
+                }
+            })
+
+            if(result.isDismissed){mostrar=false}     
+            
+            break
+    }
+
+    if(mostrar){
+        if (response.status === 200) {
+            await Swal.fire({
+                icon: "success",
+                title: title,
+                text: text,
+            })
+            window.location.reload()
+        } 
+        else {
+            Swal.showValidationMessage(response.errors)
+            return false
+        }
+    } 
+}
+
+/**
+ * EVENTO AÑADIR
+ */
+const addButton = document.querySelector('#btn-add-miembro');
+addButton.addEventListener("click", async (event) => {
+    await Swal.fire({
+        title: "Añadir Miembro",
+        html: renderHTMLMiembro(null),
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: "Añadir",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',     
+        preConfirm: async () => preConfirm('add')
+    })
+})
+
+// EVENTO EDITAR Y ELIMINAR
+const addEditEvent = (button) => {
+    button.addEventListener("click", async (event) => {
+        try {
+            let response = null
+
+            for(let m in miembros.data){
+                if(miembros.data[m].id==button.dataset.miembroId){
+                    response = miembros.data[m]
+                    break;
+                }
+            }
+            if(!response)
+                throw "Error, miembro no encontrado"
+            
+            await Swal.fire({
+                title: response && response.deleted_at!=null ? 'Miembro eliminado' : 'Editar Miembro',
+                html: renderHTMLMiembro(response),
+                focusConfirm: false,
+                showDenyButton: response && response.deleted_at!=null ? false : true,
+                showCancelButton: response && response.deleted_at!=null ? false : true,
+                showConfirmButton: response && response.deleted_at!=null ? false : true,
                 denyButtonText: 'Eliminar',
                 confirmButtonText: "Actualizar",
                 cancelButtonText: "Cancelar",
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '',
                 denyButtonColor: '#d33',
+                preConfirm: async () => preConfirm('update', button.dataset.miembroId),
+                preDeny: async () => preConfirm('delete', button.dataset.miembroId),
             });
 
-            if (result.isConfirmed) {
-                const inputs = document.querySelectorAll(".miembro");
-                const valores = {};
-                let error = 0;
-
-                inputs.forEach((input) => {
-
-                    if (input.id!='fechaCese' && input.value === "") {
-                        error++;
-                    }
-
-                    valores[input.id] = input.value;
-                });
-
-                // Si es vacío fechaCese, colocamos un null
-                if(!valores['fechaCese']){
-                    valores['fechaCese']=null;
-                }
-                      
-                if (error > 0) {
-
-                    await Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Faltan campos por rellenar.",
-                    });
-
-                } else {
-
-                    const dataToSend = {
-                        id: button.dataset.miembroId,
-                        data: valores,
-                    };
-
-                    const response = await UPDATE_MIEMBROSCOMISION_BBDD(dataToSend);
-
-                    if (response.status === 200) {
-                        await Swal.fire({
-                            icon: "success",
-                            title: "Updated!",
-                            text: "Se ha editado el miembro de Comisión.",
-                        });
-
-                        window.location.reload();
-
-                    } else {
-
-                        await Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: response.error,
-                        });
-
-                    }
-                }
-            }
-            // BOTÓN ELIMINAR
-            else if (result.isDenied) {
-
-                try {
-                    const result = await Swal.fire({
-                        title: "¿Eliminar el miembro de comisión?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#d33",
-                        cancelButtonColor: "",
-                        confirmButtonText: "Eliminar",
-                    });
-
-                    if (result.isConfirmed) {
-
-                        const response = await DELETE_MIEMBROSCOMISION_BBDD(dataToSend);
- 
-                        await Swal.fire(
-                            "Eliminado",
-                            "El miembro de comisión fue eliminado.",
-                            "success"
-                        );
-                        
-                        window.location.reload();
-                    }
-
-                } catch (error) {
-
-                    await Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Ha ocurrido un error al eliminar el miembro de comisión",
-                    });
-                }
-            }
         } catch (error) {
-            console.error(error);
             await Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "Ha ocurrido un error al editar el miembro de Comisión.",
+                text: "Ha ocurrido un error al realizar una operación con el miembro.",
             });
         }
     });

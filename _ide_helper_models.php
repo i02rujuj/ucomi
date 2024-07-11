@@ -178,6 +178,7 @@ namespace App\Models{
  * @property string $fechaTomaPosesion
  * @property string|null $fechaCese
  * @property int $responsable
+ * @property int $presidente
  * @property int $idRepresentacion
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -186,6 +187,7 @@ namespace App\Models{
  * @property-read \App\Models\RepresentacionGeneral $representacion
  * @property-read \App\Models\User $usuario
  * @method static \Database\Factories\MiembroComisionFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision filters(\Illuminate\Http\Request $request)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision onlyTrashed()
@@ -198,6 +200,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereIdComision($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereIdRepresentacion($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereIdUsuario($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision wherePresidente($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereResponsable($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision withTrashed()

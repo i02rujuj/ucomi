@@ -21,7 +21,8 @@ return new class extends Migration
 
             $table->date('fechaTomaPosesion');
             $table->date('fechaCese')->nullable();
-            $table->integer('responsable')->default(0);;
+            $table->integer('responsable')->default(0);
+            $table->integer('presidente')->default(0);
             $table->unsignedBigInteger('idRepresentacion');
             $table->timestamps();
             $table->softDeletes();

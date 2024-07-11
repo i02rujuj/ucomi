@@ -35,7 +35,7 @@ class ComisionController extends Controller
 
             if($datosResponsableComision = Auth::user()->esResponsableDatos('comision')['comisiones']){
                 $juntas = $juntas->whereIn('id', $datosResponsableComision['idJuntas']);
-                $comisiones = $comisiones->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
+                $comisiones = $comisiones->whereIn('idJunta', $datosResponsableComision['idJuntas']);
             }
 
             switch ($request->input('action')) {

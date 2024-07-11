@@ -161,7 +161,7 @@
 
                     <div @class(['submenu', request()->routeIs('miembrosGobierno') || request()->routeIs('miembrosJunta') || request()->routeIs('miembrosComision') ? 'submenu-visible' : ''])>
 
-                        @if(auth()->user()->esResponsable('admin|centro'))
+                        {{--@if(auth()->user()->esResponsable('admin|centro'))
                         <li @class(['mb-1 flex', request()->routeIs('miembrosGobierno') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('miembrosGobierno') }}" class="text-gray-600 w-full flex justify-start items-center">
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
@@ -171,7 +171,7 @@
                                 Centro
                             </a>
                         </li>
-                        @endif
+                        @endif--}}
 
                         @if(auth()->user()->esResponsable('admin|centro|junta'))
                         <li @class(['mb-1 flex', request()->routeIs('miembrosJunta') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>

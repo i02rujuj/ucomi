@@ -78,19 +78,35 @@ Juntas
                                         <h2 class="text-base font-bold truncate">{{ $junta->centro->nombre }}</h2>
                                     </div>
 
-                                    <div class="truncate flex items-center">
+                                    {{--<div class="truncate flex items-center">
                                         <span class="material-icons-round scale-75">
                                             event
                                         </span>
                                         <div class="font-bold fechaTomaPosesion truncate">
-                                            {{ $junta->fechaConstitucion }} | {{ $junta->fechaDisolucion ? $junta->fechaDisolucion : 'Actualidad' }}
+                                            {{ $junta->fechaConstitucion }} {{ $junta->fechaDisolucion ? ' | '.$junta->fechaDisolucion : '' }}
                                         </div>
-                                    </div>
+                                    </div>--}}
                                     
+                                    @empty($junta->directores[0])
                                     <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
                                         <div class="truncate flex items-center">
-
-                                            @empty($junta->directores[0])
+                                            <span class="material-icons-round scale-75">
+                                                person
+                                            </span>
+                                            <div class="truncate">
+                                                @if($junta->centro->tipo->id == config('constants.TIPOS_CENTRO.FACULTAD'))
+                                                    Decano/a:
+                                                @else
+                                                    Director/a:
+                                                @endif
+                                                Sin asignar
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @else
+                                        @foreach ($junta->directores as $d)
+                                        <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                            <div class="truncate flex items-center">
                                                 <span class="material-icons-round scale-75">
                                                     person
                                                 </span>
@@ -100,49 +116,39 @@ Juntas
                                                     @else
                                                         Director/a:
                                                     @endif
-                                                    Sin asignar
+
+                                                    {{ $d->usuario->name }}
                                                 </div>
-                                            @else
-                                                @foreach ($junta->directores as $d)
-                                                    <span class="material-icons-round scale-75">
-                                                        person
-                                                    </span>
-                                                    <div class="truncate">
-                                                        @if($junta->centro->tipo->id == config('constants.TIPOS_CENTRO.FACULTAD'))
-                                                            Decano/a:
-                                                        @else
-                                                            Director/a:
-                                                        @endif
-
-                                                        {{ $d->usuario->name }}
-                                                    </div>
-                                                @endforeach
-                                            @endempty
+                                            </div>
                                         </div>
-                                    </div>
+                                        @endforeach
+                                    @endempty
 
-                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
-                                        <div class="truncate flex items-center">
-
-                                            @empty($junta->secretarios[0])
+                                    @empty($junta->secretarios[0])
+                                        <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                            <div class="truncate flex items-center">
                                                 <span class="material-icons-round scale-75">
                                                     person
                                                 </span>
                                                 <div class="truncate">
                                                     Secretario/a: Sin asignar
                                                 </div>
-                                            @else
-                                                @foreach ($junta->secretarios as $s)
-                                                    <span class="material-icons-round scale-75">
-                                                        person
-                                                    </span>
-                                                    <div class="truncate">
-                                                        Secretario/a: {{ $s->usuario->name }}
-                                                    </div>
-                                                @endforeach
-                                            @endempty
+                                            </div>
                                         </div>
-                                    </div>
+                                    @else
+                                        @foreach ($junta->secretarios as $s)
+                                        <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                            <div class="truncate flex items-center">
+                                                <span class="material-icons-round scale-75">
+                                                    person
+                                                </span>
+                                                <div class="truncate">
+                                                    Secretario/a: {{ $s->usuario->name }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    @endempty
 
                                     <div class="flex justify-start items-center gap-2 mt-3" >
                                         <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Junta</span>

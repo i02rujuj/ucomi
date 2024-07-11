@@ -94,6 +94,7 @@ class User extends Authenticatable
                     foreach ($this->miembrosComision as $miembro) {
                         if($miembro->responsable==1){
                             $resultado['comisiones']['idComisiones'][]=$miembro->idComision;
+                            $resultado['comisiones']['idJuntas'][]=$miembro->comision->idJunta;
                         }
                     }  
                     break;

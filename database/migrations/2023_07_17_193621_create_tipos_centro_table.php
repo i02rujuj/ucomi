@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('tipos_centro', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->boolean('estado');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -13,9 +13,9 @@ Miembros de Junta
             </div>
             @endif
             
-            @if (session()->has('error'))
+            @if (session()->has('errors'))
             <div class="my-2 py-1 px-4 text-sm font-medium bg-red-100 text-slate-700 rounded" role="alert">
-                {{ session("error") }}
+                {{ session("errors") }}
             </div>
             @endif
 

@@ -4,196 +4,238 @@ namespace App\Http\Controllers;
 
 use DateTime;
 use App\Models\Junta;
+use App\Models\Centro;
 use App\Models\Comision;
-use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
-use App\Models\MiembroGobierno;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ComisionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
+            $comisiones = Comision::select('id', 'nombre', 'descripcion', 'idJunta', 'fechaConstitucion', 'fechaDisolucion', 'updated_at', 'deleted_at');
+            $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion');
 
-            $user = Auth::user();
-
-            if($user->hasRole('admin')){
-                $comisiones = Comision::select('id', 'idJunta', 'nombre', 'descripcion', 'fechaConstitucion', 'fechaDisolucion', 'estado')
-                ->where('estado', 1)
-                ->orderBy('fechaDisolucion')          
-                ->orderBy('idJunta')
-                ->orderBy('fechaConstitucion')
-                ->get();
-                
-                $juntas = Junta::where('estado', 1)
-                ->where('fechaDisolucion', null)
-                ->get();
-            }
-
-            if($user->hasRole('responsable_centro')){
-
-                $centroResponsable = MiembroGobierno::where('idUsuario', $user->id)
-                ->select('idCentro')
-                ->first();
-
-                $comisiones = Comision::select('comisiones.*')
-                ->where('comisiones.estado', 1)
+            if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
+                $juntas = $juntas
                 ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                ->where('juntas.idCentro', $centroResponsable->idCentro)
-                ->where('juntas.estado', 1)
-                ->orderBy('comisiones.fechaDisolucion')          
-                ->orderBy('comisiones.idJunta')
-                ->orderBy('comisiones.fechaConstitucion')
-                ->get();
-                
-                $juntas = Junta::where('estado', 1)
-                ->where('idCentro', $centroResponsable->idCentro)
-                ->where('fechaDisolucion', null)
-                ->get();
+                ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
+                $comisiones = $comisiones
+                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
+                ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
             }
 
-            if($user->hasRole('responsable_junta')){
-                $juntaResponsable = MiembroJunta::where('idUsuario', $user->id)
-                ->select('idJunta')
-                ->first();
-
-                $comisiones = Comision::select('comisiones.*')
-                ->where('hola', 'like')
-                ->where('idJunta', $juntaResponsable->idJunta)
-                ->orderBy('comisiones.fechaDisolucion')          
-                ->orderBy('comisiones.idJunta')
-                ->orderBy('comisiones.fechaConstitucion')
-                ->get();
-                
-                $juntas = Junta::where('estado', 1)
-                ->where('id', $juntaResponsable->idJunta)
-                ->where('fechaDisolucion', null)
-                ->get();
+            if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
+                $juntas = $juntas->whereIn('id', $datosResponsableJunta['idJuntas']);
+                $comisiones = $comisiones->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
             }
 
+            if($datosResponsableComision = Auth::user()->esResponsableDatos('comision')['comisiones']){
+                $juntas = $juntas->whereIn('id', $datosResponsableComision['idJuntas']);
+                $comisiones = $comisiones->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
+            }
 
-            return view('comisiones', ['comisiones' => $comisiones, 'juntas' => $juntas]);
+            switch ($request->input('action')) {
+                case 'limpiar':
+                    $request['filtroCentro']=null;
+                    $request['filtroJunta']=null;
+                    $request['filtroVigente']=null;
+                    $request['filtroEstado']=null;
+                    break;
+                case 'filtrar':
+                    $comisiones = $comisiones->withTrashed()->filters($request);
+                    break;
+                default:
+                    $comisiones = $comisiones->whereNull('deleted_at');
+                    break;
+            }
+
+            $centros = Centro::select('id', 'nombre')->get();
+            $juntas=$juntas->get();
+
+            $comisiones = $comisiones
+            ->orderBy('deleted_at')
+            ->orderBy('fechaDisolucion')
+            ->orderBy('updated_at','desc')
+            ->orderBy('fechaConstitucion', 'desc')
+            ->paginate(5);
+
+            if($request->input('action')=='limpiar'){
+                return redirect()->route('comisiones')->with([
+                    'comisiones' => $comisiones, 
+                    'juntas' => $juntas,
+                    'centros' => $centros,
+                ]);
+            }
+
+            return view('comisiones', [
+                'comisiones' => $comisiones, 
+                'juntas' => $juntas,
+                'centros' => $centros,
+                'filtroCentro' => $request['filtroCentro'],
+                'filtroJunta' => $request['filtroJunta'],
+                'filtroVigente' => $request['filtroVigente'],
+                'filtroEstado' => $request['filtroEstado'],
+                'action' => $request['action'],
+            ]);
+
         } catch (\Throwable $th) {
-            return redirect()->route('comisiones')->with('error', 'No se pudieron obtener las comisiones: ' . $th->getMessage());
+            return redirect()->route('comisiones')->with('errors', 'No se pudieron obtener las comisiones: ' . $th->getMessage());
         }
     }
 
     public function store(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(),[
-                'idJunta' => 'required|integer|exists:App\Models\Junta,id',
-                'nombre' => 'required|max:100|string',
-                'descripcion' => 'nullable|string|max:250',
-                'fechaConstitucion' => 'required|date',
-                'fechaDisolucion' => 'nullable|date',
-            ], [
-                // Mensajes error idJunta
-                'idJunta.required' => 'La junta es obligatoria.',
-                'idJunta.integer' => 'La junta debe ser un entero.',
-                'idJunta.exists' => 'La junta seleccionado no existe.',
-                // Mensajes error nombre
-                'nombre.required' => 'El nombre es obligatorio.',
-                'nombre.string' => 'El nombre no puede contener números ni caracteres especiales.',
-                'nombre.max' => 'El nombre no puede exceder los 100 caracteres.',
-                // Mensajes error descripcion
-                'descripcion.string' => 'La descripcion debe ser una cadena de texto.',
-                'descripcion.max' => 'La descripcion no puede exceder los 250 carácteres.',
-                // Mensajes error fechaConstitucion
-                'fechaConstitucion.required' => 'La fecha de constitución es obligatoria.',
-                'fechaConstitucion.date' => 'La fecha de constitución debe tener el formato fecha DD/MM/YYYY.',
-                // Mensajes error fechaDisolucion
-                'fechaDisolucion.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
+            $request['accion']='add';
+            $validation = $this->validateComision($request);
+            if($validation->original['status']!=200){
+                return $validation;
+            }
+           
+            $junta = Comision::create([
+                "idJunta" => $request->data['idJunta'],
+                "fechaConstitucion" => $request->data['fechaConstitucion'],
+                "fechaDisolucion" => $request->data['fechaDisolucion'],
             ]);
 
-            if ($validator->fails()) {
-                // Si la validación falla, redirige de vuelta con los errores
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
+            return response()->json(['message' => 'La comisión se ha añadido correctamente.', 'status' => 200], 200);
 
-            if($request->fechaDisolucion != null){
-                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-                $dateConstitucion = new DateTime($request->fechaConstitucion);
-                $dateDisolucion = new DateTime($request->fechaDisolucion);
-
-                if ($dateConstitucion>$dateDisolucion) {
-                    return redirect()->route('comisiones')->with('error', 'La fecha de disolución no puede ser anterior a la fecha de constitución')->withInput();
-                }
-            }
-
-            $comision = Comision::create([
-                "idJunta" => $request->idJunta,
-                "nombre" => $request->nombre,
-                "descripcion" => $request->descripcion,
-                "fechaConstitucion" => $request->fechaConstitucion,
-                "fechaDisolucion" => $request->fechaDisolucion,
-                'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
-            ]);
-            return redirect()->route('comisiones')->with('success', 'Comisión creada correctamente.');
         } catch (\Throwable $th) {
-            return redirect()->route('comisiones')->with('error', 'No se pudo crear la comisión: ' . $th->getMessage());
+            return response()->json(['errors' => 'Error al añadir la comisión.', 'status' => 422], 200);
         }
     }
 
     public function delete(Request $request)
     {
         try {
+            $request['accion']='delete';
+            $validation = $this->validateComision($request);
+            if($validation->original['status']!=200){
+                return $validation;
+            }
+
             $comision = Comision::where('id', $request->id)->first();
 
             if (!$comision) {
-                return response()->json(['error' => 'No se ha encontrado el comisión.'], 404);
+                return response()->json(['errors' => 'No se ha encontrado la comisión.','status' => 422], 200);
             }
 
-            $comision->estado = 0;
-            $comision->save();
-            return response()->json($request);
+            $comision->delete();
+            return response()->json(['status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se ha encontrado el comisión.'], 404);
+            return response()->json(['errors' => 'No se ha encontrado la comisión.','status' => 422], 200);
         }
     }
 
     public function get(Request $request)
     {
         try {
-            $comision = Comision::where('id', $request->id)->first();
+            $comision = Comision::withTrashed()->where('id', $request->id)->first();
             if (!$comision) {
-                return response()->json(['error' => 'No se ha encontrado la comisión.'], 404);
+                return response()->json(['errors' => 'No se ha encontrado la comisión.','status' => 422], 200);
             }
             return response()->json($comision);
         } catch (\Throwable $th) {
-            return response()->json(['error' => 'No se ha encontrado la comisión.'], 404);
+            return response()->json(['errors' => 'No se ha encontrado la comisión.','status' => 422], 200);
         }
     }
 
     public function update(Request $request)
     {
-        try {
+        
+    }
+
+    public function rules()
+    {
+        $rules = [
+            'idJunta' => 'required|integer|exists:App\Models\Junta,id',
+            'nombre' => 'required|max:100|string',
+            'descripcion' => 'nullable|string|max:250',
+            'fechaConstitucion' => 'required|date',
+            'fechaDisolucion' => 'nullable|date',
+        ]; 
+        
+        $rules_message = [
+            // Mensajes error idJunta
+            'idJunta.required' => 'La junta es obligatoria.',
+            'idJunta.integer' => 'La junta debe ser un entero.',
+            'idJunta.exists' => 'La junta seleccionado no existe.',
+            // Mensajes error nombre
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.string' => 'El nombre no puede contener números ni caracteres especiales.',
+            'nombre.max' => 'El nombre no puede exceder los 100 caracteres.',
+            // Mensajes error descripcion
+            'descripcion.string' => 'La descripcion debe ser una cadena de texto.',
+            'descripcion.max' => 'La descripcion no puede exceder los 250 carácteres.',
+            // Mensajes error fechaConstitucion
+            'fechaConstitucion.required' => 'La fecha de constitución es obligatoria.',
+            'fechaConstitucion.date' => 'La fecha de constitución debe tener el formato fecha DD/MM/YYYY.',
+            // Mensajes error fechaDisolucion
+            'fechaDisolucion.date' => 'La fecha de cese debe tener el formato fecha DD/MM/YYYY.',
+        ];
+
+        return [$rules, $rules_message];
+    }
+
+    public function validateComision(Request $request){
+
+        if($request->accion=='delete'){
             $comision = Comision::where('id', $request->id)->first();
+
             if (!$comision) {
-                return response()->json(['error' => 'No se ha encontrado el comisión.', 'status' => 404], 404);
+                return response()->json(['errors' => 'No se ha encontrado la comision.','status' => 422], 200);
             }
 
-            // Validar que fechaConstitución no pueda ser mayor a fechaDisolución
-            $dateConstitucion = new DateTime($request->data['fechaConstitucion']);
-            $dateDisolucion = new DateTime($request->data['fechaDisolucion']);
+            if($comision->miembrosComision->count() > 0)
+                return response()->json(['errors' => 'Existen miembros de comision asociadas a esta comision. Para borrar la comision es necesario eliminar todos sus miembros de comision.', 'status' => 422], 200);
 
-            if ($dateConstitucion>$dateDisolucion) {
-                return response()->json(['error' => 'La fecha de disolución no puede ser anterior a la fecha de constitución de la comisión', 'status' => 404], 200);
-            } 
-            
-            $comision->nombre = $request->data['nombre'];
-            $comision->descripcion = $request->data['descripcion'];
-            $comision->idJunta = $request->data['idJunta'];
-            $comision->fechaConstitucion = $request->data['fechaConstitucion'];
-            $comision->fechaDisolucion = $request->data['fechaDisolucion'];
-            $comision->save();
-            return response()->json(['message' => 'La comisión se ha actualizado correctamente.', 'status' => 200], 200);
-            
-        } catch (\Throwable $th) {
-            return response()->json(['error' => 'Error al actualizar la comisión.', 'status' => 404], 404);
+            if($comision->convocatorias->count() > 0)
+                return response()->json(['errors' => 'Existen convocatorias asociadas a esta comision. Para borrar la comision es necesario eliminar todas sus comision.', 'status' => 422], 200);
         }
+        else{
+            $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
+            }
+            else{
+                if($request->data['fechaDisolucion']!=null){
+                    // Validar que fechaConstitución no pueda ser mayor a fechaDisolución
+                    $dateConstitucion = new DateTime($request->data['fechaConstitucion']);
+                    $dateDisolucion = new DateTime($request->data['fechaDisolucion']);
+    
+                    if ($dateConstitucion>$dateDisolucion) {
+                        return response()->json(['errors' => 'La fecha de disolución '.$request->fechaDisolucion.' no puede ser anterior a la fecha de constitución '. $request->fechaConstitucion, 'status' => 422], 200);
+                    }
+                }
+                else{
+                    switch($request->accion){
+                        case 'add':
+                            // Comprobación existencia junta en activo para la comisión seleccionado
+                            $comision = Comision::select('id')
+                                ->where('idJunta', $request->data['idJunta'])
+                                ->where('fechaDisolucion', null)
+                                ->first();
+                            break;
+                        case 'update':
+                            $comision = Comision::select('id')
+                                ->where('idJunta', $request->data['idJunta'])
+                                ->where('fechaDisolucion', null)
+                                ->whereNot('id', $request->id)
+                                ->first();
+                            break;
+                    } 
+    
+                    if($comision){
+                        return response()->json(['errors' => 'No se pudo crear la comisión. Ya existe una comisión vigente para la junta indicada', 'status' => 422], 200);
+                    }
+                }
+            }
+        }
+        return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
     }
 }

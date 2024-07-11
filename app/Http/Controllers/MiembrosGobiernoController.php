@@ -21,7 +21,7 @@ class MiembrosGobiernoController extends Controller
             $centros = Centro::select('id', 'nombre');
 
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
-                $centros = $centros->where('id', $datosResponsableCentro['idCentros']);
+                $centros = $centros->whereIn('id', $datosResponsableCentro['idCentros']);
                 $miembrosGobierno = $miembrosGobierno
                 ->whereIn('idCentro', $datosResponsableCentro['idCentros']);
             }

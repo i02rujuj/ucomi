@@ -49,15 +49,13 @@ class Junta extends Model
     public function directores()
     {
         return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.DIRECTOR'))
-            ->whereNull('fechaCese');
+            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.DIRECTOR'));
     }
 
     public function secretarios()
     {
         return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.SECRETARIO'))
-            ->whereNull('fechaCese');
+            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.SECRETARIO'));
     }
 
     public function scopeFilters(Builder $query, Request $request){

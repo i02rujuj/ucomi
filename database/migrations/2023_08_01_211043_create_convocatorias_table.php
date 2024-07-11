@@ -20,8 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('idComision')->nullable();
             $table->unsignedBigInteger('idJunta')->nullable();
             $table->string('acta')->nullable();
-            $table->boolean('estado');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('idComision')->references('id')->on('comisiones');
             $table->foreign('idJunta')->references('id')->on('juntas');

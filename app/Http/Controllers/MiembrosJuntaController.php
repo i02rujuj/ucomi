@@ -21,7 +21,7 @@ class MiembrosJuntaController extends Controller
             $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaConstitucion');
 
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
-                $juntas = $juntas->where('idCentro', $datosResponsableCentro['idCentros']);
+                $juntas = $juntas->whereIn('idCentro', $datosResponsableCentro['idCentros']);
                 $miembrosJunta = $miembrosJunta
                 ->join('juntas', 'juntas.id', '=', 'miembros_junta.idJunta')
                 ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
@@ -258,7 +258,6 @@ class MiembrosJuntaController extends Controller
                     if($juntaVigenteMiembro)
                         return response()->json(['errors' => 'No se pudo actualizar el miembro de junta: la junta no está vigente', 'status' => 422], 200);
                 }
-                
             }
             else{
                 // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese

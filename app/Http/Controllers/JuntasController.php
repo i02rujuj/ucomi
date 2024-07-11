@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use DateTime;
 use App\Models\Junta;
 use App\Models\Centro;
-use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
-use App\Models\MiembroGobierno;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -17,7 +15,6 @@ class JuntasController extends Controller
     public function index(Request $request)
     {
         try {
-
             $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'updated_at', 'deleted_at');
             $centros = Centro::select('id', 'nombre');
 
@@ -99,7 +96,6 @@ class JuntasController extends Controller
     public function delete(Request $request)
     {
         try {
-
             $request['accion']='delete';
             $validation = $this->validateJunta($request);
             if($validation->original['status']!=200){
@@ -244,7 +240,7 @@ class JuntasController extends Controller
                 else{
                     switch($request->accion){
                         case 'add':
-                            // Comprobación existencia junta en activo para el centro seleccionado
+                            // Comprobación existencia junta en activo para la junta seleccionado
                             $junta = Junta::select('id')
                                 ->where('idCentro', $request->data['idCentro'])
                                 ->where('fechaDisolucion', null)

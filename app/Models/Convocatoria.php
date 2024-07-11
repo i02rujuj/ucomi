@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Convocatoria extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
      // Tabla
      protected $table = 'convocatorias'; 
@@ -16,7 +17,7 @@ class Convocatoria extends Model
      protected $primaryKey = 'id';
      
      //Campos
-     protected $fillable = ['idComision', 'idJunta', 'idTipo', 'lugar', 'fecha', 'hora', 'acta', 'estado'];
+     protected $fillable = ['idComision', 'idJunta', 'idTipo', 'lugar', 'fecha', 'hora', 'acta'];
 
     public function comision()
     {

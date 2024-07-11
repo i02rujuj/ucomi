@@ -18,8 +18,8 @@ return new class extends Migration
             $table->date('fechaConstitucion');
             $table->date('fechaDisolucion')->nullable();
             $table->unsignedBigInteger('idJunta');
-            $table->boolean('estado');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('idJunta')->references('id')->on('juntas');
         });

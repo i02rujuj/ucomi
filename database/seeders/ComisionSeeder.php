@@ -20,7 +20,6 @@ class ComisionSeeder extends Seeder
                 'fechaConstitucion' => now(),
                 'fechaDisolucion' => null,
                 'idJunta' => 1,
-                'estado' => 1,
             ],
             [
                 'nombre' => 'Docencia', 
@@ -28,7 +27,6 @@ class ComisionSeeder extends Seeder
                 'fechaConstitucion' => now(),
                 'fechaDisolucion' => null,
                 'idJunta' => 1,
-                'estado' => 1,
             ],
             [
                 'nombre' => 'Prácticas externas', 
@@ -36,7 +34,6 @@ class ComisionSeeder extends Seeder
                 'fechaConstitucion' => now(),
                 'fechaDisolucion' => null,
                 'idJunta' => 1,
-                'estado' => 1,
             ],
             [
                 'nombre' => 'Relaciones internacionales', 
@@ -44,7 +41,6 @@ class ComisionSeeder extends Seeder
                 'fechaConstitucion' => now(),
                 'fechaDisolucion' => null,
                 'idJunta' => 1,
-                'estado' => 1,
             ],
             [
                 'nombre' => 'Reconocimiento y transferencia', 
@@ -52,7 +48,6 @@ class ComisionSeeder extends Seeder
                 'fechaConstitucion' => now(),
                 'fechaDisolucion' => null,
                 'idJunta' => 1,
-                'estado' => 1,
             ],
             [
                 'nombre' => 'TFG Grado Ingeniería informática', 
@@ -60,7 +55,6 @@ class ComisionSeeder extends Seeder
                 'fechaConstitucion' => now(),
                 'fechaDisolucion' => null,
                 'idJunta' => 1,
-                'estado' => 1,
             ],
             [
                 'nombre' => 'Planes estudios Grado Ingeniería eléctrica', 
@@ -68,7 +62,6 @@ class ComisionSeeder extends Seeder
                 'fechaConstitucion' => now(),
                 'fechaDisolucion' => null,
                 'idJunta' => 1,
-                'estado' => 1,
             ],
             
         ];
@@ -80,7 +73,6 @@ class ComisionSeeder extends Seeder
             $c->fechaConstitucion = $com['fechaConstitucion'];
             $c->fechaDisolucion = $com['fechaDisolucion'];
             $c->idJunta = $com['idJunta'];
-            $c->estado = $com['estado'];
             $c->save();
         }
     }

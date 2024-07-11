@@ -57,26 +57,32 @@ namespace App\Models{
  * @property string $fechaConstitucion
  * @property string|null $fechaDisolucion
  * @property int $idJunta
- * @property int $estado
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Convocatoria> $convocatorias
  * @property-read int|null $convocatorias_count
  * @property-read \App\Models\Junta $junta
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroComision> $miembros
  * @property-read int|null $miembros_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroComision> $presidentes
+ * @property-read int|null $presidentes_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Comision filters(\Illuminate\Http\Request $request)
  * @method static \Illuminate\Database\Eloquent\Builder|Comision newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Comision newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comision onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Comision query()
  * @method static \Illuminate\Database\Eloquent\Builder|Comision whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comision whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comision whereDescripcion($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Comision whereEstado($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comision whereFechaConstitucion($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comision whereFechaDisolucion($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comision whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comision whereIdJunta($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comision whereNombre($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comision whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comision withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comision withoutTrashed()
  */
 	class Comision extends \Eloquent {}
 }
@@ -93,18 +99,19 @@ namespace App\Models{
  * @property int|null $idComision
  * @property int|null $idJunta
  * @property string|null $acta
- * @property int $estado
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Comision|null $comision
  * @property-read \App\Models\Junta|null $junta
  * @property-read \App\Models\TipoConvocatoria $tipo
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria query()
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria whereActa($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria whereEstado($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria whereFecha($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria whereHora($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria whereId($value)
@@ -113,6 +120,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria whereIdTipo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria whereLugar($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria withoutTrashed()
  */
 	class Convocatoria extends \Eloquent {}
 }
@@ -336,19 +345,22 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $nombre
- * @property int $estado
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Centro> $centros
  * @property-read int|null $centros_count
  * @method static \Illuminate\Database\Eloquent\Builder|TipoCentro newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TipoCentro newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TipoCentro onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|TipoCentro query()
  * @method static \Illuminate\Database\Eloquent\Builder|TipoCentro whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TipoCentro whereEstado($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TipoCentro whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TipoCentro whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TipoCentro whereNombre($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TipoCentro whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TipoCentro withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|TipoCentro withoutTrashed()
  */
 	class TipoCentro extends \Eloquent {}
 }
@@ -359,19 +371,22 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $nombre
- * @property int $estado
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Convocatoria> $convocatorias
  * @property-read int|null $convocatorias_count
  * @method static \Illuminate\Database\Eloquent\Builder|TipoConvocatoria newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TipoConvocatoria newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TipoConvocatoria onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|TipoConvocatoria query()
  * @method static \Illuminate\Database\Eloquent\Builder|TipoConvocatoria whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TipoConvocatoria whereEstado($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TipoConvocatoria whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TipoConvocatoria whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TipoConvocatoria whereNombre($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TipoConvocatoria whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TipoConvocatoria withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|TipoConvocatoria withoutTrashed()
  */
 	class TipoConvocatoria extends \Eloquent {}
 }

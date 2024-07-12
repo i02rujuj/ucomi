@@ -12,7 +12,7 @@ class PublicoController extends Controller
     
     public function index()
     {
-        $centros = Centro::get();
+        $centros = Centro::all();
         return view('publico.welcome',['centros' => $centros]);
     }
     

@@ -4,7 +4,7 @@ const JUNTA_UPDATE_URL = "junta/update"
 const JUNTA_GETALL_URL = "junta/all"
 const JUNTA_ADD_URL = "junta/add"
 const JUNTA_VALIDATE_URL = "junta/validate"
-
+const JUNTA_MIEMBROS_URL = "junta/miembros"
 
 export {
     JUNTA_DELETE_URL,
@@ -13,4 +13,5 @@ export {
     JUNTA_GETALL_URL,
     JUNTA_ADD_URL,
     JUNTA_VALIDATE_URL,
+    JUNTA_MIEMBROS_URL,
 }

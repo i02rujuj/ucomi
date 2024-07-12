@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DateTime;
 use App\Models\Junta;
 use App\Models\Centro;
+use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -262,5 +263,19 @@ class JuntasController extends Controller
             }
         }
         return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
+    }
+
+    public function miembros(Request $request)
+    {
+        try {
+            $miembrosJunta = MiembroJunta::
+            with('usuario')
+            ->where('idJunta', $request->id)
+            ->get();
+
+            return response()->json($miembrosJunta);
+        } catch (\Throwable $th) {
+            return response()->json(['errors' => 'No se han encontrado los miembros de junta.','status' => 422], 200);
+        }
     }
 }

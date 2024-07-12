@@ -1,4 +1,5 @@
 import { DELETE_CONVOCATORIA_BBDD, UPDATE_CONVOCATORIA_BBDD, ADD_CONVOCATORIA_BBDD, VALIDATE_CONVOCATORIA_BBDD } from "./axiosTemplate.js";
+import { MIEMBROS_JUNTA_BBDD } from "../juntas/axiosTemplate.js";
 import Swal from 'sweetalert2';
 
 let modal_add = null
@@ -152,6 +153,7 @@ if(addButton){
 // EVENTO EDITAR Y ELIMINAR
 const addEditEvent = (button) => {
     button.addEventListener("click", async (event) => {
+        event.stopPropagation()
         try {
             let response = null
 
@@ -196,3 +198,94 @@ const editButtons = document.querySelectorAll('#btn-editar-convocatoria');
 editButtons.forEach(button => {
     addEditEvent(button);
 });
+
+const renderHTMLNotificar = (miembros) => {
+
+    let html =`
+        <div class="relative overflow-x-auto">
+        <table class="w-full text-xs text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-1 py-2">
+                        Nombre
+                    </th>
+                    <th scope="col" class="px-1 py-2">
+                        Email
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+        
+            </tbody>
+        </table>
+    </div>
+    `
+    const domparser = new DOMParser()
+    const doc = domparser.parseFromString(html, 'text/html')
+    let tbody = doc.querySelector('tbody')
+
+    if(miembros){
+        miembros.forEach(miembro => {
+            let miembro_tr = document.createElement("tr");
+            let miembro_th_name = document.createElement("th");
+            miembro_th_name.classList.add('px-1','py-2');
+            miembro_th_name.innerHTML=miembro.usuario.name
+            let miembro_td_email = document.createElement("td");
+            miembro_td_email.classList.add('px-1','py-2');
+            miembro_td_email.innerHTML = miembro.usuario.email
+            
+            miembro_tr.appendChild(miembro_th_name);
+            miembro_tr.appendChild(miembro_td_email);
+
+            tbody.appendChild(miembro_tr);
+        })
+    }
+
+    return doc.querySelector('table')
+}
+
+const notificarButton = document.querySelector('#notificar');
+notificarButton.addEventListener('click', async (event) => {
+    event.stopPropagation()
+
+    let response = null
+
+    for(let c in convocatorias.data){
+        if(convocatorias.data[c].id==notificarButton.dataset.convocatoriaId){
+            response = convocatorias.data[c]
+            break;
+        }
+    }
+    if(!response)
+        throw "Error, convocatoria no encontrada"
+
+        const dataToSend = {
+            id:response.junta.id
+        }
+
+        const miembros = await MIEMBROS_JUNTA_BBDD(dataToSend)
+
+    try {
+        await Swal.fire({
+            title:'Notificar miembros Junta',
+            html: renderHTMLNotificar(miembros),
+            focusConfirm: false,
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: "Notificar",
+            cancelButtonText: "Cancelar",
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '',
+            denyButtonColor: '#d33',
+            preConfirm: async () => {
+
+            },
+        });
+    } catch (error) {
+        await Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Ha ocurrido un error al realizar una operación con las notificaciones.",
+        });
+    }
+}, true)

@@ -1,5 +1,4 @@
 import { DELETE_CENTRO_BBDD, GET_CENTRO_BBDD, UPDATE_CENTRO_BBDD, ADD_CENTRO_BBDD } from "./axiosTemplate.js";
-import { GET_TIPOSCENTRO_BBDD } from "../tiposCentro/axiosTemplate";
 import Swal from 'sweetalert2';
 
 let modal_add = null

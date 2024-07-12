@@ -93,6 +93,7 @@ Route::group(['middleware' => ['responsable:admin|centro|junta']], function () {
     Route::post('/junta/update', [JuntasController::class, 'update']);
     Route::post('/junta/all', [JuntasController::class, 'all'])->middleware('responsable:admin|centro');
     Route::post('/junta/validate', [JuntasController::class, 'validateJunta']);
+    Route::post('/junta/miembros', [JuntasController::class, 'miembros']);
 
     // CONVOCATORIAS JUNTA
     Route::get('/convocatorias_junta', [ConvocatoriasJuntaController::class, 'index'])->name('convocatoriasJunta')->middleware('responsable:admin|centro|junta');

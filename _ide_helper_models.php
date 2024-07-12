@@ -13,6 +13,22 @@
 
 namespace App\Models{
 /**
+ * App\Models\Asistente
+ *
+ * @property-read \App\Models\Comision|null $convocatoria
+ * @property-read \App\Models\User|null $usuario
+ * @method static \Illuminate\Database\Eloquent\Builder|Asistente newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Asistente newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Asistente onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Asistente query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Asistente withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Asistente withoutTrashed()
+ */
+	class Asistente extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Centro
  *
  * @property int $id
@@ -102,6 +118,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Asistente> $asistentes
+ * @property-read int|null $asistentes_count
  * @property-read \App\Models\Comision|null $comision
  * @property-read \App\Models\Junta|null $junta
  * @property-read \App\Models\TipoConvocatoria $tipo
@@ -409,6 +427,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Asistente> $asistentes
+ * @property-read int|null $asistentes_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroComision> $miembrosComision
  * @property-read int|null $miembros_comision_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroGobierno> $miembrosGobierno

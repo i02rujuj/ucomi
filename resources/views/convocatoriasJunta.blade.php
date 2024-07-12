@@ -83,7 +83,7 @@ Convocatorias Junta
                 @if($convocatorias && $convocatorias[0])
                     @foreach ($convocatorias as $convocatoria)
                         <div id="btn-editar-convocatoria" data-convocatoria-id="{{ $convocatoria['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
-                            <div class="flex items-center">
+                            <div class="flex justify-start items-center">
                                 <div class="right-part w-full max-w-max">
                                     <img src="{{ $convocatoria->junta->centro->logo ? $convocatoria->junta->centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
                                 </div>
@@ -125,7 +125,7 @@ Convocatorias Junta
                                         </div>
                                     </div> 
                                     
-                                    <div class="flex justify-start items-center gap-2 mt-3" >
+                                    <div class="flex justify-end items-center gap-2 mt-3" >
                                         <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Convocatoria Junta</span>
 
                                         <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $convocatoria->tipo->nombre }}</span>
@@ -134,8 +134,13 @@ Convocatorias Junta
                                             <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Eliminado</span>
                                         @endif
                                     </div>
-
                                 </div>
+                            </div>
+                            
+                            <div class="flex justify-end items-center gap-2 mt-3" >
+                                <span id="notificar" name="notificar" data-convocatoria-id="{{ $convocatoria['id'] }}" class="material-icons-round cursor-pointer">
+                                    forward_to_inbox
+                                </span>
                             </div>
                         </div>
                     @endforeach
@@ -157,6 +162,6 @@ Convocatorias Junta
 
 <script>
     const permitirAcciones = "{{$permitirAcciones}}"
-    const convocatorias = @json($convocatorias)
+    const convocatorias = @json($convocatorias);
 </script>
 @vite(['resources/js/convocatoriasJunta/convocatoriasJunta.js'])

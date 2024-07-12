@@ -90,13 +90,13 @@ Convocatorias Comisión
 
                                 <div class="left-part truncate w-full max-w-max pl-3 z-10">
 
-                                    {{--<div class="flex items-center">
+                                    <div class="flex items-center">
                                         <span class="material-icons-round scale-75">
                                             send
                                         </span>
                                         &nbsp;
-                                        <h2 class="text-base font-bold truncate">{{ $convocatoria->junta->fechaConstitucion }} | {{ $convocatoria->junta->centro->nombre }}</h2>
-                                    </div>--}}
+                                        <h2 class="text-base font-bold truncate">{{ $convocatoria->comision->nombre }}</h2>
+                                    </div>
 
                                     <div class="truncate flex items-center">
                                         <span class="material-icons-round scale-75">

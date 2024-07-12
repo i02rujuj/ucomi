@@ -15,7 +15,6 @@ class ConvocatoriasJuntaController extends Controller
     public function index(Request $request)
     {
         try {
-
             $convocatorias = Convocatoria::select('id', 'idJunta', 'idTipo', 'lugar', 'fecha', 'hora', 'acta', 'updated_at', 'deleted_at');
             $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'updated_at', 'deleted_at');
 

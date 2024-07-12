@@ -62,6 +62,10 @@ class User extends Authenticatable
         return $this->hasMany(MiembroComision::class, 'id');
     }
 
+    public function asistentes(){
+        return $this->hasMany(Asistente::class, 'id');
+    }
+
     public function esResponsableDatos($lista){
 
         $resultado=[

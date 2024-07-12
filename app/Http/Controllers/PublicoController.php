@@ -12,7 +12,10 @@ class PublicoController extends Controller
     
     public function index()
     {
-        $centros = Centro::all();
+        $centros = Centro::select('id', 'nombre')
+        ->orderBy('idTipo')
+        ->orderBy('updated_at')
+        ->get();
         return view('publico.welcome',['centros' => $centros]);
     }
     

@@ -1,6 +1,6 @@
 @extends ('layouts.panel')
 @section ('title')
-Convocatorias
+Convocatorias Junta
 @endsection
 
 @section ('content')
@@ -20,9 +20,9 @@ Convocatorias
             @endif
 
             <div class="flex justify-between">
-                @include('components.filtros.convocatoriasFiltro')
+                @include('components.filtros.convocatoriasJuntaFiltro')
 
-                @if($permitirAcciones = Auth::user()->esResponsable('admin|centro|junta|comision'))
+                @if($permitirAcciones = Auth::user()->esResponsable('admin|centro|junta'))
                     <div>
                         <div id="btn-add-convocatoria" type="submit" class="flex items-center gap-2 bg-white px-5 py-2.5 rounded-md shadow cursor-pointer">
                             <span class="material-icons-round scale-75">
@@ -115,19 +115,15 @@ Convocatorias
                                             <div class="font-bold truncate">
                                                 {{ $convocatoria->fecha }} 
                                             </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
-                                        <div class="truncate flex items-center">
                                             <span class="material-icons-round scale-75">
                                                 schedule
                                             </span>
                                             <div class="font-bold truncate">
-                                                {{ $convocatoria->hora }}
+                                                {{ \Carbon\Carbon::parse($convocatoria->hora)->format('H:i') }}
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> 
                                     
                                     <div class="flex justify-start items-center gap-2 mt-3" >
                                         <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Convocatoria Junta</span>

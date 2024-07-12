@@ -42,7 +42,9 @@ class Convocatoria extends Model
 
     public function scopeFilters(Builder $query, Request $request){
         return $query
-           ->when($request->has('filtroJunta') && $request->filtroJunta!=null, function($builder) use ($request){
+           ->when($request->has('filtroComision') && $request->filtroComision!=null, function($builder) use ($request){
+                return $builder->where('idComision', $request->filtroComision);       
+            })->when($request->has('filtroJunta') && $request->filtroJunta!=null, function($builder) use ($request){
                 return $builder->where('idJunta', $request->filtroJunta);       
             })->when($request->has('filtroEstado') && $request->filtroEstado!=null && $request->filtroEstado!=2, function($builder) use ($request){
                 if($request->filtroEstado==0){

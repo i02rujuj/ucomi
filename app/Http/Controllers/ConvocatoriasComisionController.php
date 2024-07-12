@@ -3,187 +3,232 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comision;
+use App\Helpers\Helper;
 use App\Models\Convocatoria;
-use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
-use App\Models\MiembroComision;
-use App\Models\MiembroGobierno;
 use App\Models\TipoConvocatoria;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ConvocatoriasComisionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
 
-            $user = Auth::user();
+            $convocatorias = Convocatoria::select('id', 'idComision', 'idTipo', 'lugar', 'fecha', 'hora', 'acta', 'updated_at', 'deleted_at');
+            $comisiones = Comision::select('id', 'idJunta', 'nombre', 'descripcion', 'fechaConstitucion', 'fechaDisolucion', 'updated_at', 'deleted_at');
 
-            if($user->hasRole('admin')){
-
-                $comisiones = Comision::where('estado', 1)
-                ->where('fechaDisolucion', null)
-                ->get();
-
-                $convocatorias = Convocatoria::where('estado', 1)
-                ->whereNot('idComision', null)
-                ->orderBy('fecha')  
-                ->orderBy('hora')          
-                ->orderBy('idJunta')
-                ->orderBy('idComision')
-                ->orderBy('idTipo')
-                ->get();
-            }
-
-            if($user->hasRole('responsable_centro')){
-
-                $centroResponsable = MiembroGobierno::where('idUsuario', $user->id)
-                ->select('idCentro')
-                ->first();
-
-                $comisiones = Comision::select('comisiones.*')
-                ->where('comisiones.estado', 1)
-                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                ->where('juntas.idCentro', $centroResponsable->idCentro)
-                ->where('comisiones.estado', 1)
-                ->where('comisiones.fechaDisolucion', null)
-                ->get();
-
-                $convocatorias = Convocatoria::select('convocatorias.*')
-                ->whereNot('convocatorias.idComision', null)
-                ->where('convocatorias.estado', 1)
+            if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
+                $convocatorias = $convocatorias
                 ->join('comisiones', 'comisiones.id', '=', 'convocatorias.idComision')
                 ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                ->where('juntas.idCentro', $centroResponsable->idCentro)
-                ->where('juntas.estado', 1)
-                ->orderBy('convocatorias.fecha')  
-                ->orderBy('convocatorias.hora')          
-                ->orderBy('convocatorias.idJunta')
-                ->orderBy('convocatorias.idComision')
-                ->orderBy('convocatorias.idTipo')
-                ->get();
-
-            }
-
-            if($user->hasRole('responsable_junta')){
-
-                $juntaResponsable = MiembroJunta::where('idUsuario', $user->id)
-                ->select('idJunta')
-                ->first();
-
-                $comisiones = Comision::select('comisiones.*')
-                ->where('comisiones.estado', 1)
+                ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
+                $comisiones = $comisiones
                 ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                ->where('juntas.id', $juntaResponsable->idJunta)
-                ->where('juntas.estado', 1)
-                ->where('comisiones.fechaDisolucion', null)
-                ->get();
-
-                $convocatorias = Convocatoria::where('estado', 1)
-                ->whereNot('idComision', null)
-                ->where('idJunta', $juntaResponsable->idJunta)
-                ->orderBy('fecha')  
-                ->orderBy('hora')          
-                ->orderBy('idJunta')
-                ->orderBy('idComision')
-                ->orderBy('idTipo')
-                ->get();
-
+                ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
             }
 
-            if($user->hasRole('responsable_comision')){
-
-               $comisionResponsable = MiembroComision::where('idUsuario', $user->id)
-                ->select('idComision')
-                ->first();
-
-                $comisiones = Comision::select('comisiones.*')
-                ->where('comisiones.id', $comisionResponsable->idComision)
-                ->where('comisiones.estado', 1)
-                ->where('comisiones.fechaDisolucion', null)
-                ->get();
-
-                $convocatorias = Convocatoria::where('estado', 1)
-                ->whereNot('idComision', null)
-                ->where('idComision', $comisionResponsable->idComision)
-                ->orderBy('fecha')  
-                ->orderBy('hora')          
-                ->orderBy('idJunta')
-                ->orderBy('idComision')
-                ->orderBy('idTipo')
-                ->get();
+            if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
+                $convocatorias = $convocatorias
+                ->join('comisiones', 'comisiones.id', '=', 'convocatorias.idComision')
+                ->whereIn('comisiones.idJunta', $datosResponsableJunta['idJuntas']);
+                $comisiones = $comisiones->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
             }
-            
-            $tipos = TipoConvocatoria::where('estado', 1)->get();
 
-            return view('convocatoriasComision', ['convocatorias' => $convocatorias, 'comisiones' => $comisiones, 'tipos' => $tipos]);
+            if($datosResponsableComision = Auth::user()->esResponsableDatos('comision')['comisiones']){
+                $convocatorias = $convocatorias
+                ->whereIn('idComision', $datosResponsableComision['idComisiones']);
+                $comisiones = $comisiones->whereIn('id', $datosResponsableComision['idComisiones']);
+            }
+
+            switch ($request->input('action')) {
+                case 'limpiar':
+                    $request['filtroComision']=null;
+                    $request['filtroVigente']=null;
+                    $request['filtroEstado']=null;
+                    break;
+                case 'filtrar':
+                    $convocatorias = $convocatorias->withTrashed()->filters($request);
+                    break;
+                default:
+                    $convocatorias = $convocatorias->whereNull('deleted_at');
+                    break;
+            }
+
+            $tipos = TipoConvocatoria::get();
+            $comisiones=$comisiones->get();
+            $convocatorias = $convocatorias
+            ->whereNot('idComision', null)
+            ->orderBy('deleted_at')
+            ->orderBy('fecha')  
+            ->orderBy('hora')          
+            ->orderBy('idComision')
+            ->orderBy('idComision')
+            ->orderBy('idTipo')
+            ->orderBy('updated_at','desc')
+            ->paginate(5);
+
+            if($request->input('action')=='limpiar'){
+                return redirect()->route('convocatorias')->with([
+                    'convocatorias' => $convocatorias,
+                    'comisiones' => $comisiones, 
+                    'tipos' => $tipos, 
+                ]);
+            }
+
+            return view('convocatoriasComision', [
+                'convocatorias' => $convocatorias,
+                'comisiones' => $comisiones, 
+                'tipos' => $tipos, 
+                'filtroComision' => $request['filtroComision'],
+                'filtroVigente' => $request['filtroVigente'],
+                'filtroEstado' => $request['filtroEstado'],
+                'action' => $request['action'],
+            ]);
+
         } catch (\Throwable $th) {
-            return redirect()->route('convocatoriasComision')->with('error', 'No se pudieron obtener las convocatorias: ' . $th->getMessage());
+            return redirect()->route('convocatoriasComision')->with('errors', 'No se pudieron obtener las convocatorias: ' . $th->getMessage());
         }
     }
-
+    
     public function store(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(),[
-                'idComision' => 'required|integer|exists:App\Models\Comision,id',
-                'idTipo' => 'required|integer|exists:App\Models\TipoConvocatoria,id',
-                'lugar' => 'required|max:100|string',
-                'fecha' => 'required|date',
-                'hora' => 'required|date_format:H:i',
-                'acta' => 'nullable|max:1000|mimetypes:application/pdf',
-            ], [
-                // Mensajes error idComision
-                'idComision.required' => 'La comisión es obligatoria.',
-                'idComision.integer' => 'La comisión debe ser un entero.',
-                'idComision.exists' => 'La comisión seleccionada no existe.',
-                // Mensajes error idTipo
-                'idTipo.integer' => 'El tipo de convocatoria debe ser un entero.',
-                'idTipo.exists' => 'El tipo de convocatoria seleccionado no existe.',
-                // Mensajes error lugar
-                'lugar.required' => 'El lugar es obligatorio.',
-                'lugar.string' => 'El lugar no puede contener números ni caracteres especiales.',
-                'lugar.max' => 'El lugar no puede exceder los 100 caracteres.',
-                // Mensajes error fecha
-                'fecha.required' => 'La fecha es obligatoria.',
-                'fecha.date' => 'La fecha debe tener el formato fecha DD/MM/YYYY.',
-                // Mensajes error hora
-                'hora.required' => 'La hora es obligatoria.',
-                'hora.date_format' => 'La hora debe tener el formato hora HH:MM.',
-                // Mensajes error acta
-                'acta.mimetypes' => 'El acta debe estar en formato pdf.',
-                'acta.max' => 'El nombre del acta no puede exceder los 1000 caracteres.',
-                
-            ]);
-
-            if ($validator->fails()) {
-                // Si la validación falla, redirige de vuelta con los errores
-                return redirect()->back()->withErrors($validator)->withInput();
+            $request['accion']='add';
+            $validation = $this->validateConvocatoria($request);
+            if($validation->original['status']!=200){
+                return $validation;
             }
 
-            $file_acta = $request->file('acta');
-            $result=null;
-
-            if ($file_acta) {
-                $result = cloudinary()->upload($file_acta->getRealPath(), [
-                    'folder' => 'actasComision'
-                ])->getPublicId();
+            if(isset($request->data['acta'])){
+                $url_acta = Helper::subirImagenCloudinary($request->data['acta'], "actasComisiones");
             }
-           
-            $convocatoria = Convocatoria::create([
-                "idComision" => $request->idComision,
-                "idTipo" => $request->idTipo,
-                "lugar" => $request->lugar,
-                "fecha" => $request->fecha,
-                "hora" => $request->hora,
-                "acta" => $result,
-                'estado' => 1, // 1 = 'Activo' | 0 = 'Inactivo'
+
+            Convocatoria::create([
+                "idComision" => $request->data['idComision'],
+                "idTipo" => $request->data['idTipo'],
+                "lugar" => $request->data['lugar'],
+                "fecha" => $request->data['fecha'],
+                "hora" => $request->data['hora'],
+                "acta" => isset($url_acta) ? $url_acta : null,
             ]);
-            return redirect()->route('convocatoriasComision')->with('success', 'Convocatoria creada correctamente.');
+
+            return response()->json(['message' => 'La convocatoria se ha añadido correctamente.', 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return redirect()->route('convocatoriasComision')->with('error', 'No se pudo crear la convocatoria: ' . $th->getMessage());
+            return response()->json(['errors' => 'Error al añadir la convocatoria.', 'status' => 422], 200);
         }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $convocatoria = Convocatoria::where('id', $request->id)->first();
+
+            if (!$convocatoria) {
+                return response()->json(['errors' => 'No se ha encontrado la convocatoria.','status' => 422], 200);
+            }
+
+            $convocatoria->delete();
+            return response()->json(['status' => 200], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json(['errors' => 'No se ha encontrado la convocatoria.','status' => 422], 200);
+        }
+    }
+
+    public function get(Request $request)
+    {
+        try {
+            $convocatoria = Convocatoria::withTrashed()->where('id', $request->id)->first();
+            if (!$convocatoria) {
+                return response()->json(['errors' => 'No se ha encontrado la convocatoria.','status' => 422], 200);
+            }
+            return response()->json($convocatoria);
+        } catch (\Throwable $th) {
+            return response()->json(['errors' => 'No se ha encontrado la convocatoria.','status' => 422], 200);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            $request['accion']='update';
+            $validation = $this->validateConvocatoria($request);
+            if($validation->original['status']!=200){
+                return $validation;
+            }
+
+            $convocatoria=Convocatoria::where('id', $request->id)->first();
+
+            if (!$convocatoria) {
+                return response()->json(['errors' => 'No se ha encontrado la convocatoria.', 'status' => 422], 200);
+            }
+
+            if(isset($request->data['acta'])){
+                $url_acta = Helper::subirImagenCloudinary($request->data['acta'], "actasComisiones");
+                $convocatoria->acta = $url_acta;
+            }
+
+            $convocatoria->idTipo = $request->data['idTipo'];
+            $convocatoria->lugar = $request->data['lugar'];
+            $convocatoria->fecha = $request->data['fecha'];
+            $convocatoria->hora = $request->data['hora'];
+            $convocatoria->save();
+           
+            return response()->json(['message' => 'La convocatoria se ha actualizado correctamente.', 'status' => 200], 200);
+            
+        } catch (\Throwable $th) {
+            return response()->json(['errors' => 'Error al actualizar la convocatoria.', 'status' => 422], 200);
+        }
+    }
+
+    public function rules()
+    {
+        $rules = [
+            'idComision' => 'required|integer|exists:App\Models\Comision,id',
+            'idTipo' => 'required|integer|exists:App\Models\TipoConvocatoria,id',
+            'lugar' => 'required|max:100|string',
+            'fecha' => 'required|date',
+            'hora' => 'required|date_format:H:i',
+            'acta' => 'nullable|max:1000|mimes:pdf',
+        ]; 
+        
+        $rules_message = [
+            // Mensajes error idComision
+            'idComision.required' => 'La comisión es obligatoria.',
+            'idComision.integer' => 'La comisión debe ser un entero.',
+            'idComision.exists' => 'La comisión seleccionada no existe.',
+            // Mensajes error idTipo
+            'idTipo.integer' => 'El tipo de convocatoria debe ser un entero.',
+            'idTipo.exists' => 'El tipo de convocatoria seleccionado no existe.',
+            // Mensajes error lugar
+            'lugar.required' => 'El lugar es obligatorio.',
+            'lugar.string' => 'El lugar no puede contener números ni caracteres especiales.',
+            'lugar.max' => 'El lugar no puede exceder los 100 caracteres.',
+            // Mensajes error fecha
+            'fecha.required' => 'La fecha es obligatoria.',
+            'fecha.date' => 'La fecha debe tener el formato fecha DD/MM/YYYY.',
+            // Mensajes error hora
+            'hora.required' => 'La hora es obligatoria.',
+            'hora.date_format' => 'La hora debe tener el formato hora HH:MM.',
+            // Mensajes error acta
+            'acta.mimes' => 'El acta debe estar en formato pdf.',
+            'acta.max' => 'El nombre del acta no puede exceder los 1000 caracteres.',
+        ];
+
+        return [$rules, $rules_message];
+    }
+
+    public function validateConvocatoria(Request $request){
+
+        $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
+        }
+        
+        return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
     }
 }

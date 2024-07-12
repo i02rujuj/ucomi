@@ -131,10 +131,11 @@ Route::group(['middleware' => ['responsable:admin|centro|junta|comision']], func
 
     // CONVOCATORIAS COMISION
     Route::get('/convocatorias_comision', [ConvocatoriasComisionController::class, 'index'])->name('convocatoriasComision');
-    Route::post('/convocatorias_comision', [ConvocatoriasComisionController::class, 'store'])->name('convocatoriasComision.store');
-    Route::post('/convocatorias_comision/delete', [ConvocatoriasComisionController::class, 'delete']);
-    Route::post('/convocatorias_comision/get', [ConvocatoriasComisionController::class, 'get']);
-    Route::post('/convocatorias_comision/update', [ConvocatoriasComisionController::class, 'update']);
+    Route::post('/convocatoria_comision/add', [ConvocatoriasComisionController::class, 'store'])->name('store');
+    Route::post('/convocatoria_comision/delete', [ConvocatoriasComisionController::class, 'delete']);
+    Route::post('/convocatoria_comision/get', [ConvocatoriasComisionController::class, 'get']);
+    Route::post('/convocatoria_comision/update', [ConvocatoriasComisionController::class, 'update']);
+    Route::post('/convocatoria_comision/validate', [ConvocatoriasComisionController::class, 'validateConvocatoria']);
 
     // REPRESENTACIONES GENERAL
     Route::post('/representacion_general/get', [RepresentacionGeneralController::class, 'get']);

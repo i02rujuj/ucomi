@@ -16,7 +16,7 @@ class ConvocatoriasJuntaController extends Controller
     {
         try {
 
-            $convocatorias = Convocatoria::select('id', 'idComision', 'idJunta', 'idTipo', 'lugar', 'fecha', 'hora', 'acta', 'updated_at', 'deleted_at');
+            $convocatorias = Convocatoria::select('id', 'idJunta', 'idTipo', 'lugar', 'fecha', 'hora', 'acta', 'updated_at', 'deleted_at');
             $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'updated_at', 'deleted_at');
 
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){

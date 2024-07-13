@@ -21,18 +21,27 @@ class ConvocatoriasComisionController extends Controller
 
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
                 $convocatorias = $convocatorias
-                ->join('comisiones', 'comisiones.id', '=', 'convocatorias.idComision')
-                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
+                ->whereHas('junta', function($builder) use ($datosResponsableCentro){
+                    return $builder
+                    ->whereHas('centro', function($builder) use ($datosResponsableCentro){
+                        $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+                    });
+                }); 
+                
                 $comisiones = $comisiones
-                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
+                ->whereHas('junta', function($builder) use ($datosResponsableCentro){
+                    return $builder
+                    ->whereHas('centro', function($builder) use ($datosResponsableCentro){
+                        $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+                    });
+                });
             }
 
             if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
                 $convocatorias = $convocatorias
-                ->join('comisiones', 'comisiones.id', '=', 'convocatorias.idComision')
-                ->whereIn('comisiones.idJunta', $datosResponsableJunta['idJuntas']);
+                ->whereHas('junta', function($builder) use ($datosResponsableJunta){
+                    return $builder->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
+                });
                 $comisiones = $comisiones->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
             }
 

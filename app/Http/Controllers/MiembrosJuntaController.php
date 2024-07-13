@@ -23,8 +23,9 @@ class MiembrosJuntaController extends Controller
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
                 $juntas = $juntas->whereIn('idCentro', $datosResponsableCentro['idCentros']);
                 $miembrosJunta = $miembrosJunta
-                ->join('juntas', 'juntas.id', '=', 'miembros_junta.idJunta')
-                ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
+                ->whereHas('junta', function($builder) use ($datosResponsableCentro){
+                    return $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+                });
             }
 
             if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){

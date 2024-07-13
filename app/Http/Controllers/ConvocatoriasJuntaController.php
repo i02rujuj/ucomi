@@ -17,13 +17,18 @@ class ConvocatoriasJuntaController extends Controller
     public function index(Request $request)
     {
         try {
-            $convocatorias = Convocatoria::select('id', 'idJunta', 'idTipo', 'lugar', 'fecha', 'hora', 'acta', 'updated_at', 'deleted_at');
+            $convocatorias = Convocatoria::select('id', 'idJunta', 'idTipo', 'lugar', 'fecha', 'hora', 'acta', 'updated_at', 'convocatorias.deleted_at');
             $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'updated_at', 'deleted_at');
 
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
                 $convocatorias = $convocatorias
-                ->join('juntas', 'juntas.id', '=', 'convocatorias.idJunta')
-                ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
+                ->whereHas('junta', function($builder) use ($datosResponsableCentro){
+                    return $builder
+                    ->whereHas('centro', function($builder) use ($datosResponsableCentro){
+                        $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+                    });
+                }); 
+                
                 $juntas = $juntas
                 ->whereIn('idCentro', $datosResponsableCentro['idCentros']);
             }
@@ -257,6 +262,20 @@ class ConvocatoriasJuntaController extends Controller
             return response()->json($convocados->get());
         } catch (\Throwable $th) {
             return response()->json(['errors' => 'Ha ocurrido un error al obtener los convocados','status' => 422], 200);
+        }
+    }
+
+    public function asistir(Request $request)
+    {
+        try {
+            Convocado::
+            where('idUsuario', Auth::user()->id)
+            ->where('idConvocatoria', $request->idConvocatoria)
+            ->update(['asiste' => $request->asiste]);
+
+            return response()->json(['message' => 'Se ha actualizado el estado de asistir a la convocatoria correctamente','status' => 200], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['errors' => 'Ha ocurrido un error al actualizar el estado de asistir','status' => 422], 200);
         }
     }
 }

@@ -136,16 +136,28 @@ Convocatorias Junta
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="flex justify-end items-center gap-2 mt-3" >
-                                <span id="btn-asistentes" data-convocatoria-id="{{ $convocatoria['id'] }}" class="material-icons-round cursor-pointer">
-                                    diversity_3
-                                </span>
 
-                                <span id="btn-notificar" data-convocatoria-id="{{ $convocatoria['id'] }}" class="material-icons-round cursor-pointer">
-                                    forward_to_inbox
-                                </span>
+                            <div class="flex justify-end items-center gap-2 mt-3 w-" >
+                                @if($permitirAcciones = Auth::user()->esResponsable('admin|centro|junta'))
+                                    <span title="Ver asistentes" id="btn-asistentes" data-convocatoria-id="{{ $convocatoria['id'] }}" class="material-icons-round cursor-pointer">
+                                        diversity_3
+                                    </span>
+
+                                    <span title="Enviar email" id="btn-notificar" data-convocatoria-id="{{ $convocatoria['id'] }}" class="material-icons-round cursor-pointer">
+                                        forward_to_inbox
+                                    </span>
+                                @endif
+                                @php
+                                    $convocado = Auth::user()->convocados->where('idConvocatoria', $convocatoria->id);
+                                @endphp
+
+                                @if($convocado->count())
+                                    <span title="Confirmar asistencia" id="btn-confirmarAsistencia" data-convocatoria-id="{{ $convocatoria['id'] }}" class="material-icons-round cursor-pointer  @if($convocado->first()->asiste) text-green-400 @else text-red-400 @endif">
+                                        recommend
+                                    </span>
+                                @endif
                             </div>
+
                         </div>
                     @endforeach
                 @else
@@ -169,3 +181,7 @@ Convocatorias Junta
     const convocatorias = @json($convocatorias);
 </script>
 @vite(['resources/js/convocatoriasJunta/convocatoriasJunta.js'])
+
+@if(Auth::user()->esResponsable('admin|centro|junta'))
+    @vite(['resources/js/convocatoriasJunta/confirmarAsistencia.js'])
+@endif

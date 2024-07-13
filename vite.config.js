@@ -17,6 +17,7 @@ export default defineConfig({
                 'resources/js/publico/info.js',
                 'resources/js/convocatoriasJunta/convocatoriasJunta.js',
                 'resources/js/convocatoriasComision/convocatoriasComision.js',
+                'resources/js/convocatoriasJunta/confirmarAsistencia.js',
             ],
             refresh: true,
         }),

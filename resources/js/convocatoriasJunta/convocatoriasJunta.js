@@ -1,4 +1,4 @@
-import { DELETE_CONVOCATORIA_BBDD, UPDATE_CONVOCATORIA_BBDD, ADD_CONVOCATORIA_BBDD, VALIDATE_CONVOCATORIA_BBDD, CONVOCADOS_CONVOCATORIA_BBDD } from "./axiosTemplate.js";
+import { DELETE_CONVOCATORIA_BBDD, UPDATE_CONVOCATORIA_BBDD, ADD_CONVOCATORIA_BBDD, VALIDATE_CONVOCATORIA_BBDD, CONVOCAR_CONVOCATORIA_BBDD } from "./axiosTemplate.js";
 import Swal from 'sweetalert2';
 
 let modal_add = null
@@ -203,11 +203,14 @@ const renderHTMLConvocados = (convocados, tipo) => {
             <table class="w-full text-xs text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-1 py-2">
+                        <th scope="col" class="px-1 py-1 w-44">
                             Nombre
                         </th>
-                        <th scope="col" class="px-1 py-2">
-                            Email
+                        <th scope="col" class="px-1 py-1 w-44">
+                            ${tipo=='notificados'? 'Email' : 'Representación'}
+                        </th>
+                        <th scope="col" class="px-1 py-1 text-center">
+                            ${tipo=='notificados'? 'Notificado' : 'Confirmado'}
                         </th>
                     </tr>
                 </thead>
@@ -224,24 +227,46 @@ const renderHTMLConvocados = (convocados, tipo) => {
         convocados.forEach(miembro => {
             let miembro_tr = document.createElement("tr");
             let miembro_th_name = document.createElement("th");
-            miembro_th_name.classList.add('px-1','py-2');
+            miembro_th_name.classList.add('px-1', 'py-1', 'w-44');
             miembro_th_name.innerHTML=miembro.usuario.name
             miembro_tr.appendChild(miembro_th_name);
 
             switch(tipo){
                 case 'notificados':
                     let miembro_td_email = document.createElement("td");
-                    miembro_td_email.classList.add('px-1','py-2');
+                    miembro_td_email.classList.add('px-1', 'py-1', 'w-44');
                     miembro_td_email.innerHTML = miembro.usuario.email
-                    miembro_tr.appendChild(miembro_td_email);
+                    miembro_tr.appendChild(miembro_td_email);      
                     break;
                 case 'asistentes':
                     let miembro_td_representacion = document.createElement("td");
-                    miembro_td_representacion.classList.add('px-1','py-2');
+                    miembro_td_representacion.classList.add('px-1', 'py-1', 'w-44');
                     miembro_td_representacion.innerHTML = miembro.usuario.miembros_junta[0].representacion.nombre
                     miembro_tr.appendChild(miembro_td_representacion);
                     break;
             }
+
+            let miembro_td_estado = document.createElement("td");
+            miembro_td_estado.classList.add('px-1', 'py-1', 'text-center');
+
+            let estadoHTML = ''
+            if(miembro.notificado || miembro.asiste){
+                estadoHTML=`
+                <span class="material-icons-round text-green-400">
+                        check_circle
+                </span>
+                `
+            }
+            else{
+                estadoHTML=`
+                <span class="material-icons-round text-red-400">
+                        cancel
+                </span>
+                `
+            }
+
+            miembro_td_estado.innerHTML = estadoHTML
+            miembro_tr.appendChild(miembro_td_estado);
             
             tbody.appendChild(miembro_tr);
         })
@@ -287,11 +312,11 @@ const notificarEvent = (button) => {
         const dataToSend = {
             id:button.dataset.convocatoriaId,
             idJunta: response.idJunta,
-            notificado: 0,
+            notificado: null,
             asiste:null
         }
 
-        const convocados = await CONVOCADOS_CONVOCATORIA_BBDD(dataToSend)
+        const convocados = await CONVOCAR_CONVOCATORIA_BBDD(dataToSend)
 
         try {
             await Swal.fire({
@@ -300,7 +325,7 @@ const notificarEvent = (button) => {
                 focusConfirm: false,
                 showCancelButton: true,
                 showConfirmButton: true,
-                confirmButtonText: "Notificar",
+                confirmButtonText: "Enviar email",
                 cancelButtonText: "Cancelar",
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '',
@@ -340,10 +365,10 @@ const asistentesEvent = (button) => {
             id:button.dataset.convocatoriaId,
             idJunta: response.idJunta,
             notificado: null,
-            asiste:1
+            asiste:null
         }
 
-        const convocados = await CONVOCADOS_CONVOCATORIA_BBDD(dataToSend)
+        const convocados = await CONVOCAR_CONVOCATORIA_BBDD(dataToSend)
         try {
             await Swal.fire({
                 title:'Asistentes convocatoria',
@@ -379,3 +404,4 @@ const asistentesButtons = document.querySelectorAll('#btn-asistentes');
 asistentesButtons.forEach(button => {
     asistentesEvent(button);
 });
+

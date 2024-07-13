@@ -25,19 +25,24 @@ class MiembrosComisionController extends Controller
 
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
                 $miembrosComision = $miembrosComision
-                ->join('comisiones', 'comisiones.id', '=', 'miembros_comision.idComision')
-                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
+                ->whereHas('comision', function($builder) use ($datosResponsableCentro){
+                    return $builder
+                    ->whereHas('junta', function($builder) use ($datosResponsableCentro){
+                        $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+                    });
+                }); 
 
                 $comisiones = $comisiones
-                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
+                ->whereHas('junta', function($builder) use ($datosResponsableCentro){
+                    return $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+                });          
             }
 
             if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
                 $miembrosComision = $miembrosComision
-                ->join('comisiones', 'comisiones.id', '=', 'miembros_comision.idComision')
-                ->whereIn('comisiones.idJunta', $datosResponsableJunta['idJuntas']);
+                ->whereHas('comision', function($builder) use ($datosResponsableJunta){
+                    return $builder->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
+                }); 
 
                 $comisiones = $comisiones->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
             }

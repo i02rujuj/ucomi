@@ -76,19 +76,6 @@ const ENDPOINT_JUNTA_VALIDATE_BBDD = {
     data: [],
 };
 
-const ENDPOINT_JUNTA_MIEMBROS_BBDD = {
-    method: 'POST',
-    url: "",
-    comment: "Endpoint get miembros de una junta",
-    explanation: "This endpoint is used to get miembros de junta of the server",
-    transformResponse: (data) => JSON.parse(data),
-    withCredentials: false,
-    headers: {
-        'content-type': 'application/json',
-    },
-    data: [],
-};
-
 export {
     ENDPOINT_JUNTA_DELETE_BBDD,
     ENDPOINT_JUNTA_GET_BBDD,
@@ -96,5 +83,4 @@ export {
     ENDPOINT_JUNTA_GETALL_BBDD,
     ENDPOINT_JUNTA_ADD_BBDD,
     ENDPOINT_JUNTA_VALIDATE_BBDD,
-    ENDPOINT_JUNTA_MIEMBROS_BBDD,
 }

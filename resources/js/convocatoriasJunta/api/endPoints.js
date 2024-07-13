@@ -4,6 +4,7 @@ const CONVOCATORIA_UPDATE_URL = "convocatoria_junta/update"
 const CONVOCATORIA_GETALL_URL = "convocatoria_junta/all"
 const CONVOCATORIA_ADD_URL = "convocatoria_junta/add"
 const CONVOCATORIA_VALIDATE_URL = "convocatoria_junta/validate"
+const CONVOCATORIA_CONVOCADOS_URL = "convocatoria_junta/convocados"
 
 export {
     CONVOCATORIA_DELETE_URL,
@@ -12,4 +13,5 @@ export {
     CONVOCATORIA_GETALL_URL,
     CONVOCATORIA_ADD_URL,
     CONVOCATORIA_VALIDATE_URL,
+    CONVOCATORIA_CONVOCADOS_URL,
 }

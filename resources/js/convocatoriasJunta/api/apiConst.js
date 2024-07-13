@@ -85,6 +85,19 @@ const ENDPOINT_CONVOCATORIA_VALIDATE_BBDD = {
     data: [],
 };
 
+const ENDPOINT_CONVOCATORIA_CONVOCADOS_BBDD = {
+    method: 'POST',
+    url: "",
+    comment: "Endpoint obtener todos los convocados de la convocatoria",
+    explanation: "This endpoint is used get all convocados from convocatoria of the server",
+    transformResponse: (data) => JSON.parse(data),
+    withCredentials: false,
+    headers: {
+        'content-type': 'application/json',
+    },
+    data: [],
+};
+
 export {
     ENDPOINT_CONVOCATORIA_DELETE_BBDD,
     ENDPOINT_CONVOCATORIA_GET_BBDD,
@@ -92,4 +105,5 @@ export {
     ENDPOINT_CONVOCATORIA_GETALL_BBDD,
     ENDPOINT_CONVOCATORIA_ADD_BBDD,
     ENDPOINT_CONVOCATORIA_VALIDATE_BBDD,
+    ENDPOINT_CONVOCATORIA_CONVOCADOS_BBDD,
 }

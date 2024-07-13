@@ -40,8 +40,8 @@ class Convocatoria extends Model
         return $this->belongsTo(TipoConvocatoria::class, 'idTipo');
     }
 
-    public function asistentes(){
-        return $this->hasMany(Asistente::class, 'id');
+    public function convocados(){
+        return $this->hasMany(Convocado::class, 'id');
     }
 
     public function scopeFilters(Builder $query, Request $request){

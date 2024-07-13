@@ -138,7 +138,11 @@ Convocatorias Junta
                             </div>
                             
                             <div class="flex justify-end items-center gap-2 mt-3" >
-                                <span id="notificar" name="notificar" data-convocatoria-id="{{ $convocatoria['id'] }}" class="material-icons-round cursor-pointer">
+                                <span id="btn-asistentes" data-convocatoria-id="{{ $convocatoria['id'] }}" class="material-icons-round cursor-pointer">
+                                    diversity_3
+                                </span>
+
+                                <span id="btn-notificar" data-convocatoria-id="{{ $convocatoria['id'] }}" class="material-icons-round cursor-pointer">
                                     forward_to_inbox
                                 </span>
                             </div>

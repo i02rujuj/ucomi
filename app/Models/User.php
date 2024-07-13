@@ -51,19 +51,19 @@ class User extends Authenticatable
     ];
 
     public function miembrosGobierno(){
-        return $this->hasMany(MiembroGobierno::class, 'id');
+        return $this->hasMany(MiembroGobierno::class, 'idUsuario');
     }
 
     public function miembrosJunta(){
-        return $this->hasMany(MiembroJunta::class, 'id');
+        return $this->hasMany(MiembroJunta::class, 'idUsuario');
     }
 
     public function miembrosComision(){
-        return $this->hasMany(MiembroComision::class, 'id');
+        return $this->hasMany(MiembroComision::class, 'idUsuario');
     }
 
-    public function asistentes(){
-        return $this->hasMany(Asistente::class, 'id');
+    public function convocados(){
+        return $this->hasMany(Convocado::class, 'idUsuario');
     }
 
     public function esResponsableDatos($lista){

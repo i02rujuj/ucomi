@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Junta;
 use App\Helpers\Helper;
+use App\Models\Convocado;
 use App\Models\Convocatoria;
+use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
 use App\Models\TipoConvocatoria;
 use Illuminate\Support\Facades\Auth;
@@ -94,7 +96,7 @@ class ConvocatoriasJuntaController extends Controller
                 $url_acta = Helper::subirImagenCloudinary($request->data['acta'], "actasJuntas");
             }
 
-            Convocatoria::create([
+            $convocatoria = Convocatoria::create([
                 "idJunta" => $request->data['idJunta'],
                 "idTipo" => $request->data['idTipo'],
                 "lugar" => $request->data['lugar'],
@@ -102,6 +104,19 @@ class ConvocatoriasJuntaController extends Controller
                 "hora" => $request->data['hora'],
                 "acta" => isset($url_acta) ? $url_acta : null,
             ]);
+
+            $miembrosJunta = MiembroJunta::
+            where('idJunta', $convocatoria->idJunta)
+            ->get();
+
+            foreach ($miembrosJunta as $miembro) {
+                Convocado::create([
+                    "idConvocatoria" => $convocatoria->id,
+                    "idUsuario" => $miembro->usuario->id,
+                    "asiste" => 0,
+                    "notificado" => 0,
+                ]);
+            }
 
             return response()->json(['message' => 'La convocatoria se ha añadido correctamente.', 'status' => 200], 200);
 
@@ -119,6 +134,7 @@ class ConvocatoriasJuntaController extends Controller
                 return response()->json(['errors' => 'No se ha encontrado la convocatoria.','status' => 422], 200);
             }
 
+            Convocado::where('idConvocatoria', $request->id)->delete();
             $convocatoria->delete();
             return response()->json(['status' => 200], 200);
 
@@ -219,5 +235,28 @@ class ConvocatoriasJuntaController extends Controller
         }
         
         return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
+    }
+
+    public function convocados(Request $request)
+    {
+        try {
+            $convocados = Convocado::
+            with(['usuario' => function ($query) use ($request){
+                $query
+                ->with(['miembrosJunta' => function ($query) use ($request){
+                    $query
+                    ->where('idJunta', $request->idJunta)
+                    ->with('representacion');
+                }]);
+            }])
+            ->where('idConvocatoria', $request->id);
+
+            $request->notificado!=null ? $convocados = $convocados->where('notificado', $request->notificado) : "";
+            $request->asiste!=null ? $convocados = $convocados->where('asiste', $request->asiste) : "";
+
+            return response()->json($convocados->get());
+        } catch (\Throwable $th) {
+            return response()->json(['errors' => 'Ha ocurrido un error al obtener los convocados','status' => 422], 200);
+        }
     }
 }

@@ -13,22 +13,6 @@
 
 namespace App\Models{
 /**
- * App\Models\Asistente
- *
- * @property-read \App\Models\Comision|null $convocatoria
- * @property-read \App\Models\User|null $usuario
- * @method static \Illuminate\Database\Eloquent\Builder|Asistente newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Asistente newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Asistente onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Asistente query()
- * @method static \Illuminate\Database\Eloquent\Builder|Asistente withTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Asistente withoutTrashed()
- */
-	class Asistente extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
  * App\Models\Centro
  *
  * @property int $id
@@ -105,6 +89,38 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Convocado
+ *
+ * @property int $id
+ * @property int $idConvocatoria
+ * @property int $idUsuario
+ * @property int $asiste
+ * @property int $notificado
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\Comision $convocatoria
+ * @property-read \App\Models\User $usuario
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocado newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocado newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocado onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocado query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocado whereAsiste($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocado whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocado whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocado whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocado whereIdConvocatoria($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocado whereIdUsuario($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocado whereNotificado($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocado whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocado withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Convocado withoutTrashed()
+ */
+	class Convocado extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Convocatoria
  *
  * @property int $id
@@ -118,9 +134,9 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Asistente> $asistentes
- * @property-read int|null $asistentes_count
  * @property-read \App\Models\Comision|null $comision
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Convocado> $convocados
+ * @property-read int|null $convocados_count
  * @property-read \App\Models\Junta|null $junta
  * @property-read \App\Models\TipoConvocatoria $tipo
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria filters(\Illuminate\Http\Request $request)
@@ -427,8 +443,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Asistente> $asistentes
- * @property-read int|null $asistentes_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Convocado> $convocados
+ * @property-read int|null $convocados_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroComision> $miembrosComision
  * @property-read int|null $miembros_comision_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroGobierno> $miembrosGobierno

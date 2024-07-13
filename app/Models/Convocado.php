@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Asistente extends Model
+class Convocado extends Model
 {
     use HasFactory, SoftDeletes;
 
      // Tabla
-     protected $table = 'asistentes'; 
+     protected $table = 'convocados'; 
 
      //Primary Key
      protected $primaryKey = 'id';

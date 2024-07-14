@@ -34,68 +34,12 @@
 
 <body>
 
-    <nav class="bg-white fixed top-0 w-full z-50">
-        <div class="mx-auto max-w-full sm:px-4 lg:px-8">
-            <div class="flex items-center justify-between h-20 ml-2">
-                    <div class="flex transition-all duration-200 ease-in-out">
-                        <a href="{{ route('welcome') }}">
-                            <img class="h-12" src="{{ asset('img/logo.png') }}" alt="logo_ucomi" />
-                        </a>
-                    </div> 
-                               
-                <div class="md:block">
-                    <div class="ml-4 flex items-center md:ml-6"> 
-                        @if (!Auth::check())
-                            <a href="{{ route('login') }}" class="ml-3 px-3 py-1 text-sm font-medium rounded-md hover:text-white hover:bg-gray-700">Iniciar sesión</a>
-                        @else
-                            <a href="{{ route('home') }}" class="ml-3 px-3 py-1 text-sm font-medium rounded-md hover:text-white hover:bg-gray-700">{{Auth::user()->name}}</a>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+    @include('components.nav')
 
-    
     <main>
         @yield('contentTop')
 
         @yield('content')
-
-        @if (Route::is('welcome') || Route::is('infoPublica'))
-        <!-- Sección búsqueda del centro -->
-        <section class="bg-ucomi bg-cover lg:h-screen md:h-screen py-8">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full w-full flex items-center justify-center">
-                <div class="text-center">
-                    <div class="mt-20">
-                        <div class="sentences_together flex flex-col md:flex-row">
-                            <h2 class="text-lg font-bold text-white mb-4">
-                                Obtén información pública sobre las comisiones de los diferentes centros de la Universidad de Córdoba
-                            </h2>
-                        </div>
-
-                        <p class="text-white mb-4">
-                            También encontrarás información relativa a la composición del equipo de gobierno, juntas y comisiones de cada centro
-                        </p>
-                        
-                        <form action="{{ route('infoPublica') }}" method="GET">
-                            <select class="max-sm:w-52 text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none required" id="idCentro" name="idCentro" required>
-                                @foreach ($centros as $centro)
-                                    <option value="{{ $centro['id'] }}">{{ $centro['nombre'] }}</option>
-                                @endforeach
-                            </select>
-
-                            <div class="buttons flex justify-center items-center gap-6 py-4">
-                                <button type="submit" class="md:w-36 w-1/2 inline-block px-6 py-3 font-bold text-white bg-blue-600 rounded-md shadow-md">
-                                    Buscar
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-        @endif
 
         @yield('contentBottom')
     </main>

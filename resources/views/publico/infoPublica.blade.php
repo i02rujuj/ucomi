@@ -5,9 +5,15 @@
 @endsection
 
 @section('contentTop')
-    <span id="idCentro" class="hidden">{{$idCentro}}</span>
-    <div id="equipoGobierno"></div>
+
 @endsection
 
-<script src="{{asset('js/orgchart.js')}}"></script>
+@section('content')
+
+@endsection
+
+@section('contentBotttom')
+
+@endsection
+
 @vite(['resources/js/publico/info.js'])

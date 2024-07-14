@@ -12,7 +12,7 @@ class PublicoController extends Controller
     
     public function index()
     {
-        $centros = Centro::select('id', 'nombre')
+        $centros = Centro::select('id', 'nombre', 'idTipo', 'logo')
         ->orderBy('idTipo')
         ->orderBy('updated_at')
         ->get();
@@ -22,7 +22,7 @@ class PublicoController extends Controller
     public function info(Request $request)
     {
         $idCentro = $request->get('idCentro');
-        $centros = Centro::where('estado', 1)->get();
+        $centros = Centro::get();
 
         return view('publico.infoPublica',['idCentro' => $idCentro, 'centros' => $centros]);
     }

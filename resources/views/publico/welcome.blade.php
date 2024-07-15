@@ -15,7 +15,7 @@ Ucomi
                         </h2>
                     </div>
 
-                    <form action="{{ route('infoPublica') }}" method="GET">
+                    <form action="{{ route('infoJunta') }}" method="GET">
                         <div class="flex flex-wrap justify-center items-center gap-4">
                             @foreach ($centros as $centro)
                                 <button type="submit" name="centro" value="{{$centro->id}}">

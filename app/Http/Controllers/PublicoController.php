@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Junta;
 use App\Models\Centro;
+use App\Models\Comision;
+use Flasher\Prime\Notification\NotificationInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 
 class PublicoController extends Controller
 {
@@ -20,7 +21,7 @@ class PublicoController extends Controller
         return view('publico.welcome',['centros' => $centros]);
     }
     
-    public function info(Request $request)
+    public function infoJunta(Request $request)
     {
         if($request->get('centro')){
             $centro = Centro::
@@ -39,11 +40,29 @@ class PublicoController extends Controller
                             ->first();
                     }
         
-                    return view('publico.infoPublica',['junta' => $juntaActual, 'centro' => $centro]);
+                    return view('publico.infoJunta',['junta' => $juntaActual, 'centro' => $centro]);
                 }
         }   
-        
+
+        toastr('No es posible consultar la información del centro',NotificationInterface::ERROR);
         return redirect()->route('welcome');
+    }
+
+    public function infoComision(Request $request)
+    {
+        if($request->get('comision')){
+            $comision = Comision::
+                where('id', $request->get('comision'))
+                ->first();
+
+                if($comision){
+                    
+                    return view('publico.infoComision',['comision' => $comision]);
+                }
+        }   
+
+        toastr('No es posible consultar la información de la comisión',NotificationInterface::ERROR);
+        return redirect()->back()->route('welcome');
     }
     
     public function login(Request $request)

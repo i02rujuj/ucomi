@@ -186,14 +186,16 @@
 
                 {{--COMISIONES--}}
                 <div x-show="openTab === 3">
-                    <div class="ml-4 mt-5 text-lg">                          
-                        @foreach ($junta->convocatorias as $convocatoria)
+                    <div class="ml-4 mt-5 text-lg"> 
+                        <form action="{{ route('infoComision') }}" method="GET">                         
+                            @foreach ($junta->comisiones as $comision)
                             <div class="ml-4">
-                                {{$convocatoria->tipo->nombre}}
-                                {{$convocatoria->fecha}}
-                                {{$convocatoria->acta}}
-                            </div>
-                        @endforeach
+                                <button type="submit" name="comision" value="{{$comision->id}}">    
+                                    {{$comision->nombre}}
+                                </button>  
+                            </div>   
+                            @endforeach
+                        </form>
                     </div>
                 </div>
             </div>

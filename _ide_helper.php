@@ -2273,22 +2273,14 @@ namespace Illuminate\Support\Facades {
      * @see \Illuminate\View\Compilers\BladeCompiler
      */        class Blade {
                     /**
-         * Returns a regex pattern to match an HTML tag and its contents.
-         *
-         * @static 
-         */        public static function regexForTag($tag)
-        {
-                        return \ProtoneMedia\Splade\CustomBladeCompiler::regexForTag($tag);
-        }
-                    /**
          * Compile the view at the given path.
          *
          * @param string|null $path
          * @return void 
          * @static 
          */        public static function compile($path = null)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->compile($path);
         }
                     /**
@@ -2297,8 +2289,8 @@ namespace Illuminate\Support\Facades {
          * @return string 
          * @static 
          */        public static function getPath()
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->getPath();
         }
                     /**
@@ -2308,8 +2300,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function setPath($path)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->setPath($path);
         }
                     /**
@@ -2319,8 +2311,8 @@ namespace Illuminate\Support\Facades {
          * @return string 
          * @static 
          */        public static function compileString($value)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->compileString($value);
         }
                     /**
@@ -2332,8 +2324,8 @@ namespace Illuminate\Support\Facades {
          * @return string 
          * @static 
          */        public static function render($string, $data = [], $deleteCachedView = false)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        return \ProtoneMedia\Splade\CustomBladeCompiler::render($string, $data, $deleteCachedView);
+        {
+                        return \Illuminate\View\Compilers\BladeCompiler::render($string, $data, $deleteCachedView);
         }
                     /**
          * Render a component instance to HTML.
@@ -2342,8 +2334,8 @@ namespace Illuminate\Support\Facades {
          * @return string 
          * @static 
          */        public static function renderComponent($component)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        return \ProtoneMedia\Splade\CustomBladeCompiler::renderComponent($component);
+        {
+                        return \Illuminate\View\Compilers\BladeCompiler::renderComponent($component);
         }
                     /**
          * Strip the parentheses from the given expression.
@@ -2352,8 +2344,8 @@ namespace Illuminate\Support\Facades {
          * @return string 
          * @static 
          */        public static function stripParentheses($expression)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->stripParentheses($expression);
         }
                     /**
@@ -2363,8 +2355,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function extend($compiler)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->extend($compiler);
         }
                     /**
@@ -2373,8 +2365,8 @@ namespace Illuminate\Support\Facades {
          * @return array 
          * @static 
          */        public static function getExtensions()
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->getExtensions();
         }
                     /**
@@ -2385,8 +2377,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function if($name, $callback)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->if($name, $callback);
         }
                     /**
@@ -2397,8 +2389,8 @@ namespace Illuminate\Support\Facades {
          * @return bool 
          * @static 
          */        public static function check($name, ...$parameters)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->check($name, ...$parameters);
         }
                     /**
@@ -2410,8 +2402,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function component($class, $alias = null, $prefix = '')
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->component($class, $alias, $prefix);
         }
                     /**
@@ -2422,8 +2414,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function components($components, $prefix = '')
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->components($components, $prefix);
         }
                     /**
@@ -2432,8 +2424,8 @@ namespace Illuminate\Support\Facades {
          * @return array 
          * @static 
          */        public static function getClassComponentAliases()
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->getClassComponentAliases();
         }
                     /**
@@ -2444,8 +2436,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function anonymousComponentPath($path, $prefix = null)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->anonymousComponentPath($path, $prefix);
         }
                     /**
@@ -2456,8 +2448,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function anonymousComponentNamespace($directory, $prefix = null)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->anonymousComponentNamespace($directory, $prefix);
         }
                     /**
@@ -2468,8 +2460,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function componentNamespace($namespace, $prefix)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->componentNamespace($namespace, $prefix);
         }
                     /**
@@ -2478,8 +2470,8 @@ namespace Illuminate\Support\Facades {
          * @return array 
          * @static 
          */        public static function getAnonymousComponentPaths()
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->getAnonymousComponentPaths();
         }
                     /**
@@ -2488,8 +2480,8 @@ namespace Illuminate\Support\Facades {
          * @return array 
          * @static 
          */        public static function getAnonymousComponentNamespaces()
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->getAnonymousComponentNamespaces();
         }
                     /**
@@ -2498,8 +2490,8 @@ namespace Illuminate\Support\Facades {
          * @return array 
          * @static 
          */        public static function getClassComponentNamespaces()
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->getClassComponentNamespaces();
         }
                     /**
@@ -2510,8 +2502,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function aliasComponent($path, $alias = null)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->aliasComponent($path, $alias);
         }
                     /**
@@ -2522,8 +2514,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function include($path, $alias = null)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->include($path, $alias);
         }
                     /**
@@ -2534,8 +2526,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function aliasInclude($path, $alias = null)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->aliasInclude($path, $alias);
         }
                     /**
@@ -2547,8 +2539,8 @@ namespace Illuminate\Support\Facades {
          * @throws \InvalidArgumentException
          * @static 
          */        public static function directive($name, $handler)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->directive($name, $handler);
         }
                     /**
@@ -2557,19 +2549,19 @@ namespace Illuminate\Support\Facades {
          * @return array 
          * @static 
          */        public static function getCustomDirectives()
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->getCustomDirectives();
         }
                     /**
          * Indicate that the following callable should be used to prepare strings for compilation.
          *
          * @param callable $callback
-         * @return \ProtoneMedia\Splade\CustomBladeCompiler 
+         * @return \Illuminate\View\Compilers\BladeCompiler 
          * @static 
          */        public static function prepareStringsForCompilationUsing($callback)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->prepareStringsForCompilationUsing($callback);
         }
                     /**
@@ -2579,8 +2571,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function precompiler($precompiler)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->precompiler($precompiler);
         }
                     /**
@@ -2590,8 +2582,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function setEchoFormat($format)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->setEchoFormat($format);
         }
                     /**
@@ -2600,8 +2592,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function withDoubleEncoding()
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->withDoubleEncoding();
         }
                     /**
@@ -2610,8 +2602,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function withoutDoubleEncoding()
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->withoutDoubleEncoding();
         }
                     /**
@@ -2620,8 +2612,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function withoutComponentTags()
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->withoutComponentTags();
         }
                     /**
@@ -2632,7 +2624,7 @@ namespace Illuminate\Support\Facades {
          * @static 
          */        public static function getCompiledPath($path)
         {            //Method inherited from \Illuminate\View\Compilers\Compiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->getCompiledPath($path);
         }
                     /**
@@ -2644,7 +2636,7 @@ namespace Illuminate\Support\Facades {
          * @static 
          */        public static function isExpired($path)
         {            //Method inherited from \Illuminate\View\Compilers\Compiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->isExpired($path);
         }
                     /**
@@ -2654,8 +2646,8 @@ namespace Illuminate\Support\Facades {
          * @return string 
          * @static 
          */        public static function newComponentHash($component)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        return \ProtoneMedia\Splade\CustomBladeCompiler::newComponentHash($component);
+        {
+                        return \Illuminate\View\Compilers\BladeCompiler::newComponentHash($component);
         }
                     /**
          * Compile a class component opening.
@@ -2667,8 +2659,8 @@ namespace Illuminate\Support\Facades {
          * @return string 
          * @static 
          */        public static function compileClassComponentOpening($component, $alias, $data, $hash)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        return \ProtoneMedia\Splade\CustomBladeCompiler::compileClassComponentOpening($component, $alias, $data, $hash);
+        {
+                        return \Illuminate\View\Compilers\BladeCompiler::compileClassComponentOpening($component, $alias, $data, $hash);
         }
                     /**
          * Compile the end-component statements into valid PHP.
@@ -2676,8 +2668,8 @@ namespace Illuminate\Support\Facades {
          * @return string 
          * @static 
          */        public static function compileEndComponentClass()
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->compileEndComponentClass();
         }
                     /**
@@ -2687,8 +2679,8 @@ namespace Illuminate\Support\Facades {
          * @return mixed 
          * @static 
          */        public static function sanitizeComponentAttribute($value)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        return \ProtoneMedia\Splade\CustomBladeCompiler::sanitizeComponentAttribute($value);
+        {
+                        return \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($value);
         }
                     /**
          * Compile an end-once block into valid PHP.
@@ -2696,8 +2688,8 @@ namespace Illuminate\Support\Facades {
          * @return string 
          * @static 
          */        public static function compileEndOnce()
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->compileEndOnce();
         }
                     /**
@@ -2708,8 +2700,8 @@ namespace Illuminate\Support\Facades {
          * @return void 
          * @static 
          */        public static function stringable($class, $handler = null)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->stringable($class, $handler);
         }
                     /**
@@ -2719,8 +2711,8 @@ namespace Illuminate\Support\Facades {
          * @return string 
          * @static 
          */        public static function compileEchos($value)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->compileEchos($value);
         }
                     /**
@@ -2730,8 +2722,8 @@ namespace Illuminate\Support\Facades {
          * @return string 
          * @static 
          */        public static function applyEchoHandler($value)
-        {            //Method inherited from \Illuminate\View\Compilers\BladeCompiler         
-                        /** @var \ProtoneMedia\Splade\CustomBladeCompiler $instance */
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->applyEchoHandler($value);
         }
             }
@@ -12274,25 +12266,6 @@ namespace Illuminate\Support\Facades {
         {
                         return \Illuminate\Http\Request::hasValidSignatureWhileIgnoring($ignoreQuery, $absolute);
         }
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerRequestMacros()
-         * @static 
-         */        public static function clearConvertedFiles()
-        {
-                        return \Illuminate\Http\Request::clearConvertedFiles();
-        }
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerRequestMacros()
-         * @param mixed $key
-         * @static 
-         */        public static function orderedSpladeFileUploads($key)
-        {
-                        return \Illuminate\Http\Request::orderedSpladeFileUploads($key);
-        }
             }
             /**
      * 
@@ -13504,42 +13477,6 @@ namespace Illuminate\Support\Facades {
          */        public static function emailVerification()
         {
                         return \Illuminate\Routing\Router::emailVerification();
-        }
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerMacroForBridgeComponent()
-         * @static 
-         */        public static function spladeWithVueBridge()
-        {
-                        return \Illuminate\Routing\Router::spladeWithVueBridge();
-        }
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerMacroForPasswordConfirmation()
-         * @static 
-         */        public static function spladePasswordConfirmation()
-        {
-                        return \Illuminate\Routing\Router::spladePasswordConfirmation();
-        }
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerMacroForFileUploads()
-         * @static 
-         */        public static function spladeUploads()
-        {
-                        return \Illuminate\Routing\Router::spladeUploads();
-        }
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerMacroForTableRoutes()
-         * @static 
-         */        public static function spladeTable()
-        {
-                        return \Illuminate\Routing\Router::spladeTable();
         }
             }
             /**
@@ -17044,15 +16981,6 @@ namespace Illuminate\Support\Facades {
                         /** @var \Illuminate\View\Factory $instance */
                         return $instance->renderTranslation();
         }
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerViewMacros()
-         * @static 
-         */        public static function getFirstSlot()
-        {
-                        return \Illuminate\View\Factory::getFirstSlot();
-        }
             }
             /**
      * 
@@ -18660,793 +18588,169 @@ namespace Barryvdh\DomPDF\Facade {
             }
     }
 
-namespace ProtoneMedia\Splade\Facades {
+namespace Flasher\Laravel\Facade {
             /**
      * 
      *
-     * @see \ProtoneMedia\Splade\TransitionRepository
-     */        class Animation {
+     * @method static NotificationBuilder addSuccess(string $message, array $options = array())
+     * @method static NotificationBuilder addError(string $message, array $options = array())
+     * @method static NotificationBuilder addWarning(string $message, array $options = array())
+     * @method static NotificationBuilder addInfo(string $message, array $options = array())
+     * @method static NotificationBuilder addFlash(NotificationInterface|string $type, string $message = null, array $options = array())
+     * @method static NotificationBuilder flash(StampInterface[] $stamps = array())
+     * @method static NotificationBuilder type(string $type, string $message = null, array $options = array())
+     * @method static NotificationBuilder message(string $message)
+     * @method static NotificationBuilder options(array $options, bool $merge = true)
+     * @method static NotificationBuilder option(string $name, $value)
+     * @method static NotificationBuilder success(string $message = null, array $options = array())
+     * @method static NotificationBuilder error(string $message = null, array $options = array())
+     * @method static NotificationBuilder info(string $message = null, array $options = array())
+     * @method static NotificationBuilder warning(string $message = null, array $options = array())
+     * @method static NotificationBuilder priority(int $priority)
+     * @method static NotificationBuilder hops(int $amount)
+     * @method static NotificationBuilder keep()
+     * @method static NotificationBuilder delay(int $delay)
+     * @method static NotificationBuilder now()
+     * @method static NotificationBuilder with(StampInterface[] $stamps = array())
+     * @method static NotificationBuilder withStamp(StampInterface $stamp)
+     * @method static NotificationBuilder handler(string $handler)
+     * @method static Envelope            getEnvelope()
+     */        class Flasher {
                     /**
-         * Adds an animation to this repository.
+         * Get a driver instance.
          *
-         * @return \ProtoneMedia\Splade\TransitionRepository 
+         * @param string|null $alias
+         * @return \Flasher\Prime\Factory\NotificationFactoryInterface 
+         * @throws \InvalidArgumentException
          * @static 
-         */        public static function add($transitionAnimation)
+         */        public static function create($alias = null)
         {
-                        /** @var \ProtoneMedia\Splade\TransitionRepository $instance */
-                        return $instance->add($transitionAnimation);
+                        /** @var \Flasher\Prime\Flasher $instance */
+                        return $instance->create($alias);
         }
                     /**
-         * Instantiates a new animations and adds it.
+         * Get a driver instance.
          *
-         * @return \ProtoneMedia\Splade\TransitionRepository 
+         * @param string|null $alias
+         * @return \Flasher\Prime\Factory\NotificationFactoryInterface 
+         * @throws \InvalidArgumentException
          * @static 
-         */        public static function new($name, $enter, $enterFrom, $enterTo, $leave, $leaveFrom, $leaveTo)
+         */        public static function using($alias)
         {
-                        /** @var \ProtoneMedia\Splade\TransitionRepository $instance */
-                        return $instance->new($name, $enter, $enterFrom, $enterTo, $leave, $leaveFrom, $leaveTo);
+                        /** @var \Flasher\Prime\Flasher $instance */
+                        return $instance->using($alias);
         }
                     /**
-         * Returns the animation with the given name.
+         * 
          *
-         * @static 
-         */        public static function get($name)
-        {
-                        /** @var \ProtoneMedia\Splade\TransitionRepository $instance */
-                        return $instance->get($name);
-        }
-                    /**
-         * Gathers all used classes in all animations and returns them as an array.
-         *
-         * @static 
-         */        public static function classes()
-        {
-                        /** @var \ProtoneMedia\Splade\TransitionRepository $instance */
-                        return $instance->classes();
-        }
-            }
-            /**
-     * 
-     *
-     */        class SEO {
-                    /**
-         * Setter for the title.
-         *
-         * @return \ProtoneMedia\Splade\Head 
-         * @static 
-         */        public static function title($title, $withPrefixAndSuffix = true)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->title($title, $withPrefixAndSuffix);
-        }
-                    /**
-         * Setter for the canonical URL.
-         *
-         * @return \ProtoneMedia\Splade\Head 
-         * @static 
-         */        public static function canonical($url)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->canonical($url);
-        }
-                    /**
-         * Setter for the description.
-         *
-         * @return \ProtoneMedia\Splade\Head 
-         * @static 
-         */        public static function description($description)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->description($description);
-        }
-                    /**
-         * Setter for the keywords.
-         *
-         * @return \ProtoneMedia\Splade\Head 
-         * @static 
-         */        public static function keywords($keywords)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->keywords($keywords);
-        }
-                    /**
-         * Sets a meta tag by its name attribute.
-         *
-         * @return \ProtoneMedia\Splade\Head 
-         * @static 
-         */        public static function metaByName($name, $content, $replace = true)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->metaByName($name, $content, $replace);
-        }
-                    /**
-         * Sets a meta tag by its property attribute.
-         *
-         * @return \ProtoneMedia\Splade\Head 
-         * @static 
-         */        public static function metaByProperty($property, $content, $replace = true)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->metaByProperty($property, $content, $replace);
-        }
-                    /**
-         * Adds a meta tag by the given attributes.
-         *
-         * @return \ProtoneMedia\Splade\Head 
-         * @static 
-         */        public static function meta($attributes)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->meta($attributes);
-        }
-                    /**
-         * Remove a meta tag that matches the given attributes
-         *
-         * @return void 
-         * @static 
-         */        public static function removeMeta($attributes)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        $instance->removeMeta($attributes);
-        }
-                    /**
-         * Get a Meta instance by name.
-         *
-         * @static 
-         */        public static function getMetaByName($name)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->getMetaByName($name);
-        }
-                    /**
-         * Get a Meta instance by property.
-         *
-         * @static 
-         */        public static function getMetaByProperty($property)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->getMetaByProperty($property);
-        }
-                    /**
-         * Getter for the title.
-         *
-         * @static 
-         */        public static function getTitle()
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->getTitle();
-        }
-                    /**
-         * Returns a HtmlString with the title and the meta tags.
-         *
-         * @static 
-         */        public static function renderHead()
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->renderHead();
-        }
-                    /**
-         * Returns an array with the title and meta tags.
-         *
-         * @static 
-         */        public static function toArray()
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->toArray();
-        }
-                    /**
-         * Returns the array from the 'toArray' method.
-         *
-         * @static 
-         */        public static function jsonSerialize()
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->jsonSerialize();
-        }
-                    /**
-         * Register a custom macro.
-         *
-         * @param string $name
-         * @param object|callable $macro
-         * @return void 
-         * @static 
-         */        public static function macro($name, $macro)
-        {
-                        \ProtoneMedia\Splade\Head::macro($name, $macro);
-        }
-                    /**
-         * Mix another object into the class.
-         *
-         * @param object $mixin
-         * @param bool $replace
-         * @return void 
-         * @throws \ReflectionException
-         * @static 
-         */        public static function mixin($mixin, $replace = true)
-        {
-                        \ProtoneMedia\Splade\Head::mixin($mixin, $replace);
-        }
-                    /**
-         * Checks if macro is registered.
-         *
-         * @param string $name
-         * @return bool 
-         * @static 
-         */        public static function hasMacro($name)
-        {
-                        return \ProtoneMedia\Splade\Head::hasMacro($name);
-        }
-                    /**
-         * Flush the existing macros.
-         *
-         * @return void 
-         * @static 
-         */        public static function flushMacros()
-        {
-                        \ProtoneMedia\Splade\Head::flushMacros();
-        }
-                    /**
-         * Setter for the 'og:type' Meta Property.
-         *
-         * @static 
-         */        public static function openGraphType($value)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->openGraphType($value);
-        }
-                    /**
-         * Setter for the 'og:site_name' Meta Property.
-         *
-         * @static 
-         */        public static function openGraphSiteName($value)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->openGraphSiteName($value);
-        }
-                    /**
-         * Setter for the 'og:title' Meta Property.
-         *
-         * @static 
-         */        public static function openGraphTitle($value)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->openGraphTitle($value);
-        }
-                    /**
-         * Setter for the 'og:url' Meta Property.
-         *
-         * @static 
-         */        public static function openGraphUrl($value)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->openGraphUrl($value);
-        }
-                    /**
-         * Setter for the 'og:image' Meta Property.
-         *
-         * @static 
-         */        public static function openGraphImage($value, $replace = true)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->openGraphImage($value, $replace);
-        }
-                    /**
-         * Setter for the 'twitter:card' Meta Name.
-         *
-         * @static 
-         */        public static function twitterCard($value)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->twitterCard($value);
-        }
-                    /**
-         * Setter for the 'twitter:site' Meta Name.
-         *
-         * @static 
-         */        public static function twitterSite($value)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->twitterSite($value);
-        }
-                    /**
-         * Setter for the 'twitter:title' Meta Name.
-         *
-         * @static 
-         */        public static function twitterTitle($value)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->twitterTitle($value);
-        }
-                    /**
-         * Setter for the 'twitter:description' Meta Name.
-         *
-         * @static 
-         */        public static function twitterDescription($value)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->twitterDescription($value);
-        }
-                    /**
-         * Setter for the 'twitter:image' Meta Name.
-         *
-         * @static 
-         */        public static function twitterImage($value)
-        {
-                        /** @var \ProtoneMedia\Splade\Head $instance */
-                        return $instance->twitterImage($value);
-        }
-            }
-            /**
-     * 
-     *
-     * @method static ?callable getCustomToastFactory(callable $toastFactory):
-     * @method static string modalType()
-     * @see \ProtoneMedia\Splade\SpladeCore
-     */        class Splade {
-                    /**
-         * Returns the root view that's used on the initial request to wrap the content.
-         *
-         * @static 
-         */        public static function getRootView()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->getRootView();
-        }
-                    /**
-         * Setter for the root view.
-         *
-         * @return \ProtoneMedia\Splade\SpladeCore 
-         * @static 
-         */        public static function setRootView($view)
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->setRootView($view);
-        }
-                    /**
-         * Resets the Modal Key, shared data and toasts.
-         *
-         * @return \ProtoneMedia\Splade\SpladeCore 
-         * @static 
-         */        public static function reset()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->reset();
-        }
-                    /**
-         * Getter for the Head instance.
-         *
-         * @static 
-         */        public static function head()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->head();
-        }
-                    /**
-         * Returns the Modal Key.
-         *
-         * @static 
-         */        public static function getModalKey()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->getModalKey();
-        }
-                    /**
-         * Setter for the Modal Key.
-         *
-         * @return \ProtoneMedia\Splade\SpladeCore 
-         * @static 
-         */        public static function setModalKey($key)
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->setModalKey($key);
-        }
-                    /**
-         * Returns the Persistent Layout Key.
-         *
-         * @static 
-         */        public static function getPersistentLayoutKey()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->getPersistentLayoutKey();
-        }
-                    /**
-         * Setter for the Persistent Layout Key.
-         *
-         * @return \ProtoneMedia\Splade\SpladeCore 
-         * @static 
-         */        public static function setPersistentLayoutKey($key)
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->setPersistentLayoutKey($key);
-        }
-                    /**
-         * Increases the amount of Lazy Components and returns the latest key.
-         *
-         * @static 
-         */        public static function newLazyComponentKey()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->newLazyComponentKey();
-        }
-                    /**
-         * Resets the Lazy Components counter.
-         *
-         * @return \ProtoneMedia\Splade\SpladeCore 
-         * @static 
-         */        public static function resetLazyComponentCounter()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->resetLazyComponentCounter();
-        }
-                    /**
-         * Increases the amount of Rehydrate Components and returns the latest key.
-         *
-         * @static 
-         */        public static function newRehydrateComponentKey()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->newRehydrateComponentKey();
-        }
-                    /**
-         * Resets the Rehydrate Components counter.
-         *
-         * @return \ProtoneMedia\Splade\SpladeCore 
-         * @static 
-         */        public static function resetRehydrateComponentCounter()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->resetRehydrateComponentCounter();
-        }
-                    /**
-         * Resets the Persistent Layout key.
-         *
-         * @return \ProtoneMedia\Splade\SpladeCore 
-         * @static 
-         */        public static function resetPersistentLayoutKey()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->resetPersistentLayoutKey();
-        }
-                    /**
-         * Sets a callable that defines how a default Toast.
-         *
-         * @return \ProtoneMedia\Splade\SpladeCore 
-         * @static 
-         */        public static function defaultToast($toastFactory)
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->defaultToast($toastFactory);
-        }
-                    /**
-         * Returns the custom toast factory.
-         *
-         * @static 
-         */        public static function getCustomToastFactory()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->getCustomToastFactory();
-        }
-                    /**
-         * Resolves the given value if this is the initial request.
-         *
-         * @param mixed $value
+         * @param array<string, mixed> $criteria
+         * @param string $presenter
+         * @param array<string, mixed> $context
          * @return mixed 
+         * @phpstan-return ($presenter is 'html' ? string : mixed)
          * @static 
-         */        public static function onInit($value)
+         */        public static function render($criteria = [], $presenter = 'html', $context = [])
         {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->onInit($value);
+                        /** @var \Flasher\Prime\Flasher $instance */
+                        return $instance->render($criteria, $presenter, $context);
         }
                     /**
-         * Resolves the given value if this a Splade request.
+         * Register a custom driver creator.
          *
-         * @param mixed $value
-         * @return mixed 
+         * @param string $alias
+         * @param callable|\Flasher\Prime\Factory\NotificationFactoryInterface $factory
+         * @return static 
          * @static 
-         */        public static function onLazy($value)
+         */        public static function addFactory($alias, $factory)
         {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->onLazy($value);
-        }
-                    /**
-         * Returns a new EventRefresh instance.
-         *
-         * @static 
-         */        public static function refreshOnEvent()
-        {
-                        return \ProtoneMedia\Splade\SpladeCore::refreshOnEvent();
-        }
-                    /**
-         * Returns a new EventRedirectFactory instance.
-         *
-         * @static 
-         */        public static function redirectOnEvent()
-        {
-                        return \ProtoneMedia\Splade\SpladeCore::redirectOnEvent();
-        }
-                    /**
-         * Returns a new instance of the ToastBuilder.
-         *
-         * @static 
-         */        public static function toastBuilder()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->toastBuilder();
-        }
-                    /**
-         * Returns a new SpladeToast instance
-         *
-         * @static 
-         */        public static function toastOnEvent($message = '')
-        {
-                        return \ProtoneMedia\Splade\SpladeCore::toastOnEvent($message);
-        }
-                    /**
-         * Returns a Closure that prevents generating a response from
-         * a ValidationException when this is a Splade request.
-         *
-         * @static 
-         */        public static function exceptionHandler($exceptionHandler, $renderUsing = null)
-        {
-                        return \ProtoneMedia\Splade\SpladeCore::exceptionHandler($exceptionHandler, $renderUsing);
-        }
-                    /**
-         * Returns a new SpladeToast instance, optionally with the given message
-         * if it isn't empty, and it uses the custom toast factory if set.
-         *
-         * @static 
-         */        public static function toast($message = '')
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->toast($message);
-        }
-                    /**
-         * Getter for the Shared Data.
-         *
-         * @static 
-         */        public static function getShared()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->getShared();
-        }
-                    /**
-         * Returns all registered Data Stores.
-         *
-         * @static 
-         */        public static function getDataStores()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->getDataStores();
-        }
-                    /**
-         * Adds a new Data Store.
-         *
-         * @static 
-         */        public static function addDataStore($store)
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->addDataStore($store);
-        }
-                    /**
-         * Resets the Data Stores.
-         *
-         * @return \ProtoneMedia\Splade\SpladeCore 
-         * @static 
-         */        public static function resetDataStores()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->resetDataStores();
-        }
-                    /**
-         * Sets data on the shared data array.
-         *
-         * @param mixed $value
-         * @return \ProtoneMedia\Splade\SpladeCore 
-         * @static 
-         */        public static function share($key, $value)
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->share($key, $value);
-        }
-                    /**
-         * Getter for the toasts.
-         *
-         * @static 
-         */        public static function getToasts()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->getToasts();
-        }
-                    /**
-         * Returns a boolean whether this is a Splade request.
-         *
-         * @static 
-         */        public static function isSpladeRequest()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->isSpladeRequest();
-        }
-                    /**
-         * Returns a boolean whether this is a Modal request.
-         *
-         * @static 
-         */        public static function isModalRequest()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->isModalRequest();
-        }
-                    /**
-         * Returns a boolean whether the response should prevent a
-         * page request on the front end.
-         *
-         * @static 
-         */        public static function dontRefreshPage()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->dontRefreshPage();
-        }
-                    /**
-         * Returns a boolean whether the next page should preserve the scroll position.
-         *
-         * @static 
-         */        public static function preserveScroll()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->preserveScroll();
-        }
-                    /**
-         * Returns a boolean whether the next page should not be animated.
-         *
-         * @static 
-         */        public static function preventViewTransition()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->preventViewTransition();
-        }
-                    /**
-         * Returns a boolean whether this is a Lazy request.
-         *
-         * @static 
-         */        public static function isLazyRequest()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->isLazyRequest();
-        }
-                    /**
-         * Returns a boolean whether this is a Rehydrate request.
-         *
-         * @static 
-         */        public static function isRefreshRequest()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->isRefreshRequest();
-        }
-                    /**
-         * Returns a boolean whether this is a Rehydrate request.
-         *
-         * @static 
-         */        public static function isRehydrateRequest()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->isRehydrateRequest();
-        }
-                    /**
-         * Retrieves the Lazy Component key from the request header.
-         *
-         * @static 
-         */        public static function getLazyComponentKey()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->getLazyComponentKey();
-        }
-                    /**
-         * Retrieves the Rehydrate Component key from the request header.
-         *
-         * @static 
-         */        public static function getRehydrateComponentKey()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->getRehydrateComponentKey();
-        }
-                    /**
-         * Returns the Modal type from the request header.
-         *
-         * @static 
-         */        public static function getModalType()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->getModalType();
-        }
-                    /**
-         * Returns the Modal target from the request header.
-         *
-         * @return string 
-         * @static 
-         */        public static function getModalTarget()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->getModalTarget();
-        }
-                    /**
-         * Returns a JSON response that indicates that the Splade frontend
-         * should redirect to an external URL.
-         *
-         * @static 
-         */        public static function redirectAway($targetUrl)
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->redirectAway($targetUrl);
-        }
-                    /**
-         * Indicates whether every resource needs a valid transformer.
-         *
-         * @static 
-         */        public static function requireTransformer($value = true)
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->requireTransformer($value);
-        }
-                    /**
-         * Adds a transformer for the given class.
-         *
-         * @static 
-         */        public static function transformUsing($class, $transformer = null)
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->transformUsing($class, $transformer);
-        }
-                    /**
-         * Finds the transformer for the given class.
-         *
-         * @static 
-         */        public static function findTransformerFor($instance)
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->findTransformerFor($instance);
-        }
-                    /**
-         * Setter for the 'defaultModalCloseExplicitly' property.
-         *
-         * @static 
-         */        public static function defaultModalCloseExplicitly($value = true)
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->defaultModalCloseExplicitly($value);
-        }
-                    /**
-         * Getter for the 'defaultModalCloseExplicitly' property.
-         *
-         * @static 
-         */        public static function getDefaultModalCloseExplicitly()
-        {
-                        /** @var \ProtoneMedia\Splade\SpladeCore $instance */
-                        return $instance->getDefaultModalCloseExplicitly();
+                        /** @var \Flasher\Prime\Flasher $instance */
+                        return $instance->addFactory($alias, $factory);
         }
             }
+    }
+
+namespace Flasher\Toastr\Laravel\Facade {
             /**
      * 
      *
-     * @method static self title(string $title)
-     * @method static self message(string $message)
-     * @method static self backdrop(bool $value = true)
-     * @method static self autoDismiss(int $afterSeconds = 15)
-     * @method static self position(string $x, string $y)
-     * @method static self leftTop(string $message = '')
-     * @method static self centerTop(string $message = '')
-     * @method static self rightTop(string $message = '')
-     * @method static self leftCenter(string $message = '')
-     * @method static self center(string $message = '')
-     * @method static self rightCenter(string $message = '')
-     * @method static self leftBottom(string $message = '')
-     * @method static self centerBottom(string $message = '')
-     * @method static self rightBottom(string $message = '')
-     * @method static self info(string $message = '')
-     * @method static self success(string $message = '')
-     * @method static self warning(string $message = '')
-     * @method static self danger(string $message = '')
-     * @method static self style(string $style)
-     * @see \ProtoneMedia\Splade\SpladeToast
-     */        class Toast {
+     * @method static ToastrBuilder addSuccess(string $message, array $options = array())
+     * @method static ToastrBuilder addError(string $message, array $options = array())
+     * @method static ToastrBuilder addWarning(string $message, array $options = array())
+     * @method static ToastrBuilder addInfo(string $message, array $options = array())
+     * @method static ToastrBuilder addFlash(NotificationInterface|string $type, string $message = null, array $options = array())
+     * @method static ToastrBuilder flash(StampInterface[] $stamps = array())
+     * @method static ToastrBuilder type(string $type, string $message = null, array $options = array())
+     * @method static ToastrBuilder message(string $message)
+     * @method static ToastrBuilder options(array $options, bool $merge = true)
+     * @method static ToastrBuilder option(string $name, $value)
+     * @method static ToastrBuilder success(string $message = null, array $options = array())
+     * @method static ToastrBuilder error(string $message = null, array $options = array())
+     * @method static ToastrBuilder info(string $message = null, array $options = array())
+     * @method static ToastrBuilder warning(string $message = null, array $options = array())
+     * @method static ToastrBuilder priority(int $priority)
+     * @method static ToastrBuilder hops(int $amount)
+     * @method static ToastrBuilder keep()
+     * @method static ToastrBuilder delay(int $delay)
+     * @method static ToastrBuilder now()
+     * @method static ToastrBuilder with(StampInterface[] $stamps = array())
+     * @method static ToastrBuilder withStamp(StampInterface $stamp)
+     * @method static ToastrBuilder handler(string $handler)
+     * @method static Envelope      getEnvelope()
+     * @method static ToastrBuilder title(string $title)
+     * @method static ToastrBuilder closeButton(bool $closeButton = true)
+     * @method static ToastrBuilder closeClass(string $closeClass)
+     * @method static ToastrBuilder closeDuration(int $closeDuration)
+     * @method static ToastrBuilder closeEasing(string $closeEasing)
+     * @method static ToastrBuilder closeHtml(string $closeHtml)
+     * @method static ToastrBuilder closeMethod(string $closeMethod)
+     * @method static ToastrBuilder closeOnHover(bool $closeOnHover = true)
+     * @method static ToastrBuilder containerId(string $containerId)
+     * @method static ToastrBuilder debug(bool $debug = true)
+     * @method static ToastrBuilder escapeHtml(bool $escapeHtml = true)
+     * @method static ToastrBuilder extendedTimeOut(int $extendedTimeOut)
+     * @method static ToastrBuilder hideDuration(int $hideDuration)
+     * @method static ToastrBuilder hideEasing(string $hideEasing)
+     * @method static ToastrBuilder hideMethod(string $hideMethod)
+     * @method static ToastrBuilder iconClass(string $iconClass)
+     * @method static ToastrBuilder messageClass(string $messageClass)
+     * @method static ToastrBuilder newestOnTop(bool $newestOnTop = true)
+     * @method static ToastrBuilder onHidden(string $onHidden)
+     * @method static ToastrBuilder onShown(string $onShown)
+     * @method static ToastrBuilder positionClass(string $positionClass)
+     * @method static ToastrBuilder preventDuplicates(bool $preventDuplicates = true)
+     * @method static ToastrBuilder progressBar(bool $progressBar = true)
+     * @method static ToastrBuilder progressClass(string $progressClass)
+     * @method static ToastrBuilder rtl(bool $rtl = true)
+     * @method static ToastrBuilder showDuration(int $showDuration)
+     * @method static ToastrBuilder showEasing(string $showEasing)
+     * @method static ToastrBuilder showMethod(string $showMethod)
+     * @method static ToastrBuilder tapToDismiss(bool $tapToDismiss = true)
+     * @method static ToastrBuilder target(string $target)
+     * @method static ToastrBuilder timeOut(int $timeOut, bool $extendedTimeOut = null)
+     * @method static ToastrBuilder titleClass(string $titleClass)
+     * @method static ToastrBuilder toastClass(string $toastClass)
+     * @method static ToastrBuilder persistent()
+     */        class Toastr {
+                    /**
+         * 
+         *
+         * @return \Flasher\Prime\Factory\NotificationBuilderInterface 
+         * @static 
+         */        public static function createNotificationBuilder()
+        {
+                        /** @var \Flasher\Toastr\Prime\ToastrFactory $instance */
+                        return $instance->createNotificationBuilder();
+        }
+                    /**
+         * 
+         *
+         * @return \Flasher\Prime\Factory\StorageManagerInterface 
+         * @static 
+         */        public static function getStorageManager()
+        {            //Method inherited from \Flasher\Prime\Factory\NotificationFactory         
+                        /** @var \Flasher\Toastr\Prime\ToastrFactory $instance */
+                        return $instance->getStorageManager();
+        }
             }
     }
 
@@ -19885,25 +19189,6 @@ namespace Illuminate\Http {
         {
                         return \Illuminate\Http\Request::hasValidSignatureWhileIgnoring($ignoreQuery, $absolute);
         }
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerRequestMacros()
-         * @static 
-         */        public static function clearConvertedFiles()
-        {
-                        return \Illuminate\Http\Request::clearConvertedFiles();
-        }
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerRequestMacros()
-         * @param mixed $key
-         * @static 
-         */        public static function orderedSpladeFileUploads($key)
-        {
-                        return \Illuminate\Http\Request::orderedSpladeFileUploads($key);
-        }
             }
             /**
      * 
@@ -19929,20 +19214,6 @@ namespace Illuminate\Http {
          */        public static function storeOnCloudinaryAs($folder = null, $publicId = null)
         {
                         return \Illuminate\Http\UploadedFile::storeOnCloudinaryAs($folder, $publicId);
-        }
-            }
-            /**
-     * 
-     *
-     */        class Response {
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerResponseMacro()
-         * @static 
-         */        public static function skipSpladeMiddleware()
-        {
-                        return \Illuminate\Http\Response::skipSpladeMiddleware();
         }
             }
     }
@@ -20000,42 +19271,6 @@ namespace Illuminate\Routing {
         {
                         return \Illuminate\Routing\Router::emailVerification();
         }
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerMacroForBridgeComponent()
-         * @static 
-         */        public static function spladeWithVueBridge()
-        {
-                        return \Illuminate\Routing\Router::spladeWithVueBridge();
-        }
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerMacroForPasswordConfirmation()
-         * @static 
-         */        public static function spladePasswordConfirmation()
-        {
-                        return \Illuminate\Routing\Router::spladePasswordConfirmation();
-        }
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerMacroForFileUploads()
-         * @static 
-         */        public static function spladeUploads()
-        {
-                        return \Illuminate\Routing\Router::spladeUploads();
-        }
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerMacroForTableRoutes()
-         * @static 
-         */        public static function spladeTable()
-        {
-                        return \Illuminate\Routing\Router::spladeTable();
-        }
             }
             /**
      * 
@@ -20061,59 +19296,6 @@ namespace Illuminate\Routing {
         {
                         return \Illuminate\Routing\Route::permission($permissions);
         }
-            }
-    }
-
-namespace Illuminate\View {
-            /**
-     * 
-     *
-     */        class Factory {
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerViewMacros()
-         * @static 
-         */        public static function getFirstSlot()
-        {
-                        return \Illuminate\View\Factory::getFirstSlot();
-        }
-            }
-            /**
-     * 
-     *
-     */        class ComponentAttributeBag {
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerViewMacros()
-         * @param mixed $attributes
-         * @static 
-         */        public static function rejectWhenBlank($attributes)
-        {
-                        return \Illuminate\View\ComponentAttributeBag::rejectWhenBlank($attributes);
-        }
-                    /**
-         * 
-         *
-         * @see \ProtoneMedia\Splade\ServiceProvider::registerViewMacros()
-         * @param mixed $attribute
-         * @param mixed $value
-         * @param bool $omitBlankValue
-         * @param bool $escape
-         * @static 
-         */        public static function mergeVueBinding($attribute, $value, $omitBlankValue = true, $escape = true)
-        {
-                        return \Illuminate\View\ComponentAttributeBag::mergeVueBinding($attribute, $value, $omitBlankValue, $escape);
-        }
-            }
-    }
-
-namespace Illuminate\Foundation\Http {
-            /**
-     * 
-     *
-     */        class FormRequest {
             }
     }
 
@@ -23619,10 +22801,8 @@ namespace  {
             class Helper extends \App\Helpers\Helper {}
             class Pdf extends \Barryvdh\DomPDF\Facade\Pdf {}
             class PDF extends \Barryvdh\DomPDF\Facade\Pdf {}
-            class Animation extends \ProtoneMedia\Splade\Facades\Animation {}
-            class SEO extends \ProtoneMedia\Splade\Facades\SEO {}
-            class Splade extends \ProtoneMedia\Splade\Facades\Splade {}
-            class Toast extends \ProtoneMedia\Splade\Facades\Toast {}
+            class Flasher extends \Flasher\Laravel\Facade\Flasher {}
+            class Toastr extends \Flasher\Toastr\Laravel\Facade\Toastr {}
             class Flare extends \Spatie\LaravelIgnition\Facades\Flare {}
     }
 

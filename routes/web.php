@@ -42,7 +42,8 @@ Route::get('/logout', function () {
 
 // PÚBLICO
 Route::get('/', [PublicoController::class, 'index'])->name('welcome');
-Route::get('/info', [PublicoController::class, 'info'])->name('infoPublica');
+Route::get('/info_junta', [PublicoController::class, 'infoJunta'])->name('infoJunta');
+Route::get('/info_comision', [PublicoController::class, 'infoComision'])->name('infoComision');
 Route::get('login', [PublicoController::class, 'login'])->name('login');
 Route::post('/centro/all', [CentrosController::class, 'all']);
 Route::post('/centro/get', [CentrosController::class, 'get']);

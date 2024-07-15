@@ -1,9 +1,9 @@
-<nav class="bg-white fixed top-0 w-full z-50">
+<nav class="bg-white fixed top-0 w-full z-50 border-b">
     <div class="mx-auto max-w-full sm:px-4 lg:px-8">
         <div class="flex items-center justify-between h-20 ml-2">
                 <div class="flex transition-all duration-200 ease-in-out">
                     <a href="{{ route('welcome') }}">
-                        <img class="h-12" src="{{ asset('img/logo.png') }}" alt="logo_ucomi" />
+                        <img class="h-12 transition ease-in-out hover:scale-105" src="{{ asset('img/logo.png') }}" alt="logo_ucomi" />
                     </a>
                 </div> 
                            

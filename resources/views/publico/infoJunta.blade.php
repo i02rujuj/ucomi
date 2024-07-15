@@ -6,13 +6,13 @@
 
 @section('contentTop')
 
-    <div class="flex divide-x mb-8 mt-20 items-center justify-evenly w-full">
-        <div class=" px-10">
+    <div class="flex divide-x mb-4 mt-24 items-center justify-evenly w-full">
+        <div class="px-10">
             <img src="{{ asset('img/inicio1.png') }}" alt="LogoUCO" class="rounded-lg w-60 h-28 object-cover transition ease-in-out hover:scale-105" />
         </div>
 
         <div class="max-lg:hidden px-10 lg:text-2xl text-gray-600 text-center">
-            Junta de @if($centro!=null) {{$centro->tipo->nombre}} {{$centro->nombre}} @endif
+            Junta de @if($centro->idTipo!=3) {{$centro->tipo->nombre}} @endif {{$centro->nombre}}
         </div>
 
         <div class="px-10">
@@ -38,26 +38,38 @@
             <ul class="flex justify-start border-b mb-4">
                 <li @click="openTab = 0" :class="{ '-mb-px': openTab === 1 }" class="-mb-px mr-1" @click.prevent="tab = 0">
                     <a href="#" :class="openTab === 0 ? activeClasses : inactiveClasses"
-                        class="bg-white inline-block py-2 px-4">
-                        Información
+                        class="flex gap-2 bg-white py-2 px-4">
+                        <span class="material-icons-round">
+                            info
+                        </span>
+                        <span class="max-sm:hidden">Información</span>
                     </a>
                 </li>
                 <li @click="openTab = 1" :class="{ '-mb-px': openTab === 1 }" class="-mb-px mr-1" @click.prevent="tab = 1">
                     <a href="#" :class="openTab === 1 ? activeClasses : inactiveClasses"
-                        class="bg-white inline-block py-2 px-4">
-                        Composición
+                        class="flex gap-2 bg-white py-2 px-4">
+                        <span class="material-icons-round">
+                            groups
+                        </span>
+                        <span class="max-sm:hidden">Composición</span>
                     </a>
                 </li>
                 <li @click="openTab = 2" :class="{ '-mb-px': openTab === 2 }" class="mr-1" @click.prevent="tab = 2">
                     <a href="#" :class="openTab === 2 ? activeClasses : inactiveClasses"
-                        class="bg-white inline-block py-2 px-4">
-                        Actas
+                        class="flex gap-2 bg-white py-2 px-4">
+                        <span class="material-icons-round">
+                            description
+                        </span>
+                        <span class="max-sm:hidden">Actas</span>
                     </a>
                 </li>
                 <li @click="openTab = 3" :class="{ '-mb-px': openTab === 3 }" class="mr-1" @click.prevent="tab = 3">
                     <a href="#" :class="openTab === 3 ? activeClasses : inactiveClasses"
-                        class="bg-white inline-block py-2 px-4">
-                        Comisiones
+                        class="flex gap-2 bg-white py-2 px-4">
+                        <span class="material-icons-round">
+                            send
+                        </span>
+                        <span class="max-sm:hidden">Comisiones</span>
                     </a>
                 </li>
             </ul>
@@ -67,11 +79,11 @@
                 {{--INFORMACIÓN--}}
                 <div x-show="openTab === 0">
                     <div class="ml-4 text-lg">
-                        <div class="ml-4">
+                        <div class="ml-4 mt-2 font-semibold">
                             Junta de @if($junta->centro->idTipo!=3) {{$junta->centro->tipo->nombre}} @endif {{$junta->centro->nombre}}
                         </div>
-                        <div class="ml-4">
-                            Fecha constitución: {{$junta->fechaConstitucion}}
+                        <div class="ml-4 mt-2">
+                            - Fecha constitución: {{$junta->fechaConstitucion}}
                         </div>
                     </div>
                 </div>
@@ -86,8 +98,8 @@
                             </div>
                             <div>
                                 @foreach ($junta->directores as $miembro)
-                                    <div class="ml-4">
-                                        {{$miembro->usuario->name}}
+                                    <div class="ml-4 mt-1">
+                                        - {{$miembro->usuario->name}}
                                     </div>
                                 @endforeach
                             </div>
@@ -99,8 +111,8 @@
                             </div>
                             <div>
                                 @foreach ($junta->secretarios as $miembro)
-                                    <div class="ml-4">
-                                        {{$miembro->usuario->name}}
+                                    <div class="ml-4 mt-1">
+                                        - {{$miembro->usuario->name}}
                                     </div>                        
                                 @endforeach
                             </div>
@@ -112,8 +124,8 @@
                             </div>
                             <div>
                                 @foreach ($junta->profesoradoVinculacionPermanente as $miembro)
-                                    <div class="ml-4">
-                                        {{$miembro->usuario->name}}
+                                    <div class="ml-4 mt-1">
+                                        - {{$miembro->usuario->name}}
                                     </div>                        
                                 @endforeach
                             </div>
@@ -125,8 +137,8 @@
                             </div>
                             <div>
                                 @foreach ($junta->profesoradoOtro as $miembro)
-                                    <div class="ml-4">
-                                        {{$miembro->usuario->name}}
+                                    <div class="ml-4 mt-1">
+                                        - {{$miembro->usuario->name}}
                                     </div>                        
                                 @endforeach
                             </div>
@@ -138,8 +150,8 @@
                             </div>
                             <div>
                                 @foreach ($junta->PAS as $miembro)
-                                    <div class="ml-4">
-                                        {{$miembro->usuario->name}}
+                                    <div class="ml-4 mt-1">
+                                        - {{$miembro->usuario->name}}
                                     </div>                        
                                 @endforeach
                             </div>
@@ -151,8 +163,8 @@
                             </div>
                             <div>
                                 @foreach ($junta->alumnado as $miembro)
-                                    <div class="ml-4">
-                                        {{$miembro->usuario->name}}
+                                    <div class="ml-4 mt-1">
+                                        - {{$miembro->usuario->name}}
                                     </div>                        
                                 @endforeach
                             </div>
@@ -163,8 +175,8 @@
                         </div>
                         <div>
                             @foreach ($junta->designados as $miembro)
-                                <div>
-                                    {{$miembro->usuario->name}}
+                                <div class="ml-4 mt-1">
+                                    - {{$miembro->usuario->name}}
                                 </div>                        
                             @endforeach
                         </div>--}}
@@ -173,14 +185,19 @@
 
                 {{--ACTAS--}}
                 <div x-show="openTab === 2">
-                    <div class="ml-4 mt-5 text-lg">                          
-                        @foreach ($junta->convocatorias as $convocatoria)
-                            <div class="ml-4">
-                                {{$convocatoria->tipo->nombre}}
-                                {{$convocatoria->fecha}}
-                                {{$convocatoria->acta}}
-                            </div>
-                        @endforeach
+                    <div class="ml-4 mt-5 text-lg">  
+                        <form action="{{ route('infoComision') }}" method="GET">                          
+                            @foreach ($junta->convocatorias as $convocatoria)
+                                <div class="ml-4 mt-1">
+                                    <button type="submit" name="acta" value="{{$convocatoria->acta}}" class="rounded-md hover:text-white hover:bg-gray-700 px-2">    
+                                        <span class="material-icons-round scale-75">
+                                            picture_as_pdf
+                                        </span>
+                                        Convocatoria {{$convocatoria->tipo->nombre}} | {{$convocatoria->fecha}}
+                                    </button>  
+                                </div>
+                            @endforeach
+                        </form>
                     </div>
                 </div>
 
@@ -189,8 +206,11 @@
                     <div class="ml-4 mt-5 text-lg"> 
                         <form action="{{ route('infoComision') }}" method="GET">                         
                             @foreach ($junta->comisiones as $comision)
-                            <div class="ml-4">
-                                <button type="submit" name="comision" value="{{$comision->id}}">    
+                            <div class="ml-4 mt-1">
+                                <button type="submit" name="comision" value="{{$comision->id}}" class="flex gap-2 rounded-md hover:text-white hover:bg-gray-700 px-2">    
+                                    <span class="material-icons-round scale-75">
+                                        send
+                                    </span>
                                     {{$comision->nombre}}
                                 </button>  
                             </div>   

@@ -1,34 +1,44 @@
 @extends('layouts.app')
 
 @section ('title')
-    Información Pública @if($centro!=null) {{$centro->tipo->nombre}} {{$centro->nombre}} @endif
+    Información Pública @if($comision!=null) {{$comision->nombre}} @endif
 @endsection
 
 @section('contentTop')
 
-    <div class="flex divide-x mb-8 mt-20 items-center justify-evenly w-full">
+    <div class="flex divide-x mb-8 mt-24 items-center justify-evenly w-full">
         <div class=" px-10">
             <img src="{{ asset('img/inicio1.png') }}" alt="LogoUCO" class="rounded-lg w-60 h-28 object-cover transition ease-in-out hover:scale-105" />
         </div>
 
         <div class="max-lg:hidden px-10 lg:text-2xl text-gray-600 text-center">
-            Junta de @if($centro!=null) {{$centro->tipo->nombre}} {{$centro->nombre}} @endif
+            <div>
+                Junta de @if($comision->junta->centro->idTipo!=3) {{$comision->junta->centro->tipo->nombre}} @endif {{$comision->junta->centro->nombre}} 
+            </div>
+            <div>
+                Comisión de @if($comision!=null) {{$comision->nombre}} @endif
+            </div>
         </div>
 
         <div class="px-10">
-            <img src="{{$centro->logo}}" alt="LogoCentro" class="w-28 h-28 rounded-lg object-cover transition ease-in-out hover:scale-105" />
+            <img src="{{$comision->junta->centro->logo}}" alt="LogoCentro" class="w-28 h-28 rounded-lg object-cover transition ease-in-out hover:scale-105" />
         </div>
     </div>
 
     <div class="hidden max-lg:block px-10 text-2xl text-gray-600 text-center my-8">
-        Junta de @if($centro->idTipo!=3) {{$centro->tipo->nombre}} @endif {{$centro->nombre}}
+        <div>
+            Junta de @if($comision->junta->centro->idTipo!=3) {{$comision->junta->centro->tipo->nombre}} @endif {{$comision->junta->centro->nombre}} 
+        </div>
+        <div>
+            Comisión de @if($comision!=null) {{$comision->nombre}} @endif
+        </div>
     </div>
 
 @endsection
 
 @section('content')
 <div class="mx-auto lg:px-36 md:px-10 w-full mb-32 text-gray-600">
-    @if($junta!=null)
+    @if($comision!=null)
         <div x-data="{ 
             openTab: 0,
             activeClasses: 'border-l border-t border-r rounded-t text-grey-700 font-semibold',
@@ -54,12 +64,6 @@
                         Actas
                     </a>
                 </li>
-                <li @click="openTab = 3" :class="{ '-mb-px': openTab === 3 }" class="mr-1" @click.prevent="tab = 3">
-                    <a href="#" :class="openTab === 3 ? activeClasses : inactiveClasses"
-                        class="bg-white inline-block py-2 px-4">
-                        Comisiones
-                    </a>
-                </li>
             </ul>
 
             <div class="w-full">
@@ -67,114 +71,59 @@
                 {{--INFORMACIÓN--}}
                 <div x-show="openTab === 0">
                     <div class="ml-4 text-lg">
-                        <div class="ml-4">
-                            Junta de @if($junta->centro->idTipo!=3) {{$junta->centro->tipo->nombre}} @endif {{$junta->centro->nombre}}
+                        <div class="ml-4 font-semibold">
+                            Comisión de @if($comision!=null) {{$comision->nombre}} @endif
                         </div>
                         <div class="ml-4">
-                            Fecha constitución: {{$junta->fechaConstitucion}}
+                            Fecha constitución: {{$comision->fechaConstitucion}}
+                        </div>
+                        <div class="ml-4">
+                            Pertenece a la Junta de @if($comision->junta->centro->idTipo!=3) {{$comision->junta->centro->tipo->nombre}} @endif {{$comision->junta->centro->nombre}} con fecha de constitución {{$comision->junta->fechaConstitucion}}
                         </div>
                     </div>
                 </div>
 
                 {{--COMPOSICIÓN--}}
                 <div x-show="openTab === 1">
-                    <div class="ml-4">
 
-                        <div class="mb-3">
-                            <div class="text-md font-bold">
-                                Director/a
-                            </div>
-                            <div>
-                                @foreach ($junta->directores as $miembro)
-                                    <div class="ml-4">
-                                        {{$miembro->usuario->name}}
-                                    </div>
+                    <div class="ml-4 mb-3 relative overflow-x-auto">
+                        <table class="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead class="text-md text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="px-1 py-1">
+                                        Nombre
+                                    </th>
+                                    <th scope="col" class="px-1 py-1">
+                                        Sector
+                                    </th>
+                                    <th scope="col" class="px-1 py-1 text-center">
+                                        Cargo
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($comision->miembros as $miembro)
+                                    <tr class="border-b">
+                                        <th scope="col" class="px-1 py-1">
+                                            {{$miembro->usuario->name}}
+                                        </th>
+                                        <th scope="col" class="px-1 py-1">
+                                            {{$miembro->representacion->nombre}}
+                                        </th>
+                                        <th scope="col" class="px-1 py-1 text-center">
+                                            {{$miembro->representacion->cargo}}
+                                        </th>
+                                    </tr>                      
                                 @endforeach
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="text-md font-bold">
-                                Secretario/a
-                            </div>
-                            <div>
-                                @foreach ($junta->secretarios as $miembro)
-                                    <div class="ml-4">
-                                        {{$miembro->usuario->name}}
-                                    </div>                        
-                                @endforeach
-                            </div>
-                        </div>
-            
-                        <div class="mb-3">
-                            <div class="text-md font-bold">
-                                Representantes de profesorado con vinculación permanente adscritos al Centro
-                            </div>
-                            <div>
-                                @foreach ($junta->profesoradoVinculacionPermanente as $miembro)
-                                    <div class="ml-4">
-                                        {{$miembro->usuario->name}}
-                                    </div>                        
-                                @endforeach
-                            </div>
-                        </div>
-            
-                        <div class="mb-3">
-                            <div class="text-md font-bold">
-                                Representantes de otro Personal Docente e Investigador adscrito al Centro
-                            </div>
-                            <div>
-                                @foreach ($junta->profesoradoOtro as $miembro)
-                                    <div class="ml-4">
-                                        {{$miembro->usuario->name}}
-                                    </div>                        
-                                @endforeach
-                            </div>
-                        </div>
-            
-                        <div class="mb-3">
-                            <div class="text-md font-bold">
-                                Representantes del Personal de Administración y Servicios
-                            </div>
-                            <div>
-                                @foreach ($junta->PAS as $miembro)
-                                    <div class="ml-4">
-                                        {{$miembro->usuario->name}}
-                                    </div>                        
-                                @endforeach
-                            </div>
-                        </div>
-            
-                        <div class="mb-3">
-                            <div class="text-md font-bold">
-                                Representantes de los Estudiantes del titulos oficiales tutelados por el Centro
-                            </div>
-                            <div>
-                                @foreach ($junta->alumnado as $miembro)
-                                    <div class="ml-4">
-                                        {{$miembro->usuario->name}}
-                                    </div>                        
-                                @endforeach
-                            </div>
-                        </div>
-            
-                        {{--<div class="text-md font-bold">
-                            Designados por el director
-                        </div>
-                        <div>
-                            @foreach ($junta->designados as $miembro)
-                                <div>
-                                    {{$miembro->usuario->name}}
-                                </div>                        
-                            @endforeach
-                        </div>--}}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
                 {{--ACTAS--}}
                 <div x-show="openTab === 2">
                     <div class="ml-4 mt-5 text-lg">                          
-                        @foreach ($junta->convocatorias as $convocatoria)
+                        @foreach ($comision->convocatorias as $convocatoria)
                             <div class="ml-4">
                                 {{$convocatoria->tipo->nombre}}
                                 {{$convocatoria->fecha}}
@@ -183,26 +132,11 @@
                         @endforeach
                     </div>
                 </div>
-
-                {{--COMISIONES--}}
-                <div x-show="openTab === 3">
-                    <div class="ml-4 mt-5 text-lg"> 
-                        <form action="{{ route('infoPublica') }}" method="GET">                         
-                            @foreach ($junta->comisiones as $comision)
-                            <div class="ml-4">
-                                <button type="submit" name="comision" value="{{$comision->id}}">    
-                                    {{$comision->nombre}}
-                                </button>  
-                            </div>   
-                            @endforeach
-                        </form>
-                    </div>
-                </div>
             </div>
         </div>
     @else
         <div class="mt-32">
-            Actualmente no se encuentra información disponible sobre el centro seleccionado
+            Actualmente no se encuentra información disponible sobre la comisión seleccionada
         </div>
     @endif
 </div>

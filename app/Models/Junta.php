@@ -28,7 +28,8 @@ class Junta extends Model
 
     public function miembrosJunta()
     {
-        return $this->hasMany(MiembroJunta::class, 'idJunta');
+        return $this->hasMany(MiembroJunta::class, 'idJunta')
+            ->orderBy('idRepresentacion');
     }
 
     public function miembrosGobierno()
@@ -56,6 +57,30 @@ class Junta extends Model
     {
         return $this->hasMany(MiembroJunta::class, 'idJunta')
             ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.SECRETARIO'));
+    }
+
+    public function profesoradoVinculacionPermanente()
+    {
+        return $this->hasMany(MiembroJunta::class, 'idJunta')
+            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.DOCENTE'));
+    }
+
+    public function profesoradoOtro()
+    {
+        return $this->hasMany(MiembroJunta::class, 'idJunta')
+            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.DOCENTE_OTRO'));
+    }
+
+    public function PAS()
+    {
+        return $this->hasMany(MiembroJunta::class, 'idJunta')
+            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.PAS'));
+    }
+
+    public function alumnado()
+    {
+        return $this->hasMany(MiembroJunta::class, 'idJunta')
+            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.ALUMNADO'));
     }
 
     public function scopeFilters(Builder $query, Request $request){

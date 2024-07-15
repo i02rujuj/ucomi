@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Junta;
 use App\Models\Centro;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,10 +22,28 @@ class PublicoController extends Controller
     
     public function info(Request $request)
     {
-        $idCentro = $request->get('idCentro');
-        $centros = Centro::get();
+        if($request->get('centro')){
+            $centro = Centro::
+                where('id', $request->get('centro'))
+                ->first();
 
-        return view('publico.infoPublica',['idCentro' => $idCentro, 'centros' => $centros]);
+                if($centro){
+                    $juntaActual = null;
+
+                    if($request->get('centro')!=null){
+                        $juntaActual = Junta::
+                            with('miembrosJunta')
+                            ->where('idCentro', $request->get('centro'))
+                            ->whereNull('fechaDisolucion')
+                            ->orderBy('created_at')
+                            ->first();
+                    }
+        
+                    return view('publico.infoPublica',['junta' => $juntaActual, 'centro' => $centro]);
+                }
+        }   
+        
+        return redirect()->route('welcome');
     }
     
     public function login(Request $request)

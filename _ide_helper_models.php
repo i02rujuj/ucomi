@@ -172,6 +172,10 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $PAS
+ * @property-read int|null $p_a_s_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $alumnado
+ * @property-read int|null $alumnado_count
  * @property-read \App\Models\Centro $centro
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Comision> $comisiones
  * @property-read int|null $comisiones_count
@@ -183,6 +187,10 @@ namespace App\Models{
  * @property-read int|null $miembros_gobierno_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $miembrosJunta
  * @property-read int|null $miembros_junta_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $profesoradoOtro
+ * @property-read int|null $profesorado_otro_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $profesoradoVinculacionPermanente
+ * @property-read int|null $profesorado_vinculacion_permanente_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $secretarios
  * @property-read int|null $secretarios_count
  * @method static \Illuminate\Database\Eloquent\Builder|Junta filters(\Illuminate\Http\Request $request)

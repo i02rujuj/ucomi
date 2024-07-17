@@ -17,7 +17,7 @@ class TipoCentro extends Model
     protected $primaryKey = 'id';
     
     //Campos
-    protected $fillable = ['nombre', 'estado'];
+    protected $fillable = ['nombre'];
 
     public function centros()
     {

@@ -19,22 +19,17 @@ class Junta extends Model
      protected $primaryKey = 'id';
      
      //Campos
-     protected $fillable = ['idCentro','fechaConstitucion', 'fechaDisolucion'];
+     protected $fillable = ['idCentro','fechaConstitucion', 'fechaDisolucion', 'descripcion'];
 
      public function centro()
     {
         return $this->belongsTo(Centro::class, 'idCentro');
     }
 
-    public function miembrosJunta()
+    public function miembros()
     {
         return $this->hasMany(MiembroJunta::class, 'idJunta')
             ->orderBy('idRepresentacion');
-    }
-
-    public function miembrosGobierno()
-    {
-        return $this->hasMany(MiembroGobierno::class, 'idJunta');
     }
 
     public function comisiones()
@@ -47,40 +42,46 @@ class Junta extends Model
         return $this->hasMany(Convocatoria::class, 'idJunta');
     }
 
-    public function directores()
+    public function miembrosDIR()
     {
         return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.DIRECTOR'));
+            ->where('idRepresentacion', config('constants.REPRESENTACIONES.JUNTA.DIR'));
     }
 
-    public function secretarios()
+    public function miembrosSECRE()
     {
         return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.SECRETARIO'));
+            ->where('idRepresentacion', config('constants.REPRESENTACIONES.JUNTA.SECRE'));
     }
 
-    public function profesoradoVinculacionPermanente()
+    public function miembrosPDI_VP()
     {
         return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.DOCENTE'));
+            ->where('idRepresentacion', config('constants.REPRESENTACIONES.JUNTA.PDI_VP'));
     }
 
-    public function profesoradoOtro()
+    public function miembrosPDI()
     {
         return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.DOCENTE_OTRO'));
+            ->where('idRepresentacion', config('constants.REPRESENTACIONES.JUNTA.PDI'));
     }
 
-    public function PAS()
+    public function miembrosPAS()
     {
         return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.PAS'));
+            ->where('idRepresentacion', config('constants.REPRESENTACIONES.JUNTA.PAS'));
     }
 
-    public function alumnado()
+    public function miembrosEST()
     {
         return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.ALUMNADO'));
+            ->where('idRepresentacion', config('constants.REPRESENTACIONES.JUNTA.EST'));
+    }
+
+    public function miembrosLIBRE()
+    {
+        return $this->hasMany(MiembroJunta::class, 'idJunta')
+            ->where('idRepresentacion', config('constants.REPRESENTACIONES.JUNTA.LIBRE'));
     }
 
     public function scopeFilters(Builder $query, Request $request){

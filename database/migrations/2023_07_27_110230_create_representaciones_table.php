@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('representaciones_general', function (Blueprint $table) {
+        Schema::create('representaciones', function (Blueprint $table) {
                 $table->id();
                 $table->string('nombre');
+                $table->integer('tipoJunta')->default(0);
+                $table->integer('tipoComision')->default(0);
                 $table->timestamps();
                 $table->softDeletes();
             });
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('representaciones_general');
+        Schema::dropIfExists('representaciones');
     }
 };

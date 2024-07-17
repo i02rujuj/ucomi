@@ -21,8 +21,6 @@ class MiembroJuntaFactory extends Factory
     {
         return [
             'idUsuario' => $this->faker->randomElement(User::query()
-                ->leftjoin('miembros_gobierno', 'miembros_gobierno.idUsuario', '=', 'users.id')
-                ->where('miembros_gobierno.id', null)
                 ->leftjoin('miembros_junta', 'miembros_junta.idUsuario', '=', 'users.id')
                 ->where('miembros_junta.id', null)
                 ->get('users.id')),

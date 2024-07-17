@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Junta;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class JuntaSeeder extends Seeder
 {
@@ -15,14 +14,15 @@ class JuntaSeeder extends Seeder
     {
         $juntas =[
             [
-                'idCentro'=>9, // EPS
+                'idCentro' => 9, // EPS UCO
+                'fechaConstitucion' => '2022-12-02',
             ],
         ];
 
         foreach($juntas as $j){
             $junta = new Junta();
             $junta->idCentro = $j['idCentro'];
-            $junta->fechaConstitucion = now();
+            $junta->fechaConstitucion = $j['fechaConstitucion'];
             $junta->fechaDisolucion= null;
             $junta->save();
         }

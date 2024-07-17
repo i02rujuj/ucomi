@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('idCentro');
             $table->date('fechaConstitucion');
             $table->date('fechaDisolucion')->nullable();
+            $table->string('descripcion')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

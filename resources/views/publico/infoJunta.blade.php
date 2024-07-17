@@ -12,7 +12,7 @@
         </div>
 
         <div class="max-lg:hidden px-10 lg:text-2xl text-gray-600 text-center">
-            Junta de @if($centro->idTipo!=3) {{$centro->tipo->nombre}} @endif {{$centro->nombre}}
+            Junta de @if($centro->idTipo!=config('constants.TIPOS_CENTRO.OTRO')) {{$centro->tipo->nombre}} @endif {{$centro->nombre}}
         </div>
 
         <div class="px-10">
@@ -21,7 +21,7 @@
     </div>
 
     <div class="hidden max-lg:block px-10 text-2xl text-gray-600 text-center my-8">
-        Junta de @if($centro->idTipo!=3) {{$centro->tipo->nombre}} @endif {{$centro->nombre}}
+        Junta de @if($centro->idTipo!=config('constants.TIPOS_CENTRO.OTRO')) {{$centro->tipo->nombre}} @endif {{$centro->nombre}}
     </div>
 
 @endsection
@@ -80,7 +80,7 @@
                 <div x-show="openTab === 0">
                     <div class="ml-4 text-lg">
                         <div class="ml-4 mt-2 font-semibold">
-                            Junta de @if($junta->centro->idTipo!=3) {{$junta->centro->tipo->nombre}} @endif {{$junta->centro->nombre}}
+                            Junta de @if($junta->centro->idTipo!=config('constants.TIPOS_CENTRO.OTRO')) {{$junta->centro->tipo->nombre}} @endif {{$junta->centro->nombre}}
                         </div>
                         <div class="ml-4 mt-2">
                             - Fecha constitución: {{$junta->fechaConstitucion}}
@@ -97,7 +97,7 @@
                                 Director/a
                             </div>
                             <div>
-                                @foreach ($junta->directores as $miembro)
+                                @foreach ($junta->miembrosDIR as $miembro)
                                     <div class="ml-4 mt-1">
                                         - {{$miembro->usuario->name}}
                                     </div>
@@ -110,7 +110,7 @@
                                 Secretario/a
                             </div>
                             <div>
-                                @foreach ($junta->secretarios as $miembro)
+                                @foreach ($junta->miembrosSECRE as $miembro)
                                     <div class="ml-4 mt-1">
                                         - {{$miembro->usuario->name}}
                                     </div>                        
@@ -123,7 +123,7 @@
                                 Representantes de profesorado con vinculación permanente adscritos al Centro
                             </div>
                             <div>
-                                @foreach ($junta->profesoradoVinculacionPermanente as $miembro)
+                                @foreach ($junta->miembrosPDI_VP as $miembro)
                                     <div class="ml-4 mt-1">
                                         - {{$miembro->usuario->name}}
                                     </div>                        
@@ -133,10 +133,10 @@
             
                         <div class="mb-3">
                             <div class="text-md font-bold">
-                                Representantes de otro Personal Docente e Investigador adscrito al Centro
+                                Representantes de Personal Docente e Investigador adscrito al Centro
                             </div>
                             <div>
-                                @foreach ($junta->profesoradoOtro as $miembro)
+                                @foreach ($junta->miembrosPDI as $miembro)
                                     <div class="ml-4 mt-1">
                                         - {{$miembro->usuario->name}}
                                     </div>                        
@@ -149,7 +149,7 @@
                                 Representantes del Personal de Administración y Servicios
                             </div>
                             <div>
-                                @foreach ($junta->PAS as $miembro)
+                                @foreach ($junta->miembrosPAS as $miembro)
                                     <div class="ml-4 mt-1">
                                         - {{$miembro->usuario->name}}
                                     </div>                        
@@ -162,7 +162,7 @@
                                 Representantes de los Estudiantes del titulos oficiales tutelados por el Centro
                             </div>
                             <div>
-                                @foreach ($junta->alumnado as $miembro)
+                                @foreach ($junta->miembrosEST as $miembro)
                                     <div class="ml-4 mt-1">
                                         - {{$miembro->usuario->name}}
                                     </div>                        
@@ -174,7 +174,7 @@
                             Designados por el director
                         </div>
                         <div>
-                            @foreach ($junta->designados as $miembro)
+                            @foreach ($junta->miembrosLIBRES as $miembro)
                                 <div class="ml-4 mt-1">
                                     - {{$miembro->usuario->name}}
                                 </div>                        

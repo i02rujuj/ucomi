@@ -2,26 +2,25 @@
 
 namespace App\Models;
 
-use App\Models\MiembroGobierno;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class RepresentacionGobierno extends Model
+class Representacion extends Model
 {
     use HasFactory, SoftDeletes;
 
     // Tabla
-    protected $table = 'representaciones_gobierno'; 
+    protected $table = 'representaciones'; 
 
     //Primary Key
     protected $primaryKey = 'id';
     
     //Campos
-    protected $fillable = ['nombre'];
+    protected $fillable = ['nombre', 'tipoJunta', 'tipoComision'];
 
-    public function miembrosGobierno()
+    public function miembrosJunta()
     {
-        return $this->hasMany(MiembroGobierno::class, 'idTipo');
+        return $this->hasMany(MiembroJunta::class, 'idTipo');
     }
 }

@@ -15,20 +15,22 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('idJunta');
             $table->unsignedBigInteger('idUsuario');
-
-            // No permitir duplicados en la combinación de los siguientes campos y que tampoco sea nullable (Simular clave primaria compuesta en laravel)
-            $table->unique(['idJunta', 'idUsuario']);
-
+            $table->unsignedBigInteger('idRepresentacion');
             $table->date('fechaTomaPosesion');
             $table->date('fechaCese')->nullable();
             $table->integer('responsable')->default(0);
-            $table->unsignedBigInteger('idRepresentacion');
             $table->timestamps();
             $table->softDeletes();
+            $table->string('vigente'); // Mantenida por trigger
+            $table->string('activo'); // Mantenida por trigger
 
             $table->foreign('idJunta')->references('id')->on('juntas');
             $table->foreign('idUsuario')->references('id')->on('users');
-            $table->foreign('idRepresentacion')->references('id')->on('representaciones_general');
+            $table->foreign('idRepresentacion')->references('id')->on('representaciones');
+
+            // Simular clave primaria compuesta en laravel: No permitir duplicados en la combinación de los siguientes campos y que tampoco sean null cada campo
+            // Solamente podrá haber un usuario relacionado con una determinada junta vigente y activa 
+            $table->unique(['idJunta', 'idUsuario', 'vigente', 'activo']);
         });
     }
 

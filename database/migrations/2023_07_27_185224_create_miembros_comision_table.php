@@ -15,21 +15,23 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('idComision');
             $table->unsignedBigInteger('idUsuario');
-
-            // No permitir duplicados en la combinación de los siguientes campos y que tampoco sea nullable (Simular clave primaria compuesta en laravel)
-            $table->unique(['idComision', 'idUsuario']);
-
+            $table->unsignedBigInteger('idRepresentacion');
+            $table->string('cargo')->nullable();
             $table->date('fechaTomaPosesion');
             $table->date('fechaCese')->nullable();
             $table->integer('responsable')->default(0);
-            $table->integer('presidente')->default(0);
-            $table->unsignedBigInteger('idRepresentacion');
             $table->timestamps();
             $table->softDeletes();
+            $table->string('vigente'); // Mantenida por trigger
+            $table->string('activo'); // Mantenida por trigger
 
             $table->foreign('idComision')->references('id')->on('comisiones');
             $table->foreign('idUsuario')->references('id')->on('users');
-            $table->foreign('idRepresentacion')->references('id')->on('representaciones_general');
+            $table->foreign('idRepresentacion')->references('id')->on('representaciones');
+
+            // Simular clave primaria compuesta en laravel: No permitir duplicados en la combinación de los siguientes campos y que tampoco sean null cada campo
+            // Solamente podrá haber un usuario relacionado con una determinada comisión vigente y activa 
+            $table->unique(['idComision', 'idUsuario', 'vigente', 'activo']);
         });
     }
 

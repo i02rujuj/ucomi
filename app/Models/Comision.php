@@ -19,7 +19,7 @@ class Comision extends Model
      protected $primaryKey = 'id';
      
      //Campos
-     protected $fillable = ['idJunta', 'nombre', 'descripcion', 'fechaConstitucion', 'fechaDisolucion'];
+     protected $fillable = ['idJunta', 'nombre', 'fechaConstitucion', 'fechaDisolucion', 'descripcion'];
 
     public function junta()
     {

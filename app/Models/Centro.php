@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\TipoCentro;
 use Illuminate\Http\Request;
-use App\Models\MiembroGobierno;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,11 +25,6 @@ class Centro extends Model
     public function juntas()
     {
         return $this->hasMany(Junta::class, 'idCentro');
-    }
-
-    public function miembros()
-    {
-        return $this->hasMany(MiembroGobierno::class, 'idCentro');
     }
 
     public function tipo()

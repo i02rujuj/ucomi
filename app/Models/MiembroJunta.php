@@ -19,7 +19,7 @@ class MiembroJunta extends Model
      protected $primaryKey = 'id';
      
      //Campos
-     protected $fillable = ['idJunta','idUsuario', 'fechaTomaPosesion', 'fechaCese', 'idRepresentacion', 'responsable'];
+     protected $fillable = ['idJunta','idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable'];
  
      public function junta()
      {
@@ -33,7 +33,7 @@ class MiembroJunta extends Model
  
      public function representacion()
      {
-         return $this->belongsTo(RepresentacionGeneral::class, 'idRepresentacion');
+         return $this->belongsTo(Representacion::class, 'idRepresentacion');
      }
 
      public function scopeFilters(Builder $query, Request $request){

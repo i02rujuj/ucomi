@@ -23,6 +23,9 @@ return new class extends Migration
         
             $table->foreign('idConvocatoria')->references('id')->on('convocatorias');
             $table->foreign('idUsuario')->references('id')->on('users');
+
+            // Simular clave primaria compuesta en laravel: No permitir duplicados en la combinación de los siguientes campos y que tampoco sean null cada campo
+            $table->unique(['idConvocatoria', 'idUsuario']);
         });
     }
 

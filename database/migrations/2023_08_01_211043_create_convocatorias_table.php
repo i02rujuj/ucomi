@@ -27,6 +27,11 @@ return new class extends Migration
             $table->foreign('idJunta')->references('id')->on('juntas');
             $table->foreign('idTipo')->references('id')->on('tipos_convocatoria');
         });
+  
+        // Restricción para poner a null idComision si idJunta tiene valor o viceversa
+        // No pueden estar rellenas las dos
+        DB::statement('ALTER TABLE convocatorias ADD CONSTRAINT chk_idComisionNull_idJuntaNull_convocatoria CHECK (idComision is NULL or idJunta is not null);');
+        DB::statement('ALTER TABLE convocatorias ADD CONSTRAINT chk_idJuntaNull_idComision_convocatoria CHECK (idJunta is NULL or idComision is not null);');
     }
 
     /**

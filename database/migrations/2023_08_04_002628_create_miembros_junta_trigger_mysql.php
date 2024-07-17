@@ -16,12 +16,12 @@ return new class extends Migration
     {
         if(env('DB_CONNECTION')=="mysql"){
 
-            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert_miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update_miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert_miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update_miembros_junta');
 
-            DB::unprepared("CREATE TRIGGER add_vigente_insert BEFORE INSERT ON miembros_gobierno
+            DB::unprepared("CREATE TRIGGER add_vigente_insert_miembros_junta BEFORE INSERT ON miembros_junta
                         FOR EACH ROW
                         BEGIN
                             IF NEW.fechaCese IS NULL
@@ -33,7 +33,7 @@ return new class extends Migration
                         END
                         ");
 
-            DB::unprepared("CREATE TRIGGER add_vigente_update BEFORE UPDATE ON miembros_gobierno
+            DB::unprepared("CREATE TRIGGER add_vigente_update_miembros_junta BEFORE UPDATE ON miembros_junta
                         FOR EACH ROW
                         BEGIN
                             IF NEW.fechaCese IS NULL
@@ -45,7 +45,7 @@ return new class extends Migration
                             END
                         ");
 
-            DB::unprepared("CREATE TRIGGER add_activo_insert BEFORE INSERT ON miembros_gobierno
+            DB::unprepared("CREATE TRIGGER add_activo_insert_miembros_junta BEFORE INSERT ON miembros_junta
                         FOR EACH ROW
                         BEGIN
                             IF NEW.deleted_at IS NULL
@@ -57,7 +57,7 @@ return new class extends Migration
                         END
                         ");
 
-            DB::unprepared("CREATE TRIGGER add_activo_str_update BEFORE UPDATE ON miembros_gobierno
+            DB::unprepared("CREATE TRIGGER add_activo_str_update_miembros_junta BEFORE UPDATE ON miembros_junta
                         FOR EACH ROW
                         BEGIN
                             IF NEW.deleted_at IS NULL
@@ -78,10 +78,10 @@ return new class extends Migration
     public function down(): void
     {
         if(env('DB_CONNECTION')=="mysql"){
-            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert_miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update_miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert_miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update_miembros_junta');
         }
     }
 };

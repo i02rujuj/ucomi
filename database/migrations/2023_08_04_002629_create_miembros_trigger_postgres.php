@@ -15,10 +15,15 @@ return new class extends Migration
     public function up(): void
     {
         if(env('DB_CONNECTION')=="pgsql"){
-            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert ON miembros_gobierno');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update ON miembros_gobierno');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert ON miembros_gobierno');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update ON miembros_gobierno');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert_miembros_junta ON miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update_miembros_junta ON miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert_miembros_junta ON miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update_miembros_junta ON miembros_junta');
+
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert_miembros_comision ON miembros_comision');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update_miembros_comision ON miembros_comision');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert_miembros_comision ON miembros_comision');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update_miembros_comision ON miembros_comision');
     
             DB::unprepared("CREATE OR REPLACE FUNCTION add_vigente_insert_func() RETURNS TRIGGER AS $$
                             BEGIN
@@ -104,10 +109,15 @@ return new class extends Migration
     public function down(): void
     {
         if(env('DB_CONNECTION')=="pgsql"){
-            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert ON miembros_gobierno');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update ON miembros_gobierno');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert ON miembros_gobierno');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update ON miembros_gobierno');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert ON miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update ON miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert ON miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update ON miembros_junta');
+
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert_miembros_comision ON miembros_comision');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update_miembros_comision ON miembros_comision');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert_miembros_comision ON miembros_comision');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update_miembros_comision ON miembros_comision');
         }
     }
 };

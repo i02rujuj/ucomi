@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\TipoConvocatoria;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,9 +19,7 @@ class DatabaseSeeder extends Seeder
             TipoCentroSeeder::class,
             CentroSeeder::class,
             JuntaSeeder::class,
-            RepresentacionGobiernoSeeder::class,
-            MiembroGobiernoSeeder::class,
-            RepresentacionGeneralSeeder::class,
+            RepresentacionSeeder::class,
             MiembroJuntaSeeder::class,
             TipoConvocatoriaSeeder::class,
             ComisionSeeder::class,

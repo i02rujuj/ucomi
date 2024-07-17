@@ -33,7 +33,7 @@ class PublicoController extends Controller
 
                     if($request->get('centro')!=null){
                         $juntaActual = Junta::
-                            with('miembrosJunta')
+                            with('miembros')
                             ->where('idCentro', $request->get('centro'))
                             ->whereNull('fechaDisolucion')
                             ->orderBy('created_at')

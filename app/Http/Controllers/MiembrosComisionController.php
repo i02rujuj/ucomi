@@ -7,12 +7,10 @@ use App\Models\User;
 use App\Models\Junta;
 use App\Models\Centro;
 use App\Models\Comision;
-use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
 use App\Models\MiembroComision;
-use App\Models\MiembroGobierno;
 use Illuminate\Support\Facades\Auth;
-use App\Models\RepresentacionGeneral;
+use App\Models\Representacion;
 use Illuminate\Support\Facades\Validator;
 
 class MiembrosComisionController extends Controller
@@ -80,7 +78,7 @@ class MiembrosComisionController extends Controller
             ->paginate(10);
 
             $users = User::select('id', 'name')->get();
-            $representacionesGeneral = RepresentacionGeneral::select('id', 'nombre')->get();   
+            $representacionesGeneral = Representacion::select('id', 'nombre')->get();   
             $centros = Centro::select('id', 'nombre')->get();
             $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion')->get(); 
             
@@ -204,10 +202,10 @@ class MiembrosComisionController extends Controller
         $rules = [
             'idComision' => 'required|integer|exists:App\Models\Comision,id',
             'idUsuario' => 'required|integer|exists:App\Models\User,id',
-            'idRepresentacion' => 'required|integer|exists:App\Models\RepresentacionGeneral,id',
+            'idRepresentacion' => 'required|integer|exists:App\Models\Representacion,id',
             'fechaTomaPosesion' => 'required|date',
             'fechaCese' => 'nullable|date',
-            'idRepresentacion' => 'required|integer|exists:App\Models\RepresentacionGeneral,id',
+            'idRepresentacion' => 'required|integer|exists:App\Models\Representacion,id',
         ];
 
         $rules_message = [

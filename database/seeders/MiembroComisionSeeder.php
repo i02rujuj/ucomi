@@ -1067,7 +1067,7 @@ class MiembroComisionSeeder extends Seeder
             $miembro->fechaTomaPosesion = $m['fechaTomaPosesion'];
             $miembro->fechaCese = null;
             $miembro->idRepresentacion = $m['representacion'];
-            $miembro->cargo = $m['cargo'];
+            isset($m['cargo']) ? $miembro->cargo = $m['cargo'] : null;
             $miembro->responsable = $m['responsable'];
             $miembro->save();
         }

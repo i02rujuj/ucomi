@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('representaciones', function (Blueprint $table) {
                 $table->id();
                 $table->string('nombre');
-                $table->integer('tipoJunta')->default(0);
-                $table->integer('tipoComision')->default(0);
+                $table->integer('deCentro')->default(0);
+                $table->integer('deJunta')->default(0);
+                $table->integer('deComision')->default(0);
                 $table->timestamps();
                 $table->softDeletes();
             });

@@ -9,7 +9,7 @@ use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Models\RepresentacionGeneral;
+use App\Models\Representacion;
 use Illuminate\Support\Facades\Validator;
 
 class MiembrosJuntaController extends Controller
@@ -62,7 +62,7 @@ class MiembrosJuntaController extends Controller
             ->paginate(10);
 
             $users = User::select('id', 'name')->get();
-            $representacionesGeneral = RepresentacionGeneral::select('id', 'nombre')->get();    
+            $representacionesGeneral = Representacion::select('id', 'nombre')->get();    
             
             if($request->input('action')=='limpiar'){
                 return redirect()->route('miembrosJunta')->with([
@@ -176,7 +176,7 @@ class MiembrosJuntaController extends Controller
         $rules = [
             'idJunta' => 'required|integer|exists:App\Models\Junta,id',
             'idUsuario' => 'required|integer|exists:App\Models\User,id',
-            'idRepresentacion' => 'required|integer|exists:App\Models\RepresentacionGeneral,id',
+            'idRepresentacion' => 'required|integer|exists:App\Models\Representacion,id',
             'fechaTomaPosesion' => 'required|date',
             'fechaCese' => 'nullable|date',
         ];

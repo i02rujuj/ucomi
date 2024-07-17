@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Providers\RouteServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
+use Flasher\Prime\Notification\NotificationInterface;
 
 class Responsable
 {
@@ -19,6 +20,7 @@ class Responsable
         $valido = $request->user()->esResponsable($tipos);
 
         if(!$valido){
+            toastr('No tienes suficientes permisos para realizar esta acción', NotificationInterface::ERROR);
             return redirect(RouteServiceProvider::HOME);
         }
 

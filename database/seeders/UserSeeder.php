@@ -30,11 +30,13 @@ class UserSeeder extends Seeder
                 'id' => 3,
                 'nombre'=>'Manuel Cañas Ramírez', 
                 'email'=>'epsc.director@uco.es', 
+                'image' => asset('img/miembrosGobierno/ManoloCanyasRamirez.jpg'),
             ],
             [
                 'id' => 4,
                 'nombre'=>'Luis Manuel Fernández de Ahumada', 
                 'email'=>'epsc.secretaria@uco.es', 
+                'image' => asset('img/miembrosGobierno/LuisManuelFernandezAhumada.jpg'),
             ],
             [
                 'id' => 5,
@@ -184,7 +186,8 @@ class UserSeeder extends Seeder
             [
                 'id' => 34,
                 'nombre'=>'Joost van Duijn', 
-                'email'=>'me2vavaj@uco.es', 
+                'email'=>'me2vavaj@uco.es',
+                'image' => asset('img/miembrosGobierno/JoostVanDuijn.jpg'), 
             ],
             [
                 'id' => 35,
@@ -200,11 +203,13 @@ class UserSeeder extends Seeder
                 'id' => 37,
                 'nombre'=>'Francisco Ramón Lara Raya', 
                 'email'=>'el1laraf@uco.es', 
+                'image' => asset('img/miembrosGobierno/FranciscoRamonLaraRaya.jpg'),
             ],
             [
                 'id' => 38,
                 'nombre'=>'Isabel María Moreno García', 
                 'email'=>'isabel.moreno@uco.es', 
+                'image' => asset('img/miembrosGobierno/IsabelMorenoGarcia.jpg'),
             ],
             [
                 'id' => 39,
@@ -500,6 +505,7 @@ class UserSeeder extends Seeder
             $u->email_verified_at = now();
             $u->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; /* Contraseña: password */
             $u->remember_token = Str::random(10);
+            isset($user['image']) ? $u->image = $user['image'] : null;
             $u->save();
 
             if(isset($user['rol'])){

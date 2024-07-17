@@ -48,19 +48,28 @@
             <ul class="flex justify-start border-b mb-4">
                 <li @click="openTab = 0" :class="{ '-mb-px': openTab === 1 }" class="-mb-px mr-1" @click.prevent="tab = 0">
                     <a href="#" :class="openTab === 0 ? activeClasses : inactiveClasses"
-                        class="bg-white inline-block py-2 px-4">
+                        class="flex gap-2 bg-white py-2 px-4">
+                        <span class="material-icons-round">
+                            send
+                        </span>
                         Información
                     </a>
                 </li>
                 <li @click="openTab = 1" :class="{ '-mb-px': openTab === 1 }" class="-mb-px mr-1" @click.prevent="tab = 1">
                     <a href="#" :class="openTab === 1 ? activeClasses : inactiveClasses"
-                        class="bg-white inline-block py-2 px-4">
+                        class="flex gap-2 bg-white py-2 px-4">
+                        <span class="material-icons-round">
+                            groups
+                        </span>
                         Composición
                     </a>
                 </li>
                 <li @click="openTab = 2" :class="{ '-mb-px': openTab === 2 }" class="mr-1" @click.prevent="tab = 2">
                     <a href="#" :class="openTab === 2 ? activeClasses : inactiveClasses"
-                        class="bg-white inline-block py-2 px-4">
+                        class="flex gap-2 bg-white py-2 px-4">
+                        <span class="material-icons-round">
+                            description
+                        </span>
                         Actas
                     </a>
                 </li>
@@ -86,8 +95,8 @@
                 {{--COMPOSICIÓN--}}
                 <div x-show="openTab === 1">
 
-                    <div class="ml-4 mb-3 relative overflow-x-auto">
-                        <table class="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <div class="ml-4 mb-3">
+                        <table class="w-full text-md text-left rtl:text-right text-gray-700 dark:text-gray-500">
                             <thead class="text-md text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-1 py-1">
@@ -96,7 +105,7 @@
                                     <th scope="col" class="px-1 py-1">
                                         Sector
                                     </th>
-                                    <th scope="col" class="px-1 py-1 text-center">
+                                    <th scope="col" class="px-1 py-1">
                                         Cargo
                                     </th>
                                 </tr>
@@ -104,14 +113,18 @@
                             <tbody>
                                 @foreach ($comision->miembros as $miembro)
                                     <tr class="border-b">
-                                        <th scope="col" class="px-1 py-1">
-                                            {{$miembro->usuario->name}}
+                                        <th scope="col" class="font-normal px-1 py-1">
+                                            @if($miembro->usuario->image)
+                                                <x-imgTooltip text="{{$miembro->usuario->name}}" image="{{$miembro->usuario->image}}" />
+                                            @else
+                                                {{$miembro->usuario->name}}
+                                            @endif
                                         </th>
-                                        <th scope="col" class="px-1 py-1">
+                                        <th scope="col" class="font-normal px-1 py-1">
                                             {{$miembro->representacion->nombre}}
                                         </th>
-                                        <th scope="col" class="px-1 py-1 text-center">
-                                            {{$miembro->representacion->cargo}}
+                                        <th scope="col" class="font-normal px-1 py-1">
+                                            {{$miembro->cargo}}
                                         </th>
                                     </tr>                      
                                 @endforeach

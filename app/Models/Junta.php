@@ -26,10 +26,15 @@ class Junta extends Model
         return $this->belongsTo(Centro::class, 'idCentro');
     }
 
-    public function miembros()
+    public function miembros($representacion=null)
     {
-        return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->orderBy('idRepresentacion');
+        $miembros = $this->hasMany(MiembroJunta::class, 'idJunta');
+
+        if($representacion!=null){
+            $miembros = $miembros->where('idRepresentacion', $representacion);
+        }
+
+        return $miembros->orderBy('idRepresentacion');
     }
 
     public function comisiones()
@@ -40,48 +45,6 @@ class Junta extends Model
     public function convocatorias()
     {
         return $this->hasMany(Convocatoria::class, 'idJunta');
-    }
-
-    public function miembrosDIR()
-    {
-        return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.JUNTA.DIR'));
-    }
-
-    public function miembrosSECRE()
-    {
-        return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.JUNTA.SECRE'));
-    }
-
-    public function miembrosPDI_VP()
-    {
-        return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.JUNTA.PDI_VP'));
-    }
-
-    public function miembrosPDI()
-    {
-        return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.JUNTA.PDI'));
-    }
-
-    public function miembrosPAS()
-    {
-        return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.JUNTA.PAS'));
-    }
-
-    public function miembrosEST()
-    {
-        return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.JUNTA.EST'));
-    }
-
-    public function miembrosLIBRE()
-    {
-        return $this->hasMany(MiembroJunta::class, 'idJunta')
-            ->where('idRepresentacion', config('constants.REPRESENTACIONES.JUNTA.LIBRE'));
     }
 
     public function scopeFilters(Builder $query, Request $request){

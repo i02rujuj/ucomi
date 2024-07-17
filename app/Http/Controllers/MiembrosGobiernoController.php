@@ -8,7 +8,7 @@ use App\Models\Centro;
 use Illuminate\Http\Request;
 use App\Models\MiembroGobierno;
 use Illuminate\Support\Facades\Auth;
-use App\Models\RepresentacionGobierno;
+use App\Models\Representacion;
 use Illuminate\Support\Facades\Validator;
 
 class MiembrosGobiernoController extends Controller
@@ -54,7 +54,7 @@ class MiembrosGobiernoController extends Controller
             ->paginate(10);
 
             $users = User::select('id', 'name')->get();
-            $representacionesGobierno = RepresentacionGobierno::select('id', 'nombre')->get();    
+            $representacionesGobierno = Representacion::select('id', 'nombre')->get();    
             
             if($request->input('action')=='limpiar'){
                 return redirect()->route('miembrosGobierno')->with([
@@ -169,7 +169,7 @@ class MiembrosGobiernoController extends Controller
         $rules = [
             'idCentro' => 'required|integer|exists:App\Models\Centro,id',
             'idUsuario' => 'required|integer|exists:App\Models\User,id',
-            'idRepresentacion' => 'required|integer|exists:App\Models\RepresentacionGobierno,id',
+            'idRepresentacion' => 'required|integer|exists:App\Models\Representacion,id',
             'fechaTomaPosesion' => 'required|date',
             'fechaCese' => 'nullable|date',
             'responsable' => 'nullable|integer'

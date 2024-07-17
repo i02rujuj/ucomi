@@ -36,11 +36,11 @@
         }" class="p-6">
 
             <ul class="flex justify-start border-b mb-4">
-                <li @click="openTab = 0" :class="{ '-mb-px': openTab === 1 }" class="-mb-px mr-1" @click.prevent="tab = 0">
+                <li @click="openTab = 0" :class="{ '-mb-px': openTab === 0 }" class="-mb-px mr-1" @click.prevent="tab = 0">
                     <a href="#" :class="openTab === 0 ? activeClasses : inactiveClasses"
                         class="flex gap-2 bg-white py-2 px-4">
                         <span class="material-icons-round">
-                            info
+                            workspaces
                         </span>
                         <span class="max-sm:hidden">Información</span>
                     </a>
@@ -49,13 +49,22 @@
                     <a href="#" :class="openTab === 1 ? activeClasses : inactiveClasses"
                         class="flex gap-2 bg-white py-2 px-4">
                         <span class="material-icons-round">
+                            account_balance
+                        </span>
+                        <span class="max-sm:hidden">Equipo de Gobierno</span>
+                    </a>
+                </li>
+                <li @click="openTab = 2" :class="{ '-mb-px': openTab === 2 }" class="-mb-px mr-1" @click.prevent="tab = 2">
+                    <a href="#" :class="openTab === 2 ? activeClasses : inactiveClasses"
+                        class="flex gap-2 bg-white py-2 px-4">
+                        <span class="material-icons-round">
                             groups
                         </span>
                         <span class="max-sm:hidden">Composición</span>
                     </a>
                 </li>
-                <li @click="openTab = 2" :class="{ '-mb-px': openTab === 2 }" class="mr-1" @click.prevent="tab = 2">
-                    <a href="#" :class="openTab === 2 ? activeClasses : inactiveClasses"
+                <li @click="openTab = 3" :class="{ '-mb-px': openTab === 3 }" class="mr-1" @click.prevent="tab = 3">
+                    <a href="#" :class="openTab === 3 ? activeClasses : inactiveClasses"
                         class="flex gap-2 bg-white py-2 px-4">
                         <span class="material-icons-round">
                             description
@@ -63,8 +72,8 @@
                         <span class="max-sm:hidden">Actas</span>
                     </a>
                 </li>
-                <li @click="openTab = 3" :class="{ '-mb-px': openTab === 3 }" class="mr-1" @click.prevent="tab = 3">
-                    <a href="#" :class="openTab === 3 ? activeClasses : inactiveClasses"
+                <li @click="openTab = 4" :class="{ '-mb-px': openTab === 4 }" class="mr-1" @click.prevent="tab = 4">
+                    <a href="#" :class="openTab === 4 ? activeClasses : inactiveClasses"
                         class="flex gap-2 bg-white py-2 px-4">
                         <span class="material-icons-round">
                             send
@@ -88,19 +97,117 @@
                     </div>
                 </div>
 
-                {{--COMPOSICIÓN--}}
+                {{--EQUIPO GOBIERNO--}}
                 <div x-show="openTab === 1">
                     <div class="ml-4">
+                        <div class="mb-3">
+                            <div class="text-md font-bold">
+                                Director/a
+                            </div>
+                            @foreach ($junta->centro->miembros(config('constants.REPRESENTACIONES.GOBIERNO.DIR'))->get() as $miembro)  
+                                @if($miembro->usuario->image)
+                                    <div class="ml-4">
+                                        <x-imgTooltip text="- {{$miembro->usuario->name}}" image="{{$miembro->usuario->image}}" />
+                                    </div>
+                                @else
+                                    <div class="ml-4">
+                                        <p class="">- {{$miembro->usuario->name}}</p>
+                                    </div>
+                                @endif
+                                @if ($miembro->cargo)
+                                     <div class="text-sm font-semibold">
+                                        <pre>    {{$miembro->cargo}}</pre>
+                                    </div>
+                                @endif       
+                            @endforeach
+                        </div>
 
+                        <div class="mb-3">
+                            <div class="text-md font-bold">
+                                Secretario/a
+                            </div>
+                            @foreach ($junta->centro->miembros(config('constants.REPRESENTACIONES.GOBIERNO.SECRE'))->get() as $miembro)
+                                @if($miembro->usuario->image)
+                                    <div class="ml-4">
+                                        <x-imgTooltip text="- {{$miembro->usuario->name}}" image="{{$miembro->usuario->image}}" />
+                                    </div>
+                                @else
+                                    <div class="ml-4">
+                                        <p class="">- {{$miembro->usuario->name}}</p>
+                                    </div>
+                                @endif  
+                                @if ($miembro->cargo)
+                                    <div class="text-sm font-semibold">
+                                        <pre>    {{$miembro->cargo}}</pre>
+                                    </div>
+                                @endif                     
+                            @endforeach
+                        </div>
+            
+                        <div class="mb-3">
+                            <div class="text-md font-bold">
+                                Subdirectores
+                            </div>
+                            @foreach ($junta->centro->miembros(config('constants.REPRESENTACIONES.GOBIERNO.SUBDIR'))->get() as $miembro)
+                                @if($miembro->usuario->image)
+                                    <div class="ml-4">
+                                        <x-imgTooltip text="- {{$miembro->usuario->name}}" image="{{$miembro->usuario->image}}" />
+                                    </div>
+                                @else
+                                    <div class="ml-4">
+                                        <p class="">- {{$miembro->usuario->name}}</p>
+                                    </div>
+                                @endif 
+                                @if ($miembro->cargo)
+                                    <div class="text-sm font-semibold">
+                                        <pre>    {{$miembro->cargo}}</pre>
+                                    </div>
+                                @endif           
+                            @endforeach
+                        </div>
+            
+                        <div class="mb-3">
+                            <div class="text-md font-bold">
+                                Designados por el director
+                            </div>
+                            @foreach ($junta->centro->miembros(config('constants.REPRESENTACIONES.JUNTA.LIBRE'))->get() as $miembro)
+                                @if($miembro->usuario->image)
+                                    <div class="ml-4">
+                                        <x-imgTooltip text="- {{$miembro->usuario->name}}" image="{{$miembro->usuario->image}}" />
+                                    </div>
+                                @else
+                                    <div class="ml-4">
+                                        <p class="">- {{$miembro->usuario->name}}</p>
+                                    </div>
+                                @endif    
+                                @if ($miembro->cargo)
+                                    <div class="text-sm font-semibold">
+                                        <pre>    {{$miembro->cargo}}</pre>
+                                    </div>
+                                @endif                   
+                            @endforeach                           
+                        </div>
+                    </div>
+                </div>
+
+                {{--COMPOSICIÓN--}}
+                <div x-show="openTab === 2">
+                    <div class="ml-4">
                         <div class="mb-3">
                             <div class="text-md font-bold">
                                 Director/a
                             </div>
                             <div>
-                                @foreach ($junta->miembrosDIR as $miembro)
-                                    <div class="ml-4 mt-1">
-                                        - {{$miembro->usuario->name}}
-                                    </div>
+                                @foreach ($junta->miembros(config('constants.REPRESENTACIONES.JUNTA.DIR'))->get() as $miembro)
+                                    @if($miembro->usuario->image)
+                                        <div class="ml-4">
+                                            <x-imgTooltip text="- {{$miembro->usuario->name}}" image="{{$miembro->usuario->image}}" />
+                                        </div>
+                                    @else
+                                        <div class="ml-4">
+                                            <p class="">- {{$miembro->usuario->name}}</p>
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>
@@ -110,10 +217,16 @@
                                 Secretario/a
                             </div>
                             <div>
-                                @foreach ($junta->miembrosSECRE as $miembro)
-                                    <div class="ml-4 mt-1">
-                                        - {{$miembro->usuario->name}}
-                                    </div>                        
+                                @foreach ($junta->miembros(config('constants.REPRESENTACIONES.JUNTA.SECRE'))->get() as $miembro)
+                                    @if($miembro->usuario->image)
+                                        <div class="ml-4">
+                                            <x-imgTooltip text="- {{$miembro->usuario->name}}" image="{{$miembro->usuario->image}}" />
+                                        </div>
+                                    @else
+                                        <div class="ml-4">
+                                            <p class="">- {{$miembro->usuario->name}}</p>
+                                        </div>
+                                    @endif                       
                                 @endforeach
                             </div>
                         </div>
@@ -123,10 +236,16 @@
                                 Representantes de profesorado con vinculación permanente adscritos al Centro
                             </div>
                             <div>
-                                @foreach ($junta->miembrosPDI_VP as $miembro)
-                                    <div class="ml-4 mt-1">
-                                        - {{$miembro->usuario->name}}
-                                    </div>                        
+                                @foreach ($junta->miembros(config('constants.REPRESENTACIONES.JUNTA.PDI_VP'))->get() as $miembro)
+                                    @if($miembro->usuario->image)
+                                        <div class="ml-4">
+                                            <x-imgTooltip text="- {{$miembro->usuario->name}}" image="{{$miembro->usuario->image}}" />
+                                        </div>
+                                    @else
+                                        <div class="ml-4">
+                                            <p class="">- {{$miembro->usuario->name}}</p>
+                                        </div>
+                                    @endif                       
                                 @endforeach
                             </div>
                         </div>
@@ -136,10 +255,16 @@
                                 Representantes de Personal Docente e Investigador adscrito al Centro
                             </div>
                             <div>
-                                @foreach ($junta->miembrosPDI as $miembro)
-                                    <div class="ml-4 mt-1">
-                                        - {{$miembro->usuario->name}}
-                                    </div>                        
+                                @foreach ($junta->miembros(config('constants.REPRESENTACIONES.JUNTA.PDI'))->get() as $miembro)
+                                    @if($miembro->usuario->image)
+                                        <div class="ml-4">
+                                            <x-imgTooltip text="- {{$miembro->usuario->name}}" image="{{$miembro->usuario->image}}" />
+                                        </div>
+                                    @else
+                                        <div class="ml-4">
+                                            <p class="">- {{$miembro->usuario->name}}</p>
+                                        </div>
+                                    @endif                        
                                 @endforeach
                             </div>
                         </div>
@@ -149,10 +274,16 @@
                                 Representantes del Personal de Administración y Servicios
                             </div>
                             <div>
-                                @foreach ($junta->miembrosPAS as $miembro)
-                                    <div class="ml-4 mt-1">
-                                        - {{$miembro->usuario->name}}
-                                    </div>                        
+                                @foreach ($junta->miembros(config('constants.REPRESENTACIONES.JUNTA.PAS'))->get() as $miembro)
+                                    @if($miembro->usuario->image)
+                                        <div class="ml-4">
+                                            <x-imgTooltip text="- {{$miembro->usuario->name}}" image="{{$miembro->usuario->image}}" />
+                                        </div>
+                                    @else
+                                        <div class="ml-4">
+                                            <p class="">- {{$miembro->usuario->name}}</p>
+                                        </div>
+                                    @endif                        
                                 @endforeach
                             </div>
                         </div>
@@ -162,29 +293,41 @@
                                 Representantes de los Estudiantes del titulos oficiales tutelados por el Centro
                             </div>
                             <div>
-                                @foreach ($junta->miembrosEST as $miembro)
-                                    <div class="ml-4 mt-1">
-                                        - {{$miembro->usuario->name}}
-                                    </div>                        
+                                @foreach ($junta->miembros(config('constants.REPRESENTACIONES.JUNTA.EST'))->get() as $miembro)
+                                    @if($miembro->usuario->image)
+                                        <div class="ml-4">
+                                            <x-imgTooltip text="- {{$miembro->usuario->name}}" image="{{$miembro->usuario->image}}" />
+                                        </div>
+                                    @else
+                                        <div class="ml-4">
+                                            <p class="">- {{$miembro->usuario->name}}</p>
+                                        </div>
+                                    @endif                       
                                 @endforeach
                             </div>
                         </div>
             
-                        {{--<div class="text-md font-bold">
+                        <div class="text-md font-bold">
                             Designados por el director
                         </div>
                         <div>
-                            @foreach ($junta->miembrosLIBRES as $miembro)
-                                <div class="ml-4 mt-1">
-                                    - {{$miembro->usuario->name}}
-                                </div>                        
+                            @foreach ($junta->miembros(config('constants.REPRESENTACIONES.JUNTA.LIBRE'))->get() as $miembro)
+                                @if($miembro->usuario->image)
+                                    <div class="ml-4">
+                                        <x-imgTooltip text="- {{$miembro->usuario->name}}" image="{{$miembro->usuario->image}}" />
+                                    </div>
+                                @else
+                                    <div class="ml-4">
+                                        <p class="">- {{$miembro->usuario->name}}</p>
+                                    </div>
+                                @endif                        
                             @endforeach
-                        </div>--}}
+                        </div>
                     </div>
                 </div>
 
                 {{--ACTAS--}}
-                <div x-show="openTab === 2">
+                <div x-show="openTab === 3">
                     <div class="ml-4 mt-5 text-lg">  
                         <form action="{{ route('infoComision') }}" method="GET">                          
                             @foreach ($junta->convocatorias as $convocatoria)
@@ -202,7 +345,7 @@
                 </div>
 
                 {{--COMISIONES--}}
-                <div x-show="openTab === 3">
+                <div x-show="openTab === 4">
                     <div class="ml-4 mt-5 text-lg"> 
                         <form action="{{ route('infoComision') }}" method="GET">                         
                             @foreach ($junta->comisiones as $comision)

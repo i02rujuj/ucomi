@@ -15,6 +15,12 @@ return new class extends Migration
     public function up(): void
     {
         if(env('DB_CONNECTION')=="pgsql"){
+
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert_miembros_gobierno ON miembros_gobierno');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update_miembros_gobierno ON miembros_gobierno');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert_miembros_gobierno ON miembros_gobierno');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update_miembros_gobierno ON miembros_gobierno');
+
             DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert_miembros_junta ON miembros_junta');
             DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update_miembros_junta ON miembros_junta');
             DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert_miembros_junta ON miembros_junta');
@@ -38,7 +44,15 @@ return new class extends Migration
                             END;
                             
                             $$ LANGUAGE plpgsql;
-                            CREATE TRIGGER add_vigente_insert BEFORE INSERT ON miembros_gobierno
+                            CREATE TRIGGER add_vigente_insert_miembros_gobierno BEFORE INSERT ON miembros_gobierno
+                                FOR EACH ROW
+                            EXECUTE FUNCTION add_vigente_insert_func();
+
+                            CREATE TRIGGER add_vigente_insert_miembros_junta BEFORE INSERT ON miembros_junta
+                                FOR EACH ROW
+                            EXECUTE FUNCTION add_vigente_insert_func();
+
+                            CREATE TRIGGER add_vigente_insertmiembros_comision BEFORE INSERT ON miembros_comision
                                 FOR EACH ROW
                             EXECUTE FUNCTION add_vigente_insert_func();
                             
@@ -58,7 +72,15 @@ return new class extends Migration
     
                                 $$ LANGUAGE plpgsql;
     
-                                CREATE TRIGGER add_vigente_update BEFORE UPDATE ON miembros_gobierno
+                                CREATE TRIGGER add_vigente_update_miembros_gobierno BEFORE UPDATE ON miembros_gobierno
+                                                        FOR EACH ROW
+                                EXECUTE FUNCTION add_vigente_update_func();
+
+                                CREATE TRIGGER add_vigente_update_miembros_junta BEFORE UPDATE ON miembros_junta
+                                                        FOR EACH ROW
+                                EXECUTE FUNCTION add_vigente_update_func();
+
+                                CREATE TRIGGER add_vigente_update_miembros_comision BEFORE UPDATE ON miembros_comision
                                                         FOR EACH ROW
                                 EXECUTE FUNCTION add_vigente_update_func();
                             ");
@@ -77,7 +99,15 @@ return new class extends Migration
     
                             $$ LANGUAGE plpgsql;
     
-                            CREATE TRIGGER add_activo_insert BEFORE INSERT ON miembros_gobierno
+                            CREATE TRIGGER add_activo_insert_miembros_gobierno BEFORE INSERT ON miembros_gobierno
+                                                    FOR EACH ROW
+                            EXECUTE FUNCTION add_activo_insert_func();
+
+                            CREATE TRIGGER add_activo_insert_miembros_junta BEFORE INSERT ON miembros_junta
+                                                    FOR EACH ROW
+                            EXECUTE FUNCTION add_activo_insert_func();
+
+                            CREATE TRIGGER add_activo_insert_miembros_comision BEFORE INSERT ON miembros_comision
                                                     FOR EACH ROW
                             EXECUTE FUNCTION add_activo_insert_func();
                             ");
@@ -96,7 +126,15 @@ return new class extends Migration
     
                             $$ LANGUAGE plpgsql;
     
-                            CREATE TRIGGER add_activo_str_update BEFORE UPDATE ON miembros_gobierno
+                            CREATE TRIGGER add_activo_str_update_miembros_gobierno BEFORE UPDATE ON miembros_gobierno
+                                                    FOR EACH ROW
+                            EXECUTE FUNCTION add_activo_str_update_func();
+
+                            CREATE TRIGGER add_activo_str_update_miembros_junta BEFORE UPDATE ON miembros_junta
+                                                    FOR EACH ROW
+                            EXECUTE FUNCTION add_activo_str_update_func();
+
+                            CREATE TRIGGER add_activo_str_update_miembros_comision BEFORE UPDATE ON miembros_comision
                                                     FOR EACH ROW
                             EXECUTE FUNCTION add_activo_str_update_func();
                             ");
@@ -109,10 +147,15 @@ return new class extends Migration
     public function down(): void
     {
         if(env('DB_CONNECTION')=="pgsql"){
-            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert ON miembros_junta');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update ON miembros_junta');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert ON miembros_junta');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update ON miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert_miembros_gobierno ON miembros_gobierno');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update_miembros_gobierno ON miembros_gobierno');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert_miembros_gobierno ON miembros_gobierno');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update_miembros_gobierno ON miembros_gobierno');
+
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert_miembros_junta ON miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update_miembros_junta ON miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert_miembros_junta ON miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update_miembros_junta ON miembros_junta');
 
             DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert_miembros_comision ON miembros_comision');
             DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update_miembros_comision ON miembros_comision');

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\RepresentacionGobierno;
+use App\Models\Representacion;
 use Illuminate\Http\Request;
 
 class RepresentacionController extends Controller
@@ -10,7 +10,7 @@ class RepresentacionController extends Controller
     public function get(Request $request)
     {
         try {
-            $rep = RepresentacionGobierno::where('id', $request->id)->first();
+            $rep = Representacion::where('id', $request->id)->first();
             if (!$rep) {
                 return response()->json(['errors' => 'No se ha encontrado la representación.', 'status' => 422], 200);
             }
@@ -23,7 +23,7 @@ class RepresentacionController extends Controller
     public function all()
     {
         try {
-            $representaciones = RepresentacionGobierno::all();
+            $representaciones = Representacion::all();
             if (!$representaciones) {
                 return response()->json(['errors' => 'No se han podido obtener las representaciones.', 'status' => 422], 200);
             }

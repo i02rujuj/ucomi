@@ -28,7 +28,8 @@ class Comision extends Model
 
     public function miembros()
     {
-        return $this->hasMany(MiembroComision::class, 'idComision');
+        return $this->hasMany(MiembroComision::class, 'idComision')
+            ->orderBy('idRepresentacion');
     }
 
     public function convocatorias()

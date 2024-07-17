@@ -8,22 +8,22 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class MiembroComision extends Model
+class MiembroGobierno extends Model
 {
     use HasFactory, SoftDeletes;
 
     // Tabla
-    protected $table = 'miembros_comision'; 
+    protected $table = 'miembros_gobierno'; 
 
     //Primary Key
     protected $primaryKey = 'id';
     
     //Campos
-    protected $fillable = ['idComision','idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'responsable'];
+    protected $fillable = ['idCentro', 'idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'reponsable'];
 
-    public function comision()
+    public function centro()
     {
-        return $this->belongsTo(Comision::class, 'idComision');
+        return $this->belongsTo(Centro::class, 'idCentro');
     }
 
     public function usuario()
@@ -34,34 +34,20 @@ class MiembroComision extends Model
     public function representacion()
     {
         return $this->belongsTo(Representacion::class, 'idRepresentacion');
-    }
- 
+    } 
+
     public function scopeFilters(Builder $query, Request $request){
         return $query
             ->when($request->has('filtroCentro') && $request->filtroCentro!=null, function($builder) use ($request){
-                return $builder
-                ->whereHas('comision', function($builder) use ($request){
-                    return $builder
-                    ->whereHas('junta', function($builder) use ($request){
-                        $builder->where('idCentro', $request->filtroCentro);
-                    });
-                }); 
-            })->when($request->has('filtroJunta') && $request->filtroJunta!=null, function($builder) use ($request){
-                return $builder
-                ->whereHas('comision', function($query) use ($request){
-                    $query->where('idJunta', $request->filtroJunta);
-                });       
-            })->when($request->has('filtroComision') && $request->filtroComision!=null, function($builder) use ($request){
-                return $builder
-                ->where('idComision', $request->filtroComision);
+                return $builder->where('idCentro', $request->filtroCentro);       
             })->when($request->has('filtroRepresentacion') && $request->filtroRepresentacion!=null, function($builder) use ($request){
                 return $builder->where('idRepresentacion', $request->filtroRepresentacion);       
             })->when($request->has('filtroVigente') && $request->filtroVigente!=null, function($builder) use ($request){
                 if($request->filtroVigente==1){
-                    return $builder->whereNull('fechaDisolucion');
+                    return $builder->whereNull('fechaCese');
                 }
                 elseif($request->filtroVigente==2){
-                    return $builder->whereNotNull('fechaDisolucion');
+                    return $builder->whereNotNull('fechaCese');
                 }
             })->when($request->has('filtroEstado') && $request->filtroEstado!=null && $request->filtroEstado!=2, function($builder) use ($request){
                 if($request->filtroEstado==0){

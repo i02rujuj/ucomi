@@ -50,7 +50,7 @@ select {
     border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
   }
   
-  .tooltip .tooltiptext {
+.tooltip .tooltiptext {
     visibility: hidden;
     width: 120px;
     height: 120px;
@@ -74,9 +74,13 @@ select {
 
     transition:all .1s ease-in-out;
 
-  }
+}
   
-  .tooltip:hover .tooltiptext {
+.tooltip:hover .tooltiptext {
     visibility: visible;
     transition-delay: 0.5s;
-  }
+}
+
+.clip-bottom {
+    clip-path: polygon(100% 50%, 0 0, 100% 0, 50% 100%, 0 0)
+}    

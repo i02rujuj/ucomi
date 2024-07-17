@@ -32,6 +32,17 @@ class Centro extends Model
         return $this->belongsTo(TipoCentro::class, 'idTipo');
     }
 
+    public function miembros($representacion=null)
+    {
+        $miembros = $this->hasMany(MiembroGobierno::class, 'idCentro');
+
+        if($representacion!=null){
+            $miembros = $miembros->where('idRepresentacion', $representacion);
+        }
+
+        return $miembros->orderBy('idRepresentacion');
+    }
+
     public function scopeFilters(Builder $query, Request $request){
         return $query
             ->when($request->has('filtroTipo') && $request->filtroTipo!=null, function($builder) use ($request){

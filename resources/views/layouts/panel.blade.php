@@ -65,7 +65,7 @@
                     <li @class(['mb-1 flex', request()->routeIs('centros') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="{{ route('centros') }}" class="text-gray-600 w-full flex justify-start items-center">
                             <span class="material-icons-round text-slate-600 ml-4 mr-1">
-                                school
+                                account_balance
                             </span>
                             &nbsp;
                             Centros
@@ -77,7 +77,7 @@
                     <li @class(['mb-1 flex', request()->routeIs('juntas') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="{{ route('juntas') }}" class="text-gray-600 w-full flex justify-start items-center">
                             <span class="material-icons-round text-slate-600 ml-4 mr-1">
-                                account_balance
+                                workspaces
                             </span>
                             &nbsp;
                             Juntas
@@ -113,17 +113,17 @@
 
                     <div @class(['submenu', request()->routeIs('miembrosGobierno') || request()->routeIs('miembrosJunta') || request()->routeIs('miembrosComision') ? 'submenu-visible' : ''])>
 
-                        {{--@if(auth()->user()->esResponsable('admin|centro'))
+                        @if(auth()->user()->esResponsable('admin|centro'))
                         <li @class(['mb-1 flex', request()->routeIs('miembrosGobierno') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('miembrosGobierno') }}" class="text-gray-600 w-full flex justify-start items-center">
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
                                     manage_accounts
                                 </span>
                                 &nbsp;
-                                Centro
+                                Gobierno
                             </a>
                         </li>
-                        @endif--}}
+                        @endif
 
                         @if(auth()->user()->esResponsable('admin|centro|junta'))
                         <li @class(['mb-1 flex', request()->routeIs('miembrosJunta') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
@@ -236,7 +236,9 @@
         </div>
 
         <div class="mx-auto p-6">
-            <main>@yield('content')</main>
+            <main>
+                @yield('content')     
+            </main>
         </div>
 
     </div>

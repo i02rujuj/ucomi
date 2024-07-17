@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             CentroSeeder::class,
             JuntaSeeder::class,
             RepresentacionSeeder::class,
+            MiembroGobiernoSeeder::class,
             MiembroJuntaSeeder::class,
             TipoConvocatoriaSeeder::class,
             ComisionSeeder::class,

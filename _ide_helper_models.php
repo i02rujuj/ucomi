@@ -176,22 +176,6 @@ namespace App\Models{
  * @property-read int|null $comisiones_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Convocatoria> $convocatorias
  * @property-read int|null $convocatorias_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $miembros
- * @property-read int|null $miembros_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $miembrosDIR
- * @property-read int|null $miembros_d_i_r_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $miembrosEST
- * @property-read int|null $miembros_e_s_t_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $miembrosLIBRE
- * @property-read int|null $miembros_l_i_b_r_e_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $miembrosPAS
- * @property-read int|null $miembros_p_a_s_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $miembrosPDI
- * @property-read int|null $miembros_p_d_i_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $miembrosPDI_VP
- * @property-read int|null $miembros_p_d_i__v_p_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $miembrosSECRE
- * @property-read int|null $miembros_s_e_c_r_e_count
  * @method static \Illuminate\Database\Eloquent\Builder|Junta filters(\Illuminate\Http\Request $request)
  * @method static \Illuminate\Database\Eloquent\Builder|Junta newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Junta newQuery()
@@ -229,6 +213,7 @@ namespace App\Models{
  * @property string $vigente
  * @property string $activo
  * @property-read \App\Models\Comision $comision
+ * @property-read \App\Models\Representacion $representacion
  * @property-read \App\Models\User $usuario
  * @method static \Database\Factories\MiembroComisionFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision filters(\Illuminate\Http\Request $request)
@@ -253,6 +238,50 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroComision withoutTrashed()
  */
 	class MiembroComision extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\MiembroGobierno
+ *
+ * @property int $id
+ * @property int $idCentro
+ * @property int $idUsuario
+ * @property int $idRepresentacion
+ * @property string|null $cargo
+ * @property string $fechaTomaPosesion
+ * @property string|null $fechaCese
+ * @property int $responsable
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string $vigente
+ * @property string $activo
+ * @property-read \App\Models\Centro $centro
+ * @property-read \App\Models\Representacion $representacion
+ * @property-read \App\Models\User $usuario
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno filters(\Illuminate\Http\Request $request)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno query()
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereActivo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereCargo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereFechaCese($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereFechaTomaPosesion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereIdCentro($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereIdRepresentacion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereIdUsuario($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereResponsable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno whereVigente($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno withoutTrashed()
+ */
+	class MiembroGobierno extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -304,8 +333,9 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $nombre
- * @property int $tipoJunta
- * @property int $tipoComision
+ * @property int $deCentro
+ * @property int $deJunta
+ * @property int $deComision
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -316,11 +346,12 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Representacion onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Representacion query()
  * @method static \Illuminate\Database\Eloquent\Builder|Representacion whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Representacion whereDeCentro($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Representacion whereDeComision($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Representacion whereDeJunta($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Representacion whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Representacion whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Representacion whereNombre($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Representacion whereTipoComision($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Representacion whereTipoJunta($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Representacion whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Representacion withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Representacion withoutTrashed()
@@ -398,6 +429,8 @@ namespace App\Models{
  * @property-read int|null $convocados_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroComision> $miembrosComision
  * @property-read int|null $miembros_comision_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroGobierno> $miembrosGobierno
+ * @property-read int|null $miembros_gobierno_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroJunta> $miembrosJunta
  * @property-read int|null $miembros_junta_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications

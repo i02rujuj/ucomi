@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Centro;
 use App\Helpers\Helper;
 use App\Models\TipoCentro;
 use Illuminate\Http\Request;
+use PHPUnit\Event\Code\Throwable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
 class CentrosController extends Controller
 {
     public function index(Request $request)
     {
         try {
-            
-            $centros = Centro::select('id', 'nombre', 'direccion', 'idTipo', 'logo', 'updated_at', 'deleted_at');
 
+            $centros = Centro::select('id', 'nombre', 'direccion', 'idTipo', 'logo', 'updated_at', 'deleted_at');
+            
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
                 $centros = $centros
                 ->whereIn('id', $datosResponsableCentro['idCentros']);
@@ -36,7 +37,7 @@ class CentrosController extends Controller
                     $centros = $centros->whereNull('deleted_at');
                     break;
             }     
-            
+
             $centros=$centros
                 ->orderBy('deleted_at')
                 ->orderBy('updated_at','desc')
@@ -63,7 +64,7 @@ class CentrosController extends Controller
             ]);
 
         } catch (\Throwable $th) {
-            return redirect()->route('centros')->with('errors', 'No se pudieron obtener los centros: ' . $th->getMessage());
+            return redirect()->route('home')->with('errors', 'No se pudieron obtener los centros. ' . $th->getMessage());
         }
     }
 

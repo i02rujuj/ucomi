@@ -11,51 +11,82 @@ class RepresentacionSeeder extends Seeder
     {
         $representacion = new Representacion();
         $representacion->id = 1;
-        $representacion->nombre = 'Director/a | Decano/a';
-        $representacion->tipoJunta = 1;
-        $representacion->tipoComision = 0;
+        $representacion->nombre = 'Director/a';
+        $representacion->deCentro = 1;
+        $representacion->deJunta = 1;
+        $representacion->deComision = 1;
         $representacion->save();
 
         $representacion = new Representacion();
         $representacion->id = 2;
-        $representacion->nombre = 'Secretario/a';
-        $representacion->tipoJunta = 1;
-        $representacion->tipoComision = 0;
+        $representacion->nombre = 'Decano/a';
+        $representacion->deCentro = 1;
+        $representacion->deJunta = 1;
+        $representacion->deComision = 0;
         $representacion->save();
 
         $representacion = new Representacion();
         $representacion->id = 3;
-        $representacion->nombre = 'Profesorado vinculación permanente';
-        $representacion->tipoJunta = 1;
-        $representacion->tipoComision = 1;
+        $representacion->nombre = 'Subdirector/a';
+        $representacion->deCentro = 1;
+        $representacion->deJunta = 0;
+        $representacion->deComision = 0;
         $representacion->save();
 
         $representacion = new Representacion();
         $representacion->id = 4;
-        $representacion->nombre = 'Personal Docente e Investigador';
-        $representacion->tipoJunta = 1;
-        $representacion->tipoComision = 1;
+        $representacion->nombre = 'Vicedecano/a';
+        $representacion->deCentro = 1;
+        $representacion->deJunta = 0;
+        $representacion->deComision = 0;
         $representacion->save();
 
         $representacion = new Representacion();
         $representacion->id = 5;
-        $representacion->nombre = 'Personal de Administración y Servicios';
-        $representacion->tipoJunta = 1;
-        $representacion->tipoComision = 1;
+        $representacion->nombre = 'Secretario/a';
+        $representacion->deCentro = 1;
+        $representacion->deJunta = 1;
+        $representacion->deComision = 0;
         $representacion->save();
 
         $representacion = new Representacion();
         $representacion->id = 6;
-        $representacion->nombre = 'Estudiantes';
-        $representacion->tipoJunta = 1;
-        $representacion->tipoComision = 1;
+        $representacion->nombre = 'Profesorado vinculación permanente';
+        $representacion->deCentro = 0;
+        $representacion->deJunta = 1;
+        $representacion->deComision = 1;
         $representacion->save();
 
         $representacion = new Representacion();
         $representacion->id = 7;
-        $representacion->nombre = 'Designado por el Director/a';
-        $representacion->tipoJunta = 1;
-        $representacion->tipoComision = 0;
+        $representacion->nombre = 'Personal Docente e Investigador';
+        $representacion->deCentro = 0;
+        $representacion->deJunta = 1;
+        $representacion->deComision = 1;
+        $representacion->save();
+
+        $representacion = new Representacion();
+        $representacion->id = 8;
+        $representacion->nombre = 'Personal de Administración y Servicios';
+        $representacion->deCentro = 0;
+        $representacion->deJunta = 1;
+        $representacion->deComision = 1;
+        $representacion->save();
+
+        $representacion = new Representacion();
+        $representacion->id = 9;
+        $representacion->nombre = 'Estudiantes';
+        $representacion->deCentro = 0;
+        $representacion->deJunta = 1;
+        $representacion->deComision = 1;
+        $representacion->save();
+
+        $representacion = new Representacion();
+        $representacion->id = 10;
+        $representacion->nombre = 'Libre designación';
+        $representacion->deCentro = 0;
+        $representacion->deJunta = 1;
+        $representacion->deComision = 1;
         $representacion->save();
     }
 }

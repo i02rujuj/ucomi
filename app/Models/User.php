@@ -50,6 +50,10 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function miembrosGobierno(){
+        return $this->hasMany(MiembroGobierno::class, 'idUsuario');
+    }
+
     public function miembrosJunta(){
         return $this->hasMany(MiembroJunta::class, 'idUsuario');
     }

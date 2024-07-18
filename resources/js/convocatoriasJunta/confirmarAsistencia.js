@@ -64,6 +64,11 @@ confirmarAsistenciaButtons.forEach(button => {
                         icon: "error",
                         title: 'Confirmar asistencia',
                         text: 'Se ha producido un error al confirmar tu asistencia',
+                        toast: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        position: 'top-right',
                     })
                 }
             }
@@ -73,6 +78,11 @@ confirmarAsistenciaButtons.forEach(button => {
                 icon: "error",
                 title: "Oops...",
                 text: "Ha ocurrido un error al realizar una operación al confirmar/denegar la asistencia.",
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                position: 'top-right',
             });
         }
 

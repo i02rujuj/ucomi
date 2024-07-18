@@ -119,6 +119,11 @@ const preConfirm = async(accion, id=null) => {
                 icon: "success",
                 title: title,
                 text: text,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                position: 'top-right',
             })
             window.location.reload()
         } 
@@ -186,6 +191,11 @@ const addEditEvent = (button) => {
                 icon: "error",
                 title: "Oops...",
                 text: "Ha ocurrido un error al realizar una operación con la convocatoria.",
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                position: 'top-right',
             });
         }
     });

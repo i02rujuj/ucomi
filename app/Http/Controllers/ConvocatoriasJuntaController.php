@@ -126,7 +126,7 @@ class ConvocatoriasJuntaController extends Controller
             return response()->json(['message' => 'La convocatoria se ha añadido correctamente.', 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'Error al añadir la convocatoria.', 'status' => 422], 200);
+            return response()->json(['errors' => 'Error al añadir la convocatoria.'.$th->getMessage(), 'status' => 422], 200);
         }
     }
 

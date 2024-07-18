@@ -52,7 +52,7 @@
                         <span class="material-icons-round">
                             send
                         </span>
-                        Información
+                        <span class="max-sm:hidden">Información</span>
                     </a>
                 </li>
                 <li @click="openTab = 1" :class="{ '-mb-px': openTab === 1 }" class="-mb-px mr-1" @click.prevent="tab = 1">
@@ -61,7 +61,7 @@
                         <span class="material-icons-round">
                             groups
                         </span>
-                        Composición
+                        <span class="max-sm:hidden">Composición</span>
                     </a>
                 </li>
                 <li @click="openTab = 2" :class="{ '-mb-px': openTab === 2 }" class="mr-1" @click.prevent="tab = 2">
@@ -70,7 +70,7 @@
                         <span class="material-icons-round">
                             description
                         </span>
-                        Actas
+                        <span class="max-sm:hidden">Actas</span>
                     </a>
                 </li>
             </ul>
@@ -137,11 +137,14 @@
                 <div x-show="openTab === 2">
                     <div class="ml-4 mt-5 text-lg">                          
                         @foreach ($comision->convocatorias as $convocatoria)
-                            <div class="ml-4">
-                                {{$convocatoria->tipo->nombre}}
-                                {{$convocatoria->fecha}}
-                                {{$convocatoria->acta}}
-                            </div>
+                        <div class="ml-4 mt-1">
+                            <button id="btn-show-acta" data-acta="{{$convocatoria->acta}}" class="rounded-md hover:text-white hover:bg-gray-700 px-2">    
+                                <span class="material-icons-round scale-75">
+                                    picture_as_pdf
+                                </span>
+                                Convocatoria {{$convocatoria->tipo->nombre}} | {{$convocatoria->fecha}}
+                            </button>  
+                        </div>
                         @endforeach
                     </div>
                 </div>

@@ -30,8 +30,8 @@ return new class extends Migration
   
         // Restricción para poner a null idComision si idJunta tiene valor o viceversa
         // No pueden estar rellenas las dos
-        DB::statement('ALTER TABLE convocatorias ADD CONSTRAINT chk_idComisionNull_idJuntaNull_convocatoria CHECK (idComision is NULL or idJunta is not null);');
-        DB::statement('ALTER TABLE convocatorias ADD CONSTRAINT chk_idJuntaNull_idComision_convocatoria CHECK (idJunta is NULL or idComision is not null);');
+        DB::statement('ALTER TABLE convocatorias ADD CONSTRAINT chk_idJuntaNull_idComisionNull_convocatoria CHECK (idJunta is NULL or idComision is NULL);');
+        DB::statement('ALTER TABLE convocatorias ADD CONSTRAINT chk_idJuntaNotNull_idComisionNotNull_convocatoria CHECK (idJunta is not NULL or idComision is not NULL);');
     }
 
     /**

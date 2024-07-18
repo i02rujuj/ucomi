@@ -329,18 +329,16 @@
                 {{--ACTAS--}}
                 <div x-show="openTab === 3">
                     <div class="ml-4 mt-5 text-lg">  
-                        <form action="{{ route('infoComision') }}" method="GET">                          
-                            @foreach ($junta->convocatorias as $convocatoria)
-                                <div class="ml-4 mt-1">
-                                    <button type="submit" name="acta" value="{{$convocatoria->acta}}" class="rounded-md hover:text-white hover:bg-gray-700 px-2">    
-                                        <span class="material-icons-round scale-75">
-                                            picture_as_pdf
-                                        </span>
-                                        Convocatoria {{$convocatoria->tipo->nombre}} | {{$convocatoria->fecha}}
-                                    </button>  
-                                </div>
-                            @endforeach
-                        </form>
+                        @foreach ($junta->convocatorias as $convocatoria)
+                            <div class="ml-4 mt-1">
+                                <button id="btn-show-acta" data-acta="{{$convocatoria->acta}}" class="rounded-md hover:text-white hover:bg-gray-700 px-2">    
+                                    <span class="material-icons-round scale-75">
+                                        picture_as_pdf
+                                    </span>
+                                    Convocatoria {{$convocatoria->tipo->nombre}} | {{$convocatoria->fecha}}
+                                </button>  
+                            </div>
+                        @endforeach
                     </div>
                 </div>
 

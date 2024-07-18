@@ -91,10 +91,10 @@ Miembros de Junta
                 @if($miembrosJunta && $miembrosJunta[0])
                     @foreach ($miembrosJunta as $miembro)
                         <div id="btn-editar-miembro" data-miembro-id="{{ $miembro['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
-                            <div class="flex items-center gap-3">
-                                <div class="right-part w-full max-w-max items-center">
-                                    <img src="{{ $miembro->junta->centro->logo ? $miembro->junta->centro->logo : asset('img/default_image.jpg') }}" alt="Imagen de centro" class="w-8 h-8 ml-1 mb-1 justify-self-center rounded-full object-cover">  
-                                    <img src="{{ $miembro->usuario->image ? $miembro->usuario->image : asset('img/default_image_profile.jpg') }}" alt="Imagen de usuario" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
+                            <div class="flex gap-3">
+                                <div class="right-part w-full max-w-max mt-1">
+                                    <img src="{{ $miembro->usuario->image ? $miembro->usuario->image : asset('img/default_image_profile.jpg') }}" alt="Imagen de usuario" class="shadow-black shadow-sm w-16 h-16 ml-1 mb-1 justify-self-center rounded-md object-cover">  
+                                    <img src="{{ $miembro->junta->centro->logo ? $miembro->junta->centro->logo : asset('img/default_image.jpg') }}" alt="Imagen de centro" class="shadow-black shadow-sm -mt-9 w-8 h-8 ml-1 mb-1 justify-self-center rounded-md ">  
                                 </div>
                             
                                 <div class="left-part truncate">

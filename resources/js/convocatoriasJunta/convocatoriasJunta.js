@@ -119,6 +119,11 @@ const preConfirm = async(accion, id=null) => {
                 icon: "success",
                 title: title,
                 text: text,
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                position: 'top-right',
             })
             window.location.reload()
         } 
@@ -187,6 +192,11 @@ const addEditEvent = (button) => {
                 icon: "error",
                 title: "Oops...",
                 text: "Ha ocurrido un error al realizar una operación con la convocatoria.",
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                position: 'top-right',
             });
         }
     });
@@ -338,6 +348,11 @@ const notificarEvent = (button) => {
                 icon: "error",
                 title: "Oops...",
                 text: "Ha ocurrido un error al realizar una operación con las notificaciones.",
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                position: 'top-right',
             });
         }
     }, true)
@@ -373,15 +388,17 @@ const asistentesEvent = (button) => {
             await Swal.fire({
                 title:'Asistentes convocatoria',
                 html: renderHTMLConvocados(convocados, 'asistentes'),
-                preConfirm: async () => {
-
-                },
             });
         } catch (error) {
             await Swal.fire({
                 icon: "error",
                 title: "Oops...",
                 text: "Ha ocurrido un error al realizar una operación con los asistentes.",
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                position: 'top-right',
             });
         }
     }, true)    

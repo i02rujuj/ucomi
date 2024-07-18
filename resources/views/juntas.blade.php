@@ -83,7 +83,7 @@ Juntas
                                             event
                                         </span>
                                         <div class="font-semibold truncate">
-                                            Constitución: {{ $junta->fechaConstitucion }} {{ $junta->fechaDisolucion ? ' | '.$junta->fechaDisolucion : '' }}
+                                            Constitución: {{ $junta->fecha_constitucion_format }}
                                         </div>
                                     </div>
                                     

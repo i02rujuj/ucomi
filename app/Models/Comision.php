@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,14 +13,19 @@ class Comision extends Model
 {
     use HasFactory, SoftDeletes;
 
-     // Tabla
-     protected $table = 'comisiones'; 
+    // Tabla
+    protected $table = 'comisiones'; 
 
-     //Primary Key
-     protected $primaryKey = 'id';
-     
-     //Campos
-     protected $fillable = ['idJunta', 'nombre', 'fechaConstitucion', 'fechaDisolucion', 'descripcion'];
+    //Primary Key
+    protected $primaryKey = 'id';
+    
+    //Campos
+    protected $fillable = ['idJunta', 'nombre', 'fechaConstitucion', 'fechaDisolucion', 'descripcion'];
+
+    public function getFechaConstitucionFormatAttribute()
+    {  
+        return Carbon::parse($this->fechaConstitucion)->format('d-m-Y');
+    }
 
     public function junta()
     {

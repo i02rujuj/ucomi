@@ -123,12 +123,12 @@ Miembros de Comisión
                                             </span>
                                             <div class="fechaTomaPosesion truncate">
 
-                                                {{ $miembro->fechaTomaPosesion }} | 
+                                                {{ $miembro->fecha_toma_posesion_format }} | 
                                                 
                                                 @empty ($miembro->fechaCese)
                                                     Actualidad
                                                 @else
-                                                    {{ $miembro->fechaCese }}
+                                                    {{ $miembro->fecha_cese_format }}
                                                 @endempty
                                             </div>
                                         </div>

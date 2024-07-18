@@ -189,6 +189,4 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Helper' => App\Helpers\Helper::class,
     ])->toArray(),
-    
-
 ];

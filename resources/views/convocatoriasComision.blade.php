@@ -113,7 +113,7 @@ Convocatorias Comisión
                                                 event
                                             </span>
                                             <div class="font-bold truncate">
-                                                {{ $convocatoria->fecha }} 
+                                                {{ $convocatoria->fecha_format }} 
                                             </div>
 
                                             <span class="material-icons-round scale-75">

@@ -51,7 +51,7 @@ Comisiones
                     <select id="idJunta" class="comision swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" >
                         <option value="" selected disabled>Selecciona una junta</option>
                         @foreach ($juntas as $junta)
-                            <option value="{{$junta->id}}">{{$junta->fechaConstitucion}} | {{$junta->centro->nombre}}</option>
+                            <option value="{{$junta->id}}">{{$junta->fecha_constitucion_format}} | {{$junta->centro->nombre}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -93,14 +93,14 @@ Comisiones
                                             event
                                         </span>
                                         <div class="font-semibold truncate">
-                                            Constitución: {{ $com->fechaConstitucion }} {{ $com->fechaDisolucion ? ' | '.$com->fechaDisolucion : '' }}
+                                            Constitución: {{ $com->fecha_constitucion_format}}
                                         </div>
                                     </div>
                                 </div>  
                             </div>
                  
                             <div class="flex justify-end items-center gap-2 mt-2" >
-                                <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg">Comisión Junta {{$com->junta->fechaConstitucion}}</span>
+                                <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg">Comisión Junta {{$com->junta->fecha_constitucion_format}}</span>
                                 @if ($com['fechaDisolucion']==null)
                                     <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Vigente</span>
                                 @else

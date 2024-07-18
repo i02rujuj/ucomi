@@ -41,7 +41,7 @@ Convocatorias Junta
                     <select id="idJunta" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" >
                         <option value="" selected disabled>Selecciona una junta</option>
                         @foreach ($juntas as $junta)
-                            <option value="{{$junta->id}}">{{$junta->fechaConstitucion}} | {{$junta->centro->nombre}}</option>
+                            <option value="{{$junta->id}}">{{$junta->fecha_constitucion_format}} | {{$junta->centro->nombre}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -113,7 +113,7 @@ Convocatorias Junta
                                                 event
                                             </span>
                                             <div class="font-bold truncate">
-                                                {{ $convocatoria->fecha }} 
+                                                {{ $convocatoria->fecha_format }} 
                                             </div>
 
                                             <span class="material-icons-round scale-75">

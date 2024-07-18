@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,14 +13,24 @@ class Junta extends Model
 {
     use HasFactory, SoftDeletes;
 
-     // Tabla
-     protected $table = 'juntas'; 
+    // Tabla
+    protected $table = 'juntas'; 
 
-     //Primary Key
-     protected $primaryKey = 'id';
-     
-     //Campos
-     protected $fillable = ['idCentro','fechaConstitucion', 'fechaDisolucion', 'descripcion'];
+    //Primary Key
+    protected $primaryKey = 'id';
+    
+    //Campos
+    protected $fillable = ['idCentro','fechaConstitucion', 'fechaDisolucion', 'descripcion'];
+
+    public function getFechaConstitucionFormatAttribute()
+    {  
+        return Carbon::parse($this->fechaConstitucion)->format('d-m-Y');
+    }
+
+    public function getFechaDisolucionFormatAttribute()
+    {  
+        return Carbon::parse($this->fechaDisolucion)->format('d-m-Y');
+    }
 
      public function centro()
     {

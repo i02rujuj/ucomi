@@ -39,7 +39,7 @@ Miembros de Junta
                     <select id="idJunta" name="idJunta" class="swal2-input miembro text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none bg-blue-50">
                         <option value="" selected disabled>Selecciona una junta</option>
                         @foreach ($juntas as $junta)
-                            <option value="{{ $junta->id }}">{{ $junta->fechaConstitucion }} | {{ $junta->centro->nombre }} </option>
+                            <option value="{{ $junta->id }}">{{ $junta->fecha_constitucion_format }} | {{ $junta->centro->nombre }} </option>
                         @endforeach
                     </select>
                 </div> 
@@ -149,12 +149,12 @@ Miembros de Junta
                                             </span>
                                             <div class="fechaTomaPosesion truncate">
 
-                                                {{ $miembro->fechaTomaPosesion }} | 
+                                                {{ $miembro->fecha_toma_posesion_format }} | 
                                                 
                                                 @empty ($miembro->fechaCese)
                                                     Actualidad
                                                 @else
-                                                    {{ $miembro->fechaCese }}
+                                                    {{ $miembro->fecha_cese_format }}
                                                 @endempty
                                             </div>
                                         </div>

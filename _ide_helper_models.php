@@ -60,6 +60,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Convocatoria> $convocatorias
  * @property-read int|null $convocatorias_count
+ * @property-read mixed $fecha_constitucion_format
  * @property-read \App\Models\Junta $junta
  * @method static \Illuminate\Database\Eloquent\Builder|Comision filters(\Illuminate\Http\Request $request)
  * @method static \Illuminate\Database\Eloquent\Builder|Comision newModelQuery()
@@ -131,6 +132,7 @@ namespace App\Models{
  * @property-read \App\Models\Comision|null $comision
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Convocado> $convocados
  * @property-read int|null $convocados_count
+ * @property-read mixed $fecha_format
  * @property-read \App\Models\Junta|null $junta
  * @property-read \App\Models\TipoConvocatoria $tipo
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria filters(\Illuminate\Http\Request $request)
@@ -172,6 +174,8 @@ namespace App\Models{
  * @property-read int|null $comisiones_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Convocatoria> $convocatorias
  * @property-read int|null $convocatorias_count
+ * @property-read mixed $fecha_constitucion_format
+ * @property-read mixed $fecha_disolucion_format
  * @method static \Illuminate\Database\Eloquent\Builder|Junta filters(\Illuminate\Http\Request $request)
  * @method static \Illuminate\Database\Eloquent\Builder|Junta newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Junta newQuery()
@@ -209,6 +213,8 @@ namespace App\Models{
  * @property string $vigente
  * @property string $activo
  * @property-read \App\Models\Comision $comision
+ * @property-read mixed $fecha_cese_format
+ * @property-read mixed $fecha_toma_posesion_format
  * @property-read \App\Models\Representacion $representacion
  * @property-read \App\Models\User $usuario
  * @method static \Database\Factories\MiembroComisionFactory factory($count = null, $state = [])
@@ -254,6 +260,8 @@ namespace App\Models{
  * @property string $vigente
  * @property string $activo
  * @property-read \App\Models\Centro $centro
+ * @property-read mixed $fecha_cese_format
+ * @property-read mixed $fecha_toma_posesion_format
  * @property-read \App\Models\Representacion $representacion
  * @property-read \App\Models\User $usuario
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno filters(\Illuminate\Http\Request $request)
@@ -296,6 +304,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property string $vigente
  * @property string $activo
+ * @property-read mixed $fecha_cese_format
+ * @property-read mixed $fecha_toma_posesion_format
  * @property-read \App\Models\Junta $junta
  * @property-read \App\Models\Representacion $representacion
  * @property-read \App\Models\User $usuario

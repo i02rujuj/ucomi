@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,6 +22,16 @@ class MiembroGobierno extends Model
     //Campos
     protected $fillable = ['idCentro', 'idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'reponsable'];
 
+    public function getFechaTomaPosesionFormatAttribute()
+    {  
+        return Carbon::parse($this->fechaTomaPosesion)->format('d-m-Y');
+    }
+
+    public function getFechaCeseFormatAttribute()
+    {  
+        return Carbon::parse($this->fechaCese)->format('d-m-Y');
+    }
+    
     public function centro()
     {
         return $this->belongsTo(Centro::class, 'idCentro');

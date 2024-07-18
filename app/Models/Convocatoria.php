@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,16 +13,21 @@ class Convocatoria extends Model
 {
     use HasFactory, SoftDeletes;
 
-     // Tabla
-     protected $table = 'convocatorias'; 
+    // Tabla
+    protected $table = 'convocatorias'; 
 
-     //Primary Key
-     protected $primaryKey = 'id';
-     
-     //Campos
-     protected $fillable = ['idComision', 'idJunta', 'idTipo', 'lugar', 'fecha', 'hora', 'acta'];
+    //Primary Key
+    protected $primaryKey = 'id';
+    
+    //Campos
+    protected $fillable = ['idComision', 'idJunta', 'idTipo', 'lugar', 'fecha', 'hora', 'acta'];
 
-     protected $casts = [
+    public function getFechaFormatAttribute()
+    {  
+        return Carbon::parse($this->fecha)->format('d-m-Y');
+    }
+
+    protected $casts = [
         'hora'  => 'datetime:H:i',
     ];
 

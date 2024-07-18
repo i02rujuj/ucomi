@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,31 +13,41 @@ class MiembroJunta extends Model
 {
     use HasFactory, SoftDeletes;
 
-     // Tabla
-     protected $table = 'miembros_junta'; 
+    // Tabla
+    protected $table = 'miembros_junta'; 
 
-     //Primary Key
-     protected $primaryKey = 'id';
+    //Primary Key
+    protected $primaryKey = 'id';
+    
+    //Campos
+    protected $fillable = ['idJunta','idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable'];
+
+    public function getFechaTomaPosesionFormatAttribute()
+    {  
+        return Carbon::parse($this->fechaTomaPosesion)->format('d-m-Y');
+    }
+
+    public function getFechaCeseFormatAttribute()
+    {  
+        return Carbon::parse($this->fechaCese)->format('d-m-Y');
+    }
      
-     //Campos
-     protected $fillable = ['idJunta','idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable'];
- 
-     public function junta()
-     {
-         return $this->belongsTo(Junta::class, 'idJunta');
-     }
- 
-     public function usuario()
-     {
-         return $this->belongsTo(User::class, 'idUsuario');
-     }
- 
-     public function representacion()
-     {
-         return $this->belongsTo(Representacion::class, 'idRepresentacion');
-     }
+    public function junta()
+    {
+        return $this->belongsTo(Junta::class, 'idJunta');
+    }
 
-     public function scopeFilters(Builder $query, Request $request){
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'idUsuario');
+    }
+
+    public function representacion()
+    {
+        return $this->belongsTo(Representacion::class, 'idRepresentacion');
+    }
+
+    public function scopeFilters(Builder $query, Request $request){
         return $query
             ->when($request->has('filtroJunta') && $request->filtroJunta!=null, function($builder) use ($request){
                 return $builder->where('idJunta', $request->filtroJunta);       
@@ -56,6 +67,6 @@ class MiembroJunta extends Model
                 elseif($request->filtroEstado==1){
                     return $builder->whereNull('deleted_at');
                 }
-            });
+        });
     }
 }

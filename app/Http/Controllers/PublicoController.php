@@ -7,7 +7,7 @@ use App\Models\Centro;
 use App\Models\Comision;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Flasher\Prime\Notification\NotificationInterface;
+use Flasher\Prime\FlasherInterface;
 
 class PublicoController extends Controller
 {
@@ -23,6 +23,9 @@ class PublicoController extends Controller
     
     public function infoJunta(Request $request)
     {
+        flash('Your account has been restored.');
+        return redirect()->route('welcome');
+
         if($request->get('centro')){
             $centro = Centro::
                 where('id', $request->get('centro'))
@@ -44,7 +47,8 @@ class PublicoController extends Controller
                 }
         }   
 
-        toastr('No es posible consultar la información del centro', NotificationInterface::ERROR);
+        
+        //toastr('No es posible consultar la información del centro', NotificationInterface::ERROR);
         return redirect()->route('welcome');
     }
 
@@ -61,7 +65,6 @@ class PublicoController extends Controller
                 }
         }   
 
-        toastr('No es posible consultar la información de la comisión', NotificationInterface::ERROR);
         return redirect()->route('welcome');
     }
     

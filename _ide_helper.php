@@ -19046,80 +19046,6 @@ namespace Spatie\LaravelIgnition\Facades {
             }
     }
 
-namespace Yoeunes\Toastr\Facades {
-            /**
-     * 
-     *
-     */        class Toastr {
-                    /**
-         * Shortcut for adding an error notification.
-         *
-         * @param string $message The notification's message
-         * @param string $title The notification's title
-         * @param array<string, mixed> $options The notification's options
-         * @return \Toastr 
-         * @static 
-         */        public static function error($message, $title = '', $options = [])
-        {
-                        /** @var \Yoeunes\Toastr\Toastr $instance */
-                        return $instance->error($message, $title, $options);
-        }
-                    /**
-         * Shortcut for adding an info notification.
-         *
-         * @param string $message The notification's message
-         * @param string $title The notification's title
-         * @param array<string, mixed> $options The notification's options
-         * @return \Toastr 
-         * @static 
-         */        public static function info($message, $title = '', $options = [])
-        {
-                        /** @var \Yoeunes\Toastr\Toastr $instance */
-                        return $instance->info($message, $title, $options);
-        }
-                    /**
-         * Shortcut for adding a success notification.
-         *
-         * @param string $message The notification's message
-         * @param string $title The notification's title
-         * @param array<string, mixed> $options The notification's options
-         * @return \Toastr 
-         * @static 
-         */        public static function success($message, $title = '', $options = [])
-        {
-                        /** @var \Yoeunes\Toastr\Toastr $instance */
-                        return $instance->success($message, $title, $options);
-        }
-                    /**
-         * Shortcut for adding a warning notification.
-         *
-         * @param string $message The notification's message
-         * @param string $title The notification's title
-         * @param array<string, mixed> $options The notification's options
-         * @return \Toastr 
-         * @static 
-         */        public static function warning($message, $title = '', $options = [])
-        {
-                        /** @var \Yoeunes\Toastr\Toastr $instance */
-                        return $instance->warning($message, $title, $options);
-        }
-                    /**
-         * Add a notification.
-         *
-         * @param string $type could be error, info, success, or warning
-         * @param string $message The notification's message
-         * @param string $title The notification's title
-         * @param array<string, mixed> $options The notification's options
-         * @return \Toastr 
-         * @static 
-         */        public static function addNotification($type, $message, $title = '', $options = [])
-        {
-                        /** @var \Yoeunes\Toastr\Toastr $instance */
-                        return $instance->addNotification($type, $message, $title, $options);
-        }
-            }
-    }
-
 namespace Illuminate\Http {
             /**
      * 
@@ -22792,7 +22718,6 @@ namespace  {
             class PDF extends \Barryvdh\DomPDF\Facade\Pdf {}
             class Flasher extends \Flasher\Laravel\Facade\Flasher {}
             class Flare extends \Spatie\LaravelIgnition\Facades\Flare {}
-            class Toastr extends \Yoeunes\Toastr\Facades\Toastr {}
     }
 
 

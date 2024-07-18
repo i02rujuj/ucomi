@@ -3,22 +3,24 @@
 namespace App\Http\Controllers;
 
 use DateTime;
+use Exception;
 use App\Models\User;
 use App\Models\Junta;
 use App\Models\Centro;
 use App\Models\Comision;
 use Illuminate\Http\Request;
+use App\Models\Representacion;
 use App\Models\MiembroComision;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Representacion;
 use Illuminate\Support\Facades\Validator;
+use Flasher\Prime\Notification\NotificationInterface;
 
 class MiembrosComisionController extends Controller
 {
     public function index(Request $request)
     {
         try {
-            $miembrosComision = MiembroComision::select('id', 'idComision', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'presidente', 'updated_at', 'deleted_at');
+            $miembrosComision = MiembroComision::select('id', 'idComision', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at');
             $comisiones = Comision::select('id', 'nombre', 'descripcion', 'idJunta', 'fechaConstitucion', 'fechaConstitucion');
 
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
@@ -110,7 +112,8 @@ class MiembrosComisionController extends Controller
             ]);
         
         } catch (\Throwable $th) {
-            return redirect()->route('miembrosComision')->with('errors', 'No se pudieron obtener los miembros de comisión: ' . $th->getMessage());
+            sweetalert('No se pudieron obtener los miembros de comision.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return redirect()->route('home')->with('errors', 'No se pudieron obtener los miembros de comisión.');
         }
     }
 
@@ -123,50 +126,21 @@ class MiembrosComisionController extends Controller
                 return $validation;
             } 
 
-            MiembroComision::create([
+            $miembroComision = MiembroComision::create([
                 "idComision" => $request->data['idComision'],
                 "idUsuario" => $request->data['idUsuario'],
                 "fechaTomaPosesion" => $request->data['fechaTomaPosesion'],
                 "fechaCese" => $request->data['fechaCese'],
                 "idRepresentacion" => $request->data['idRepresentacion'],
                 "responsable" => $request->data['responsable'],
-                "presidente" => $request->data['presidente'],
             ]);
 
-            return response()->json(['message' => 'Miembro de comisión creado correctamente.', 'status' => 200], 200);
+            sweetalert("El miembro de comisión '{$miembroComision->usuario->name}' se ha añadido correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "El miembro de comisión '{$miembroComision->usuario->name}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se pudo crear el miembro de comisión.', 'status' => 422], 200);
-        }
-    }
-
-    public function get(Request $request)
-    {
-        try {
-            $miembro = MiembroComision::withTrashed()->where('id', $request->id)->first();
-            if (!$miembro) {
-                return response()->json(['errors' => 'No se ha encontrado el miembro de comisión.','status' => 422], 200);
-            }
-            return response()->json($miembro);
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se ha encontrado el miembro de comisión.','status' => 422], 200);
-        }
-    }
-
-    public function delete(Request $request)
-    {
-        try {
-            $miembro = MiembroComision::where('id', $request->id)->first();
-
-            if (!$miembro) {
-                return response()->json(['errors' => 'No se ha encontrado el miembro de comisión.','status' => 422], 200);
-            }
-
-            $miembro->delete();
-            return response()->json(['status' => 200], 200);
-
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se ha encontrado el miembro de comisión.','status' => 422], 200);
+            sweetalert("Error al añadir el miembro de comisión '{$miembroComision->usuario->name}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al añadir el miembro de comisión '{$miembroComision->usuario->name}'", 'status' => 422], 200);
         }
     }
 
@@ -179,22 +153,56 @@ class MiembrosComisionController extends Controller
                 return $validation;
             }
 
-            $miembro = MiembroComision::where('id', $request->id)->first();
-            if (!$miembro) {
-                return response()->json(['errors' => 'No se ha encontrado el miembro de comisión.', 'status' => 422], 200);
-            }
+            $miembroComision = MiembroComision::where('id', $request->id)->first();
 
-            $miembro->idRepresentacion = $request->data['idRepresentacion'];
-            $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
-            $miembro->fechaCese = $request->data['fechaCese'];  
-            $miembro->responsable = $request->data['responsable'];  
-            $miembro->presidente = $request->data['presidente'];  
+            $miembroComision->idRepresentacion = $request->data['idRepresentacion'];
+            $miembroComision->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
+            $miembroComision->fechaCese = $request->data['fechaCese'];  
+            $miembroComision->responsable = $request->data['responsable'];  
+            $miembroComision->save();
 
-            $miembro->save();
-            return response()->json(['message' => 'El miembro de junta se ha actualizado correctamente.', 'status' => 200], 200);
+            sweetalert("El miembro de comision '{$miembroComision->usuario->name}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "El miembro de comision '{$miembroComision->usuario->name}' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'Error al actualizar el miembro de junta.', 'status' => 422], 200);
+            sweetalert("Error al actualizar el miembro de comisión '{$miembroComision->usuario->name}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al actualizar el miembro de comisión '{$miembroComision->usuario->name}'", 'status' => 422], 200);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        $request['accion']='delete';
+        $validation = $this->validateMiembro($request);
+        if($validation->original['status']!=200){
+            return $validation;
+        }
+
+        try {
+            $miembroComision = MiembroComision::where('id', $request->id)->first();
+            $miembroComision->delete();
+
+            sweetalert("El miembro de comisión '{$miembroComision->usuario->name}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "El miembro de comisión '{$miembroComision->usuario->name}' se ha eliminado correctamente.",'status' => 200], 200);
+
+        } catch (\Throwable $th) {
+            sweetalert("Error al eliminar el miembro de comisión '{$miembroComision->usuario->name}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al eliminar el miembro de comisión '{$miembroComision->usuario->name}'",'status' => 422], 200);
+        }
+    }
+
+    public function get(Request $request)
+    {
+        try {
+            $miembroComision = MiembroComision::withTrashed()->where('id', $request->id)->first();
+            if (!$miembroComision) {
+                throw new Exception();
+            }
+            
+            return response()->json($miembroComision);
+        } catch (\Throwable $th) {
+            sweetalert('No se ha encontrado el miembro de comisión.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => 'No se ha encontrado el miembro de comisión.','status' => 422], 200);
         }
     }
 
@@ -233,56 +241,54 @@ class MiembrosComisionController extends Controller
 
     public function validateMiembro(Request $request){
 
-        $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
+        if($request->accion=='update' || $request->accion=='delete'){
+            $miembroComision = MiembroComision::where('id', $request->id)->first();
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
+            if (!$miembroComision) {
+                return response()->json(['errors' => 'No se ha encontrado el miembro de junta.','status' => 422], 200);
+            }
         }
-        else{
-            if($request->data['fechaCese']==null){
 
-                // Comprobación existencia presidente actual en la comisión
-                if($request->data['presidente']==1){
-                    $presidente = MiembroComision::select('id')
+        if($request->accion!='delete'){
+
+            $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
+            }
+            else{
+                if($request->data['fechaCese']==null){
+
+                    // Comprobación existencia usuario en la comisión
+                    $usuarioEnComision = MiembroComision::select('id')
                         ->where('idComision', $request->data['idComision'])
-                        ->where('presidente', 1)
+                        ->where('idUsuario', $request->data['idUsuario'])
                         ->where('fechaCese', null)
                         ->whereNot('id', $request->id)
                         ->first();
 
-                    if($presidente)
-                        return response()->json(['errors' => 'No se pudo añadir el miembro de comisión: ya existe un presidente vigente en la comisión seleccionada', 'status' => 422], 200);
+                    if($usuarioEnComision)
+                        return response()->json(['errors' => 'No se pudo añadir el miembro de comisión: ya existe el usuario vigente en la comisión seleccionada', 'status' => 422], 200);
+                
+                    if($request->accion=='update'){
+                        // Comprobación existencia comisión vigente
+                        $comisionVigenteMiembro = Comision::where('id', $request->data['idComision'])
+                        ->whereNotNull('fechaDisolucion')
+                        ->first();
+
+                        if($comisionVigenteMiembro)
+                            return response()->json(['errors' => 'No se pudo actualizar el miembro de comisión: la comisión no está vigente', 'status' => 422], 200);
+                    }
                 }
+                else{
+                    // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
+                    $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
+                    $dateCese = new DateTime($request->data['fechaCese']);
 
-                // Comprobación existencia usuario en la comisión
-                $usuarioEnComision = MiembroComision::select('id')
-                    ->where('idComision', $request->data['idComision'])
-                    ->where('idUsuario', $request->data['idUsuario'])
-                    ->where('fechaCese', null)
-                    ->whereNot('id', $request->id)
-                    ->first();
-
-                if($usuarioEnComision)
-                    return response()->json(['errors' => 'No se pudo añadir el miembro de comisión: ya existe el usuario vigente en la comisión seleccionada', 'status' => 422], 200);
-            
-                if($request->accion=='update'){
-                    // Comprobación existencia comisión vigente
-                    $comisionVigenteMiembro = Comision::where('id', $request->data['idComision'])
-                    ->whereNotNull('fechaDisolucion')
-                    ->first();
-
-                    if($comisionVigenteMiembro)
-                        return response()->json(['errors' => 'No se pudo actualizar el miembro de comisión: la comisión no está vigente', 'status' => 422], 200);
+                    if ($dateTomaPosesion>$dateCese) {
+                        return response()->json(['errors' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 422], 200);
+                    }  
                 }
-            }
-            else{
-                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-                $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
-                $dateCese = new DateTime($request->data['fechaCese']);
-
-                if ($dateTomaPosesion>$dateCese) {
-                    return response()->json(['errors' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 422], 200);
-                }  
             }
         }
         

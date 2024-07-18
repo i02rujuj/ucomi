@@ -25,10 +25,8 @@ function renderHTMLMiembro(response){
     modal_add.querySelector('#fechaTomaPosesion').value=""
     modal_add.querySelector('#fechaCese').value=""
     modal_add.querySelector('#responsable').value=0
-    modal_add.querySelector('#presidente').value=0
 
     if(response){
-        console.log(response)
         let modal_edit = modal_add.cloneNode(true);
 
         modal_edit.classList.remove('hidden')
@@ -45,14 +43,12 @@ function renderHTMLMiembro(response){
         modal_edit.querySelector('#fechaTomaPosesion').value=response.fechaTomaPosesion
         modal_edit.querySelector('#fechaCese').value=response.fechaCese
         modal_edit.querySelector('#responsable').value=response.responsable
-        modal_edit.querySelector('#presidente').value=response.presidente
 
         if(response.deleted_at!=null){
             modal_edit.querySelector('#idRepresentacion').setAttribute('disabled', 'disabled')
             modal_edit.querySelector('#fechaTomaPosesion').setAttribute('disabled', 'disabled')
             modal_edit.querySelector('#fechaCese').setAttribute('disabled', 'disabled')
             modal_edit.querySelector('#responsable').setAttribute('disabled', 'disabled')
-            modal_edit.querySelector('#presidente').setAttribute('disabled', 'disabled')
         }
         return modal_edit        
     }
@@ -75,7 +71,6 @@ const preConfirm = async(accion, id=null) => {
     }
 
     let dataToSend, response, title, text = null
-    let mostrar=true
 
     switch (accion) {
         case 'add':
@@ -107,12 +102,17 @@ const preConfirm = async(accion, id=null) => {
         case 'delete':
 
             const result = await Swal.fire({
-                title: "¿Eliminar el miembro de comisión?",
+                title: "Seguro que quiere eliminar el miembro de comisión?",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#d33",
                 cancelButtonColor: "",
                 confirmButtonText: "Eliminar",
+                toast: true,
+                timerProgressBar: true,
+                showConfirmButton: true,
+                position: 'top-right',
+                showLoaderOnConfirm:true,
                 preConfirm: async () => {  
                     dataToSend = {
                         id: id,
@@ -125,30 +125,18 @@ const preConfirm = async(accion, id=null) => {
                 }
             })
 
-            if(result.isDismissed){mostrar=false}     
+            if(result.isDismissed){return false}     
             
             break
     }
 
-    if(mostrar){
-        if (response.status === 200) {
-            await Swal.fire({
-                icon: "success",
-                title: title,
-                text: text,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-                showConfirmButton: false,
-                position: 'top-right',
-            })
-            window.location.reload()
-        } 
-        else {
-            Swal.showValidationMessage(response.errors)
-            return false
-        }
+    if (response.status === 200) {
+        window.location.reload()
     } 
+    else {
+        Swal.showValidationMessage(response.errors)
+        return false
+    }
 }
 
 /**
@@ -164,7 +152,8 @@ addButton.addEventListener("click", async (event) => {
         confirmButtonText: "Añadir",
         cancelButtonText: "Cancelar",
         confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',     
+        cancelButtonColor: '#d33',
+        showLoaderOnConfirm:true,           
         preConfirm: async () => preConfirm('add')
     })
 })
@@ -197,6 +186,8 @@ const addEditEvent = (button) => {
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '',
                 denyButtonColor: '#d33',
+                showLoaderOnConfirm:true,
+                showLoaderOnDeny:true,
                 preConfirm: async () => preConfirm('update', button.dataset.miembroId),
                 preDeny: async () => preConfirm('delete', button.dataset.miembroId),
             });

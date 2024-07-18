@@ -83,14 +83,6 @@ Miembros de Comisión
                         <option value="1">Sí</option>
                     </select>
                 </div>  
-                
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mt-3 justify-center items-center">
-                    <label for="presidente" class="block text-sm text-gray-600 w-36 pr-6 text-right">Presidente:</label>
-                    <select id="presidente" class="miembro swal2-input tipo text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none">                     
-                        <option value="0">No</option>
-                        <option value="1">Sí</option>
-                    </select>
-                </div> 
             </div>
 
             <hr className="my-6 border-t border-gray-300" />
@@ -121,20 +113,6 @@ Miembros de Comisión
                                         </span>
                                         &nbsp;
                                         <h2 class="truncate">{{ $miembro->comision->nombre }}</h2>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
-                                        <div class="flex items-center">
-                                            <span class="material-icons-round scale-75">
-                                                psychology
-                                            </span>
-                                            &nbsp;
-                                            @if ($miembro->presidente==1)
-                                                <h2 class="truncate">Presidente</h2>
-                                            @else
-                                                <h2 class="truncate">{{ $miembro->representacion->nombre }}</h2>
-                                            @endif
                                         </div>
                                     </div>
 

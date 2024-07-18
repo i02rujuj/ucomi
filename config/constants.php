@@ -5,15 +5,15 @@ return [
         'GOBIERNO'=> [
             'DIR' => 1, 
             'DEC' => 2,
-            'SUBDIR' => 3, 
-            'VICEDEC' => 4, 
-            'SECRE' => 5, 
+            'SECRE' => 3, 
+            'SUBDIR' => 4, 
+            'VICEDEC' => 5, 
             'LIBRE' => 10,
         ],
         'JUNTA'=> [
             'DIR' => 1, 
             'DEC' => 2,
-            'SECRE' => 5,
+            'SECRE' => 3,
             'PDI_VP' => 6, 
             'PDI' => 7, 
             'PAS' => 8, 
@@ -22,7 +22,7 @@ return [
         ],
         'COMISION'=> [
             'DIR' => 1, 
-            'SECRE' => 5,
+            'SECRE' => 3,
             'PDI_VP' => 6, 
             'PDI' => 7, 
             'PAS' => 8, 

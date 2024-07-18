@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use DateTime;
+use Exception;
 use App\Models\User;
 use App\Models\Junta;
 use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
+use App\Models\Representacion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Representacion;
 use Illuminate\Support\Facades\Validator;
+use Flasher\Prime\Notification\NotificationInterface;
 
 class MiembrosJuntaController extends Controller
 {
@@ -86,7 +88,8 @@ class MiembrosJuntaController extends Controller
             ]);
         
         } catch (\Throwable $th) {
-            return redirect()->route('miembrosJunta')->with('errors', 'No se pudieron obtener los miembros de junta: ' . $th->getMessage());
+            sweetalert('No se pudieron obtener los miembros de junta.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return redirect()->route('home')->with('errors', 'No se pudieron obtener los miembros de junta.');
         }
     }
 
@@ -108,40 +111,12 @@ class MiembrosJuntaController extends Controller
                 "responsable" => $request->data['responsable'],
             ]);
 
-            return response()->json(['message' => 'Miembro de junta creado correctamente.', 'status' => 200], 200);
+            sweetalert("El miembro de junta '{$miembroJunta->usuario->name}' se ha añadido correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "El miembro de junta '{$miembroJunta->usuario->name}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se pudo crear el miembro de junta.', 'status' => 422], 200);
-        }
-    }
-
-    public function get(Request $request)
-    {
-        try {
-            $miembro = MiembroJunta::withTrashed()->where('id', $request->id)->first();
-            if (!$miembro) {
-                return response()->json(['errors' => 'No se ha encontrado el miembro de junta.','status' => 422], 200);
-            }
-            return response()->json($miembro);
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se ha encontrado el miembro de junta.','status' => 422], 200);
-        }
-    }
-
-    public function delete(Request $request)
-    {
-        try {
-            $miembro = MiembroJunta::where('id', $request->id)->first();
-
-            if (!$miembro) {
-                return response()->json(['errors' => 'No se ha encontrado el miembro de junta.','status' => 422], 200);
-            }
-
-            $miembro->delete();
-            return response()->json(['status' => 200], 200);
-
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se ha encontrado el miembro de junta.','status' => 422], 200);
+            sweetalert("Error al añadir el miembro de junta '{$miembroJunta->usuario->name}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al añadir el miembro de junta '{$miembroJunta->usuario->name}'", 'status' => 422], 200);
         }
     }
 
@@ -154,21 +129,57 @@ class MiembrosJuntaController extends Controller
                 return $validation;
             }
 
-            $miembro = MiembroJunta::where('id', $request->id)->first();
-            if (!$miembro) {
-                return response()->json(['errors' => 'No se ha encontrado el miembro de junta.', 'status' => 422], 200);
-            }
+            $miembroJunta = MiembroJunta::where('id', $request->id)->first();
 
-            $miembro->idRepresentacion = $request->data['idRepresentacion'];
-            $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
-            $miembro->fechaCese = $request->data['fechaCese'];  
-            $miembro->responsable = $request->data['responsable'];  
+            $miembroJunta->idRepresentacion = $request->data['idRepresentacion'];
+            $miembroJunta->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
+            $miembroJunta->fechaCese = $request->data['fechaCese'];  
+            $miembroJunta->responsable = $request->data['responsable'];  
 
-            $miembro->save();
-            return response()->json(['message' => 'El miembro de junta se ha actualizado correctamente.', 'status' => 200], 200);
+            $miembroJunta->save();
+
+            sweetalert("El miembro de junta '{$miembroJunta->usuario->name}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "El miembro de junta '{$miembroJunta->usuario->name}' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
+            sweetalert("Error al actualizar el miembro de junta '{$miembroJunta->usuario->name}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
             return response()->json(['errors' => 'Error al actualizar el miembro de junta.', 'status' => 422], 200);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        $request['accion']='delete';
+        $validation = $this->validateMiembro($request);
+        if($validation->original['status']!=200){
+            return $validation;
+        }
+
+        try {
+            $miembroJunta = MiembroJunta::where('id', $request->id)->first();
+            $miembroJunta->delete();
+
+            sweetalert("El miembro de junta '{$miembroJunta->usuario->name}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "El miembro de junta '{$miembroJunta->usuario->name}' se ha eliminado correctamente.",'status' => 200], 200);
+
+        } catch (\Throwable $th) {
+            sweetalert("Error al eliminar el miembro de junta '{$miembroJunta->usuario->name}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al eliminar el miembro de junta '{$miembroJunta->usuario->name}'",'status' => 422], 200);
+        }
+    }
+
+    public function get(Request $request)
+    {
+        try {
+            $miembroJunta = MiembroJunta::withTrashed()->where('id', $request->id)->first();
+            if (!$miembroJunta) {
+                throw new Exception();
+            }
+            
+            return response()->json($miembroJunta);
+        } catch (\Throwable $th) {
+            sweetalert('No se ha encontrado el miembro de junta.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => 'No se ha encontrado el miembro de junta.','status' => 422], 200);
         }
     }
 
@@ -206,91 +217,82 @@ class MiembrosJuntaController extends Controller
 
     public function validateMiembro(Request $request){
 
-        $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
+        if($request->accion=='update' || $request->accion=='delete'){
+            $miembroJunta = MiembroJunta::where('id', $request->id)->first();
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
+            if (!$miembroJunta) {
+                return response()->json(['errors' => 'No se ha encontrado el miembro de junta.','status' => 422], 200);
+            }
         }
-        else{
-            if($request->data['fechaCese']==null){
-                // Comprobación existencia director actual en la junta
-                if($request->data['idRepresentacion']==config('constants.REPRESENTACIONES.GENERAL.DIRECTOR')){
-                    $director = MiembroJunta::select('id')
-                        ->where('idJunta', $request->data['idJunta'])
-                        ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.DIRECTOR'))
-                        ->where('fechaCese', null)
-                        ->whereNot('id', $request->id)
-                        ->first();
-    
-                    if($director)
-                        return response()->json(['errors' => 'No se pudo añadir el miembro de junta: ya existe un Director/a | Decano/a vigente en la junta seleccionada', 'status' => 422], 200);
-                }
-    
-                // Comprobación existencia secretario actual en la junta
-                if($request->data['idRepresentacion']==config('constants.REPRESENTACIONES.GENERAL.SECRETARIO')){
-                    $secretario = MiembroJunta::select('id')
-                        ->where('idJunta', $request->data['idJunta'])
-                        ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.SECRETARIO'))
-                        ->where('fechaCese', null)
-                        ->whereNot('id', $request->id)
-                        ->first();
-    
-                    if($secretario)
-                        return response()->json(['errors' => 'No se pudo añadir el miembro de junta: ya existe un Secretario/a vigente en el centro seleccionado', 'status' => 422], 200);
-                }
 
-                // Comprobación existencia usuario en la junta
-                $usuarioEnJunta = MiembroJunta::select('id')
-                    ->where('idJunta', $request->data['idJunta'])
-                    ->where('idUsuario', $request->data['idUsuario'])
-                    ->where('fechaCese', null)
-                    ->whereNot('id', $request->id)
-                    ->first();
+        if($request->accion!='delete'){
 
-                if($usuarioEnJunta)
-                    return response()->json(['errors' => 'No se pudo añadir el miembro de junta: ya existe el usuario vigente en la junta seleccionado', 'status' => 422], 200);
-            
-                if($request->accion=='update'){
-                    // Comprobación existencia junta vigente
-                    $juntaVigenteMiembro = Junta::where('id', $request->data['idJunta'])
-                    ->whereNotNull('fechaDisolucion')
-                    ->first();
+            $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
 
-                    if($juntaVigenteMiembro)
-                        return response()->json(['errors' => 'No se pudo actualizar el miembro de junta: la junta no está vigente', 'status' => 422], 200);
-                }
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
             }
             else{
-                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-                $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
-                $dateCese = new DateTime($request->data['fechaCese']);
+                if($request->data['fechaCese']==null){
+                    // Comprobación existencia director actual en la junta
+                    if($request->data['idRepresentacion']==config('constants.REPRESENTACIONES.GENERAL.DIRECTOR')){
+                        $director = MiembroJunta::select('id')
+                            ->where('idJunta', $request->data['idJunta'])
+                            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.DIRECTOR'))
+                            ->where('fechaCese', null)
+                            ->whereNot('id', $request->id)
+                            ->first();
+        
+                        if($director)
+                            return response()->json(['errors' => 'No se pudo añadir el miembro de junta: ya existe un Director/a | Decano/a vigente en la junta seleccionada', 'status' => 422], 200);
+                    }
+        
+                    // Comprobación existencia secretario actual en la junta
+                    if($request->data['idRepresentacion']==config('constants.REPRESENTACIONES.GENERAL.SECRETARIO')){
+                        $secretario = MiembroJunta::select('id')
+                            ->where('idJunta', $request->data['idJunta'])
+                            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GENERAL.SECRETARIO'))
+                            ->where('fechaCese', null)
+                            ->whereNot('id', $request->id)
+                            ->first();
+        
+                        if($secretario)
+                            return response()->json(['errors' => 'No se pudo añadir el miembro de junta: ya existe un Secretario/a vigente en el centro seleccionado', 'status' => 422], 200);
+                    }
 
-                if ($dateTomaPosesion>$dateCese) {
-                    return response()->json(['errors' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 422], 200);
-                }  
+                    // Comprobación existencia usuario en la junta
+                    $usuarioEnJunta = MiembroJunta::select('id')
+                        ->where('idJunta', $request->data['idJunta'])
+                        ->where('idUsuario', $request->data['idUsuario'])
+                        ->where('fechaCese', null)
+                        ->whereNot('id', $request->id)
+                        ->first();
+
+                    if($usuarioEnJunta)
+                        return response()->json(['errors' => 'No se pudo añadir el miembro de junta: ya existe el usuario vigente en la junta seleccionado', 'status' => 422], 200);
+                
+                    if($request->accion=='update'){
+                        // Comprobación existencia junta vigente
+                        $juntaVigenteMiembro = Junta::where('id', $request->data['idJunta'])
+                        ->whereNotNull('fechaDisolucion')
+                        ->first();
+
+                        if($juntaVigenteMiembro)
+                            return response()->json(['errors' => 'No se pudo actualizar el miembro de junta: la junta no está vigente', 'status' => 422], 200);
+                    }
+                }
+                else{
+                    // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
+                    $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
+                    $dateCese = new DateTime($request->data['fechaCese']);
+
+                    if ($dateTomaPosesion>$dateCese) {
+                        return response()->json(['errors' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 422], 200);
+                    }  
+                }
             }
         }
         
         return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
-    }
-
-    public function getByCentro(Request $request)
-    {
-        try {
-            $miembros = DB::table('miembros_junta')
-                ->join('users', 'miembros_junta.idUsuario', '=', 'users.id')
-                ->join('representaciones_general', 'miembros_junta.idRepresentacion', '=', 'representaciones_general.id')
-                ->join('juntas', 'miembros_junta.idJunta', '=', 'juntas.id')
-                ->where('juntas.idCentro', $request->get('id'))
-                ->where('miembros_junta.fechaCese', null)
-                ->where('miembros_junta.estado', 1)
-                ->select('users.id', 'users.name', 'users.email', 'miembros_junta.idRepresentacion', 'representaciones_general.nombre')
-                ->get();
-
-            return response()->json(['miembros'=>$miembros]);
-
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se han encontrado miembros de la junta para el centro seleccionado.', 'status' => 422], 200);
-        }    
     }
 }

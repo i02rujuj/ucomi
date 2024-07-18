@@ -27,6 +27,14 @@ class RepresentacionSeeder extends Seeder
 
         $representacion = new Representacion();
         $representacion->id = 3;
+        $representacion->nombre = 'Secretario/a';
+        $representacion->deCentro = 1;
+        $representacion->deJunta = 1;
+        $representacion->deComision = 0;
+        $representacion->save();
+
+        $representacion = new Representacion();
+        $representacion->id = 4;
         $representacion->nombre = 'Subdirector/a';
         $representacion->deCentro = 1;
         $representacion->deJunta = 0;
@@ -34,18 +42,10 @@ class RepresentacionSeeder extends Seeder
         $representacion->save();
 
         $representacion = new Representacion();
-        $representacion->id = 4;
+        $representacion->id = 5;
         $representacion->nombre = 'Vicedecano/a';
         $representacion->deCentro = 1;
         $representacion->deJunta = 0;
-        $representacion->deComision = 0;
-        $representacion->save();
-
-        $representacion = new Representacion();
-        $representacion->id = 5;
-        $representacion->nombre = 'Secretario/a';
-        $representacion->deCentro = 1;
-        $representacion->deJunta = 1;
         $representacion->deComision = 0;
         $representacion->save();
 

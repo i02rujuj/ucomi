@@ -1,4 +1,4 @@
-import { DELETE_CENTRO_BBDD, GET_CENTRO_BBDD, UPDATE_CENTRO_BBDD, ADD_CENTRO_BBDD } from "./axiosTemplate.js";
+import { DELETE_CENTRO_BBDD, UPDATE_CENTRO_BBDD, ADD_CENTRO_BBDD, VALIDATE_CENTRO_BBDD } from "./axiosTemplate.js";
 import Swal from 'sweetalert2';
 
 let modal_add = null
@@ -76,43 +76,50 @@ const preConfirm = async(accion, id=null) => {
 
         case 'delete':
 
-            const result = await Swal.fire({
-                title: "¿Eliminar el centro?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#d33",
-                cancelButtonColor: "",
-                confirmButtonText: "Eliminar",
-            });
+            dataToSend = {
+                id: id,
+                data: valores,
+                accion: 'delete'
+            };
+            response = await VALIDATE_CENTRO_BBDD(dataToSend)
 
-            if (result.isConfirmed) {
-
-                dataToSend = {
-                    id: id,
-                };
-
-                response = await DELETE_CENTRO_BBDD(dataToSend);
-                title="Eliminado"
-                text="Se ha eliminado el centro"
-            }
+            if (response.status === 200) { 
+                const result = await Swal.fire({
+                    title: "¿Seguro que quiere eliminar el centro?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "",
+                    confirmButtonText: "Eliminar",
+                    toast: true,
+                    timerProgressBar: true,
+                    showConfirmButton: true,
+                    position: 'top-right',
+                });
+    
+                if (result.isConfirmed) {
+    
+                    dataToSend = {
+                        id: id,
+                    };
+    
+                    response = await DELETE_CENTRO_BBDD(dataToSend);
+                    title="Eliminado"
+                    text="Se ha eliminado el centro"
+                }
+                else{
+                    return false
+                }
+            }  
             break;
     }
 
-    if (response.status === 200) {     
-        await Swal.fire({
-            icon: "success",
-            title: title,
-            text: text,
-            toast: true,
-            timer: 3000,
-            timerProgressBar: true,
-            showConfirmButton: false,
-            position: 'top-right',
-        })
-        window.location.reload()
+    if (response.status === 200) {  
+        window.location.reload()   
     } 
     else {
         Swal.showValidationMessage(response.errors)
+        return false
     }
 }
 
@@ -132,6 +139,7 @@ if(addButton){
             cancelButtonText: "Cancelar",
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
+            showLoaderOnConfirm:true,
             didRender: () => {
                 modal_add.querySelector('#logo').addEventListener("change", async (event) => {
                     if (event.srcElement.files[0]) {
@@ -173,6 +181,8 @@ const addEditEvent = (button) => {
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '',
                 denyButtonColor: '#d33',
+                showLoaderOnConfirm:true,
+                showLoaderOnDeny:true,
                 didRender: () => {
                     modal_edit.querySelector('#logo').addEventListener("change", async (event) => {
                         if (event.srcElement.files[0]) {

@@ -15,7 +15,6 @@ use App\Http\Controllers\MiembrosComisionController;
 use App\Http\Controllers\MiembrosGobiernoController;
 use App\Http\Controllers\ConvocatoriasJuntaController;
 use App\Http\Controllers\ConvocatoriasComisionController;
-use App\Http\Controllers\RepresentacionGeneralController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +68,7 @@ Route::group(['middleware' => ['responsable:admin|centro']], function () {
     Route::post('/centro/add', [CentrosController::class, 'store'])->middleware('responsable:admin');
     Route::post('/centro/delete', [CentrosController::class, 'delete'])->middleware('responsable:admin');;
     Route::post('/centro/update', [CentrosController::class, 'update']);
+    Route::post('/centro/validate', [CentrosController::class, 'validateCentro']);
 
     // TIPOS DE CENTROS
     Route::post('/tiposCentro', [TiposCentroController::class, 'index']);
@@ -141,11 +141,7 @@ Route::group(['middleware' => ['responsable:admin|centro|junta|comision']], func
     Route::post('/convocatoria_comision/update', [ConvocatoriasComisionController::class, 'update']);
     Route::post('/convocatoria_comision/validate', [ConvocatoriasComisionController::class, 'validateConvocatoria']);
 
-    // REPRESENTACIONES GENERAL
-    Route::post('/representacion_general/get', [RepresentacionGeneralController::class, 'get']);
-    Route::post('/representacion_general/all', [RepresentacionGeneralController::class, 'all']);
-
-    // REPRESENTACIONES CENTRO
+    // REPRESENTACIONES
     Route::post('/representacion/get', [RepresentacionController::class, 'get']);
     Route::post('/representacion/all', [RepresentacionController::class, 'all']);
 });

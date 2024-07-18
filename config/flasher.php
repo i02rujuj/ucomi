@@ -191,6 +191,23 @@ return array(
         'limit' => 5, // Limit the number of notifications to display
     ),
     'plugins' => [
+        'sweetalert' => [
+            'scripts' => [
+                '/vendor/flasher/sweetalert2.min.js',
+                '/vendor/flasher/flasher-sweetalert.min.js',
+            ],
+            'styles' => [
+                '/vendor/flasher/sweetalert2.min.css',
+            ],
+            'options' => [
+                // Optional: Add global options here
+                'position' => 'top-right',
+                'toast' => true,
+                'timer' => 3000,
+                'timerProgressBar' => true,
+                'showConfirmButton' => false,
+            ],
+        ],
         'toastr' => [
             'scripts' => [
                 '/vendor/flasher/jquery.min.js',

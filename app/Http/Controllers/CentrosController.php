@@ -7,16 +7,16 @@ use App\Models\Centro;
 use App\Helpers\Helper;
 use App\Models\TipoCentro;
 use Illuminate\Http\Request;
-use PHPUnit\Event\Code\Throwable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Flasher\Prime\Notification\NotificationInterface;
+
 class CentrosController extends Controller
 {
     public function index(Request $request)
     {
         try {
-
             $centros = Centro::select('id', 'nombre', 'direccion', 'idTipo', 'logo', 'updated_at', 'deleted_at');
             
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
@@ -64,15 +64,17 @@ class CentrosController extends Controller
             ]);
 
         } catch (\Throwable $th) {
-            return redirect()->route('home')->with('errors', 'No se pudieron obtener los centros. ' . $th->getMessage());
+            sweetalert("No se pudieron obtener los centros..", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return redirect()->route('home')->with('errors', 'No se pudieron obtener los centros.');
         }
     }
 
     public function store(Request $request)
     {                
         try {
+            $request['accion']='store';
             $validation = $this->validateCentro($request);
-            if(isset($validation)){
+            if($validation->original['status']!=200){
                 return $validation;
             }
 
@@ -85,65 +87,24 @@ class CentrosController extends Controller
                 "logo" => $url_image,
             ]);
 
-            return response()->json(['message' => 'El centro se ha añadido correctamente.', 'status' => 200], 200);
+            sweetalert("El centro $centro->nombre se ha añadido correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "El centro $centro->nombre se ha añadido correctamente.", 'status' => 200], 200);
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'Error al añadir el centro.', 'status' => 422], 200);
-        }
-    }
-
-    public function delete(Request $request)
-    {
-        try {
-            $centro = Centro::where('id', $request->id)->first();
-
-            if (!$centro) 
-                return response()->json(['errors' => 'No se ha encontrado el centro.','status' => 422], 200);
-
-            if($centro->juntas->count() > 0)
-                return response()->json(['errors' => 'Existen juntas asociadas a este centro. Para borrar el centro es necesario eliminar todas sus juntas.', 'status' => 422], 200);
-
-            if($centro->miembros->count() > 0)
-                return response()->json(['errors' => 'Existen miembros de gobierno asociados a este centro. Para borrar el centro es necesario eliminar todos sus miembros de gobierno.', 'status' => 422], 200);
-
-            $centro->delete();
-            return response()->json(['status' => 200], 200);
-
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se ha encontrado el centro.','status' => 422], 200);
-        }
-    }
-
-    public function get(Request $request)
-    {
-        try {
-            $centro = DB::table('centros')
-            ->join('tipos_centro', 'centros.idTipo', '=', 'tipos_centro.id')
-            ->where('centros.id', $request->id)
-            ->select('centros.id', 'centros.nombre', 'centros.direccion', 'centros.idTipo', 'centros.logo', 'tipos_centro.nombre as tipo', 'centros.deleted_at')
-            ->first();
-
-            if (!$centro) {
-                return response()->json(['errors' => 'No se ha encontrado el centro.', 'status' => 422], 200);
-            }
-            return response()->json($centro);
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se ha encontrado el centro.', 'status' => 422], 200);
+            sweetalert("Error al añadir el centro $centro->nombre", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al añadir el centro $centro->nombre", 'status' => 422], 200);
         }
     }
 
     public function update(Request $request)
     {
         try {
-
+            $request['accion']='update';
             $validation = $this->validateCentro($request);
-            if(isset($validation)){
+            if($validation->original['status']!=200){
                 return $validation;
             }
 
             $centro = Centro::where('id', $request->id)->first();
-            if (!$centro) {
-                return response()->json(['errors' => 'No se ha encontrado el centro.', 'status' => 422], 200);
-            }
 
             if(isset($request->data['logo'])){
                 $url_image = Helper::subirImagenCloudinary($request->data['logo'], "logosCentros");
@@ -154,26 +115,49 @@ class CentrosController extends Controller
             $centro->direccion = $request->data['direccion'];
             $centro->idTipo = $request->data['idTipo'];
             $centro->save();
-            return response()->json(['message' => 'El centro se ha actualizado correctamente.', 'status' => 200], 200);
-            
+
+            sweetalert("El centro $centro->nombre se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "El centro $centro->nombre se ha actualizado correctamente.", 'status' => 200], 200);
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'Error al actualizar el centro.', 'status' => 422], 200);
+            sweetalert("Error al actualizar el centro $centro->nombre", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al actualizar el centro $centro->nombre", 'status' => 422], 200);
         }
     }
 
-    public function all()
+    public function delete(Request $request)
     {
         try {
-            
-            $centros = Centro::select('id', 'nombre')->get();
+            $request['accion']='delete';
+            $validation = $this->validateCentro($request);
+            if($validation->original['status']!=200){
+                return $validation;
+            } 
 
-            if (!$centros) {
-                return response()->json(['errors' => 'No se han podido obtener los centros.','status' => 422], 200);
+            $centro = Centro::where('id', $request->id)->first();
+            $centro->delete();
+
+            sweetalert("El centro $centro->nombre se ha eliminado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "El centro $centro->nombre se ha eliminado correctamente.",'status' => 200], 200);
+
+        } catch (\Throwable $th) {
+            sweetalert("Error al eliminar el centro $centro->nombre", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al eliminar el centro $centro->nombre",'status' => 422], 200);
+        }
+    }
+
+    public function get(Request $request)
+    {
+        try {
+            $centro = Centro::where('id', $request->id)->first();
+
+            if (!$centro) {
+                throw new Exception();
             }
 
-            return response()->json($centros);
+            return response()->json($centro);
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se han podido obtener los centros.','status' => 422], 200);
+            sweetalert("No se ha encontrado el centro.", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => 'No se ha encontrado el centro.', 'status' => 422], 200);
         }
     }
 
@@ -208,13 +192,32 @@ class CentrosController extends Controller
     }
 
     public function validateCentro(Request $request){
-        $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
+        
+        if($request->accion=='update' ||$request->accion=='delete'){
+            $centro = Centro::where('id', $request->id)->first();
+            if (!$centro)
+                return response()->json(['errors' => 'No se ha encontrado el centro.','status' => 422], 200);
+        }
+        
+        if($request->accion=='delete'){
+            $centro = Centro::where('id', $request->id)->first();
+            if (!$centro) 
+                return response()->json(['errors' => 'No se ha encontrado el centro.','status' => 422], 200);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
+            if($centro->juntas->count() > 0)
+                return response()->json(['errors' => 'Existen juntas asociadas a este centro. Para borrar el centro es necesario eliminar todas sus juntas.', 'status' => 422], 200);
+
+            if($centro->miembros->count() > 0)
+                return response()->json(['errors' => 'Existen miembros de gobierno asociados a este centro. Para borrar el centro es necesario eliminar todos sus miembros de gobierno.', 'status' => 422], 200);
         }
         else{
-            return null;
+            $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
+            }
         }
+        
+        return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
     }
 }

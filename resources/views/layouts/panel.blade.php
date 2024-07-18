@@ -244,7 +244,6 @@
     </div>
 
     @vite(['resources/js/panel.js'])
-    @include('sweetalert::alert')
 </body>
 
 </html>

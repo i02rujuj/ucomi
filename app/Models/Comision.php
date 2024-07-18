@@ -26,21 +26,22 @@ class Comision extends Model
         return $this->belongsTo(Junta::class, 'idJunta');
     }
 
-    public function miembros()
+    public function miembros($representacion=null)
     {
-        return $this->hasMany(MiembroComision::class, 'idComision')
-            ->orderBy('idRepresentacion');
+        $miembros = $this->hasMany(MiembroComision::class, 'idComision');
+
+        if($representacion!=null){
+            $miembros = $miembros->where('idRepresentacion', $representacion);
+        }
+
+        return $miembros
+            ->orderBy('idRepresentacion')
+            ->orderBy('fechaCese');
     }
 
     public function convocatorias()
     {
         return $this->hasMany(Convocatoria::class, 'idComision');
-    }
-
-    public function presidentes()
-    {
-        return $this->hasMany(MiembroComision::class, 'idComision')
-            ->where('presidente', 1);
     }
 
     public function scopeFilters(Builder $query, Request $request){

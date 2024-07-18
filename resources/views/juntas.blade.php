@@ -78,77 +78,62 @@ Juntas
                                         <h2 class="text-base font-bold truncate">{{ $junta->centro->nombre }}</h2>
                                     </div>
 
-                                    {{--<div class="truncate flex items-center">
+                                    <div class="truncate flex items-center">
                                         <span class="material-icons-round scale-75">
                                             event
                                         </span>
-                                        <div class="font-bold fechaTomaPosesion truncate">
-                                            {{ $junta->fechaConstitucion }} {{ $junta->fechaDisolucion ? ' | '.$junta->fechaDisolucion : '' }}
+                                        <div class="font-semibold truncate">
+                                            Constitución: {{ $junta->fechaConstitucion }} {{ $junta->fechaDisolucion ? ' | '.$junta->fechaDisolucion : '' }}
                                         </div>
-                                    </div>--}}
+                                    </div>
                                     
-                                    @empty($junta->directores[0])
+                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                        @if ($junta->centro->idCentro==config('constants.TIPOS_CENTRO.FACULTAD'))
+                                            <div class="truncate flex items-center">
+                                                <span class="material-icons-round scale-75">
+                                                    person
+                                                </span>
+                                                <div class="truncate">
+                                                    Decano/a:
+                                                    @if($decano = $junta->miembros(config('constants.REPRESENTACIONES.JUNTA.DEC'))->first())
+                                                        {{ $decano->usuario->name }}
+                                                    @else
+                                                        Sin asignar
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div class="truncate flex items-center">
+                                                <span class="material-icons-round scale-75">
+                                                    person
+                                                </span>
+                                                <div class="truncate">
+                                                    Director/a:
+                                                    @if($director = $junta->miembros(config('constants.REPRESENTACIONES.JUNTA.DIR'))->first())
+                                                        {{ $director->usuario->name }}
+                                                    @else
+                                                        Sin asignar
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+
                                     <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
                                         <div class="truncate flex items-center">
                                             <span class="material-icons-round scale-75">
                                                 person
                                             </span>
                                             <div class="truncate">
-                                                @if($junta->centro->tipo->id == config('constants.TIPOS_CENTRO.FACULTAD'))
-                                                    Decano/a:
+                                                Secretario/a:
+                                                @if($secretario = $junta->miembros(config('constants.REPRESENTACIONES.JUNTA.SECRE'))->first())
+                                                    {{ $secretario->usuario->name }}
                                                 @else
-                                                    Director/a:
+                                                    Sin asignar
                                                 @endif
-                                                Sin asignar
                                             </div>
                                         </div>
                                     </div>
-                                    @else
-                                        @foreach ($junta->directores as $d)
-                                        <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
-                                            <div class="truncate flex items-center">
-                                                <span class="material-icons-round scale-75">
-                                                    person
-                                                </span>
-                                                <div class="truncate">
-                                                    @if($junta->centro->tipo->id == config('constants.TIPOS_CENTRO.FACULTAD'))
-                                                        Decano/a:
-                                                    @else
-                                                        Director/a:
-                                                    @endif
-
-                                                    {{ $d->usuario->name }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        @endforeach
-                                    @endempty
-
-                                    @empty($junta->secretarios[0])
-                                        <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
-                                            <div class="truncate flex items-center">
-                                                <span class="material-icons-round scale-75">
-                                                    person
-                                                </span>
-                                                <div class="truncate">
-                                                    Secretario/a: Sin asignar
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @else
-                                        @foreach ($junta->secretarios as $s)
-                                        <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
-                                            <div class="truncate flex items-center">
-                                                <span class="material-icons-round scale-75">
-                                                    person
-                                                </span>
-                                                <div class="truncate">
-                                                    Secretario/a: {{ $s->usuario->name }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        @endforeach
-                                    @endempty
 
                                     <div class="flex justify-start items-center gap-2 mt-3" >
                                         <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Junta</span>
@@ -162,7 +147,6 @@ Juntas
                                             <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Eliminado</span>
                                         @endif
                                     </div>
-
                                 </div>
                             </div>
                         </div>

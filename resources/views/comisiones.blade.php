@@ -75,7 +75,7 @@ Comisiones
                         <div id="btn-editar-comision" data-comision-id="{{ $com['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
                             <div class="flex items-center">
                                 <div class="right-part w-full max-w-max">
-                                    <img src="{{ $com->junta->centro->logo ? $com->junta->centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
+                                    <img src="{{ $com->junta->centro->logo ? $com->junta->centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="max-md:w-12 max-md:h-12 w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
                                 </div>
 
                                 <div class="left-part truncate w-full max-w-max pl-3 z-10">
@@ -88,52 +88,28 @@ Comisiones
                                         <h2 class="text-base font-bold truncate">{{ $com->nombre }}</h2>
                                     </div>
 
-                                    {{--<div class="truncate flex items-center">
+                                    <div class="truncate flex items-center">
                                         <span class="material-icons-round scale-75">
                                             event
                                         </span>
-                                        <div class="font-bold fechaTomaPosesion truncate">
-                                            {{ $com->fechaConstitucion }} {{ $com->fechaDisolucion ? ' | '.$com->fechaDisolucion : '' }}
-                                        </div>
-                                    </div>--}}
-
-                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
-                                        <div class="truncate flex items-center">
-
-                                            @empty($com->presidentes[0])
-                                                <span class="material-icons-round scale-75">
-                                                    person
-                                                </span>
-                                                <div class="truncate">
-                                                    Presidente/a: Sin asignar
-                                                </div>
-                                            @else
-                                                @foreach ($com->presidentes as $p)
-                                                    <span class="material-icons-round scale-75">
-                                                        person
-                                                    </span>
-                                                    <div class="truncate">
-                                                            Presidente/a: {{ $p->usuario->name }}
-                                                    </div>
-                                                @endforeach
-                                            @endempty
+                                        <div class="font-semibold truncate">
+                                            Constitución: {{ $com->fechaConstitucion }} {{ $com->fechaDisolucion ? ' | '.$com->fechaDisolucion : '' }}
                                         </div>
                                     </div>
-                                    
-                                    <div class="flex justify-start items-center gap-2 mt-3" >
-                                        <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Comisión</span>
-                                        @if ($com['fechaDisolucion']==null)
-                                            <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Vigente</span>
-                                        @else
-                                            <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">No vigente</span>
-                                        @endif
+                                </div>  
+                            </div>
+                 
+                            <div class="flex justify-end items-center gap-2 mt-2" >
+                                <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg">Comisión Junta {{$com->junta->fechaConstitucion}}</span>
+                                @if ($com['fechaDisolucion']==null)
+                                    <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Vigente</span>
+                                @else
+                                    <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">No vigente</span>
+                                @endif
 
-                                        @if ($com['deleted_at']!=null)
-                                            <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Eliminado</span>
-                                        @endif
-                                    </div>
-
-                                </div>
+                                @if ($com['deleted_at']!=null)
+                                    <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Eliminado</span>
+                                @endif
                             </div>
                         </div>
                     @endforeach

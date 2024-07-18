@@ -70,7 +70,7 @@ class JuntasController extends Controller
 
         } catch (\Throwable $th) {
             sweetalert('No se pudieron obtener las juntas.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
-            return redirect()->route('juntas')->with('errors', 'No se pudieron obtener las juntas.' . $th->getMessage());
+            return redirect()->route('juntas')->with('errors', 'No se pudieron obtener las juntas.');
         }
     }
 
@@ -123,7 +123,7 @@ class JuntasController extends Controller
             return response()->json(['message' => "La junta de centro '{$junta->centro->nombre}' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            sweetalert("Error al actualizar la junta '{$junta->centro->nombre}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            sweetalert("Error al actualizar la junta de centro '{$junta->centro->nombre}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
             return response()->json(['errors' => "Error al actualizar la junta de centro '{$junta->centro->nombre}'", 'status' => 422], 200);
         }
     }

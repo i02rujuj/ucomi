@@ -40,7 +40,9 @@ class Centro extends Model
             $miembros = $miembros->where('idRepresentacion', $representacion);
         }
 
-        return $miembros->orderBy('idRepresentacion');
+        return $miembros
+            ->orderBy('idRepresentacion')
+            ->orderBy('fechaCese');
     }
 
     public function scopeFilters(Builder $query, Request $request){

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DateTime;
+use Exception;
 use App\Models\Junta;
 use App\Models\Centro;
 use App\Models\Comision;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Flasher\Prime\Notification\NotificationInterface;
 
 class ComisionController extends Controller
 {
@@ -81,7 +83,8 @@ class ComisionController extends Controller
             ]);
 
         } catch (\Throwable $th) {
-            return redirect()->route('comisiones')->with('errors', 'No se pudieron obtener las comisiones: ' . $th->getMessage());
+            sweetalert('No se pudieron obtener las comisiones.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return redirect()->route('comisiones')->with('errors', 'No se pudieron obtener las comisiones.');
         }
     }
 
@@ -94,7 +97,7 @@ class ComisionController extends Controller
                 return $validation;
             }
            
-            Comision::create([
+            $comision = Comision::create([
                 "nombre" => $request->data['nombre'],
                 "descripcion" => $request->data['descripcion'],
                 "idJunta" => $request->data['idJunta'],
@@ -102,46 +105,12 @@ class ComisionController extends Controller
                 "fechaDisolucion" => $request->data['fechaDisolucion'],
             ]);
 
-            return response()->json(['message' => 'La comisión se ha añadido correctamente.', 'status' => 200], 200);
+            sweetalert("La comisión '{$comision->nombre}' se ha añadido correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "La comisión '{$comision->nombre}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'Error al añadir la comisión.', 'status' => 422], 200);
-        }
-    }
-
-    public function delete(Request $request)
-    {
-        try {
-            $request['accion']='delete';
-            $validation = $this->validateComision($request);
-            if($validation->original['status']!=200){
-                return $validation;
-            }
-
-            $comision = Comision::where('id', $request->id)->first();
-
-            if (!$comision) {
-                return response()->json(['errors' => 'No se ha encontrado la comisión.','status' => 422], 200);
-            }
-
-            $comision->delete();
-            return response()->json(['status' => 200], 200);
-
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se ha encontrado la comisión.','status' => 422], 200);
-        }
-    }
-
-    public function get(Request $request)
-    {
-        try {
-            $comision = Comision::withTrashed()->where('id', $request->id)->first();
-            if (!$comision) {
-                return response()->json(['errors' => 'No se ha encontrado la comisión.','status' => 422], 200);
-            }
-            return response()->json($comision);
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se ha encontrado la comisión.','status' => 422], 200);
+            sweetalert("Error al añadir la comisión '{$comision->nombre}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al añadir la comisión '{$comision->nombre}'", 'status' => 422], 200);
         }
     }
 
@@ -156,10 +125,6 @@ class ComisionController extends Controller
 
             $comision=Comision::where('id', $request->id)->first();
 
-            if (!$comision) {
-                return response()->json(['errors' => 'No se ha encontrado la comisión.', 'status' => 422], 200);
-            }
-
             if($request->data['fechaDisolucion']!=null){
                 DB::table('miembros_comision')
                 ->where('idComision', $comision->id)
@@ -171,10 +136,49 @@ class ComisionController extends Controller
             $comision->fechaConstitucion = $request->data['fechaConstitucion'];
             $comision->fechaDisolucion = $request->data['fechaDisolucion'];
             $comision->save();
-            return response()->json(['message' => 'La comisión se ha actualizado correctamente.', 'status' => 200], 200);
+
+            sweetalert("La junta comision '{$comision->nombre}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "La junta comision '{$comision->nombre}' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'Error al actualizar la comisión.', 'status' => 422], 200);
+            sweetalert("Error al actualizar la comisión '{$comision->nombre}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al actualizar la comisión '{$comision->nombre}'", 'status' => 422], 200);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $request['accion']='delete';
+            $validation = $this->validateComision($request);
+            if($validation->original['status']!=200){
+                return $validation;
+            }
+
+            $comision = Comision::where('id', $request->id)->first();
+            $comision->delete();
+
+            sweetalert("La comisión '{$comision->nombre}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "La comisión '{$comision->nombre}' se ha eliminado correctamente.",'status' => 200], 200);
+
+        } catch (\Throwable $th) {
+            sweetalert("Error al eliminar la comisión '{$comision->nombre}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al eliminar la comisión '{$comision->nombre}'",'status' => 422], 200);
+        }
+    }
+
+    public function get(Request $request)
+    {
+        try {
+            $comision = Comision::withTrashed()->where('id', $request->id)->first();
+            if (!$comision) {
+                throw new Exception();
+            }
+            
+            return response()->json($comision);
+        } catch (\Throwable $th) {
+            sweetalert("No se ha encontrado la comisión.", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "No se ha encontrado la comisión.",'status' => 422], 200);
         }
     }
 
@@ -212,14 +216,16 @@ class ComisionController extends Controller
 
     public function validateComision(Request $request){
 
-        if($request->accion=='delete'){
+        if($request->accion=='update' ||$request->accion=='delete'){
             $comision = Comision::where('id', $request->id)->first();
 
             if (!$comision) {
                 return response()->json(['errors' => 'No se ha encontrado la comision.','status' => 422], 200);
             }
+        }
 
-            if($comision->miembrosComision->count() > 0)
+        if($request->accion=='delete'){
+            if($comision->miembros->count() > 0)
                 return response()->json(['errors' => 'Existen miembros de comision asociadas a esta comision. Para borrar la comision es necesario eliminar todos sus miembros de comision.', 'status' => 422], 200);
 
             if($comision->convocatorias->count() > 0)

@@ -17,6 +17,7 @@ class ConvocatoriaSeeder extends Seeder
     {
         $convocatoriaJunta = new Convocatoria();
         $convocatoriaJunta->idJunta = 1;
+        $convocatoriaJunta->idComision = null;
         $convocatoriaJunta->idTipo = config('constants.TIPOS_CONVOCATORIA.EXTRAORDINARIA');
         $convocatoriaJunta->lugar = 'Sala de Juntas José Agüera Soriano del Campus Universitario de Rabanales';
         $convocatoriaJunta->fecha = '2022-12-02';
@@ -38,6 +39,7 @@ class ConvocatoriaSeeder extends Seeder
         }
 
         $convocatoriaComision = new Convocatoria();
+        $convocatoriaComision->idJunta = null;
         $convocatoriaComision->idComision = 1;
         $convocatoriaComision->idTipo = config('constants.TIPOS_CONVOCATORIA.ORDINARIA');
         $convocatoriaComision->lugar = 'Videoconferencia mediante la plataforma Webex';

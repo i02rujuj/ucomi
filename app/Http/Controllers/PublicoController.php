@@ -44,7 +44,7 @@ class PublicoController extends Controller
                 }
         }   
 
-        toastr('No es posible consultar la información del centro', NotificationInterface::ERROR);
+        //toastr('No es posible consultar la información del centro', NotificationInterface::ERROR);
         return redirect()->route('welcome');
     }
 
@@ -61,7 +61,7 @@ class PublicoController extends Controller
                 }
         }   
 
-        toastr('No es posible consultar la información de la comisión', NotificationInterface::ERROR);
+        //toastr('No es posible consultar la información de la comisión', NotificationInterface::ERROR);
         return redirect()->route('welcome');
     }
     

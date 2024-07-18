@@ -5,7 +5,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 10.48.14.
+ * Generated for Laravel 10.48.16.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -13434,7 +13434,7 @@ namespace Illuminate\Support\Facades {
                     /**
          * 
          *
-         * @see \LaravelLang\Routes\ServiceProvider::boot()
+         * @see \LaravelLang\Routes\ServiceProvider::registerGroup()
          * @param \Closure $callback
          * @static 
          */        public static function localizedGroup($callback)
@@ -18588,172 +18588,6 @@ namespace Barryvdh\DomPDF\Facade {
             }
     }
 
-namespace Flasher\Laravel\Facade {
-            /**
-     * 
-     *
-     * @method static NotificationBuilder addSuccess(string $message, array $options = array())
-     * @method static NotificationBuilder addError(string $message, array $options = array())
-     * @method static NotificationBuilder addWarning(string $message, array $options = array())
-     * @method static NotificationBuilder addInfo(string $message, array $options = array())
-     * @method static NotificationBuilder addFlash(NotificationInterface|string $type, string $message = null, array $options = array())
-     * @method static NotificationBuilder flash(StampInterface[] $stamps = array())
-     * @method static NotificationBuilder type(string $type, string $message = null, array $options = array())
-     * @method static NotificationBuilder message(string $message)
-     * @method static NotificationBuilder options(array $options, bool $merge = true)
-     * @method static NotificationBuilder option(string $name, $value)
-     * @method static NotificationBuilder success(string $message = null, array $options = array())
-     * @method static NotificationBuilder error(string $message = null, array $options = array())
-     * @method static NotificationBuilder info(string $message = null, array $options = array())
-     * @method static NotificationBuilder warning(string $message = null, array $options = array())
-     * @method static NotificationBuilder priority(int $priority)
-     * @method static NotificationBuilder hops(int $amount)
-     * @method static NotificationBuilder keep()
-     * @method static NotificationBuilder delay(int $delay)
-     * @method static NotificationBuilder now()
-     * @method static NotificationBuilder with(StampInterface[] $stamps = array())
-     * @method static NotificationBuilder withStamp(StampInterface $stamp)
-     * @method static NotificationBuilder handler(string $handler)
-     * @method static Envelope            getEnvelope()
-     */        class Flasher {
-                    /**
-         * Get a driver instance.
-         *
-         * @param string|null $alias
-         * @return \Flasher\Prime\Factory\NotificationFactoryInterface 
-         * @throws \InvalidArgumentException
-         * @static 
-         */        public static function create($alias = null)
-        {
-                        /** @var \Flasher\Prime\Flasher $instance */
-                        return $instance->create($alias);
-        }
-                    /**
-         * Get a driver instance.
-         *
-         * @param string|null $alias
-         * @return \Flasher\Prime\Factory\NotificationFactoryInterface 
-         * @throws \InvalidArgumentException
-         * @static 
-         */        public static function using($alias)
-        {
-                        /** @var \Flasher\Prime\Flasher $instance */
-                        return $instance->using($alias);
-        }
-                    /**
-         * 
-         *
-         * @param array<string, mixed> $criteria
-         * @param string $presenter
-         * @param array<string, mixed> $context
-         * @return mixed 
-         * @phpstan-return ($presenter is 'html' ? string : mixed)
-         * @static 
-         */        public static function render($criteria = [], $presenter = 'html', $context = [])
-        {
-                        /** @var \Flasher\Prime\Flasher $instance */
-                        return $instance->render($criteria, $presenter, $context);
-        }
-                    /**
-         * Register a custom driver creator.
-         *
-         * @param string $alias
-         * @param callable|\Flasher\Prime\Factory\NotificationFactoryInterface $factory
-         * @return static 
-         * @static 
-         */        public static function addFactory($alias, $factory)
-        {
-                        /** @var \Flasher\Prime\Flasher $instance */
-                        return $instance->addFactory($alias, $factory);
-        }
-            }
-    }
-
-namespace Flasher\Toastr\Laravel\Facade {
-            /**
-     * 
-     *
-     * @method static ToastrBuilder addSuccess(string $message, array $options = array())
-     * @method static ToastrBuilder addError(string $message, array $options = array())
-     * @method static ToastrBuilder addWarning(string $message, array $options = array())
-     * @method static ToastrBuilder addInfo(string $message, array $options = array())
-     * @method static ToastrBuilder addFlash(NotificationInterface|string $type, string $message = null, array $options = array())
-     * @method static ToastrBuilder flash(StampInterface[] $stamps = array())
-     * @method static ToastrBuilder type(string $type, string $message = null, array $options = array())
-     * @method static ToastrBuilder message(string $message)
-     * @method static ToastrBuilder options(array $options, bool $merge = true)
-     * @method static ToastrBuilder option(string $name, $value)
-     * @method static ToastrBuilder success(string $message = null, array $options = array())
-     * @method static ToastrBuilder error(string $message = null, array $options = array())
-     * @method static ToastrBuilder info(string $message = null, array $options = array())
-     * @method static ToastrBuilder warning(string $message = null, array $options = array())
-     * @method static ToastrBuilder priority(int $priority)
-     * @method static ToastrBuilder hops(int $amount)
-     * @method static ToastrBuilder keep()
-     * @method static ToastrBuilder delay(int $delay)
-     * @method static ToastrBuilder now()
-     * @method static ToastrBuilder with(StampInterface[] $stamps = array())
-     * @method static ToastrBuilder withStamp(StampInterface $stamp)
-     * @method static ToastrBuilder handler(string $handler)
-     * @method static Envelope      getEnvelope()
-     * @method static ToastrBuilder title(string $title)
-     * @method static ToastrBuilder closeButton(bool $closeButton = true)
-     * @method static ToastrBuilder closeClass(string $closeClass)
-     * @method static ToastrBuilder closeDuration(int $closeDuration)
-     * @method static ToastrBuilder closeEasing(string $closeEasing)
-     * @method static ToastrBuilder closeHtml(string $closeHtml)
-     * @method static ToastrBuilder closeMethod(string $closeMethod)
-     * @method static ToastrBuilder closeOnHover(bool $closeOnHover = true)
-     * @method static ToastrBuilder containerId(string $containerId)
-     * @method static ToastrBuilder debug(bool $debug = true)
-     * @method static ToastrBuilder escapeHtml(bool $escapeHtml = true)
-     * @method static ToastrBuilder extendedTimeOut(int $extendedTimeOut)
-     * @method static ToastrBuilder hideDuration(int $hideDuration)
-     * @method static ToastrBuilder hideEasing(string $hideEasing)
-     * @method static ToastrBuilder hideMethod(string $hideMethod)
-     * @method static ToastrBuilder iconClass(string $iconClass)
-     * @method static ToastrBuilder messageClass(string $messageClass)
-     * @method static ToastrBuilder newestOnTop(bool $newestOnTop = true)
-     * @method static ToastrBuilder onHidden(string $onHidden)
-     * @method static ToastrBuilder onShown(string $onShown)
-     * @method static ToastrBuilder positionClass(string $positionClass)
-     * @method static ToastrBuilder preventDuplicates(bool $preventDuplicates = true)
-     * @method static ToastrBuilder progressBar(bool $progressBar = true)
-     * @method static ToastrBuilder progressClass(string $progressClass)
-     * @method static ToastrBuilder rtl(bool $rtl = true)
-     * @method static ToastrBuilder showDuration(int $showDuration)
-     * @method static ToastrBuilder showEasing(string $showEasing)
-     * @method static ToastrBuilder showMethod(string $showMethod)
-     * @method static ToastrBuilder tapToDismiss(bool $tapToDismiss = true)
-     * @method static ToastrBuilder target(string $target)
-     * @method static ToastrBuilder timeOut(int $timeOut, bool $extendedTimeOut = null)
-     * @method static ToastrBuilder titleClass(string $titleClass)
-     * @method static ToastrBuilder toastClass(string $toastClass)
-     * @method static ToastrBuilder persistent()
-     */        class Toastr {
-                    /**
-         * 
-         *
-         * @return \Flasher\Prime\Factory\NotificationBuilderInterface 
-         * @static 
-         */        public static function createNotificationBuilder()
-        {
-                        /** @var \Flasher\Toastr\Prime\ToastrFactory $instance */
-                        return $instance->createNotificationBuilder();
-        }
-                    /**
-         * 
-         *
-         * @return \Flasher\Prime\Factory\StorageManagerInterface 
-         * @static 
-         */        public static function getStorageManager()
-        {            //Method inherited from \Flasher\Prime\Factory\NotificationFactory         
-                        /** @var \Flasher\Toastr\Prime\ToastrFactory $instance */
-                        return $instance->getStorageManager();
-        }
-            }
-    }
-
 namespace Spatie\LaravelIgnition\Facades {
             /**
      * 
@@ -19227,7 +19061,7 @@ namespace Illuminate\Routing {
                     /**
          * 
          *
-         * @see \LaravelLang\Routes\ServiceProvider::boot()
+         * @see \LaravelLang\Routes\ServiceProvider::registerGroup()
          * @param \Closure $callback
          * @static 
          */        public static function localizedGroup($callback)
@@ -22801,8 +22635,6 @@ namespace  {
             class Helper extends \App\Helpers\Helper {}
             class Pdf extends \Barryvdh\DomPDF\Facade\Pdf {}
             class PDF extends \Barryvdh\DomPDF\Facade\Pdf {}
-            class Flasher extends \Flasher\Laravel\Facade\Flasher {}
-            class Toastr extends \Flasher\Toastr\Laravel\Facade\Toastr {}
             class Flare extends \Spatie\LaravelIgnition\Facades\Flare {}
     }
 

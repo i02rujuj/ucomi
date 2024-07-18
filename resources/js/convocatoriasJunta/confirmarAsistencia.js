@@ -9,13 +9,16 @@ confirmarAsistenciaButtons.forEach(button => {
         
         try {
             const asistir = await Swal.fire({
-                title:'Confirmar asistencia',
+                title:'¿Asistirás a la convocatoria?',
                 showDenyButton: true,
                 showConfirmButton: true,
-                denyButtonText: 'No asistiré',
-                confirmButtonText: "Asistiré",
+                denyButtonText: 'Cancelar asistencia',
+                confirmButtonText: "Confirmar asistencia",
                 confirmButtonColor: '#3085d6',
                 denyButtonColor: '#d33', 
+                toast: true,
+                position: 'top-right',
+                showLoaderOnConfirm:true,
             });
 
             let confirmado = 0

@@ -18,6 +18,7 @@ class PublicoController extends Controller
         ->orderBy('idTipo')
         ->orderBy('updated_at')
         ->get();
+
         return view('publico.welcome',['centros' => $centros]);
     }
     
@@ -45,7 +46,7 @@ class PublicoController extends Controller
         }   
 
         
-        flash('No es posible consultar la información del centro.', NotificationInterface::ERROR);
+        sweetalert('No es posible consultar la información del centro.', NotificationInterface::ERROR);
         return redirect()->route('welcome');
     }
 
@@ -57,12 +58,11 @@ class PublicoController extends Controller
                 ->first();
 
                 if($comision){
-                    
                     return view('publico.infoComision',['comision' => $comision]);
                 }
         }   
 
-        flash('No es posible consultar la información de la comisión.', NotificationInterface::ERROR);
+        sweetalert('No es posible consultar la información de la comisión.', NotificationInterface::ERROR);
         return redirect()->route('welcome');
     }
     

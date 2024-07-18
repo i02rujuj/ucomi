@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Junta;
 use App\Helpers\Helper;
 use App\Models\Convocado;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\TipoConvocatoria;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Flasher\Prime\Notification\NotificationInterface;
 
 class ConvocatoriasJuntaController extends Controller
 {
@@ -84,7 +86,8 @@ class ConvocatoriasJuntaController extends Controller
             ]);
 
         } catch (\Throwable $th) {
-            return redirect()->route('convocatoriasJunta')->with('errors', 'No se pudieron obtener las convocatorias: ' . $th->getMessage());
+            sweetalert('No se pudieron obtener las convocatorias.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return redirect()->route('home')->with('errors', 'No se pudieron obtener las convocatorias.');
         }
     }
     
@@ -123,41 +126,12 @@ class ConvocatoriasJuntaController extends Controller
                 ]);
             }
 
-            return response()->json(['message' => 'La convocatoria se ha añadido correctamente.', 'status' => 200], 200);
+            sweetalert("La convocatoria del día '$convocatoria->fecha' se ha añadido correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "La convocatoria  del día '$convocatoria->fecha' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'Error al añadir la convocatoria.'.$th->getMessage(), 'status' => 422], 200);
-        }
-    }
-
-    public function delete(Request $request)
-    {
-        try {
-            $convocatoria = Convocatoria::where('id', $request->id)->first();
-
-            if (!$convocatoria) {
-                return response()->json(['errors' => 'No se ha encontrado la convocatoria.','status' => 422], 200);
-            }
-
-            Convocado::where('idConvocatoria', $request->id)->delete();
-            $convocatoria->delete();
-            return response()->json(['status' => 200], 200);
-
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se ha encontrado la convocatoria.','status' => 422], 200);
-        }
-    }
-
-    public function get(Request $request)
-    {
-        try {
-            $convocatoria = Convocatoria::withTrashed()->where('id', $request->id)->first();
-            if (!$convocatoria) {
-                return response()->json(['errors' => 'No se ha encontrado la convocatoria.','status' => 422], 200);
-            }
-            return response()->json($convocatoria);
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se ha encontrado la convocatoria.','status' => 422], 200);
+            sweetalert("Error al añadir la convocatoria del día '$convocatoria->fecha'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al añadir la convocatoria del día '$convocatoria->fecha'", 'status' => 422], 200);
         }
     }
 
@@ -172,10 +146,6 @@ class ConvocatoriasJuntaController extends Controller
 
             $convocatoria=Convocatoria::where('id', $request->id)->first();
 
-            if (!$convocatoria) {
-                return response()->json(['errors' => 'No se ha encontrado la convocatoria.', 'status' => 422], 200);
-            }
-
             if(isset($request->data['acta'])){
                 $url_acta = Helper::subirImagenCloudinary($request->data['acta'], "actasJuntas");
                 $convocatoria->acta = $url_acta;
@@ -187,10 +157,51 @@ class ConvocatoriasJuntaController extends Controller
             $convocatoria->hora = $request->data['hora'];
             $convocatoria->save();
            
-            return response()->json(['message' => 'La convocatoria se ha actualizado correctamente.', 'status' => 200], 200);
+            sweetalert("La convocatoria del día '$convocatoria->fecha' se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "La convocatoria del día '$convocatoria->fecha' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'Error al actualizar la convocatoria.', 'status' => 422], 200);
+            sweetalert("Error al actualizar la convocatoria del día '$convocatoria->fecha'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al actualizar la convocatoria del día '$convocatoria->fecha'", 'status' => 422], 200);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+
+            $request['accion']='delete';
+            $validation = $this->validateConvocatoria($request);
+            if($validation->original['status']!=200){
+                return $validation;
+            }
+
+            $convocatoria = Convocatoria::where('id', $request->id)->first();
+
+            Convocado::where('idConvocatoria', $request->id)->delete();
+            $convocatoria->delete();
+
+            sweetalert("La convocatoria del día '{$convocatoria->fecha}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "La convocatoria del día '{$convocatoria->fecha}' se ha eliminado correctamente.",'status' => 200], 200);
+
+        } catch (\Throwable $th) {
+            sweetalert("Error al eliminar la convocatoria del día '{$convocatoria->fecha}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al eliminar la convocatoria del día '{$convocatoria->fecha}'",'status' => 422], 200);
+        }
+    }
+
+    public function get(Request $request)
+    {
+        try {
+            $convocatoria = Convocatoria::withTrashed()->where('id', $request->id)->first();
+            if (!$convocatoria) {
+                throw new Exception();
+            }
+
+            return response()->json($convocatoria);
+        } catch (\Throwable $th) {
+            sweetalert("No se ha encontrado la convocatoria.", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => 'No se ha encontrado la convocatoria.','status' => 422], 200);
         }
     }
 
@@ -233,10 +244,20 @@ class ConvocatoriasJuntaController extends Controller
 
     public function validateConvocatoria(Request $request){
 
-        $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
+        if($request->accion=='update' || $request->accion=='delete'){
+            $convocatoria = Convocatoria::where('id', $request->id)->first();
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
+            if (!$convocatoria) {
+                return response()->json(['errors' => 'No se ha encontrado la convocatoria.','status' => 422], 200);
+            }
+        }
+
+        if($request->accion!='delete'){
+            $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
+            }
         }
         
         return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
@@ -261,7 +282,8 @@ class ConvocatoriasJuntaController extends Controller
 
             return response()->json($convocados->get());
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'Ha ocurrido un error al obtener los convocados','status' => 422], 200);
+            sweetalert("Ha ocurrido un error al obtener los convocados de la convocatoria del día '$request->fecha'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Ha ocurrido un error al obtener los convocados de la convocatoria del día '$request->fecha'",'status' => 422], 200);
         }
     }
 
@@ -273,9 +295,18 @@ class ConvocatoriasJuntaController extends Controller
             ->where('idConvocatoria', $request->idConvocatoria)
             ->update(['asiste' => $request->asiste]);
 
-            return response()->json(['message' => 'Se ha actualizado el estado de asistir a la convocatoria correctamente','status' => 200], 200);
+            if($request->asiste==1){
+                sweetalert('Se ha confirmado la asistencia a la convocatoria', NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+                return response()->json(['message' => 'Se ha confirmado la asistencia de la convocatoria','status' => 200], 200);
+            }
+            else{
+                sweetalert('Se ha cancelado la asistencia a la convocatoria', NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+                return response()->json(['message' => 'Se ha cancelado la asistencia a la convocatoria','status' => 200], 200);
+            }
+
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'Ha ocurrido un error al actualizar el estado de asistir','status' => 422], 200);
+            sweetalert('Ha ocurrido un error al editar la asistencia de la convocatoria', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => 'Ha ocurrido un error al editar la asistencia de la convocatoria','status' => 422], 200);
         }
     }
 }

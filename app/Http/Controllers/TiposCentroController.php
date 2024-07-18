@@ -10,16 +10,16 @@ class TiposCentroController extends Controller
     public function index()
     {
         try {
-            $tiposCentro = TipoCentro::select('id', 'nombre', 'estado')->where('estado', 1)->get();
+            $tiposCentro = TipoCentro::select('id', 'nombre')->get();
 
             if (!$tiposCentro) {
-                return response()->json(['error' => 'No se han encontrado tipos de centro.'], 404);
+                return response()->json(['errors' => 'No se han podido obtener los tipos de centro.', 'status' => 422], 200);
             }
 
             return response()->json($tiposCentro);
 
         } catch (\Throwable $th) {
-            return redirect()->route('centros')->with('error', 'No se pudieron obtener los tipos de centros: ' . $th->getMessage());
+            return redirect()->route('home')->with('error', 'No se han podido obtener los tipos de centro.');
         }
     }
 }

@@ -7,13 +7,9 @@ use PDF;
 use App\Models\User;
 use App\Helpers\Helper;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class UserController extends Controller
 {
@@ -105,9 +101,9 @@ class UserController extends Controller
             break;
     
             case 'delete':
-                    $user->image = null;
-                    $user->save();
-                    return redirect()->route('perfil')->with('success', 'Imagen de perfil eliminada correctamente');
+                $user->image = null;
+                $user->save();
+                return redirect()->route('perfil')->with('success', 'Imagen de perfil eliminada correctamente');
                 break;
         } 
     }

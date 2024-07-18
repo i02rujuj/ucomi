@@ -64,7 +64,9 @@ class MiembrosJuntaController extends Controller
             ->paginate(10);
 
             $users = User::select('id', 'name')->get();
-            $representacionesGeneral = Representacion::select('id', 'nombre')->get();    
+            $representacionesGeneral = Representacion::select('id', 'nombre')
+            ->where('deJunta', 1)
+            ->get();    
             
             if($request->input('action')=='limpiar'){
                 return redirect()->route('miembrosJunta')->with([

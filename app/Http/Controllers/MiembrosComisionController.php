@@ -80,7 +80,9 @@ class MiembrosComisionController extends Controller
             ->paginate(10);
 
             $users = User::select('id', 'name')->get();
-            $representacionesGeneral = Representacion::select('id', 'nombre')->get();   
+            $representacionesGeneral = Representacion::select('id', 'nombre')
+            ->where('deComision', 1)
+            ->get();   
             $centros = Centro::select('id', 'nombre')->get();
             $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion')->get(); 
             

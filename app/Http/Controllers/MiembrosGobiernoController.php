@@ -55,7 +55,9 @@ class MiembrosGobiernoController extends Controller
             ->paginate(10);
 
             $users = User::select('id', 'name')->get();
-            $representacionesGobierno = Representacion::select('id', 'nombre')->get();    
+            $representacionesGobierno = Representacion::select('id', 'nombre')
+            ->where('deCentro', 1)
+            ->get();    
             
             if($request->input('action')=='limpiar'){
                 return redirect()->route('miembrosGobierno')->with([

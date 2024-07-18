@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use DateTime;
+use Exception;
 use App\Models\Junta;
 use App\Models\Centro;
-use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Flasher\Prime\Notification\NotificationInterface;
 
 class JuntasController extends Controller
 {
@@ -68,7 +69,8 @@ class JuntasController extends Controller
             ]);
 
         } catch (\Throwable $th) {
-            return redirect()->route('juntas')->with('errors', 'No se pudieron obtener las juntas: ' . $th->getMessage());
+            sweetalert('No se pudieron obtener las juntas.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return redirect()->route('juntas')->with('errors', 'No se pudieron obtener las juntas.' . $th->getMessage());
         }
     }
 
@@ -87,46 +89,12 @@ class JuntasController extends Controller
                 "fechaDisolucion" => $request->data['fechaDisolucion'],
             ]);
 
-            return response()->json(['message' => 'La junta se ha añadido correctamente.', 'status' => 200], 200);
+            sweetalert("La junta de centro '{$junta->centro->nombre}' se ha añadido correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "La junta de centro '{$junta->centro->nombre}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'Error al añadir la junta.', 'status' => 422], 200);
-        }
-    }
-
-    public function delete(Request $request)
-    {
-        try {
-            $request['accion']='delete';
-            $validation = $this->validateJunta($request);
-            if($validation->original['status']!=200){
-                return $validation;
-            }
-
-            $junta = Junta::where('id', $request->id)->first();
-
-            if (!$junta) {
-                return response()->json(['errors' => 'No se ha encontrado la junta.','status' => 422], 200);
-            }
-
-            $junta->delete();
-            return response()->json(['status' => 200], 200);
-
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se ha encontrado la junta.','status' => 422], 200);
-        }
-    }
-
-    public function get(Request $request)
-    {
-        try {
-            $junta = Junta::withTrashed()->where('id', $request->id)->first();
-            if (!$junta) {
-                return response()->json(['errors' => 'No se ha encontrado la junta.','status' => 422], 200);
-            }
-            return response()->json($junta);
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se ha encontrado la junta.','status' => 422], 200);
+            sweetalert("Error al añadir la junta de centro '{$junta->centro->nombre}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al añadir la junta de centro '{$junta->centro->nombre}'", 'status' => 422], 200);
         }
     }
 
@@ -141,10 +109,6 @@ class JuntasController extends Controller
 
             $junta=Junta::where('id', $request->id)->first();
 
-            if (!$junta) {
-                return response()->json(['errors' => 'No se ha encontrado la junta.', 'status' => 422], 200);
-            }
-
             if($request->data['fechaDisolucion']!=null){
                 $miembrosJunta = DB::table('miembros_junta')
                 ->where('idJunta', $junta->id)
@@ -154,29 +118,49 @@ class JuntasController extends Controller
             $junta->fechaConstitucion = $request->data['fechaConstitucion'];
             $junta->fechaDisolucion = $request->data['fechaDisolucion'];
             $junta->save();
-            return response()->json(['message' => 'La junta se ha actualizado correctamente.', 'status' => 200], 200);
+
+            sweetalert("La junta de centro '{$junta->centro->nombre}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "La junta de centro '{$junta->centro->nombre}' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'Error al actualizar la junta.', 'status' => 422], 200);
+            sweetalert("Error al actualizar la junta '{$junta->centro->nombre}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al actualizar la junta de centro '{$junta->centro->nombre}'", 'status' => 422], 200);
         }
     }
 
-    public function all()
+    public function delete(Request $request)
     {
         try {
-            $juntas = DB::table('juntas')
-            ->join('centros', 'juntas.idCentro', '=', 'centros.id')
-            ->select('juntas.id', 'juntas.fechaConstitucion', 'centros.id as idCentro', 'centros.nombre')
-            ->get();
-
-            if (!$juntas) {
-                return response()->json(['errors' => 'No se han podido obtener las juntas.','status' => 422], 200);
+            $request['accion']='delete';
+            $validation = $this->validateJunta($request);
+            if($validation->original['status']!=200){
+                return $validation;
             }
 
-            return response()->json($juntas);
+            $junta = Junta::where('id', $request->id)->first();
+            $junta->delete();
+
+            sweetalert("La junta de centro '{$junta->centro->nombre}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "La junta de centro '{$junta->centro->nombre}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se han podido obtener las juntas.','status' => 422], 200);
+            sweetalert("Error al eliminar la junta de centro '{$junta->centro->nombre}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al eliminar la junta de centro '{$junta->centro->nombre}'",'status' => 422], 200);
+        }
+    }
+
+    public function get(Request $request)
+    {
+        try {
+            $junta = Junta::withTrashed()->where('id', $request->id)->first();
+            if (!$junta) {
+                throw new Exception();
+            }
+
+            return response()->json($junta);
+        } catch (\Throwable $th) {
+            sweetalert("No se ha encontrado la junta.", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => 'No se ha encontrado la junta.','status' => 422], 200);
         }
     }
 
@@ -205,14 +189,16 @@ class JuntasController extends Controller
 
     public function validateJunta(Request $request){
 
-        if($request->accion=='delete'){
+        if($request->accion=='update' ||$request->accion=='delete'){
             $junta = Junta::where('id', $request->id)->first();
 
-            if (!$junta) {
+            if (!$junta) 
                 return response()->json(['errors' => 'No se ha encontrado la junta.','status' => 422], 200);
-            }
+        }
 
-            if($junta->miembrosJunta->count() > 0)
+        if($request->accion=='delete'){
+            
+            if($junta->miembros->count() > 0)
                 return response()->json(['errors' => 'Existen miembros de junta asociadas a esta junta. Para borrar la junta es necesario eliminar todos sus miembros de junta.', 'status' => 422], 200);
 
             if($junta->comisiones->count() > 0)

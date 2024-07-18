@@ -85,7 +85,7 @@ const preConfirm = async(accion, id=null) => {
 
             if (response.status === 200) { 
                 const result = await Swal.fire({
-                    title: "¿Seguro que quiere eliminar el centro?",
+                    title: `¿Seguro que quiere eliminar el centro '${valores.nombre}'?`,
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#d33",
@@ -95,21 +95,19 @@ const preConfirm = async(accion, id=null) => {
                     timerProgressBar: true,
                     showConfirmButton: true,
                     position: 'top-right',
+                    showLoaderOnConfirm:true,
+                    preConfirm: async () => { 
+                        dataToSend = {
+                            id: id,
+                        };
+        
+                        response = await DELETE_CENTRO_BBDD(dataToSend);
+                        title="Eliminado"
+                        text="Se ha eliminado el centro" 
+                    }
                 });
     
-                if (result.isConfirmed) {
-    
-                    dataToSend = {
-                        id: id,
-                    };
-    
-                    response = await DELETE_CENTRO_BBDD(dataToSend);
-                    title="Eliminado"
-                    text="Se ha eliminado el centro"
-                }
-                else{
-                    return false
-                }
+                if(result.isDismissed){return false}     
             }  
             break;
     }

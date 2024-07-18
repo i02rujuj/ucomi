@@ -7,7 +7,6 @@ use App\Models\Centro;
 use App\Helpers\Helper;
 use App\Models\TipoCentro;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Flasher\Prime\Notification\NotificationInterface;
@@ -64,7 +63,7 @@ class CentrosController extends Controller
             ]);
 
         } catch (\Throwable $th) {
-            sweetalert("No se pudieron obtener los centros..", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            sweetalert("No se pudieron obtener los centros.", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
             return redirect()->route('home')->with('errors', 'No se pudieron obtener los centros.');
         }
     }
@@ -87,11 +86,11 @@ class CentrosController extends Controller
                 "logo" => $url_image,
             ]);
 
-            sweetalert("El centro $centro->nombre se ha añadido correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
-            return response()->json(['message' => "El centro $centro->nombre se ha añadido correctamente.", 'status' => 200], 200);
+            sweetalert("El centro '$centro->nombre' se ha añadido correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "El centro '$centro->nombre' se ha añadido correctamente.", 'status' => 200], 200);
         } catch (\Throwable $th) {
-            sweetalert("Error al añadir el centro $centro->nombre", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
-            return response()->json(['errors' => "Error al añadir el centro $centro->nombre", 'status' => 422], 200);
+            sweetalert("Error al añadir el centro '$centro->nombre'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al añadir el centro '$centro->nombre'", 'status' => 422], 200);
         }
     }
 
@@ -116,11 +115,11 @@ class CentrosController extends Controller
             $centro->idTipo = $request->data['idTipo'];
             $centro->save();
 
-            sweetalert("El centro $centro->nombre se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
-            return response()->json(['message' => "El centro $centro->nombre se ha actualizado correctamente.", 'status' => 200], 200);
+            sweetalert("El centro '$centro->nombre' se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "El centro '$centro->nombre' se ha actualizado correctamente.", 'status' => 200], 200);
         } catch (\Throwable $th) {
-            sweetalert("Error al actualizar el centro $centro->nombre", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
-            return response()->json(['errors' => "Error al actualizar el centro $centro->nombre", 'status' => 422], 200);
+            sweetalert("Error al actualizar el centro '$centro->nombre'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al actualizar el centro '$centro->nombre'", 'status' => 422], 200);
         }
     }
 
@@ -136,12 +135,12 @@ class CentrosController extends Controller
             $centro = Centro::where('id', $request->id)->first();
             $centro->delete();
 
-            sweetalert("El centro $centro->nombre se ha eliminado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
-            return response()->json(['message' => "El centro $centro->nombre se ha eliminado correctamente.",'status' => 200], 200);
+            sweetalert("El centro '$centro->nombre' se ha eliminado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "El centro '$centro->nombre' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            sweetalert("Error al eliminar el centro $centro->nombre", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
-            return response()->json(['errors' => "Error al eliminar el centro $centro->nombre",'status' => 422], 200);
+            sweetalert("Error al eliminar el centro '$centro->nombre'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al eliminar el centro '$centro->nombre'",'status' => 422], 200);
         }
     }
 

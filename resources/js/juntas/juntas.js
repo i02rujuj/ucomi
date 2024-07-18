@@ -50,7 +50,6 @@ const preConfirm = async(accion, id=null) => {
     }
 
     let dataToSend, response, title, text = null
-    let mostrar=true
 
     switch (accion) {
         case 'add':
@@ -85,10 +84,15 @@ const preConfirm = async(accion, id=null) => {
                         cancelButtonText: "Cancelar",
                         confirmButtonColor: '#d33',
                         cancelButtonColor: '',
+                        toast: true,
+                        timerProgressBar: true,
+                        showConfirmButton: true,
+                        position: 'top-right',
+                        showLoaderOnConfirm:true,
                         preConfirm: async () => {confirmarCesarMiembros = true},
                     })
 
-                    if(result2.isDismissed){mostrar=false}
+                    if(result2.isDismissed){return false}
                 }
     
                 if(valores['fechaDisolucion']==null || confirmarCesarMiembros){
@@ -112,12 +116,17 @@ const preConfirm = async(accion, id=null) => {
 
             if (response.status === 200) {
                 const result = await Swal.fire({
-                    title: "¿Eliminar la junta?",
+                    title: `¿Seguro que quiere eliminar la junta?`,
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#d33",
                     cancelButtonColor: "",
                     confirmButtonText: "Eliminar",
+                    toast: true,
+                    timerProgressBar: true,
+                    showConfirmButton: true,
+                    position: 'top-right',
+                    showLoaderOnConfirm:true,
                     preConfirm: async () => {        
                         response = await DELETE_JUNTA_BBDD(dataToSend);
                         title="Eliminado"
@@ -125,30 +134,18 @@ const preConfirm = async(accion, id=null) => {
                     }
                 })
 
-                if(result.isDismissed){mostrar=false}     
+                if(result.isDismissed){return false}     
             }
             break
     }
 
-    if(mostrar){
-        if (response.status === 200) {
-            await Swal.fire({
-                icon: "success",
-                title: title,
-                text: text,
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-                showConfirmButton: false,
-                position: 'top-right',
-            })
-            window.location.reload()
-        } 
-        else {
-            Swal.showValidationMessage(response.errors)
-            return false
-        }
+    if (response.status === 200) {
+        window.location.reload()
     } 
+    else {
+        Swal.showValidationMessage(response.errors)
+        return false
+    }
 }
 
 /**
@@ -166,6 +163,7 @@ if(addButton){
             cancelButtonText: "Cancelar",
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
+            showLoaderOnConfirm:true,
             preConfirm: async () => preConfirm('add')
         })
     })
@@ -199,6 +197,8 @@ const addEditEvent = (button) => {
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '',
                 denyButtonColor: '#d33',
+                showLoaderOnConfirm:true,
+                showLoaderOnDeny:true,
                 preConfirm: async () => preConfirm('update', button.dataset.juntaId),
                 preDeny: permitirAcciones ? async () => preConfirm('delete', button.dataset.juntaId) : null,
             });

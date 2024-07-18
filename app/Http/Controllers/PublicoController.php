@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Junta;
 use App\Models\Centro;
 use App\Models\Comision;
-use Flasher\Prime\Notification\NotificationInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Flasher\Prime\Notification\NotificationInterface;
 
 class PublicoController extends Controller
 {
@@ -44,7 +44,7 @@ class PublicoController extends Controller
                 }
         }   
 
-        //toastr('No es posible consultar la información del centro', NotificationInterface::ERROR);
+        toastr('No es posible consultar la información del centro', NotificationInterface::ERROR);
         return redirect()->route('welcome');
     }
 
@@ -61,7 +61,7 @@ class PublicoController extends Controller
                 }
         }   
 
-        //toastr('No es posible consultar la información de la comisión', NotificationInterface::ERROR);
+        toastr('No es posible consultar la información de la comisión', NotificationInterface::ERROR);
         return redirect()->route('welcome');
     }
     

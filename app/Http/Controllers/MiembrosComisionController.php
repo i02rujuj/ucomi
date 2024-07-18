@@ -11,6 +11,7 @@ use App\Models\Comision;
 use Illuminate\Http\Request;
 use App\Models\Representacion;
 use App\Models\MiembroComision;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Flasher\Prime\Notification\NotificationInterface;
@@ -79,7 +80,15 @@ class MiembrosComisionController extends Controller
             ->orderBy('idUsuario')
             ->paginate(10);
 
-            $users = User::select('id', 'name')->get();
+            $users = User::select('id', 'name')
+            ->whereNotExists(function($query){
+                $query->select(DB::raw(1))
+                      ->from('miembros_comision')
+                      ->whereNull('miembros_comision.fechaCese')
+                      ->whereNull('miembros_comision.deleted_at')
+                      ->whereRaw('miembros_comision.idUsuario = users.id');
+            })->get();
+            
             $representacionesGeneral = Representacion::select('id', 'nombre')
             ->where('deComision', 1)
             ->get();   

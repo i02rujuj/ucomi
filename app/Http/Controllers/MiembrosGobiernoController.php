@@ -9,6 +9,7 @@ use App\Models\Centro;
 use Illuminate\Http\Request;
 use App\Models\Representacion;
 use App\Models\MiembroGobierno;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Flasher\Prime\Notification\NotificationInterface;
@@ -54,7 +55,16 @@ class MiembrosGobiernoController extends Controller
             ->orderBy('idUsuario')
             ->paginate(10);
 
-            $users = User::select('id', 'name')->get();
+            $users = User::select('id', 'name')
+            ->whereNotExists(function($query){
+                $query->select(DB::raw(1))
+                      ->from('miembros_gobierno')
+                      ->whereNull('miembros_gobierno.fechaCese')
+                      ->whereNull('miembros_gobierno.deleted_at')
+                      ->whereRaw('miembros_gobierno.idUsuario = users.id');
+            })
+            ->get();
+
             $representacionesGobierno = Representacion::select('id', 'nombre')
             ->where('deCentro', 1)
             ->get();    

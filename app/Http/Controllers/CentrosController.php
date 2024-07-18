@@ -192,7 +192,7 @@ class CentrosController extends Controller
 
     public function validateCentro(Request $request){
         
-        if($request->accion=='update' ||$request->accion=='delete'){
+        if($request->accion=='update' || $request->accion=='delete'){
             $centro = Centro::where('id', $request->id)->first();
             if (!$centro)
                 return response()->json(['errors' => 'No se ha encontrado el centro.','status' => 422], 200);

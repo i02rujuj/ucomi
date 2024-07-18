@@ -84,7 +84,7 @@ class ComisionController extends Controller
 
         } catch (\Throwable $th) {
             sweetalert('No se pudieron obtener las comisiones.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
-            return redirect()->route('comisiones')->with('errors', 'No se pudieron obtener las comisiones.');
+            return redirect()->route('home')->with('errors', 'No se pudieron obtener las comisiones.');
         }
     }
 
@@ -137,8 +137,8 @@ class ComisionController extends Controller
             $comision->fechaDisolucion = $request->data['fechaDisolucion'];
             $comision->save();
 
-            sweetalert("La junta comision '{$comision->nombre}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
-            return response()->json(['message' => "La junta comision '{$comision->nombre}' se ha actualizado correctamente.", 'status' => 200], 200);
+            sweetalert("La comision '{$comision->nombre}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "La comision '{$comision->nombre}' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
             sweetalert("Error al actualizar la comisión '{$comision->nombre}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
@@ -216,7 +216,7 @@ class ComisionController extends Controller
 
     public function validateComision(Request $request){
 
-        if($request->accion=='update' ||$request->accion=='delete'){
+        if($request->accion=='update' || $request->accion=='delete'){
             $comision = Comision::where('id', $request->id)->first();
 
             if (!$comision) {

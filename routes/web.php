@@ -44,12 +44,9 @@ Route::get('/', [PublicoController::class, 'index'])->name('welcome');
 Route::get('/info_junta', [PublicoController::class, 'infoJunta'])->name('infoJunta');
 Route::get('/info_comision', [PublicoController::class, 'infoComision'])->name('infoComision');
 Route::get('login', [PublicoController::class, 'login'])->name('login');
-Route::post('/centro/all', [CentrosController::class, 'all']);
-Route::post('/centro/get', [CentrosController::class, 'get']);
-Route::post('/miembros_gobierno/getbycentro', [MiembrosGobiernoController::class, 'getByCentro']);
-Route::post('/miembros_junta/getbycentro', [MiembrosJuntaController::class, 'getByCentro']);
 
 Route::group(['middleware' => ['auth']], function () {
+    
     // USERS
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::post('/user/get', [UserController::class, 'get']);
@@ -66,7 +63,8 @@ Route::group(['middleware' => ['responsable:admin|centro']], function () {
     // CENTROS
     Route::get('/centros', [CentrosController::class, 'index'])->name('centros');
     Route::post('/centro/add', [CentrosController::class, 'store'])->middleware('responsable:admin');
-    Route::post('/centro/delete', [CentrosController::class, 'delete'])->middleware('responsable:admin');;
+    Route::post('/centro/delete', [CentrosController::class, 'delete'])->middleware('responsable:admin');
+    Route::post('/centro/get', [CentrosController::class, 'get']);
     Route::post('/centro/update', [CentrosController::class, 'update']);
     Route::post('/centro/validate', [CentrosController::class, 'validateCentro']);
 

@@ -70,7 +70,7 @@ class JuntasController extends Controller
 
         } catch (\Throwable $th) {
             sweetalert('No se pudieron obtener las juntas.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
-            return redirect()->route('juntas')->with('errors', 'No se pudieron obtener las juntas.');
+            return redirect()->route('home')->with('errors', 'No se pudieron obtener las juntas.');
         }
     }
 
@@ -189,7 +189,7 @@ class JuntasController extends Controller
 
     public function validateJunta(Request $request){
 
-        if($request->accion=='update' ||$request->accion=='delete'){
+        if($request->accion=='update' || $request->accion=='delete'){
             $junta = Junta::where('id', $request->id)->first();
 
             if (!$junta) 

@@ -3,17 +3,18 @@
 namespace App\Http\Controllers;
 
 use DateTime;
+use Exception;
 use App\Models\User;
 use App\Models\Centro;
 use Illuminate\Http\Request;
+use App\Models\Representacion;
 use App\Models\MiembroGobierno;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Representacion;
 use Illuminate\Support\Facades\Validator;
+use Flasher\Prime\Notification\NotificationInterface;
 
 class MiembrosGobiernoController extends Controller
 {
-
     public function index(Request $request)
     {
         try {
@@ -78,7 +79,8 @@ class MiembrosGobiernoController extends Controller
             ]);
         
         } catch (\Throwable $th) {
-            return redirect()->route('miembrosGobierno')->with('errors', 'No se pudieron obtener los miembros de centro: ' . $th->getMessage());
+            sweetalert('No se pudieron obtener los miembros de gobierno.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return redirect()->route('home')->with('errors', 'No se pudieron obtener los miembros de gobierno.');
         }
     }
 
@@ -100,40 +102,12 @@ class MiembrosGobiernoController extends Controller
                 "responsable" => $request->data['responsable'],
             ]);
 
-            return response()->json(['message' => 'Miembro de centro creado correctamente.', 'status' => 200], 200);
+            sweetalert("El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha añadido correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se pudo crear el miembro de centro.', 'status' => 422], 200);
-        }
-    }
-
-    public function get(Request $request)
-    {
-        try {
-            $miembro = MiembroGobierno::withTrashed()->where('id', $request->id)->first();
-            if (!$miembro) {
-                return response()->json(['errors' => 'No se ha encontrado el miembro de centro.','status' => 422], 200);
-            }
-            return response()->json($miembro);
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se ha encontrado el miembro de centro.','status' => 422], 200);
-        }
-    }
-
-    public function delete(Request $request)
-    {
-        try {
-            $miembro = MiembroGobierno::where('id', $request->id)->first();
-
-            if (!$miembro) {
-                return response()->json(['errors' => 'No se ha encontrado el miembro de centro.','status' => 422], 200);
-            }
-
-            $miembro->delete();
-            return response()->json(['status' => 200], 200);
-
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se ha encontrado el miembro de centro.','status' => 422], 200);
+            sweetalert("Error al añadir el miembro de gobierno '{$miembroGobierno->usuario->name}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al añadir el miembro de gobierno '{$miembroGobierno->usuario->name}'", 'status' => 422], 200);
         }
     }
 
@@ -146,21 +120,57 @@ class MiembrosGobiernoController extends Controller
                 return $validation;
             }
 
-            $miembro = MiembroGobierno::where('id', $request->id)->first();
-            if (!$miembro) {
-                return response()->json(['errors' => 'No se ha encontrado el miembro de centro.', 'status' => 422], 200);
-            }
+            $miembroGobierno = MiembroGobierno::where('id', $request->id)->first();
 
-            $miembro->idRepresentacion = $request->data['idRepresentacion'];
-            $miembro->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
-            $miembro->fechaCese = $request->data['fechaCese'];  
-            $miembro->responsable = $request->data['responsable'];  
+            $miembroGobierno->idRepresentacion = $request->data['idRepresentacion'];
+            $miembroGobierno->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
+            $miembroGobierno->fechaCese = $request->data['fechaCese'];  
+            $miembroGobierno->responsable = $request->data['responsable'];  
 
-            $miembro->save();
-            return response()->json(['message' => 'El miembro de centro se ha actualizado correctamente.', 'status' => 200], 200);
+            $miembroGobierno->save();
+
+            sweetalert("El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'Error al actualizar el miembro de centro.', 'status' => 422], 200);
+            sweetalert("Error al actualizar el miembro de gobierno '{$miembroGobierno->usuario->name}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al actualizar el miembro de gobierno '{$miembroGobierno->usuario->name}'", 'status' => 422], 200);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        $request['accion']='delete';
+        $validation = $this->validateMiembro($request);
+        if($validation->original['status']!=200){
+            return $validation;
+        }
+
+        try {
+            $miembroGobierno = MiembroGobierno::where('id', $request->id)->first();
+            $miembroGobierno->delete();
+
+            sweetalert("El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['message' => "El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha eliminado correctamente.",'status' => 200], 200);
+
+        } catch (\Throwable $th) {
+            sweetalert("Error al eliminar el miembro de gobierno '{$miembroGobierno->usuario->name}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Error al eliminar el miembro de gobierno '{$miembroGobierno->usuario->name}'",'status' => 422], 200);
+        }
+    }
+
+    public function get(Request $request)
+    {
+        try {
+            $miembroGobierno = MiembroGobierno::withTrashed()->where('id', $request->id)->first();
+            if (!$miembroGobierno) {
+                throw new Exception();
+            }
+
+            return response()->json($miembroGobierno);
+        } catch (\Throwable $th) {
+            sweetalert("No se ha encontrado el miembro de gobierno.", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "No se ha encontrado el miembro de gobierno.",'status' => 422], 200);
         }
     }
 
@@ -202,89 +212,81 @@ class MiembrosGobiernoController extends Controller
 
     public function validateMiembro(Request $request){
 
-        $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
+        if($request->accion=='update' || $request->accion=='delete'){
+            $miembroGobierno = MiembroGobierno::where('id', $request->id)->first();
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
+            if (!$miembroGobierno) {
+                return response()->json(['errors' => 'No se ha encontrado el miembro de gobierno.','status' => 422], 200);
+            }
         }
-        else{
-            if($request->data['fechaCese']==null){
-                /// Comprobación existencia director actual en el centro
-                if($request->data['idRepresentacion']==config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR')){
-                    $director = MiembroGobierno::select('id')
-                        ->where('idCentro', $request->data['idCentro'])
-                        ->where('idRepresentacion', config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR'))
-                        ->where('fechaCese', null)
-                        ->whereNot('id', $request->id)
-                        ->first();
-    
-                    if($director)
-                        return response()->json(['errors' => 'No se pudo añadir el miembro de centro: ya existe un Director/a | Decano/a vigente en el centro seleccionado', 'status' => 422], 200);
-                }
-    
-                // Comprobación existencia secretario actual en el centro
-                if($request->data['idRepresentacion']==config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO')){
-                    $secretario = MiembroGobierno::select('id')
-                        ->where('idCentro', $request->data['idCentro'])
-                        ->where('idRepresentacion', config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO'))
-                        ->where('fechaCese', null)
-                        ->whereNot('id', $request->id)
-                        ->first();
-    
-                    if($secretario)
-                        return response()->json(['errors' => 'No se pudo añadir el miembro de centro: ya existe un Secretario/a vigente en el centro seleccionado', 'status' => 422], 200);
-                }
 
-                // Comprobación existencia usuario en el centro
-                    $usuarioEnCentro = MiembroGobierno::select('id')
-                        ->where('idCentro', $request->data['idCentro'])
-                        ->where('idUsuario', $request->data['idUsuario'])
-                        ->where('fechaCese', null)
-                        ->whereNot('id', $request->id)
-                        ->first();
-    
-                    if($usuarioEnCentro)
-                        return response()->json(['errors' => 'No se pudo añadir el miembro de centro: ya existe el usuario vigente en el centro seleccionado', 'status' => 422], 200);
-        
-                    if($request->accion=='update'){
-                        // Comprobación existencia centro vigente
-                        $centroVigenteMiembro = Centro::where('id', $request->data['idCentro'])
-                        ->whereNotNull('fechaDisolucion')
-                        ->first();
-    
-                        if($centroVigenteMiembro)
-                            return response()->json(['errors' => 'No se pudo actualizar el miembro de centro: el centro no está vigente', 'status' => 422], 200);
-                    }
+        if($request->accion!='delete'){
+            $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()->first(), 'status' => 422], 200);
             }
             else{
-                // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
-                $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
-                $dateCese = new DateTime($request->data['fechaCese']);
+                if($request->data['fechaCese']==null){
+                    /// Comprobación existencia director actual en el centro
+                    if($request->data['idRepresentacion']==config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR')){
+                        $director = MiembroGobierno::select('id')
+                            ->where('idCentro', $request->data['idCentro'])
+                            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR'))
+                            ->where('fechaCese', null)
+                            ->whereNot('id', $request->id)
+                            ->first();
+        
+                        if($director)
+                            return response()->json(['errors' => 'No se pudo añadir el miembro de gobierno: ya existe un Director/a | Decano/a vigente en el centro seleccionado', 'status' => 422], 200);
+                    }
+        
+                    // Comprobación existencia secretario actual en el centro
+                    if($request->data['idRepresentacion']==config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO')){
+                        $secretario = MiembroGobierno::select('id')
+                            ->where('idCentro', $request->data['idCentro'])
+                            ->where('idRepresentacion', config('constants.REPRESENTACIONES.GOBIERNO.SECRETARIO'))
+                            ->where('fechaCese', null)
+                            ->whereNot('id', $request->id)
+                            ->first();
+        
+                        if($secretario)
+                            return response()->json(['errors' => 'No se pudo añadir el miembro de gobierno: ya existe un Secretario/a vigente en el centro seleccionado', 'status' => 422], 200);
+                    }
 
-                if ($dateTomaPosesion>$dateCese) {
-                    return response()->json(['errors' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 422], 200);
-                }  
+                    // Comprobación existencia usuario en el centro
+                        $usuarioEnCentro = MiembroGobierno::select('id')
+                            ->where('idCentro', $request->data['idCentro'])
+                            ->where('idUsuario', $request->data['idUsuario'])
+                            ->where('fechaCese', null)
+                            ->whereNot('id', $request->id)
+                            ->first();
+        
+                        if($usuarioEnCentro)
+                            return response()->json(['errors' => 'No se pudo añadir el miembro de gobierno: ya existe el usuario vigente en el centro seleccionado', 'status' => 422], 200);
+            
+                        if($request->accion=='update'){
+                            // Comprobación existencia centro vigente
+                            $centroVigenteMiembro = Centro::where('id', $request->data['idCentro'])
+                            ->whereNotNull('deleted_at')
+                            ->first();
+        
+                            if($centroVigenteMiembro)
+                                return response()->json(['errors' => 'No se pudo actualizar el miembro de gobierno: el centro no está vigente', 'status' => 422], 200);
+                        }
+                }
+                else{
+                    // Validar que fechaTomaPosesión no pueda ser mayor a fechaCese
+                    $dateTomaPosesion = new DateTime($request->data['fechaTomaPosesion']);
+                    $dateCese = new DateTime($request->data['fechaCese']);
+
+                    if ($dateTomaPosesion>$dateCese) {
+                        return response()->json(['errors' => 'La fecha de cese no puede ser anterior a la toma de posesión', 'status' => 422], 200);
+                    }  
+                }
             }
         }
         
         return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
-    }
-
-    public function getByCentro(Request $request)
-    {
-        try {
-            $miembros = MiembroGobierno::
-                join('users', 'miembros_gobierno.idUsuario', '=', 'users.id')
-                ->join('representaciones_gobierno', 'miembros_gobierno.idRepresentacion', '=', 'representaciones_gobierno.id')
-                ->where('miembros_gobierno.idCentro', $request->get('id'))
-                ->where('miembros_gobierno.fechaCese', null)
-                ->select('users.id', 'users.name', 'users.email', 'miembros_gobierno.idRepresentacion', 'representaciones_gobierno.nombre')
-                ->get();
-
-            return response()->json(['miembros'=>$miembros]);
-
-        } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se han encontrado miembros de gobierno para el centro seleccionado.','status' => 422], 200);
-        }    
     }
 }

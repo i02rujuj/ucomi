@@ -118,7 +118,7 @@ const preConfirm = async(accion, id=null) => {
 
             if (response.status === 200) {
                 const result = await Swal.fire({
-                    title: "¿Seguro que quiere eliminar la comisión?",
+                    title: `¿Seguro que quiere eliminar la comisión '${valores.nombre}'?`,
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#d33",

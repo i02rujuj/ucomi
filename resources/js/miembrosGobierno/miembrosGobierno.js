@@ -22,6 +22,7 @@ function renderHTMLMiembro(response){
     $(modal_add).find("#idUsuario").val('').trigger('change');
     modal_add.querySelector('#idCentro').value=""
     modal_add.querySelector('#idRepresentacion').value=""
+    modal_add.querySelector('#cargo').value=""
     modal_add.querySelector('#fechaTomaPosesion').value=""
     modal_add.querySelector('#fechaCese').value=""
     modal_add.querySelector('#responsable').value=0
@@ -40,12 +41,14 @@ function renderHTMLMiembro(response){
         modal_edit.querySelector('#idCentro').setAttribute('disabled', 'disabled')
         modal_edit.querySelector('#idCentro').classList.add('bg-red-50')
         modal_edit.querySelector('#idRepresentacion').value=response.representacion.id
+        modal_edit.querySelector('#cargo').value=response.cargo
         modal_edit.querySelector('#fechaTomaPosesion').value=response.fechaTomaPosesion
         modal_edit.querySelector('#fechaCese').value=response.fechaCese
         modal_edit.querySelector('#responsable').value=response.responsable
 
         if(response.deleted_at!=null){
             modal_edit.querySelector('#idRepresentacion').setAttribute('disabled', 'disabled')
+            modal_edit.querySelector('#cargo').setAttribute('disabled', 'disabled')
             modal_edit.querySelector('#fechaTomaPosesion').setAttribute('disabled', 'disabled')
             modal_edit.querySelector('#fechaCese').setAttribute('disabled', 'disabled')
             modal_edit.querySelector('#responsable').setAttribute('disabled', 'disabled')

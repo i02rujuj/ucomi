@@ -19,7 +19,7 @@ class MiembrosGobiernoController extends Controller
     public function index(Request $request)
     {
         try {
-            $miembrosGobierno = MiembroGobierno::select('id', 'idCentro', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at');
+            $miembrosGobierno = MiembroGobierno::select('id', 'idCentro', 'idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at');
             $centros = Centro::select('id', 'nombre');
 
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
@@ -111,6 +111,7 @@ class MiembrosGobiernoController extends Controller
                 "fechaTomaPosesion" => $request->data['fechaTomaPosesion'],
                 "fechaCese" => $request->data['fechaCese'],
                 "idRepresentacion" => $request->data['idRepresentacion'],
+                "cargo" => $request->data['cargo'],
                 "responsable" => $request->data['responsable'],
             ]);
 
@@ -135,6 +136,7 @@ class MiembrosGobiernoController extends Controller
             $miembroGobierno = MiembroGobierno::where('id', $request->id)->first();
 
             $miembroGobierno->idRepresentacion = $request->data['idRepresentacion'];
+            $miembroGobierno->cargo = $request->data['cargo'];
             $miembroGobierno->fechaTomaPosesion = $request->data['fechaTomaPosesion'];
             $miembroGobierno->fechaCese = $request->data['fechaCese'];  
             $miembroGobierno->responsable = $request->data['responsable'];  
@@ -192,6 +194,7 @@ class MiembrosGobiernoController extends Controller
             'idCentro' => 'required|integer|exists:App\Models\Centro,id',
             'idUsuario' => 'required|integer|exists:App\Models\User,id',
             'idRepresentacion' => 'required|integer|exists:App\Models\Representacion,id',
+            'cargo' => 'nullable|max:100|string',
             'fechaTomaPosesion' => 'required|date',
             'fechaCese' => 'nullable|date',
             'responsable' => 'nullable|integer'
@@ -210,6 +213,9 @@ class MiembrosGobiernoController extends Controller
             'idRepresentacion.required' => 'La representación es obligatoria.',
             'idRepresentacion.integer' => 'La representación debe ser un entero.',
             'idRepresentacion.exists' => 'La representación seleccionada no existe.',
+            // Mensajes error cargo
+            'cargo.string' => 'El cargo no puede contener números ni caracteres especiales.',
+            'cargo.max' => 'El cargo no puede exceder los 100 caracteres.',
             // Mensajes error fechaTomaPosesión
             'fechaTomaPosesion.required' => 'La fecha de toma de posesión es obligatoria.',
             'fechaTomaPosesion.date' => 'La fecha de toma de posesión debe tener el formato fecha DD/MM/YYYY.',

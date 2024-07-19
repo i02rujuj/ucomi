@@ -8,7 +8,7 @@ Ucomi
     <section class="bg-ucomi bg-cover lg:h-screen md:h-screen py-8">
         <div class="flex items-center justify-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-5/6 w-full">
             <div class="text-center">
-                <div class="mt-20">
+                <div class="mt-28">
                     <div class="sentences_together flex flex-col md:flex-row justify-center mb-5">
                         <h2 class="text-xl font-bold text-white mb-4">
                             Obtén información pública de las Juntas de Centro y Comisiones de la Universidad de Córdoba

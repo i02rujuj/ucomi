@@ -1,4 +1,4 @@
-import { DELETE_CONVOCATORIA_BBDD, UPDATE_CONVOCATORIA_BBDD, ADD_CONVOCATORIA_BBDD, VALIDATE_CONVOCATORIA_BBDD } from "./axiosTemplate.js";
+import { DELETE_CONVOCATORIA_BBDD, UPDATE_CONVOCATORIA_BBDD, ADD_CONVOCATORIA_BBDD, VALIDATE_CONVOCATORIA_BBDD, CONVOCAR_CONVOCATORIA_BBDD } from "./axiosTemplate.js";
 import Swal from 'sweetalert2';
 
 let modal_add = null
@@ -124,7 +124,6 @@ const preConfirm = async(accion, id=null) => {
         Swal.showValidationMessage(response.errors)
         return false
     }
-
 }
 
 /**
@@ -151,6 +150,7 @@ if(addButton){
 // EVENTO EDITAR Y ELIMINAR
 const addEditEvent = (button) => {
     button.addEventListener("click", async (event) => {
+        event.stopPropagation()
         try {
             let response = null
 
@@ -197,8 +197,257 @@ const addEditEvent = (button) => {
     });
 };
 
+const renderHTMLConvocados = (convocados, tipo) => {
+
+    let doc = null
+
+    if(convocados && convocados.length){
+
+        let html =`
+            <div class="relative overflow-x-auto">
+            <table class="w-full text-xs text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-1 py-1">
+                            Nombre
+                        </th>
+                        <th scope="col" class="px-1 py-1">
+                            ${tipo=='notificados'? 'Email' : 'Representación'}
+                        </th>
+                        <th scope="col" class="px-1 py-1 text-center">
+                            ${tipo=='notificados'? 'Notificado' : 'Confirmado'}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+            
+                </tbody>
+            </table>
+        </div>
+        `
+        const domparser = new DOMParser()
+        doc = domparser.parseFromString(html, 'text/html')
+        let tbody = doc.querySelector('tbody')
+
+        convocados.forEach(miembro => {
+            let miembro_tr = document.createElement("tr");
+            let miembro_th_name = document.createElement("th");
+            miembro_th_name.classList.add('px-1', 'py-1');
+            miembro_th_name.innerHTML=miembro.usuario.name
+            miembro_tr.appendChild(miembro_th_name);
+
+            switch(tipo){
+                case 'notificados':
+                    let miembro_td_email = document.createElement("td");
+                    miembro_td_email.classList.add('px-1', 'py-1');
+                    miembro_td_email.innerHTML = miembro.usuario.email
+                    miembro_tr.appendChild(miembro_td_email);      
+                    break;
+                case 'asistentes':
+                    let miembro_td_representacion = document.createElement("td");
+                    miembro_td_representacion.classList.add('px-1', 'py-1');
+                    miembro_td_representacion.innerHTML = miembro.usuario.miembros_comision[0].representacion.nombre
+                    miembro_tr.appendChild(miembro_td_representacion);
+                    break;
+            }
+
+            let miembro_td_estado = document.createElement("td");
+            miembro_td_estado.classList.add('px-1', 'py-1', 'text-center');
+
+            let estadoHTML = ''
+            if(miembro.notificado || miembro.asiste){
+                estadoHTML=`
+                <span class="material-icons-round text-green-400">
+                        check_circle
+                </span>
+                `
+            }
+            else{
+                estadoHTML=`
+                <span class="material-icons-round text-red-400">
+                        cancel
+                </span>
+                `
+            }
+
+            miembro_td_estado.innerHTML = estadoHTML
+            miembro_tr.appendChild(miembro_td_estado);
+            
+            tbody.appendChild(miembro_tr);
+        })
+    }
+    else{
+        let mensaje = ''
+
+        switch(tipo){
+            case 'notificados':
+                mensaje = 'No existen notificados'
+                break;
+            case 'asistentes':
+                mensaje = 'No existen asistentes'
+                break;
+        }
+
+        let mensaje_div = document.createElement("div");
+        mensaje_div.innerHTML=mensaje
+        return mensaje_div  
+    }
+
+    return doc.querySelector('table')
+}
+
+/**
+ * NOTIFICAR
+ */
+const notificarEvent = (button) => {
+    button.addEventListener('click', async (event) => {
+        event.stopPropagation()
+
+        let response = null
+
+            for(let c in convocatorias.data){
+                if(convocatorias.data[c].id==button.dataset.convocatoriaId){
+                    response = convocatorias.data[c]
+                    break;
+                }
+            }
+            if(!response)
+                throw "Error, convocatoria no encontrada"
+
+        const dataToSend = {
+            id:button.dataset.convocatoriaId,
+            idComision: response.idComision,
+            notificado: null,
+            asiste:null
+        }
+
+        const convocados = await CONVOCAR_CONVOCATORIA_BBDD(dataToSend)
+
+        try {
+            await Swal.fire({
+                title:'Notificar',
+                html: renderHTMLConvocados(convocados, 'notificados'),
+                focusConfirm: false,
+                showCancelButton: true,
+                showConfirmButton: true,
+                confirmButtonText: "Enviar email",
+                cancelButtonText: "Cancelar",
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '',
+                showLoaderOnConfirm:true,
+                width: '90vw',
+                heightAuto:false, 
+                customClass: 'swal-height',
+                preConfirm: async () => {
+
+                },
+            });
+        } catch (error) {
+            await Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Ha ocurrido un error al realizar una operación con las notificaciones.",
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                position: 'top-right',
+            });
+        }
+    }, true)
+}
+
+/**
+ * ASISTENTES
+ */
+const asistentesEvent = (button) => {
+    button.addEventListener('click', async (event) => {
+        event.stopPropagation()
+
+        let response = null
+
+            for(let c in convocatorias.data){
+                if(convocatorias.data[c].id==button.dataset.convocatoriaId){
+                    response = convocatorias.data[c]
+                    break;
+                }
+            }
+            if(!response)
+                throw "Error, convocatoria no encontrada"
+
+        const dataToSend = {
+            id:button.dataset.convocatoriaId,
+            idComision: response.idComision,
+            notificado: null,
+            asiste:null
+        }
+
+        const convocados = await CONVOCAR_CONVOCATORIA_BBDD(dataToSend)
+        try {
+            await Swal.fire({
+                title:'Asistentes convocatoria',
+                html: renderHTMLConvocados(convocados, 'asistentes'),
+                showConfirmButton:false,
+                width: '90vw',
+                heightAuto:false, 
+                customClass: 'swal-height' 
+            });
+        } catch (error) {
+            await Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Ha ocurrido un error al realizar una operación con los asistentes.",
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                position: 'top-right',
+            });
+        }
+    }, true)    
+}
+
+/**
+ * ACTAS
+ */
+const actasEvent = (button) => {
+    button.addEventListener('click', async (event) => {
+        event.stopPropagation()
+
+        await Swal.fire({
+            html: `
+                <iframe src="${button.dataset.acta}" class="w-full h-full"></iframe>
+            `,
+            focusConfirm: false,
+            showConfirmButton: false,
+            width: '90vw',
+            heightAuto:false, 
+            customClass: 'swal-height'   
+        })
+    }, true)    
+}
+
 const editButtons = document.querySelectorAll('#btn-editar-convocatoria');
 
 editButtons.forEach(button => {
     addEditEvent(button);
 });
+
+const notificarButtons = document.querySelectorAll('#btn-notificar');
+
+notificarButtons.forEach(button => {
+    notificarEvent(button);
+});
+
+const asistentesButtons = document.querySelectorAll('#btn-asistentes');
+
+asistentesButtons.forEach(button => {
+    asistentesEvent(button);
+});
+
+const actasButtons = document.querySelectorAll('#btn-visualizar-acta');
+
+actasButtons.forEach(button => {
+    actasEvent(button);
+});
+

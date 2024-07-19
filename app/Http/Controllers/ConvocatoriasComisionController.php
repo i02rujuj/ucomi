@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Helpers\Helper;
 use App\Models\Comision;
+use App\Models\Convocado;
 use App\Models\Convocatoria;
 use Illuminate\Http\Request;
 use App\Models\TipoConvocatoria;
@@ -252,5 +253,52 @@ class ConvocatoriasComisionController extends Controller
         }
         
         return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
+    }
+
+    public function convocados(Request $request)
+    {
+        try {
+            $convocados = Convocado::
+            with(['usuario' => function ($query) use ($request){
+                $query
+                ->with(['miembrosComision' => function ($query) use ($request){
+                    $query
+                    ->where('idComision', $request->idComision)
+                    ->with('representacion');
+                }]);
+            }])
+            ->where('idConvocatoria', $request->id);
+
+            $request->notificado!=null ? $convocados = $convocados->where('notificado', $request->notificado) : "";
+            $request->asiste!=null ? $convocados = $convocados->where('asiste', $request->asiste) : "";
+
+            return response()->json($convocados->get());
+        } catch (\Throwable $th) {
+            sweetalert("Ha ocurrido un error al obtener los convocados de la convocatoria del día '$request->fecha'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => "Ha ocurrido un error al obtener los convocados de la convocatoria del día '$request->fecha'",'status' => 422], 200);
+        }
+    }
+
+    public function asistir(Request $request)
+    {
+        try {
+            Convocado::
+            where('idUsuario', Auth::user()->id)
+            ->where('idConvocatoria', $request->idConvocatoria)
+            ->update(['asiste' => $request->asiste]);
+
+            if($request->asiste==1){
+                sweetalert('Se ha confirmado la asistencia a la convocatoria', NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+                return response()->json(['message' => 'Se ha confirmado la asistencia de la convocatoria','status' => 200], 200);
+            }
+            else{
+                sweetalert('Se ha cancelado la asistencia a la convocatoria', NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+                return response()->json(['message' => 'Se ha cancelado la asistencia a la convocatoria','status' => 200], 200);
+            }
+
+        } catch (\Throwable $th) {
+            sweetalert('Ha ocurrido un error al editar la asistencia de la convocatoria', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            return response()->json(['errors' => 'Ha ocurrido un error al editar la asistencia de la convocatoria','status' => 422], 200);
+        }
     }
 }

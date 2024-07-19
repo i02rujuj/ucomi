@@ -83,7 +83,7 @@ Convocatorias Comisión
                 @if($convocatorias && $convocatorias[0])
                     @foreach ($convocatorias as $convocatoria)
                         <div id="btn-editar-convocatoria" data-convocatoria-id="{{ $convocatoria['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
-                            <div class="flex items-center">
+                            <div class="flex justify-start items-center">
                                 <div class="right-part w-full max-w-max">
                                     <img src="{{ $convocatoria->comision->junta->centro->logo ? $convocatoria->comision->junta->centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
                                 </div>
@@ -95,7 +95,7 @@ Convocatorias Comisión
                                             send
                                         </span>
                                         &nbsp;
-                                        <h2 class="text-base font-bold truncate">{{ $convocatoria->comision->nombre }}</h2>
+                                        <h2 class="text-base font-bold truncate">{{ $convocatoria->comision->nombre }} </h2>
                                     </div>
 
                                     <div class="truncate flex items-center">
@@ -123,9 +123,9 @@ Convocatorias Comisión
                                                 {{ \Carbon\Carbon::parse($convocatoria->hora)->format('H:i') }}
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> 
                                     
-                                    <div class="flex justify-start items-center gap-2 mt-3" >
+                                    <div class="flex justify-end items-center gap-2 mt-3" >
                                         <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Convocatoria Comisión</span>
 
                                         <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $convocatoria->tipo->nombre }}</span>
@@ -134,8 +134,73 @@ Convocatorias Comisión
                                             <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Eliminado</span>
                                         @endif
                                     </div>
-
                                 </div>
+                            </div>
+
+                            <div class="flex justify-end items-center gap-2 mt-3 w-" >
+                                @if($permitirAcciones = Auth::user()->esResponsable('admin|centro|junta'))
+                                    <a id="btn-asistentes" data-convocatoria-id="{{ $convocatoria['id'] }}" class="group max-w-max relative flex flex-col justify-center items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="#">
+                                        <span class="material-icons-round cursor-pointer">
+                                            diversity_3
+                                        </span>
+                                        <div class="z-50 invisible group-hover:visible [transform:perspective(50px)_translateZ(0)_rotateX(10deg)] group-hover:[transform:perspective(0px)_translateZ(0)_rotateX(0deg)] absolute bottom-0 mb-6 origin-bottom transform rounded text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                            <div class="flex max-w-xs flex-col items-center">
+                                                <div class="rounded bg-gray-900 p-1 text-xs text-center shadow-lg">
+                                                    <span>Ver asistentes</span>
+                                                </div>
+                                                <div class="clip-bottom h-2 w-4 bg-gray-900"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <a id="btn-notificar" data-convocatoria-id="{{ $convocatoria['id'] }}" class="group max-w-max relative flex flex-col justify-center items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="#">
+                                        <span class="material-icons-round cursor-pointer">
+                                            forward_to_inbox
+                                        </span>
+                                        <div class="z-50 invisible group-hover:visible [transform:perspective(50px)_translateZ(0)_rotateX(10deg)] group-hover:[transform:perspective(0px)_translateZ(0)_rotateX(0deg)] absolute bottom-0 mb-6 origin-bottom transform rounded text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                            <div class="flex max-w-xs flex-col items-center">
+                                                <div class="rounded bg-gray-900 p-1 text-xs text-center shadow-lg">
+                                                    <span>Notificar</span>
+                                                </div>
+                                                <div class="clip-bottom h-2 w-4 bg-gray-900"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                @endif
+                                @php
+                                    $convocado = Auth::user()->convocados->where('idConvocatoria', $convocatoria->id);
+                                @endphp
+
+                                @if($convocado->count())
+                                    <a id="btn-confirmarAsistencia" data-convocatoria-id="{{ $convocatoria['id'] }}" class="group max-w-max relative flex flex-col justify-center items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="#">
+                                        <span class="material-icons-round cursor-pointer">
+                                            recommend
+                                        </span>
+                                        <div class="z-50 invisible group-hover:visible [transform:perspective(50px)_translateZ(0)_rotateX(10deg)] group-hover:[transform:perspective(0px)_translateZ(0)_rotateX(0deg)] absolute bottom-0 mb-6 origin-bottom transform rounded text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                            <div class="flex max-w-xs flex-col items-center">
+                                                <div class="rounded bg-gray-900 p-1 text-xs text-center shadow-lg">
+                                                    <span>Confirmar/Cancelar assitencia</span>
+                                                </div>
+                                                <div class="clip-bottom h-2 w-4 bg-gray-900"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                @endif
+
+                                <a id="btn-visualizar-acta" data-convocatoria-id="{{ $convocatoria['id'] }}" data-acta="{{ $convocatoria['acta'] }}" class="group max-w-max relative flex flex-col justify-center items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="#">
+                                    <span class="material-icons-round cursor-pointer">
+                                        picture_as_pdf
+                                    </span>
+                                    <div class="z-50 invisible group-hover:visible [transform:perspective(50px)_translateZ(0)_rotateX(10deg)] group-hover:[transform:perspective(0px)_translateZ(0)_rotateX(0deg)] absolute bottom-0 mb-6 origin-bottom transform rounded text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                        <div class="flex max-w-xs flex-col items-center">
+                                            <div class="rounded bg-gray-900 p-1 text-xs text-center shadow-lg">
+                                                <span>Visualizar acta</span>
+                                            </div>
+                                            <div class="clip-bottom h-2 w-4 bg-gray-900"></div>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     @endforeach
@@ -160,3 +225,7 @@ Convocatorias Comisión
     const convocatorias = @json($convocatorias)
 </script>
 @vite(['resources/js/convocatoriasComision/convocatoriasComision.js'])
+
+@if(Auth::user()->esResponsable('admin|centro|junta|comision'))
+    @vite(['resources/js/convocatoriasComision/confirmarAsistencia.js'])
+@endif

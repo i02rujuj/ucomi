@@ -79,7 +79,6 @@ Route::group(['middleware' => ['responsable:admin|centro']], function () {
     Route::post('/miembro_gobierno/update', [MiembrosGobiernoController::class, 'update']);
     Route::post('/miembro_gobierno/getDirectivos', [MiembrosGobiernoController::class, 'getDirectivos']);
     Route::post('/miembro_gobierno/validate', [MiembrosGobiernoController::class, 'validateMiembro']);
-
 }); 
 
 Route::group(['middleware' => ['responsable:admin|centro|junta']], function () {
@@ -138,6 +137,8 @@ Route::group(['middleware' => ['responsable:admin|centro|junta|comision']], func
     Route::post('/convocatoria_comision/get', [ConvocatoriasComisionController::class, 'get']);
     Route::post('/convocatoria_comision/update', [ConvocatoriasComisionController::class, 'update']);
     Route::post('/convocatoria_comision/validate', [ConvocatoriasComisionController::class, 'validateConvocatoria']);
+    Route::post('/convocatoria_comision/convocar', [ConvocatoriasComisionController::class, 'convocados']);
+    Route::post('/convocatoria_comision/asistir', [ConvocatoriasComisionController::class, 'asistir']);
 
     // REPRESENTACIONES
     Route::post('/representacion/get', [RepresentacionController::class, 'get']);

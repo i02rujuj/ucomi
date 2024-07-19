@@ -139,25 +139,70 @@ Convocatorias Junta
 
                             <div class="flex justify-end items-center gap-2 mt-3 w-" >
                                 @if($permitirAcciones = Auth::user()->esResponsable('admin|centro|junta'))
-                                    <span title="Ver asistentes" id="btn-asistentes" data-convocatoria-id="{{ $convocatoria['id'] }}" class="material-icons-round cursor-pointer">
-                                        diversity_3
-                                    </span>
 
-                                    <span title="Enviar email" id="btn-notificar" data-convocatoria-id="{{ $convocatoria['id'] }}" class="material-icons-round cursor-pointer">
-                                        forward_to_inbox
-                                    </span>
+                                    <a id="btn-asistentes" data-convocatoria-id="{{ $convocatoria['id'] }}" class="group max-w-max relative flex flex-col justify-center items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="#">
+                                        <span class="material-icons-round cursor-pointer">
+                                            diversity_3
+                                        </span>
+                                        <div class="z-50 invisible group-hover:visible [transform:perspective(50px)_translateZ(0)_rotateX(10deg)] group-hover:[transform:perspective(0px)_translateZ(0)_rotateX(0deg)] absolute bottom-0 mb-6 origin-bottom transform rounded text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                            <div class="flex max-w-xs flex-col items-center">
+                                                <div class="rounded bg-gray-900 p-1 text-xs text-center shadow-lg">
+                                                    <span>Ver asistentes</span>
+                                                </div>
+                                                <div class="clip-bottom h-2 w-4 bg-gray-900"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <a id="btn-notificar" data-convocatoria-id="{{ $convocatoria['id'] }}" class="group max-w-max relative flex flex-col justify-center items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="#">
+                                        <span class="material-icons-round cursor-pointer">
+                                            forward_to_inbox
+                                        </span>
+                                        <div class="z-50 invisible group-hover:visible [transform:perspective(50px)_translateZ(0)_rotateX(10deg)] group-hover:[transform:perspective(0px)_translateZ(0)_rotateX(0deg)] absolute bottom-0 mb-6 origin-bottom transform rounded text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                            <div class="flex max-w-xs flex-col items-center">
+                                                <div class="rounded bg-gray-900 p-1 text-xs text-center shadow-lg">
+                                                    <span>Notificar</span>
+                                                </div>
+                                                <div class="clip-bottom h-2 w-4 bg-gray-900"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+
                                 @endif
                                 @php
                                     $convocado = Auth::user()->convocados->where('idConvocatoria', $convocatoria->id);
                                 @endphp
 
                                 @if($convocado->count())
-                                    <span title="Confirmar asistencia" id="btn-confirmarAsistencia" data-convocatoria-id="{{ $convocatoria['id'] }}" class="material-icons-round cursor-pointer  @if($convocado->first()->asiste) text-green-400 @else text-red-400 @endif">
-                                        recommend
-                                    </span>
+                                    <a id="btn-confirmarAsistencia" data-convocatoria-id="{{ $convocatoria['id'] }}" class="group max-w-max relative flex flex-col justify-center items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="#">
+                                        <span class="material-icons-round cursor-pointer">
+                                            recommend
+                                        </span>
+                                        <div class="z-50 invisible group-hover:visible [transform:perspective(50px)_translateZ(0)_rotateX(10deg)] group-hover:[transform:perspective(0px)_translateZ(0)_rotateX(0deg)] absolute bottom-0 mb-6 origin-bottom transform rounded text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                            <div class="flex max-w-xs flex-col items-center">
+                                                <div class="rounded bg-gray-900 p-1 text-xs text-center shadow-lg">
+                                                    <span>Confirmar/Cancelar assitencia</span>
+                                                </div>
+                                                <div class="clip-bottom h-2 w-4 bg-gray-900"></div>
+                                            </div>
+                                        </div>
+                                    </a>
                                 @endif
-                            </div>
 
+                                <a id="btn-visualizar-acta" data-convocatoria-id="{{ $convocatoria['id'] }}" data-acta="{{ $convocatoria['acta'] }}" class="group max-w-max relative flex flex-col justify-center items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="#">
+                                    <span class="material-icons-round cursor-pointer">
+                                        picture_as_pdf
+                                    </span>
+                                    <div class="z-50 invisible group-hover:visible [transform:perspective(50px)_translateZ(0)_rotateX(10deg)] group-hover:[transform:perspective(0px)_translateZ(0)_rotateX(0deg)] absolute bottom-0 mb-6 origin-bottom transform rounded text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                        <div class="flex max-w-xs flex-col items-center">
+                                            <div class="rounded bg-gray-900 p-1 text-xs text-center shadow-lg">
+                                                <span>Visualizar acta</span>
+                                            </div>
+                                            <div class="clip-bottom h-2 w-4 bg-gray-900"></div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
                     @endforeach
                 @else

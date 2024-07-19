@@ -208,10 +208,10 @@ const renderHTMLConvocados = (convocados, tipo) => {
             <table class="w-full text-xs text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-1 py-1 w-44">
+                        <th scope="col" class="px-1 py-1">
                             Nombre
                         </th>
-                        <th scope="col" class="px-1 py-1 w-44">
+                        <th scope="col" class="px-1 py-1">
                             ${tipo=='notificados'? 'Email' : 'Representación'}
                         </th>
                         <th scope="col" class="px-1 py-1 text-center">
@@ -232,20 +232,20 @@ const renderHTMLConvocados = (convocados, tipo) => {
         convocados.forEach(miembro => {
             let miembro_tr = document.createElement("tr");
             let miembro_th_name = document.createElement("th");
-            miembro_th_name.classList.add('px-1', 'py-1', 'w-44');
+            miembro_th_name.classList.add('px-1', 'py-1');
             miembro_th_name.innerHTML=miembro.usuario.name
             miembro_tr.appendChild(miembro_th_name);
 
             switch(tipo){
                 case 'notificados':
                     let miembro_td_email = document.createElement("td");
-                    miembro_td_email.classList.add('px-1', 'py-1', 'w-44');
+                    miembro_td_email.classList.add('px-1', 'py-1');
                     miembro_td_email.innerHTML = miembro.usuario.email
                     miembro_tr.appendChild(miembro_td_email);      
                     break;
                 case 'asistentes':
                     let miembro_td_representacion = document.createElement("td");
-                    miembro_td_representacion.classList.add('px-1', 'py-1', 'w-44');
+                    miembro_td_representacion.classList.add('px-1', 'py-1');
                     miembro_td_representacion.innerHTML = miembro.usuario.miembros_junta[0].representacion.nombre
                     miembro_tr.appendChild(miembro_td_representacion);
                     break;
@@ -325,7 +325,7 @@ const notificarEvent = (button) => {
 
         try {
             await Swal.fire({
-                title:'Notificar miembros Junta',
+                title:'Notificar',
                 html: renderHTMLConvocados(convocados, 'notificados'),
                 focusConfirm: false,
                 showCancelButton: true,
@@ -335,6 +335,9 @@ const notificarEvent = (button) => {
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '',
                 showLoaderOnConfirm:true,
+                width: '90vw',
+                heightAuto:false, 
+                customClass: 'swal-height',
                 preConfirm: async () => {
 
                 },
@@ -384,6 +387,10 @@ const asistentesEvent = (button) => {
             await Swal.fire({
                 title:'Asistentes convocatoria',
                 html: renderHTMLConvocados(convocados, 'asistentes'),
+                showConfirmButton:false,
+                width: '90vw',
+                heightAuto:false, 
+                customClass: 'swal-height' 
             });
         } catch (error) {
             await Swal.fire({
@@ -397,6 +404,26 @@ const asistentesEvent = (button) => {
                 position: 'top-right',
             });
         }
+    }, true)    
+}
+
+/**
+ * ACTAS
+ */
+const actasEvent = (button) => {
+    button.addEventListener('click', async (event) => {
+        event.stopPropagation()
+
+        await Swal.fire({
+            html: `
+                <iframe src="${button.dataset.acta}" class="w-full h-full"></iframe>
+            `,
+            focusConfirm: false,
+            showConfirmButton: false,
+            width: '90vw',
+            heightAuto:false, 
+            customClass: 'swal-height'   
+        })
     }, true)    
 }
 
@@ -416,5 +443,11 @@ const asistentesButtons = document.querySelectorAll('#btn-asistentes');
 
 asistentesButtons.forEach(button => {
     asistentesEvent(button);
+});
+
+const actasButtons = document.querySelectorAll('#btn-visualizar-acta');
+
+actasButtons.forEach(button => {
+    actasEvent(button);
 });
 

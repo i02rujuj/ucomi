@@ -11,7 +11,10 @@ let modal_add = null
 document.addEventListener("DOMContentLoaded",  (event) => {
     $('#idUsuario').select2({
         placeholder: 'Selecciona un usuario',
-        dropdownParent: $('#modal_add')
+        dropdownParent: $('#modal_add'),
+        shouldFocusInput: function() {
+            return false;
+        }
     });
    
     modal_add = document.querySelector('#modal_add')

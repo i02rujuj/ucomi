@@ -62,6 +62,8 @@ namespace App\Models{
  * @property-read int|null $convocatorias_count
  * @property-read mixed $fecha_constitucion_format
  * @property-read \App\Models\Junta $junta
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroComision> $presidente
+ * @property-read int|null $presidente_count
  * @method static \Illuminate\Database\Eloquent\Builder|Comision filters(\Illuminate\Http\Request $request)
  * @method static \Illuminate\Database\Eloquent\Builder|Comision newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Comision newQuery()

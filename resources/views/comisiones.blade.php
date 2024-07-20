@@ -96,6 +96,21 @@ Comisiones
                                             Constitución: {{ $com->fecha_constitucion_format}}
                                         </div>
                                     </div>
+                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                        <div class="truncate flex items-center">
+                                            <span class="material-icons-round scale-75">
+                                                person
+                                            </span>
+                                            <div class="truncate">
+                                                Presidente/a:
+                                                @if($presidente = $com->presidente->first())
+                                                    {{ $presidente->usuario->name }}
+                                                @else
+                                                    Sin asignar
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>  
                             </div>
                  

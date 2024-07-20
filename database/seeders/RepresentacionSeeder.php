@@ -84,7 +84,7 @@ class RepresentacionSeeder extends Seeder
         $representacion = new Representacion();
         $representacion->id = 10;
         $representacion->nombre = 'Libre designación';
-        $representacion->deCentro = 0;
+        $representacion->deCentro = 1;
         $representacion->deJunta = 1;
         $representacion->deComision = 1;
         $representacion->save();

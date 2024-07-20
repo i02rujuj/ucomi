@@ -56,13 +56,6 @@ class MiembrosGobiernoController extends Controller
             ->paginate(10);
 
             $users = User::select('id', 'name')
-            ->whereNotExists(function($query){
-                $query->select(DB::raw(1))
-                      ->from('miembros_gobierno')
-                      ->whereNull('miembros_gobierno.fechaCese')
-                      ->whereNull('miembros_gobierno.deleted_at')
-                      ->whereRaw('miembros_gobierno.idUsuario = users.id');
-            })
             ->get();
 
             $representacionesGobierno = Representacion::select('id', 'nombre')

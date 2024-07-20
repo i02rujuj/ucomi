@@ -45,6 +45,12 @@ class Comision extends Model
             ->orderBy('fechaCese');
     }
 
+    public function presidente()
+    {
+        return $this->hasMany(MiembroComision::class, 'idComision')
+            ->where('cargo', 'Presidente');
+    }
+
     public function convocatorias()
     {
         return $this->hasMany(Convocatoria::class, 'idComision');

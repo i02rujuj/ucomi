@@ -64,13 +64,6 @@ class MiembrosJuntaController extends Controller
             ->paginate(10);
 
             $users = User::select('id', 'name')
-            ->whereNotExists(function($query){
-                $query->select(DB::raw(1))
-                      ->from('miembros_junta')
-                      ->whereNull('miembros_junta.fechaCese')
-                      ->whereNull('miembros_junta.deleted_at')
-                      ->whereRaw('miembros_junta.idUsuario = users.id');
-            })
             ->get();
             $representacionesGeneral = Representacion::select('id', 'nombre')
             ->where('deJunta', 1)

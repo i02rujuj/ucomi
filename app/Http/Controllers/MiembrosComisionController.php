@@ -81,13 +81,7 @@ class MiembrosComisionController extends Controller
             ->paginate(10);
 
             $users = User::select('id', 'name')
-            ->whereNotExists(function($query){
-                $query->select(DB::raw(1))
-                      ->from('miembros_comision')
-                      ->whereNull('miembros_comision.fechaCese')
-                      ->whereNull('miembros_comision.deleted_at')
-                      ->whereRaw('miembros_comision.idUsuario = users.id');
-            })->get();
+            ->get();
             
             $representacionesGeneral = Representacion::select('id', 'nombre')
             ->where('deComision', 1)
@@ -285,8 +279,21 @@ class MiembrosComisionController extends Controller
                         ->first();
 
                     if($usuarioEnComision)
-                        return response()->json(['errors' => 'No se pudo añadir el miembro de comisión: ya existe el usuario vigente en la comisión seleccionada', 'status' => 422], 200);
+                        return response()->json(['errors' => 'No se pudo guardar el miembro de comisión: ya existe el usuario vigente en la comisión seleccionada', 'status' => 422], 200);
                 
+                    // Comprobación existencia presidente en la comisión
+                    if($request->data['cargo'] == "Presidente"){
+                        $presidenteEnComision = MiembroComision::select('id')
+                        ->where('idComision', $request->data['idComision'])
+                        ->where('cargo', 'Presidente')
+                        ->where('fechaCese', null)
+                        ->whereNot('id', $request->id)
+                        ->first();
+
+                        if($presidenteEnComision)
+                            return response()->json(['errors' => 'No se pudo guardar el miembro de comisión: ya existe un presidente en la comisión seleccionada', 'status' => 422], 200);
+                    }
+
                     if($request->accion=='update'){
                         // Comprobación existencia comisión vigente
                         $comisionVigenteMiembro = Comision::where('id', $request->data['idComision'])

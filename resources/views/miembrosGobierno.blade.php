@@ -65,9 +65,15 @@ Miembros de Centro
                     </select>
                 </div>
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
-                    <label for="cargo" class="block text-sm text-gray-600 w-36 text-right">Cargo: </label>
-                    <input type="text" id="cargo" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none">
+                <div id='select-cargo'>
+                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mt-4 justify-center items-center">
+                        <label for="cargo" class="block text-sm text-gray-600 w-36 pr-6 text-right">Cargo: </label>
+                        <select id="cargo" class="swal2-input miembro text-sm text-gray-600 border w-60 px-2 py-1 rounded-lg outline-none bg-blue-50" >
+                            <optgroup label="Cargos existentes">
+                                <option value="Presidente">Presidente</option>
+                            </optgroup>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">

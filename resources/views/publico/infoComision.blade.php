@@ -103,7 +103,7 @@
                                         Nombre
                                     </th>
                                     <th scope="col" class="px-1 py-1">
-                                        Sector
+                                        Representación
                                     </th>
                                     <th scope="col" class="px-1 py-1">
                                         Cargo

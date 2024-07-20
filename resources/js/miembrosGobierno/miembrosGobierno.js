@@ -12,56 +12,66 @@ document.addEventListener("DOMContentLoaded",  (event) => {
     $('#idUsuario').select2({
         placeholder: 'Selecciona un usuario',
         dropdownParent: $('#modal_add'),
-        shouldFocusInput: function() {
-            return false;
-        }
+        allowClear: true,
     });
-   
+    
+    $('#cargo').select2({
+        placeholder: 'Crea o selecciona un cargo',
+        dropdownParent: $('#modal_add'),
+        tags: true,
+        allowClear: true,
+    });
+
     modal_add = document.querySelector('#modal_add')
 })
 
 function renderHTMLMiembro(response){
 
     $(modal_add).find("#idUsuario").val('').trigger('change');
+    $(modal_add).find("#idUsuario").prop("disabled", false);
     modal_add.querySelector('#idCentro').value=""
+    modal_add.querySelector('#idCentro').removeAttribute('disabled')
     modal_add.querySelector('#idRepresentacion').value=""
-    modal_add.querySelector('#cargo').value=""
+    $(modal_add).find("#cargo").find('option:not(:last)').remove().trigger('change');
+    $(modal_add).find("#cargo").val('').trigger('change');
     modal_add.querySelector('#fechaTomaPosesion').value=""
     modal_add.querySelector('#fechaCese').value=""
     modal_add.querySelector('#responsable').value=0
 
     if(response){
-        let modal_edit = modal_add.cloneNode(true);
+        $(modal_add).find("#idUsuario").val(response.usuario.id).trigger('change');
 
-        modal_edit.classList.remove('hidden')
-        modal_edit.querySelector('#user').innerHTML= `
-            <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
-                <label for="usuario" class="block text-sm text-gray-600 w-36 text-right">Usuario: *</label>
-                <input class="miembro" type="hidden" id="idUsuario" value="${response.usuario.id}"/>
-                <input type="text" id="usuario" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.usuario.name}" disabled>
-            </div>`
-        modal_edit.querySelector('#idCentro').value=response.centro.id
-        modal_edit.querySelector('#idCentro').setAttribute('disabled', 'disabled')
-        modal_edit.querySelector('#idCentro').classList.add('bg-red-50')
-        modal_edit.querySelector('#idRepresentacion').value=response.representacion.id
-        modal_edit.querySelector('#cargo').value=response.cargo
-        modal_edit.querySelector('#fechaTomaPosesion').value=response.fechaTomaPosesion
-        modal_edit.querySelector('#fechaCese').value=response.fechaCese
-        modal_edit.querySelector('#responsable').value=response.responsable
+        $(modal_add).find("#idUsuario").prop("disabled", true);
+        modal_add.querySelector('#idCentro').value=response.centro.id
+        modal_add.querySelector('#idCentro').setAttribute('disabled', 'disabled')
+        modal_add.querySelector('#idRepresentacion').value=response.representacion.id
+
+        if(response.cargo!= null){
+            if (!$(modal_add).find("#cargo").find("option[value='" + response.cargo + "']").length) { 
+                let newOption = new Option(response.cargo, response.cargo, true, true);
+                $( newOption ).prependTo(modal_add.querySelector('#cargo')).trigger('change')
+            } 
+        }
+
+        $(modal_add).find("#cargo").val(response.cargo).trigger('change');
+
+        modal_add.querySelector('#fechaTomaPosesion').value=response.fechaTomaPosesion
+        modal_add.querySelector('#fechaCese').value=response.fechaCese
+        modal_add.querySelector('#responsable').value=response.responsable
 
         if(response.deleted_at!=null){
-            modal_edit.querySelector('#idRepresentacion').setAttribute('disabled', 'disabled')
-            modal_edit.querySelector('#cargo').setAttribute('disabled', 'disabled')
-            modal_edit.querySelector('#fechaTomaPosesion').setAttribute('disabled', 'disabled')
-            modal_edit.querySelector('#fechaCese').setAttribute('disabled', 'disabled')
-            modal_edit.querySelector('#responsable').setAttribute('disabled', 'disabled')
+            $(modal_add).find("#idUsuario").prop("disabled", true);
+            modal_add.querySelector('#idRepresentacion').setAttribute('disabled', 'disabled')
+            $(modal_add).find("#cargo").prop("disabled", true);
+            modal_add.querySelector('#fechaTomaPosesion').setAttribute('disabled', 'disabled')
+            modal_add.querySelector('#fechaCese').setAttribute('disabled', 'disabled')
+            modal_add.querySelector('#responsable').setAttribute('disabled', 'disabled')
         }
-        return modal_edit        
+       
     }
-    else{
-        modal_add.classList.remove('hidden')
-        return modal_add
-    }
+
+    modal_add.classList.remove('hidden')
+    return modal_add
 }
 
 const preConfirm = async(accion, id=null) => {
@@ -161,7 +171,7 @@ addButton.addEventListener("click", async (event) => {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',   
         showLoaderOnConfirm:true,  
-        preConfirm: async () => preConfirm('add')
+        preConfirm: async () => preConfirm('add'),
     })
 })
 

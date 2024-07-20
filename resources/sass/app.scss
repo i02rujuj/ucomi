@@ -18,15 +18,38 @@
     border-width: 1px;
     border-radius: 0.375rem;
     border-color: #e5e7eb;
-    @apply text-left text-sm text-gray-600;
+    @apply text-left text-sm text-gray-600 ;
+    height: 38px;
+    @apply flex items-center
+}
+
+.select2-selection__clear{
+    @apply pl-3;
 }
 
 .select2-dropdown {
-    @apply text-left text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none bg-blue-50;
+    @apply text-left text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none bg-blue-50 z-50;
 }
+
+.select2-container--default.select2-container--disabled .select2-selection--single{
+    background-color: rgb(254 242 242 / 0.7);
+}
+
+.select2-container--default.select2-container--disabled .select2-selection--single .select2-selection__rendered{
+    color: rgb(75 85 99 / 0.7);
+}
+
+.select2-container *:focus {
+    outline: none;
+}
+
 
 select {
     cursor:pointer;
+}
+
+select:disabled {
+    background-color: rgb(254 242 242 / 0.7);
 }
 
 .contenedor:hover .logo {

@@ -32,7 +32,7 @@ class MiembroGobiernoSeeder extends Seeder
                 'idUsuario' => 37, 
                 'idCentro' => 9,
                 'representacion' => config('constants.REPRESENTACIONES.GOBIERNO.SUBDIR'),
-                'cargo' => 'Ordenación Académica y Estudiantes',
+                'cargo' => 'Subidrección Ordenación Académica y Estudiantes',
                 'fechaTomaPosesion' => '2022-11-17',
                 'responsable' => 0
             ],
@@ -41,7 +41,7 @@ class MiembroGobiernoSeeder extends Seeder
                 'idCentro' => 9,
                 'representacion' => config('constants.REPRESENTACIONES.GOBIERNO.SUBDIR'),
                 'fechaTomaPosesion' => '2022-11-17',
-                'cargo' => 'Relaciones Exteriores y Movilidad',
+                'cargo' => 'Subdirección Relaciones Exteriores y Movilidad',
                 'responsable' => 0
             ],
             [
@@ -49,7 +49,7 @@ class MiembroGobiernoSeeder extends Seeder
                 'idCentro' => 9,
                 'representacion' => config('constants.REPRESENTACIONES.GOBIERNO.SUBDIR'),
                 'fechaTomaPosesion' => '2022-11-17',
-                'cargo' => 'Calidad e Innovación',
+                'cargo' => 'Subdirección Calidad e Innovación',
                 'responsable' => 0
             ],
             [

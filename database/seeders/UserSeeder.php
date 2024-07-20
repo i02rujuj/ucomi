@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
                 'id' => 1,
                 'nombre'=>'José Luis Ávila Jiménez', 
                 'email'=>'jlavila@uco.es', 
-                //'rol'=>'admin',
+                'rol'=>'admin',
             ],
             [
                 'id' => 2,

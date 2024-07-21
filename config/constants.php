@@ -39,6 +39,10 @@ return [
         'EXTRAORDINARIA' => 2,
         'URGENTE' => 3,
     ],
+    'TIPOS_CERTIFICADO' => [
+        'ACTUAL' => 1, 
+        'HISTORICO' => 2,
+    ],
 ];
 
 

@@ -51,10 +51,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::post('/user/get', [UserController::class, 'get']);
     Route::post('/user/all', [UserController::class, 'all']);
-    Route::get('/perfil', [UserController::class, 'index'])->name('perfil');
+    Route::get('/perfil', function () { return view('perfil');})->name('perfil');
     Route::post('/perfil', [UserController::class, 'store'])->name('perfil.store');
     Route::post('/save_image_perfil', [UserController::class, 'saveImagePerfil'])->name('saveImagePerfil');
-    Route::get('/certificados', [UserController::class, 'certificados'])->name('certificados');
+    Route::get('/certificados', function () { return view('certificados');})->name('certificados');
     Route::post('/generar_certificado', [UserController::class, 'generarCertificado'])->name('generarCertificado');
 });
 

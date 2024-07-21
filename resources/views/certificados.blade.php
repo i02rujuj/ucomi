@@ -20,7 +20,7 @@ Perfil
             </div>
             @endif
 
-            <form method="post" action="{{ route('generarCertificado') }}" enctype="multipart/form-data" class="bg-white p-8 mb-6 rounded-lg shadow-md">
+            <form method="post" action="{{ route('generarCertificado') }}" target="_blank" enctype="multipart/form-data" class="bg-white p-8 mb-6 rounded-lg shadow-md">
                 @csrf
                 <div class="form-group flex flex-col gap-2">
                     <label for="certificados" class="font-bold text-slate-600">Mis certificados</label>
@@ -31,18 +31,16 @@ Perfil
 
                         <div class="left-side w-full">
                             <div class="mb-2">
-                                <label for="idUsuario" class="block text-sm text-gray-600 mb-1">
+                                <label for="tipoCertificado" class="block text-sm text-gray-600 mb-1">
                                     Tipo de certificado:
                                 </label>
                                 
-                                <select class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required id="idCertificado" name="idCertificado">
-                                    <option value="1">Certificado Situación actual</option>
-                                    <option value="2">Certificado de Centros en los que he participado como miembro de equipo de gobierno</option>
-                                    <option value="3">Certificado de Juntas a las que he representado</option>
-                                    <option value="4">Certificado de Comisiones a las que he pertenecido</option>
+                                <select id="tipoCertificado" name="tipoCertificado" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none required" required>
+                                    <option value="{{config('constants.TIPOS_CERTIFICADO.ACTUAL')}}">Situación actual</option>
+                                    <option value="{{config('constants.TIPOS_CERTIFICADO.HISTORICO')}}">Histórico</option>
                                 </select>
                             
-                                @error('idUsuario')
+                                @error('tipoCertificado')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -50,8 +48,38 @@ Perfil
 
                         <div class="left-side w-full">
                             <div class="mb-2">
+                                <label for="representaciones" class="block text-sm text-gray-600 mb-1">
+                                    Representaciones:
+                                </label>
+                                <input type="checkbox" id="representacionCentro" name="representacionCentro" checked> Centro
+                                <input type="checkbox" id="representacionJunta" name="representacionJunta" checked class="accent-pink-500"> Junta
+                                <input type="checkbox" id="representacionComision" name="representacionComision" checked class="accent-yellow-500"> Comisión
+                            
+                                @error('representaciones')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                        
+                        <div class="left-side w-full">
+                            <div class="mb-2">
+                                <label for="opciones" class="block text-sm text-gray-600 mb-1">
+                                    Opciones:
+                                </label>
+                                <input type="checkbox" id="responsable" name="responsable"> Responsable
+                            
+                                @error('opciones')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="fechas" class="flex gap-4 hidden">
+                        <div class="left-side w-full">
+                            <div class="mb-2">
                                 <label for="fechaInicio" class="block text-sm text-gray-600 mb-1">
-                                    Desde:
+                                    Desde fecha toma posesión:
                                 </label>
                                 <input id="fechaInicio" name="fechaInicio" type="date" value="{{old("fechaInicio")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" />
                                 @error('fechaInicio')
@@ -82,3 +110,5 @@ Perfil
     </div>
 
 @endsection
+
+@vite(['resources/js/certificados/certificados.js'])

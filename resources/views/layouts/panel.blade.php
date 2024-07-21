@@ -209,7 +209,7 @@
                                 account_box
                             </span>
                             &nbsp;
-                            Mi perfil
+                            Perfil
                         </a>
                     </li>
 
@@ -219,7 +219,7 @@
                                 picture_as_pdf
                             </span>
                             &nbsp;
-                            Mis certificados
+                            Certificados
                         </a>
                     </li>
 

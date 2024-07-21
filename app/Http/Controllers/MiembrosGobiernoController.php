@@ -9,7 +9,6 @@ use App\Models\Centro;
 use Illuminate\Http\Request;
 use App\Models\Representacion;
 use App\Models\MiembroGobierno;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Flasher\Prime\Notification\NotificationInterface;

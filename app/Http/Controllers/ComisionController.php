@@ -22,20 +22,21 @@ class ComisionController extends Controller
             $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion');
 
             if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
-                $comisiones = $comisiones
-                ->join('juntas', 'juntas.id', '=', 'comisiones.idJunta')
-                ->whereIn('juntas.idCentro', $datosResponsableCentro['idCentros']);
+
+                $comisiones = $comisiones->whereHas('junta', function($builder) use ($datosResponsableCentro){
+                    return $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+                }); 
                 $juntas = $juntas->whereIn('idCentro', $datosResponsableCentro['idCentros']);
             }
 
             if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
                 $comisiones = $comisiones->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
-                $juntas = $juntas->whereIn('id', $datosResponsableJunta['idJuntas']);
+                $juntas = $juntas->whereIn('juntas.id', $datosResponsableJunta['idJuntas']);
             }
 
             if($datosResponsableComision = Auth::user()->esResponsableDatos('comision')['comisiones']){
-                $comisiones = $comisiones->whereIn('id', $datosResponsableComision['idComisiones']);
-                $juntas = $juntas->whereIn('id', $datosResponsableComision['idJuntas']);
+                $comisiones = $comisiones->whereIn('comisiones.id', $datosResponsableComision['idComisiones']);
+                $juntas = $juntas->whereIn('juntas.id', $datosResponsableComision['idJuntas']);
             }
 
             switch ($request->input('action')) {
@@ -84,7 +85,7 @@ class ComisionController extends Controller
 
         } catch (\Throwable $th) {
             toastr('No se pudieron obtener las comisiones.', NotificationInterface::ERROR, ' ');
-            return redirect()->route('home')->with('errors', 'No se pudieron obtener las comisiones.');
+            return redirect()->route('home')->with('errors', 'No se pudieron obtener las comisiones.'.$th->getMessage());
         }
     }
 

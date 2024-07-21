@@ -4,15 +4,20 @@ namespace App\Http\Controllers;
 
 
 use PDF;
+use DateTime;
 use App\Models\User;
 use App\Helpers\Helper;
+use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
+use PHPUnit\TextUI\Exception;
+use App\Models\MiembroComision;
+use App\Models\MiembroGobierno;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
-{
+{   
     public function get(Request $request)
     {
         try {
@@ -41,16 +46,6 @@ class UserController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['errors' => 'No se han podido obtener los usuarios.', 'status' => 422], 200);
         }
-    }
-
-    public function index()
-    {
-        return view('perfil');
-    }
-
-    public function certificados()
-    {
-        return view('certificados');
     }
 
     public function store(Request $request)
@@ -122,13 +117,140 @@ class UserController extends Controller
 
     public function generarCertificado(Request $request)
     {
-	    $data = [
-	            'title' => 'Tipo de certificado...',
-	            'date' => date('d/m/Y'),
-                'users' => User::get(),
-	    ];
+        try {
+            $usuario = Auth::User()->name;
+            $time = now();
 
-        $pdf = PDF::loadView('certificado', $data);
-        return $pdf->download('certificado.pdf');
+            switch ($request->tipoCertificado) {
+                case config('constants.TIPOS_CERTIFICADO.ACTUAL'):
+                    $idTipoCertificado = config('constants.TIPOS_CERTIFICADO.ACTUAL');
+                    $tipoCertificado = "Situación actual";
+                    break;
+
+                case config('constants.TIPOS_CERTIFICADO.HISTORICO'):
+                    $idTipoCertificado = config('constants.TIPOS_CERTIFICADO.HISTORICO');
+                    $tipoCertificado = "Histórico";
+
+                    if((isset($request->data['fechaDesde']) && !isset($request->data['fechaHasta'])) || (!isset($request->data['fechaDesde']) && isset($request->data['fechaHasta']))){
+                        throw new Exception('Es necesario indicar las dos fechas para realizar la búsqueda o no seleccionar ninguna para obtener todos los resultados');
+                    }
+
+                    if(!(!isset($request->data['fechaDesde']) && !isset($request->data['fechaHasta']))){
+                        // Validar que fechaHasta no pueda ser mayor a fechaDesde
+                        $dateDesde = new DateTime($request->data['fechaDesde']);
+                        $dateHasta = new DateTime($request->data['fechaHasta']);
+
+                        if ($dateHasta>$dateDesde) {
+                            throw new Exception('La fecha hasta no puede ser superior a la fecha desde');
+                        }  
+                    }
+
+                    break;
+                
+                default:
+                    throw new Exception('Tipo de certificado incorrecto');
+                    break;
+            }
+
+            if($request->representacionCentro){
+                $dataCentro = MiembroGobierno::
+                select('id', 'idCentro', 'idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at')
+                ->where('idUsuario', Auth::User()->id);
+
+                switch ($request->tipoCertificado) {
+                    case config('constants.TIPOS_CERTIFICADO.ACTUAL'):
+                        $dataCentro = $dataCentro->whereNull('fechaCese');
+                        break;
+
+                    case config('constants.TIPOS_CERTIFICADO.HISTORICO'):
+                        $dataCentro = $dataCentro->whereBetween('fechaTomaPosesion', [$dateDesde, $dateHasta]);
+                        break;
+                }
+
+                if($request->responsable){
+                    $dataCentro = $dataCentro->where('responsable', 1);
+                }
+    
+                $dataCentro = $dataCentro
+                    ->orderBy('deleted_at')
+                    ->orderBy('fechaCese')
+                    ->orderBy('updated_at','desc')
+                    ->orderBy('idRepresentacion')
+                    ->get();
+            }
+
+            if($request->representacionJunta){
+                $dataJunta = MiembroJunta::
+                select('id', 'idJunta', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at')
+                ->where('idUsuario', Auth::User()->id);
+
+                switch ($request->tipoCertificado) {
+                    case config('constants.TIPOS_CERTIFICADO.ACTUAL'):
+                        $dataJunta = $dataJunta->whereNull('fechaCese');
+                        break;
+
+                    case config('constants.TIPOS_CERTIFICADO.HISTORICO'):
+                        $dataJunta = $dataJunta->whereBetween('fechaTomaPosesion', [$dateDesde, $dateHasta]);
+                        break;
+                }
+
+                if($request->responsable){
+                    $dataJunta = $dataJunta->where('responsable', 1);
+                }
+    
+                $dataJunta = $dataJunta
+                    ->orderBy('deleted_at')
+                    ->orderBy('fechaCese')
+                    ->orderBy('updated_at','desc')
+                    ->orderBy('idRepresentacion')
+                    ->get();
+            }
+
+            if($request->representacionComision){
+                $dataComision = MiembroComision::
+                select('id', 'idComision', 'idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at')
+                ->where('idUsuario', Auth::User()->id);
+
+                switch ($request->tipoCertificado) {
+                    case config('constants.TIPOS_CERTIFICADO.ACTUAL'):
+                        $dataComision = $dataComision->whereNull('fechaCese');
+                        break;
+
+                    case config('constants.TIPOS_CERTIFICADO.HISTORICO'):
+                        $dataComision = $dataComision->whereBetween('fechaTomaPosesion', [$dateDesde, $dateHasta]);
+                        break;
+                }
+
+                if($request->responsable){
+                    $dataComision = $dataComision->where('responsable', 1);
+                }
+    
+                $dataComision = $dataComision
+                    ->orderBy('deleted_at')
+                    ->orderBy('fechaCese')
+                    ->orderBy('updated_at','desc')
+                    ->orderBy('idRepresentacion')
+                    ->get();
+            }
+
+            $data = [
+                    'idTipo' => $idTipoCertificado,
+                    'tipo' => $tipoCertificado,
+                    'usuario' => $usuario,
+                    'dataCentro' => $dataCentro,
+                    'dataJunta' => $dataJunta,
+                    'dataComision' => $dataComision,
+            ];
+
+            $pdf = PDF::loadView('certificados.certificado', $data);
+            $pdf->setOptions([
+                'isRemoteEnabled' => true,
+            ]);
+            $pdf->render();
+            //dd($pdf);
+            return $pdf->stream("Certificado $tipoCertificado $usuario $time.pdf");
+        } catch (\Throwable $th) {
+           
+        }   
     }
 }

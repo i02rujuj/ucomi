@@ -19,6 +19,7 @@ export default defineConfig({
                 'resources/js/convocatoriasComision/convocatoriasComision.js',
                 'resources/js/convocatoriasJunta/confirmarAsistencia.js',
                 'resources/js/convocatoriasComision/confirmarAsistencia.js',
+                'resources/js/certificados/certificados.js',
             ],
             refresh: true,
         }),

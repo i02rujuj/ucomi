@@ -59,12 +59,12 @@ class ConvocatoriasJuntaController extends Controller
             $convocatorias = $convocatorias
             ->whereNot('idJunta', null)
             ->orderBy('deleted_at')
+            ->orderBy('updated_at','desc')
             ->orderBy('fecha')  
             ->orderBy('hora')          
             ->orderBy('idJunta')
             ->orderBy('idComision')
             ->orderBy('idTipo')
-            ->orderBy('updated_at','desc')
             ->paginate(5);
 
             if($request->input('action')=='limpiar'){

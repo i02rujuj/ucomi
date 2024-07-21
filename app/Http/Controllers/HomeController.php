@@ -30,16 +30,25 @@ class HomeController extends Controller
         $miembrosGobierno = MiembroGobierno::
         where('idUsuario', Auth::user()->id)
         ->whereNull('fechaCese')
+        ->orderBy('responsable', 'desc')
+        ->orderBy('updated_at', 'desc')
+        ->orderBy('idRepresentacion')
         ->get(); 
 
         $miembrosJunta = MiembroJunta::
         where('idUsuario', Auth::user()->id)
         ->whereNull('fechaCese')
+        ->orderBy('responsable', 'desc')
+        ->orderBy('updated_at', 'desc')
+        ->orderBy('idRepresentacion')
         ->get(); 
 
         $miembrosComision = MiembroComision::
         where('idUsuario', Auth::user()->id)
         ->whereNull('fechaCese')
+        ->orderBy('responsable', 'desc')
+        ->orderBy('updated_at', 'desc')
+        ->orderBy('idRepresentacion')
         ->get(); 
 
         return view('home',['miembrosGobierno' => $miembrosGobierno, 'miembrosJunta' => $miembrosJunta, 'miembrosComision' => $miembrosComision]);

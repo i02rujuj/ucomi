@@ -34,7 +34,7 @@ class ComisionController extends Controller
             }
 
             if($datosResponsableComision = Auth::user()->esResponsableDatos('comision')['comisiones']){
-                $comisiones = $comisiones->whereIn('idJunta', $datosResponsableComision['idJuntas']);
+                $comisiones = $comisiones->whereIn('id', $datosResponsableComision['idComisiones']);
                 $juntas = $juntas->whereIn('id', $datosResponsableComision['idJuntas']);
             }
 
@@ -61,7 +61,7 @@ class ComisionController extends Controller
             ->orderBy('fechaDisolucion')
             ->orderBy('updated_at','desc')
             ->orderBy('fechaConstitucion', 'desc')
-            ->paginate(5);
+            ->paginate(6);
 
             if($request->input('action')=='limpiar'){
                 return redirect()->route('comisiones')->with([

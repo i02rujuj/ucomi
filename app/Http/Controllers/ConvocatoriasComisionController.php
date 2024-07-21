@@ -73,12 +73,12 @@ class ConvocatoriasComisionController extends Controller
             $convocatorias = $convocatorias
             ->whereNot('idComision', null)
             ->orderBy('deleted_at')
+            ->orderBy('updated_at','desc')
             ->orderBy('fecha')  
             ->orderBy('hora')          
             ->orderBy('idComision')
             ->orderBy('idComision')
             ->orderBy('idTipo')
-            ->orderBy('updated_at','desc')
             ->paginate(5);
 
             if($request->input('action')=='limpiar'){

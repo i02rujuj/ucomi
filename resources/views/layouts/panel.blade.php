@@ -50,7 +50,9 @@
         <div id="menu" class="select-none transform -translate-x-full lg:translate-x-0 transition-all duration-200 ease-in-out opacity-0 lg:opacity-100 invisible lg:visible md:flex lg:flex h-screen fixed top-14 left-0 bg-gray-100 z-50">
             <div class="w-64 h-screen px-6 py-4 bg-white shadow-lg">
                 <div class="flex flex-col">
-                    <img src="{{ Auth::user()->image ? Auth::user()->image : asset('img/default_image_profile.jpg') }}" alt="Imagen de perfil" class="w-12 h-12 self-start ml-3 mb-1 justify-self-center rounded-full object-cover">
+                    <button onclick="window.location='{{ route('home') }}'">
+                        <img src="{{ Auth::user()->image ? Auth::user()->image : asset('img/default_image_profile.jpg') }}" alt="Imagen de perfil" class="w-12 h-12 self-start ml-3 mb-1 justify-self-center rounded-full object-cover cursor-pointer">
+                    </button>
                     <h1 class="text-lg font-bold px-3">Bienvenido</h1>
                     <h3 class="text-xs text-gray-500 px-3 truncate">{{ auth()->user()->email }}</h3>
                     <h3 class="text-xs text-gray-500 px-3 truncate">{{ auth()->user()->getRoleName() }}</h3>

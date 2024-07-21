@@ -30,4 +30,19 @@ class Helper{
         
         return $url_image;
     }
+
+    static function subirPDFCloudinary($pdf, $folder)
+    {
+        $url_pdf=null;
+
+        if ($pdf) {
+            $publicId_pdf = cloudinary()->upload($pdf->getRealPath(), [
+                'folder' => $folder
+            ])->getPublicId();
+            
+            $url_pdf = cloudinary()->getUrl($publicId_pdf); 
+        }
+        
+        return $url_pdf;
+    }
 }

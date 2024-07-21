@@ -115,7 +115,7 @@ class ConvocatoriasComisionController extends Controller
             }
 
             if(isset($request->data['acta'])){
-                $url_acta = Helper::subirImagenCloudinary($request->data['acta'], "actasComisiones");
+                $url_acta = Helper::subirPDFCloudinary($request->data['acta'], "actasComisiones");
             }
 
             $convocatoria = Convocatoria::create([
@@ -148,7 +148,7 @@ class ConvocatoriasComisionController extends Controller
             $convocatoria=Convocatoria::where('id', $request->id)->first();
 
             if(isset($request->data['acta'])){
-                $url_acta = Helper::subirImagenCloudinary($request->data['acta'], "actasComisiones");
+                $url_acta = Helper::subirPDFCloudinary($request->data['acta'], "actasComisiones");
                 $convocatoria->acta = $url_acta;
             }
 

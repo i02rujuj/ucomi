@@ -39,7 +39,7 @@ Panel
                 ,
                 activeClasses: 'border-l border-t border-r rounded-t text-grey-700 font-semibold',
                 inactiveClasses: 'text-grey-500 hover:border-l hover:border-t hover:border-r hover:rounded-t'
-            }" class="p-6">
+            }" class="px-2 py-6">
 
                 <ul class="flex justify-start border-b mb-4">
                     @if($miembrosGobierno->count())
@@ -85,7 +85,7 @@ Panel
                             <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
                                 @if($miembrosGobierno->count())
                                     @foreach ($miembrosGobierno as $miembro)
-                                        <div id="btn-editar-miembro" data-miembro-id="{{ $miembro['id'] }}" class="card bg-white p-6 rounded-lg shadow-md">
+                                        <div class="card bg-white p-6 rounded-lg shadow-md">
                                             <div class="flex gap-3">
                                                 <div class="right-part w-full max-w-max mt-1">
                                                     <img src="{{ $miembro->usuario->image ? $miembro->usuario->image : asset('img/default_image_profile.jpg') }}" alt="Imagen de usuario" class="shadow-black shadow-sm w-16 h-16 ml-1 mb-1 justify-self-center rounded-md object-cover">  
@@ -156,7 +156,7 @@ Panel
                             <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
                                 @if($miembrosJunta->count())
                                     @foreach ($miembrosJunta as $miembro)
-                                        <div id="btn-editar-miembro" data-miembro-id="{{ $miembro['id'] }}" class="card bg-white p-6 rounded-lg shadow-md">
+                                        <div class="card bg-white p-6 rounded-lg shadow-md">
                                             <div class="flex gap-3">
                                                 <div class="right-part w-full max-w-max mt-1">
                                                     <img src="{{ $miembro->usuario->image ? $miembro->usuario->image : asset('img/default_image_profile.jpg') }}" alt="Imagen de usuario" class="shadow-black shadow-sm w-16 h-16 ml-1 mb-1 justify-self-center rounded-md object-cover">  
@@ -237,7 +237,7 @@ Panel
                             <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
                                 @if($miembrosComision->count())
                                     @foreach ($miembrosComision as $miembro)
-                                        <div id="btn-editar-miembro" data-miembro-id="{{ $miembro['id'] }}" class="card bg-white p-6 rounded-lg shadow-md">
+                                        <div class="card bg-white p-6 rounded-lg shadow-md">
                                             <div class="flex gap-3">
                                                 <div class="right-part w-full max-w-max mt-1">
                                                     <img src="{{ $miembro->usuario->image ? $miembro->usuario->image : asset('img/default_image_profile.jpg') }}" alt="Imagen de usuario" class="shadow-black shadow-sm w-16 h-16 ml-1 mb-1 justify-self-center rounded-md object-cover">  
@@ -292,20 +292,8 @@ Panel
                                                             workspace_premium
                                                         </span>
                                                         Responsable de Comisión
-                                                    @else
-                                                        Miembro de Comisión
                                                     @endif
                                                 </span>
-                                            
-                                                @if ($miembro['fechaCese']==null)
-                                                    <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Vigente</span>
-                                                @else
-                                                    <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">No vigente</span>
-                                                @endif
-                
-                                                @if ($miembro['deleted_at']!=null)
-                                                    <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Eliminado</span>
-                                                @endif
                                             </div>
                                         </div>
                                     @endforeach

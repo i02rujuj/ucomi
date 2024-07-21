@@ -117,7 +117,7 @@ class MiembrosComisionController extends Controller
             ]);
         
         } catch (\Throwable $th) {
-            sweetalert('No se pudieron obtener los miembros de comision.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr('No se pudieron obtener los miembros de comision.', NotificationInterface::ERROR, ' ');
             return redirect()->route('home')->with('errors', 'No se pudieron obtener los miembros de comisión.');
         }
     }
@@ -141,11 +141,11 @@ class MiembrosComisionController extends Controller
                 "responsable" => $request->data['responsable'],
             ]);
 
-            sweetalert("El miembro de comisión '{$miembroComision->usuario->name}' se ha añadido correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            toastr("El miembro de comisión '{$miembroComision->usuario->name}' se ha añadido correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El miembro de comisión '{$miembroComision->usuario->name}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            sweetalert("Error al añadir el miembro de comisión '{$miembroComision->usuario->name}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Error al añadir el miembro de comisión '{$miembroComision->usuario->name}'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Error al añadir el miembro de comisión '{$miembroComision->usuario->name}'", 'status' => 422], 200);
         }
     }
@@ -168,11 +168,11 @@ class MiembrosComisionController extends Controller
             $miembroComision->responsable = $request->data['responsable'];  
             $miembroComision->save();
 
-            sweetalert("El miembro de comision '{$miembroComision->usuario->name}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            toastr("El miembro de comision '{$miembroComision->usuario->name}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El miembro de comision '{$miembroComision->usuario->name}' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            sweetalert("Error al actualizar el miembro de comisión '{$miembroComision->usuario->name}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Error al actualizar el miembro de comisión '{$miembroComision->usuario->name}'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Error al actualizar el miembro de comisión '{$miembroComision->usuario->name}'", 'status' => 422], 200);
         }
     }
@@ -189,11 +189,11 @@ class MiembrosComisionController extends Controller
             $miembroComision = MiembroComision::where('id', $request->id)->first();
             $miembroComision->delete();
 
-            sweetalert("El miembro de comisión '{$miembroComision->usuario->name}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            toastr("El miembro de comisión '{$miembroComision->usuario->name}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El miembro de comisión '{$miembroComision->usuario->name}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            sweetalert("Error al eliminar el miembro de comisión '{$miembroComision->usuario->name}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Error al eliminar el miembro de comisión '{$miembroComision->usuario->name}'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Error al eliminar el miembro de comisión '{$miembroComision->usuario->name}'",'status' => 422], 200);
         }
     }
@@ -208,7 +208,7 @@ class MiembrosComisionController extends Controller
             
             return response()->json($miembroComision);
         } catch (\Throwable $th) {
-            sweetalert('No se ha encontrado el miembro de comisión.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr('No se ha encontrado el miembro de comisión.', NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => 'No se ha encontrado el miembro de comisión.','status' => 422], 200);
         }
     }

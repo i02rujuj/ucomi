@@ -203,9 +203,9 @@ return array(
                 // Optional: Add global options here
                 'position' => 'top-right',
                 'toast' => true,
-                'timer' => 3000,
-                'timerProgressBar' => true,
-                'showConfirmButton' => false,
+                'timer' => false,
+                'timerProgressBar' => false,
+                'showConfirmButton' => true,
             ],
         ],
         'toastr' => [
@@ -219,7 +219,8 @@ return array(
             ],
             'options' => [
                 // Optional: Add global options here
-                'closeButton' => true
+                //'closeButton' => true
+                'title' => ''
             ],
         ],
     ],

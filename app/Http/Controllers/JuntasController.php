@@ -69,7 +69,7 @@ class JuntasController extends Controller
             ]);
 
         } catch (\Throwable $th) {
-            sweetalert('No se pudieron obtener las juntas.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr('No se pudieron obtener las juntas.', NotificationInterface::ERROR, ' ');
             return redirect()->route('home')->with('errors', 'No se pudieron obtener las juntas.');
         }
     }
@@ -89,11 +89,11 @@ class JuntasController extends Controller
                 "fechaDisolucion" => $request->data['fechaDisolucion'],
             ]);
 
-            sweetalert("La junta de centro '{$junta->centro->nombre}' se ha añadido correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            toastr("La junta de centro '{$junta->centro->nombre}' se ha añadido correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La junta de centro '{$junta->centro->nombre}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            sweetalert("Error al añadir la junta de centro '{$junta->centro->nombre}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Error al añadir la junta de centro '{$junta->centro->nombre}'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Error al añadir la junta de centro '{$junta->centro->nombre}'", 'status' => 422], 200);
         }
     }
@@ -119,11 +119,11 @@ class JuntasController extends Controller
             $junta->fechaDisolucion = $request->data['fechaDisolucion'];
             $junta->save();
 
-            sweetalert("La junta de centro '{$junta->centro->nombre}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            toastr("La junta de centro '{$junta->centro->nombre}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La junta de centro '{$junta->centro->nombre}' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            sweetalert("Error al actualizar la junta de centro '{$junta->centro->nombre}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Error al actualizar la junta de centro '{$junta->centro->nombre}'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Error al actualizar la junta de centro '{$junta->centro->nombre}'", 'status' => 422], 200);
         }
     }
@@ -140,11 +140,11 @@ class JuntasController extends Controller
             $junta = Junta::where('id', $request->id)->first();
             $junta->delete();
 
-            sweetalert("La junta de centro '{$junta->centro->nombre}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            toastr("La junta de centro '{$junta->centro->nombre}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La junta de centro '{$junta->centro->nombre}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            sweetalert("Error al eliminar la junta de centro '{$junta->centro->nombre}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Error al eliminar la junta de centro '{$junta->centro->nombre}'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Error al eliminar la junta de centro '{$junta->centro->nombre}'",'status' => 422], 200);
         }
     }
@@ -159,7 +159,7 @@ class JuntasController extends Controller
 
             return response()->json($junta);
         } catch (\Throwable $th) {
-            sweetalert("No se ha encontrado la junta.", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("No se ha encontrado la junta.", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => 'No se ha encontrado la junta.','status' => 422], 200);
         }
     }

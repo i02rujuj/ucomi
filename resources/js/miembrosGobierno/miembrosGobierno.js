@@ -206,9 +206,13 @@ const addEditEvent = (button) => {
                 showLoaderOnConfirm:true,
                 showLoaderOnDeny:true,
                 preConfirm: async () => preConfirm('update', button.dataset.miembroId),
-                preDeny: async () => preConfirm('delete', button.dataset.miembroId),
-            });
-
+                preDeny: async () => preConfirm('delete', button.dataset.miembroId), 
+                didOpen: () => {
+                    let toast = document.querySelector('.swal2-toast');
+                    console.log(toast)
+                    Swal.stopTimer();
+                  }   
+            })
         } catch (error) {
             await Swal.fire({
                 icon: "error",

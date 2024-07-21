@@ -86,7 +86,7 @@ class ConvocatoriasJuntaController extends Controller
             ]);
 
         } catch (\Throwable $th) {
-            sweetalert('No se pudieron obtener las convocatorias.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr('No se pudieron obtener las convocatorias.', NotificationInterface::ERROR, ' ');
             return redirect()->route('home')->with('errors', 'No se pudieron obtener las convocatorias.');
         }
     }
@@ -126,11 +126,11 @@ class ConvocatoriasJuntaController extends Controller
                 ]);
             }
 
-            sweetalert("La convocatoria del día '$convocatoria->fecha' se ha añadido correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            toastr("La convocatoria del día '$convocatoria->fecha' se ha añadido correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La convocatoria  del día '$convocatoria->fecha' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            sweetalert("Error al añadir la convocatoria del día '$convocatoria->fecha'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Error al añadir la convocatoria del día '$convocatoria->fecha'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Error al añadir la convocatoria del día '$convocatoria->fecha'", 'status' => 422], 200);
         }
     }
@@ -157,11 +157,11 @@ class ConvocatoriasJuntaController extends Controller
             $convocatoria->hora = $request->data['hora'];
             $convocatoria->save();
            
-            sweetalert("La convocatoria del día '$convocatoria->fecha' se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            toastr("La convocatoria del día '$convocatoria->fecha' se ha actualizado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La convocatoria del día '$convocatoria->fecha' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            sweetalert("Error al actualizar la convocatoria del día '$convocatoria->fecha'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Error al actualizar la convocatoria del día '$convocatoria->fecha'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Error al actualizar la convocatoria del día '$convocatoria->fecha'", 'status' => 422], 200);
         }
     }
@@ -181,11 +181,11 @@ class ConvocatoriasJuntaController extends Controller
             Convocado::where('idConvocatoria', $request->id)->delete();
             $convocatoria->delete();
 
-            sweetalert("La convocatoria del día '{$convocatoria->fecha}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            toastr("La convocatoria del día '{$convocatoria->fecha}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La convocatoria del día '{$convocatoria->fecha}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            sweetalert("Error al eliminar la convocatoria del día '{$convocatoria->fecha}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Error al eliminar la convocatoria del día '{$convocatoria->fecha}'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Error al eliminar la convocatoria del día '{$convocatoria->fecha}'",'status' => 422], 200);
         }
     }
@@ -200,7 +200,7 @@ class ConvocatoriasJuntaController extends Controller
 
             return response()->json($convocatoria);
         } catch (\Throwable $th) {
-            sweetalert("No se ha encontrado la convocatoria.", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("No se ha encontrado la convocatoria.", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => 'No se ha encontrado la convocatoria.','status' => 422], 200);
         }
     }
@@ -282,7 +282,7 @@ class ConvocatoriasJuntaController extends Controller
 
             return response()->json($convocados->get());
         } catch (\Throwable $th) {
-            sweetalert("Ha ocurrido un error al obtener los convocados de la convocatoria del día '$request->fecha'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Ha ocurrido un error al obtener los convocados de la convocatoria del día '$request->fecha'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Ha ocurrido un error al obtener los convocados de la convocatoria del día '$request->fecha'",'status' => 422], 200);
         }
     }
@@ -296,16 +296,16 @@ class ConvocatoriasJuntaController extends Controller
             ->update(['asiste' => $request->asiste]);
 
             if($request->asiste==1){
-                sweetalert('Se ha confirmado la asistencia a la convocatoria', NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+                toastr('Se ha confirmado la asistencia a la convocatoria', NotificationInterface::SUCCESS, ' ');
                 return response()->json(['message' => 'Se ha confirmado la asistencia de la convocatoria','status' => 200], 200);
             }
             else{
-                sweetalert('Se ha cancelado la asistencia a la convocatoria', NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+                toastr('Se ha cancelado la asistencia a la convocatoria', NotificationInterface::SUCCESS, ' ');
                 return response()->json(['message' => 'Se ha cancelado la asistencia a la convocatoria','status' => 200], 200);
             }
 
         } catch (\Throwable $th) {
-            sweetalert('Ha ocurrido un error al editar la asistencia de la convocatoria', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr('Ha ocurrido un error al editar la asistencia de la convocatoria', NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => 'Ha ocurrido un error al editar la asistencia de la convocatoria','status' => 422], 200);
         }
     }

@@ -84,7 +84,7 @@ class MiembrosGobiernoController extends Controller
             ]);
         
         } catch (\Throwable $th) {
-            sweetalert('No se pudieron obtener los miembros de gobierno.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr('No se pudieron obtener los miembros de gobierno.', NotificationInterface::ERROR, ' ');
             return redirect()->route('home')->with('errors', 'No se pudieron obtener los miembros de gobierno.');
         }
     }
@@ -108,11 +108,11 @@ class MiembrosGobiernoController extends Controller
                 "responsable" => $request->data['responsable'],
             ]);
 
-            sweetalert("El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha añadido correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            toastr("El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha añadido correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            sweetalert("Error al añadir el miembro de gobierno '{$miembroGobierno->usuario->name}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Error al añadir el miembro de gobierno '{$miembroGobierno->usuario->name}'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Error al añadir el miembro de gobierno '{$miembroGobierno->usuario->name}'", 'status' => 422], 200);
         }
     }
@@ -136,11 +136,11 @@ class MiembrosGobiernoController extends Controller
 
             $miembroGobierno->save();
 
-            sweetalert("El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            toastr("El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            sweetalert("Error al actualizar el miembro de gobierno '{$miembroGobierno->usuario->name}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Error al actualizar el miembro de gobierno '{$miembroGobierno->usuario->name}'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Error al actualizar el miembro de gobierno '{$miembroGobierno->usuario->name}'", 'status' => 422], 200);
         }
     }
@@ -157,11 +157,11 @@ class MiembrosGobiernoController extends Controller
             $miembroGobierno = MiembroGobierno::where('id', $request->id)->first();
             $miembroGobierno->delete();
 
-            sweetalert("El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            toastr("El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            sweetalert("Error al eliminar el miembro de gobierno '{$miembroGobierno->usuario->name}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Error al eliminar el miembro de gobierno '{$miembroGobierno->usuario->name}'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Error al eliminar el miembro de gobierno '{$miembroGobierno->usuario->name}'",'status' => 422], 200);
         }
     }
@@ -176,7 +176,7 @@ class MiembrosGobiernoController extends Controller
 
             return response()->json($miembroGobierno);
         } catch (\Throwable $th) {
-            sweetalert("No se ha encontrado el miembro de gobierno.", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("No se ha encontrado el miembro de gobierno.", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "No se ha encontrado el miembro de gobierno.",'status' => 422], 200);
         }
     }

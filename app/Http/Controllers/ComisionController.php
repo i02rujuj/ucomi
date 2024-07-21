@@ -83,7 +83,7 @@ class ComisionController extends Controller
             ]);
 
         } catch (\Throwable $th) {
-            sweetalert('No se pudieron obtener las comisiones.', NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr('No se pudieron obtener las comisiones.', NotificationInterface::ERROR, ' ');
             return redirect()->route('home')->with('errors', 'No se pudieron obtener las comisiones.');
         }
     }
@@ -105,11 +105,11 @@ class ComisionController extends Controller
                 "fechaDisolucion" => $request->data['fechaDisolucion'],
             ]);
 
-            sweetalert("La comisión '{$comision->nombre}' se ha añadido correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            toastr("La comisión '{$comision->nombre}' se ha añadido correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La comisión '{$comision->nombre}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            sweetalert("Error al añadir la comisión '{$comision->nombre}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Error al añadir la comisión '{$comision->nombre}'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Error al añadir la comisión '{$comision->nombre}'", 'status' => 422], 200);
         }
     }
@@ -137,11 +137,11 @@ class ComisionController extends Controller
             $comision->fechaDisolucion = $request->data['fechaDisolucion'];
             $comision->save();
 
-            sweetalert("La comision '{$comision->nombre}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            toastr("La comision '{$comision->nombre}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La comision '{$comision->nombre}' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            sweetalert("Error al actualizar la comisión '{$comision->nombre}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Error al actualizar la comisión '{$comision->nombre}'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Error al actualizar la comisión '{$comision->nombre}'", 'status' => 422], 200);
         }
     }
@@ -158,11 +158,11 @@ class ComisionController extends Controller
             $comision = Comision::where('id', $request->id)->first();
             $comision->delete();
 
-            sweetalert("La comisión '{$comision->nombre}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, config('flasher.plugins.sweetalert.options'));
+            toastr("La comisión '{$comision->nombre}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La comisión '{$comision->nombre}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            sweetalert("Error al eliminar la comisión '{$comision->nombre}'", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("Error al eliminar la comisión '{$comision->nombre}'", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "Error al eliminar la comisión '{$comision->nombre}'",'status' => 422], 200);
         }
     }
@@ -177,7 +177,7 @@ class ComisionController extends Controller
             
             return response()->json($comision);
         } catch (\Throwable $th) {
-            sweetalert("No se ha encontrado la comisión.", NotificationInterface::ERROR, config('flasher.plugins.sweetalert.options'));
+            toastr("No se ha encontrado la comisión.", NotificationInterface::ERROR, ' ');
             return response()->json(['errors' => "No se ha encontrado la comisión.",'status' => 422], 200);
         }
     }

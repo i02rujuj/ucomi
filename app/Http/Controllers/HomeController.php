@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
+use App\Models\MiembroComision;
+use App\Models\MiembroGobierno;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -24,6 +27,21 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $miembrosGobierno = MiembroGobierno::
+        where('idUsuario', Auth::user()->id)
+        ->whereNull('fechaCese')
+        ->get(); 
+
+        $miembrosJunta = MiembroJunta::
+        where('idUsuario', Auth::user()->id)
+        ->whereNull('fechaCese')
+        ->get(); 
+
+        $miembrosComision = MiembroComision::
+        where('idUsuario', Auth::user()->id)
+        ->whereNull('fechaCese')
+        ->get(); 
+
+        return view('home',['miembrosGobierno' => $miembrosGobierno, 'miembrosJunta' => $miembrosJunta, 'miembrosComision' => $miembrosComision]);
     }
 }

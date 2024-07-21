@@ -96,7 +96,7 @@ Miembros de Centro
             <hr class="my-4 border-t border-gray-300" />
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
-                @if($miembrosGobierno && $miembrosGobierno[0])
+                @if($miembrosGobierno->count())
                     @foreach ($miembrosGobierno as $miembro)
                         <div id="btn-editar-miembro" data-miembro-id="{{ $miembro['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
                             <div class="flex gap-3">
@@ -114,32 +114,6 @@ Miembros de Centro
                                         <h2 class="text-base font-bold truncate">{{ $miembro->usuario->name }}</h2>
                                     </div>
 
-                                    <div class="flex font-bold truncate items-center gap-1">
-                                        <div class="flex items-center">
-                                            <span class="material-icons-round scale-75">
-                                                psychology
-                                            </span>
-
-                                            &nbsp;
-
-                                            @if($miembro->representacion->id == config('constants.REPRESENTACIONES.GOBIERNO.DIRECTOR'))
-                                                @if ($miembro->centro->id == config('constants.TIPOS_CENTRO.FACULTAD')) 
-                                                    <h2 class="">Decano/a</h2>
-                                                @else
-                                                    <h2 class="">Director/a</h2>
-                                                @endif
-                                            @elseif ($miembro->representacion->id == config('constants.REPRESENTACIONES.GOBIERNO.VICEDIRECTOR'))
-                                                @if ($miembro->centro->id == config('constants.TIPOS_CENTRO.FACULTAD')) 
-                                                    <h2 class="">ViceDecano/a</h2>
-                                                @else
-                                                    <h2 class="">ViceDirector/a</h2>
-                                                @endif
-                                            @else
-                                                <h2 class="">{{ $miembro->representacion->nombre }}</h2>
-                                            @endif
-                                        </div>
-                                    </div>
-
                                     <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
                                         <div class="flex items-center">
                                             <span class="material-icons-round scale-75">
@@ -149,6 +123,15 @@ Miembros de Centro
                                             <h2 class="truncate">{{ $miembro->centro->nombre }}</h2>
                                         </div>
                                     </div> 
+
+                                    <div class="flex font-bold truncate items-center gap-1">
+                                        <div class="flex items-center">
+                                            <span class="material-icons-round scale-75">
+                                                psychology
+                                            </span>
+                                            <h2 class="ml-1">{{ $miembro->representacion->nombre }}</h2>
+                                        </div>
+                                    </div>
 
                                     <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
                                         <div class="truncate flex items-center">

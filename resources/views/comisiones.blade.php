@@ -115,7 +115,7 @@ Comisiones
                             </div>
                  
                             <div class="flex justify-end items-center gap-2 mt-2" >
-                                <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg">Comisión Junta {{$com->junta->fecha_constitucion_format}}</span>
+                                <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg">Comisión de Junta {{$com->junta->fecha_constitucion_format}}</span>
                                 @if ($com['fechaDisolucion']==null)
                                     <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Vigente</span>
                                 @else

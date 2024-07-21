@@ -34,16 +34,6 @@ Miembros de Junta
 
             <div id="modal_add" name="modal_add" class="hidden">
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-4 justify-center items-center">
-                    <label for="idJunta" class="block text-sm text-gray-600 w-36 pr-6 text-right">Juntas vigentes:</label>
-                    <select id="idJunta" name="idJunta" class="swal2-input miembro text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none bg-blue-50">
-                        <option value="" selected disabled>Selecciona una junta</option>
-                        @foreach ($juntas as $junta)
-                            <option value="{{ $junta->id }}">{{ $junta->fecha_constitucion_format }} | {{ $junta->centro->nombre }} </option>
-                        @endforeach
-                    </select>
-                </div> 
-
                 <div id='user'>
                     <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-4 justify-center items-center">
                         <label for="idUsuario" class="block text-sm text-gray-600 w-36 pr-6 text-right">Usuario: *</label>
@@ -55,6 +45,16 @@ Miembros de Junta
                         </select>
                     </div>
                 </div>
+
+                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-4 justify-center items-center">
+                    <label for="idJunta" class="block text-sm text-gray-600 w-36 pr-6 text-right">Juntas vigentes:</label>
+                    <select id="idJunta" name="idJunta" class="swal2-input miembro text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none bg-blue-50">
+                        <option value="" selected disabled>Selecciona una junta</option>
+                        @foreach ($juntas as $junta)
+                            <option value="{{ $junta->id }}">{{ $junta->fecha_constitucion_format }} | {{ $junta->centro->nombre }} </option>
+                        @endforeach
+                    </select>
+                </div>  
 
                 <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mt-4 justify-center items-center">
                     <label for="idRepresentacion" class="block text-sm text-gray-600 w-36 pr-6 text-right">Representación: *</label>
@@ -88,7 +88,7 @@ Miembros de Junta
             <hr className="my-6 border-t border-gray-300" />
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
-                @if($miembrosJunta && $miembrosJunta[0])
+                @if($miembrosJunta->count())
                     @foreach ($miembrosJunta as $miembro)
                         <div id="btn-editar-miembro" data-miembro-id="{{ $miembro['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
                             <div class="flex gap-3">
@@ -106,32 +106,6 @@ Miembros de Junta
                                         <h2 class="text-base font-bold truncate">{{ $miembro->usuario->name }}</h2>
                                     </div>
 
-                                    <div class="flex font-bold truncate items-center gap-1">
-                                        <div class="flex items-center">
-                                            <span class="material-icons-round scale-75">
-                                                psychology
-                                            </span>
-
-                                            &nbsp;
-
-                                            @if($miembro->representacion->id == config('constants.REPRESENTACIONES.GENERAL.DIRECTOR'))
-                                                @if ($miembro->junta->centro->id == config('constants.TIPOS_CENTRO.FACULTAD')) 
-                                                    <h2 class="">Decano/a</h2>
-                                                @else
-                                                    <h2 class="">Director/a</h2>
-                                                @endif
-                                            @elseif ($miembro->representacion->id == config('constants.REPRESENTACIONES.GENERAL.VICEDIRECTOR'))
-                                                @if ($miembro->junta->centro->id == config('constants.TIPOS_CENTRO.FACULTAD')) 
-                                                    <h2 class="">ViceDecano/a</h2>
-                                                @else
-                                                    <h2 class="">ViceDirector/a</h2>
-                                                @endif
-                                            @else
-                                                <h2 class="">{{ $miembro->representacion->nombre }}</h2>
-                                            @endif
-                                        </div>
-                                    </div>
-
                                     <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
                                         <div class="flex items-center">
                                             <span class="material-icons-round scale-75">
@@ -141,6 +115,25 @@ Miembros de Junta
                                             <h2 class="truncate">{{ $miembro->junta->centro->nombre }}</h2>
                                         </div>
                                     </div> 
+
+                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                        <div class="flex items-center">
+                                            <span class="material-icons-round scale-75">
+                                                event
+                                            </span>
+                                            &nbsp;
+                                            <h2 class="truncate">Junta de {{ $miembro->junta->fecha_constitucion_format }}</h2>
+                                        </div>
+                                    </div> 
+
+                                    <div class="flex font-bold truncate items-center gap-1">
+                                        <div class="flex items-center">
+                                            <span class="material-icons-round scale-75">
+                                                psychology
+                                            </span>
+                                            <h2 class="ml-1">{{ $miembro->representacion->nombre }}</h2>
+                                        </div>
+                                    </div>
 
                                     <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
                                         <div class="truncate flex items-center">

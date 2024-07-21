@@ -5,7 +5,7 @@ Perfil
 
 @section ('content')
 
-    <div class="md:ml-64 lg:ml-64 mt-14">
+    <div class="lg:ml-64 mt-14">
         <div class="mx-auto p-6">
 
             @if (session()->has('success'))

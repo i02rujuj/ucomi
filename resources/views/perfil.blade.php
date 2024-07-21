@@ -55,7 +55,7 @@ Perfil
                 </button>
             </form>
 
-            <form method="post" action="/save_image_perfil" enctype="multipart/form-data" class="bg-white p-8 mb-6 rounded-lg shadow-md">
+            <form method="post" action="{{ route('saveImagePerfil') }}" enctype="multipart/form-data" class="bg-white p-8 mb-6 rounded-lg shadow-md">
                 @csrf
                 <div class="form-group flex flex-col gap-2">
                     <label for="imagen" class="font-bold text-slate-600">Seleccione una imagen:</label>
@@ -63,13 +63,16 @@ Perfil
                     <img src="{{ Auth::user()->image ? Auth::user()->image : asset('img/default_image_profile.jpg') }}" alt="Imagen de perfil" class="w-28 h-28 self-start ml- mb-1 justify-self-center rounded-full object-cover">
                     <input type="file" name="imagen" id="imagen" class="form-control-file" placeholder="Seleccione una imagen">
                 </div>
+                @error('imagen')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
                 <button type="submit" value="save" name="action" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
                     Guardar
                 </button>
                 @if(Auth::user()->image)
-                <button type="submit" value="delete" name="action" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
-                    Eliminar
-                </button>
+                    <button type="submit" value="delete" name="action" class="w-full md:w-auto mt-6 text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
+                        Eliminar
+                    </button>
                 @endif
             </form>
 

@@ -89,6 +89,18 @@ class UserController extends Controller
 
     public function saveImagePerfil(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'imagen' => 'required|max:1000|mimes:png,jpg,jpeg',
+        ], [
+            'imagen.required' => 'La imagen es obligatoria.',
+            'imagen.max' => 'El nombre de la imagen no puede exceder los 1000 caracteres.',
+            'imagen.mimes' => 'El logo debe estar en formato jpeg, jpg ó png.',
+        ]);
+        if ($validator->fails()) {
+            // Si la validación falla, redirige de vuelta con los errores
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $user = Auth::user();
 
         switch ($request->input('action')) {

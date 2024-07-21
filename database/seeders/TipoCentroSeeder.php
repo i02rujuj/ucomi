@@ -22,7 +22,7 @@ class TipoCentroSeeder extends Seeder
         $tipo->save();
 
         $tipo = new TipoCentro();
-        $tipo->nombre = 'Otro';
+        $tipo->nombre = 'Centro';
         $tipo->save();
     }
 }

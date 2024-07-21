@@ -181,6 +181,42 @@ class User extends Authenticatable
         return false;
     }
 
+    public function esMiembroDatos($lista){
+
+        $resultado=[
+            'centros' => [],
+            'juntas' => [],
+            'comisiones' => [],
+        ];
+
+        $lista = explode("|", $lista);
+
+        foreach ($lista as $r) {
+
+            switch($r){
+                case 'centro':
+                    foreach ($this->miembrosGobierno as $miembro) {
+                            $resultado['centros']['idCentros'][]=$miembro->idCentro;
+                    }              
+                    break;
+                case 'junta':
+                    foreach ($this->miembrosJunta as $miembro) {
+                            $resultado['juntas']['idJuntas'][]=$miembro->idJunta;
+                            $resultado['juntas']['idCentros'][]=$miembro->junta->idCentro;
+                    }  
+                    break;
+                case 'comision':
+                    foreach ($this->miembrosComision as $miembro) {
+                            $resultado['comisiones']['idComisiones'][]=$miembro->idComision;
+                            $resultado['comisiones']['idJuntas'][]=$miembro->comision->idJunta;
+                    }  
+                    break;
+            }
+        }
+
+        return $resultado;
+    }
+
     public function getRoleName(){
 
         $res = '';

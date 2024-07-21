@@ -90,14 +90,6 @@ Convocatorias Comisión
 
                                 <div class="left-part truncate w-full max-w-max pl-3 z-10">
 
-                                    <div class="flex items-center">
-                                        <span class="material-icons-round scale-75">
-                                            send
-                                        </span>
-                                        &nbsp;
-                                        <h2 class="text-base font-bold truncate">{{ $convocatoria->comision->nombre }} </h2>
-                                    </div>
-
                                     <div class="truncate flex items-center">
                                         <span class="material-icons-round scale-75">
                                             location_on
@@ -124,6 +116,14 @@ Convocatorias Comisión
                                             </div>
                                         </div>
                                     </div> 
+
+                                    <div class="flex items-center text-xs text-slate-400">
+                                        <span class="material-icons-round scale-75">
+                                            send
+                                        </span>
+                                        &nbsp;
+                                        <h2 class="font-medium truncate">{{ $convocatoria->comision->nombre }} </h2>
+                                    </div>
                                     
                                     <div class="flex justify-end items-center gap-2 mt-3" >
                                         <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Convocatoria Comisión</span>
@@ -138,7 +138,7 @@ Convocatorias Comisión
                             </div>
 
                             <div class="flex justify-end items-center gap-2 mt-3 w-" >
-                                @if($permitirAcciones = Auth::user()->esResponsable('admin|centro|junta'))
+                                @if($permitirAcciones = Auth::user()->esResponsable('admin|centro|junta|comision'))
                                     <a id="btn-asistentes" data-convocatoria-id="{{ $convocatoria['id'] }}" class="group max-w-max relative flex flex-col justify-center items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="#">
                                         <span class="material-icons-round cursor-pointer">
                                             diversity_3
@@ -172,35 +172,37 @@ Convocatorias Comisión
                                     $convocado = Auth::user()->convocados->where('idConvocatoria', $convocatoria->id);
                                 @endphp
 
+                                @if($convocatoria->acta)
+                                    <a id="btn-visualizar-acta" data-convocatoria-id="{{ $convocatoria['id'] }}" data-acta="{{ $convocatoria['acta'] }}" class="group max-w-max relative flex flex-col justify-center items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="#">
+                                        <span class="material-icons-round cursor-pointer">
+                                            picture_as_pdf
+                                        </span>
+                                        <div class="z-50 invisible group-hover:visible [transform:perspective(50px)_translateZ(0)_rotateX(10deg)] group-hover:[transform:perspective(0px)_translateZ(0)_rotateX(0deg)] absolute bottom-0 mb-6 origin-bottom transform rounded text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                            <div class="flex max-w-xs flex-col items-center">
+                                                <div class="rounded bg-gray-900 p-1 text-xs text-center shadow-lg">
+                                                    <span>Visualizar acta</span>
+                                                </div>
+                                                <div class="clip-bottom h-2 w-4 bg-gray-900"></div>
+                                            </div>
+                                        </div>
+                                    </a>  
+                                @endif
+
                                 @if($convocado->count())
                                     <a id="btn-confirmarAsistencia" data-convocatoria-id="{{ $convocatoria['id'] }}" class="group max-w-max relative flex flex-col justify-center items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="#">
-                                        <span class="material-icons-round cursor-pointer">
+                                        <span class="material-icons-round cursor-pointer @if($convocatoria->convocado(Auth::user()->id)->asiste) text-green-400 @else text-red-400  @endif">
                                             recommend
                                         </span>
                                         <div class="z-50 invisible group-hover:visible [transform:perspective(50px)_translateZ(0)_rotateX(10deg)] group-hover:[transform:perspective(0px)_translateZ(0)_rotateX(0deg)] absolute bottom-0 mb-6 origin-bottom transform rounded text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
                                             <div class="flex max-w-xs flex-col items-center">
                                                 <div class="rounded bg-gray-900 p-1 text-xs text-center shadow-lg">
-                                                    <span>Confirmar/Cancelar assitencia</span>
+                                                    <span>Confirmar/Cancelar asitencia</span>
                                                 </div>
                                                 <div class="clip-bottom h-2 w-4 bg-gray-900"></div>
                                             </div>
                                         </div>
                                     </a>
                                 @endif
-
-                                <a id="btn-visualizar-acta" data-convocatoria-id="{{ $convocatoria['id'] }}" data-acta="{{ $convocatoria['acta'] }}" class="group max-w-max relative flex flex-col justify-center items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="#">
-                                    <span class="material-icons-round cursor-pointer">
-                                        picture_as_pdf
-                                    </span>
-                                    <div class="z-50 invisible group-hover:visible [transform:perspective(50px)_translateZ(0)_rotateX(10deg)] group-hover:[transform:perspective(0px)_translateZ(0)_rotateX(0deg)] absolute bottom-0 mb-6 origin-bottom transform rounded text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
-                                        <div class="flex max-w-xs flex-col items-center">
-                                            <div class="rounded bg-gray-900 p-1 text-xs text-center shadow-lg">
-                                                <span>Visualizar acta</span>
-                                            </div>
-                                            <div class="clip-bottom h-2 w-4 bg-gray-900"></div>
-                                        </div>
-                                    </div>
-                                </a>
                             </div>
                         </div>
                     @endforeach
@@ -225,7 +227,4 @@ Convocatorias Comisión
     const convocatorias = @json($convocatorias)
 </script>
 @vite(['resources/js/convocatoriasComision/convocatoriasComision.js'])
-
-@if(Auth::user()->esResponsable('admin|centro|junta|comision'))
-    @vite(['resources/js/convocatoriasComision/confirmarAsistencia.js'])
-@endif
+@vite(['resources/js/convocatoriasComision/confirmarAsistencia.js'])

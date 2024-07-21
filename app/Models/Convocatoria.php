@@ -47,7 +47,13 @@ class Convocatoria extends Model
     }
 
     public function convocados(){
-        return $this->hasMany(Convocado::class, 'id');
+        return $this->hasMany(Convocado::class, 'idConvocatoria');
+    }
+
+    public function convocado($user){
+        return $this->hasMany(Convocado::class, 'idConvocatoria')
+        ->where('idUsuario', $user)
+        ->first();
     }
 
     public function scopeFilters(Builder $query, Request $request){

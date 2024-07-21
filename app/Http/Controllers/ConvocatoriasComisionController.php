@@ -8,6 +8,7 @@ use App\Models\Comision;
 use App\Models\Convocado;
 use App\Models\Convocatoria;
 use Illuminate\Http\Request;
+use App\Models\MiembroComision;
 use App\Models\TipoConvocatoria;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -20,38 +21,75 @@ class ConvocatoriasComisionController extends Controller
         try {
 
             $convocatorias = Convocatoria::select('id', 'idComision', 'idTipo', 'lugar', 'fecha', 'hora', 'acta', 'updated_at', 'deleted_at');
-            $comisiones = Comision::select('id', 'idJunta', 'nombre', 'descripcion', 'fechaConstitucion', 'fechaDisolucion', 'updated_at', 'deleted_at');
+            $comisiones = Comision::select('id', 'idJunta', 'nombre', 'descripcion', 'fechaConstitucion', 'fechaDisolucion', 'updated_at', 'deleted_at');    
 
-            if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
-                $convocatorias = $convocatorias
-                ->whereHas('junta', function($builder) use ($datosResponsableCentro){
-                    return $builder
-                    ->whereHas('centro', function($builder) use ($datosResponsableCentro){
-                        $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+            if(Auth::user()->esResponsable('admin|centro|junta|comision')){
+
+                if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
+                    $convocatorias = $convocatorias
+                    ->whereHas('junta', function($builder) use ($datosResponsableCentro){
+                        return $builder
+                        ->whereHas('centro', function($builder) use ($datosResponsableCentro){
+                            $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+                        });
+                    }); 
+                    
+                    $comisiones = $comisiones
+                    ->whereHas('junta', function($builder) use ($datosResponsableCentro){
+                        return $builder
+                        ->whereHas('centro', function($builder) use ($datosResponsableCentro){
+                            $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+                        });
                     });
-                }); 
-                
-                $comisiones = $comisiones
-                ->whereHas('junta', function($builder) use ($datosResponsableCentro){
-                    return $builder
-                    ->whereHas('centro', function($builder) use ($datosResponsableCentro){
-                        $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+                }
+    
+                if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
+                    $convocatorias = $convocatorias
+                    ->whereHas('junta', function($builder) use ($datosResponsableJunta){
+                        return $builder->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
                     });
-                });
+                    $comisiones = $comisiones->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
+                }
+    
+                if($datosResponsableComision = Auth::user()->esResponsableDatos('comision')['comisiones']){
+                    $convocatorias = $convocatorias
+                    ->whereIn('idComision', $datosResponsableComision['idComisiones']);
+                    $comisiones = $comisiones->whereIn('id', $datosResponsableComision['idComisiones']);
+                }
             }
+            else{
 
-            if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
-                $convocatorias = $convocatorias
-                ->whereHas('junta', function($builder) use ($datosResponsableJunta){
-                    return $builder->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
-                });
-                $comisiones = $comisiones->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
-            }
+                if($datosMiembroCentro = Auth::user()->esMiembroDatos('centro')['centros']){
+                    $convocatorias = $convocatorias
+                    ->whereHas('junta', function($builder) use ($datosMiembroCentro){
+                        return $builder
+                        ->whereHas('centro', function($builder) use ($datosMiembroCentro){
+                            $builder->whereIn('idCentro', $datosMiembroCentro['idCentros']);
+                        });
+                    }); 
+                    
+                    $comisiones = $comisiones
+                    ->whereHas('junta', function($builder) use ($datosMiembroCentro){
+                        return $builder
+                        ->whereHas('centro', function($builder) use ($datosMiembroCentro){
+                            $builder->whereIn('idCentro', $datosMiembroCentro['idCentros']);
+                        });
+                    });
+                }
+    
+                if($datosMiembroJunta = Auth::user()->esMiembroDatos('junta')['juntas']){
+                    $convocatorias = $convocatorias
+                    ->whereHas('junta', function($builder) use ($datosMiembroJunta){
+                        return $builder->whereIn('idJunta', $datosMiembroJunta['idJuntas']);
+                    });
+                    $comisiones = $comisiones->whereIn('idJunta', $datosMiembroJunta['idJuntas']);
+                }
 
-            if($datosResponsableComision = Auth::user()->esResponsableDatos('comision')['comisiones']){
-                $convocatorias = $convocatorias
-                ->whereIn('idComision', $datosResponsableComision['idComisiones']);
-                $comisiones = $comisiones->whereIn('id', $datosResponsableComision['idComisiones']);
+                if($datosMiembroComision = Auth::user()->esMiembroDatos('comision')['comisiones']){
+                    $convocatorias = $convocatorias
+                    ->whereIn('idComision', $datosMiembroComision['idComisiones']);
+                    $comisiones = $comisiones->whereIn('id', $datosMiembroComision['idComisiones']);
+                }          
             }
 
             switch ($request->input('action')) {
@@ -126,6 +164,19 @@ class ConvocatoriasComisionController extends Controller
                 "hora" => $request->data['hora'],
                 "acta" => isset($url_acta) ? $url_acta : null,
             ]);
+
+            $miembrosComision = MiembroComision::
+            where('idComision', $convocatoria->idComision)
+            ->get();
+
+            foreach ($miembrosComision as $miembro) {
+                Convocado::create([
+                    "idConvocatoria" => $convocatoria->id,
+                    "idUsuario" => $miembro->usuario->id,
+                    "asiste" => 0,
+                    "notificado" => 0,
+                ]);
+            }
 
             toastr("La convocatoria del día '$convocatoria->fecha' se ha añadido correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La convocatoria  del día '$convocatoria->fecha' se ha añadido correctamente.", 'status' => 200], 200);
@@ -287,13 +338,15 @@ class ConvocatoriasComisionController extends Controller
             ->where('idConvocatoria', $request->idConvocatoria)
             ->update(['asiste' => $request->asiste]);
 
+            $convocatoria = Convocatoria::where('id', $request->idConvocatoria)->first();
+
             if($request->asiste==1){
-                toastr('Se ha confirmado la asistencia a la convocatoria', NotificationInterface::SUCCESS, ' ');
-                return response()->json(['message' => 'Se ha confirmado la asistencia de la convocatoria','status' => 200], 200);
+                toastr("Se ha confirmado la asistencia a la convocatoria de la comisión {$convocatoria->comision->nombre} con fecha {$convocatoria->fecha} a las {$convocatoria->hora} en {$convocatoria->lugar}", NotificationInterface::SUCCESS, ' ');
+                return response()->json(['message' => "Se ha confirmado la asistencia a la convocatoria de la comisión {$convocatoria->comision->nombre} con fecha {$convocatoria->fecha} a las {$convocatoria->hora} en {$convocatoria->lugar}",'status' => 200], 200);
             }
             else{
-                toastr('Se ha cancelado la asistencia a la convocatoria', NotificationInterface::SUCCESS, ' ');
-                return response()->json(['message' => 'Se ha cancelado la asistencia a la convocatoria','status' => 200], 200);
+                toastr("Se ha cancelado la asistencia a la convocatoria de la comisión {$convocatoria->comision->nombre} con fecha {$convocatoria->fecha} a las {$convocatoria->hora} en {$convocatoria->lugar}", NotificationInterface::INFO, ' ');
+                return response()->json(['message' => "Se ha cancelado la asistencia a la convocatoria de la comisión {$convocatoria->comision->nombre} con fecha {$convocatoria->fecha} a las {$convocatoria->hora} en {$convocatoria->lugar}",'status' => 200], 200);
             }
 
         } catch (\Throwable $th) {

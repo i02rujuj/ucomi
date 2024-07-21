@@ -8,7 +8,7 @@ use App\Providers\RouteServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Flasher\Prime\Notification\NotificationInterface;
 
-class Responsable
+class ResponsableMiddleware
 {
     /**
      * Handle an incoming request.

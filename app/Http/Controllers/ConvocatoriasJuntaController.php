@@ -22,22 +22,45 @@ class ConvocatoriasJuntaController extends Controller
             $convocatorias = Convocatoria::select('id', 'idJunta', 'idTipo', 'lugar', 'fecha', 'hora', 'acta', 'updated_at', 'convocatorias.deleted_at');
             $juntas = Junta::select('id', 'idCentro', 'fechaConstitucion', 'fechaDisolucion', 'updated_at', 'deleted_at');
 
-            if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
-                $convocatorias = $convocatorias
-                ->whereHas('junta', function($builder) use ($datosResponsableCentro){
-                    return $builder
-                    ->whereHas('centro', function($builder) use ($datosResponsableCentro){
-                        $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
-                    });
-                }); 
-                
-                $juntas = $juntas
-                ->whereIn('idCentro', $datosResponsableCentro['idCentros']);
-            }
+            if(Auth::user()->esResponsable('admin|centro|junta|comision')){
 
-            if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
-                $convocatorias = $convocatorias->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
-                $juntas = $juntas->whereIn('id', $datosResponsableJunta['idJuntas']);
+                if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
+                    $convocatorias = $convocatorias
+                    ->whereHas('junta', function($builder) use ($datosResponsableCentro){
+                        return $builder
+                        ->whereHas('centro', function($builder) use ($datosResponsableCentro){
+                            $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+                        });
+                    }); 
+                    
+                    $juntas = $juntas
+                    ->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+                }
+
+                if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
+                    $convocatorias = $convocatorias->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
+                    $juntas = $juntas->whereIn('id', $datosResponsableJunta['idJuntas']);
+                }
+            }
+            else{
+
+                if($datosMiembroCentro = Auth::user()->esMiembroDatos('centro')['centros']){
+                    $convocatorias = $convocatorias
+                    ->whereHas('junta', function($builder) use ($datosMiembroCentro){
+                        return $builder
+                        ->whereHas('centro', function($builder) use ($datosMiembroCentro){
+                            $builder->whereIn('idCentro', $datosMiembroCentro['idCentros']);
+                        });
+                    }); 
+                    
+                    $juntas = $juntas
+                    ->whereIn('idCentro', $datosMiembroCentro['idCentros']);
+                }
+    
+                if($datosMiembroJunta = Auth::user()->esMiembroDatos('junta')['juntas']){
+                    $convocatorias = $convocatorias->whereIn('idJunta', $datosMiembroJunta['idJuntas']);
+                    $juntas = $juntas->whereIn('id', $datosMiembroJunta['idJuntas']);
+                }      
             }
 
             switch ($request->input('action')) {
@@ -295,13 +318,15 @@ class ConvocatoriasJuntaController extends Controller
             ->where('idConvocatoria', $request->idConvocatoria)
             ->update(['asiste' => $request->asiste]);
 
+            $convocatoria = Convocatoria::where('id', $request->idConvocatoria)->first();
+
             if($request->asiste==1){
-                toastr('Se ha confirmado la asistencia a la convocatoria', NotificationInterface::SUCCESS, ' ');
-                return response()->json(['message' => 'Se ha confirmado la asistencia de la convocatoria','status' => 200], 200);
+                toastr("Se ha confirmado la asistencia a la convocatoria de la junta {$convocatoria->junta->centro->nombre} con fecha {$convocatoria->fecha} a las {$convocatoria->hora} en {$convocatoria->lugar}", NotificationInterface::SUCCESS, ' ');
+                return response()->json(['message' => "Se ha confirmado la asistencia a la convocatoria de la junta {$convocatoria->junta->centro->nombre} con fecha {$convocatoria->fecha} a las {$convocatoria->hora} en {$convocatoria->lugar}",'status' => 200], 200);
             }
             else{
-                toastr('Se ha cancelado la asistencia a la convocatoria', NotificationInterface::SUCCESS, ' ');
-                return response()->json(['message' => 'Se ha cancelado la asistencia a la convocatoria','status' => 200], 200);
+                toastr("Se ha cancelado la asistencia a la convocatoria de la junta {$convocatoria->junta->centro->nombre} con fecha {$convocatoria->fecha} a las {$convocatoria->hora} en {$convocatoria->lugar}", NotificationInterface::INFO, ' ');
+                return response()->json(['message' => "Se ha cancelado la asistencia a la convocatoria de la junta {$convocatoria->junta->centro->nombre} con fecha {$convocatoria->fecha} a las {$convocatoria->hora} en {$convocatoria->lugar}",'status' => 200], 200);
             }
 
         } catch (\Throwable $th) {

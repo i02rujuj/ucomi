@@ -94,14 +94,12 @@ Route::group(['middleware' => ['responsable:admin|centro|junta']], function () {
     Route::post('/junta/miembros', [JuntasController::class, 'miembros']);
 
     // CONVOCATORIAS JUNTA
-    Route::get('/convocatorias_junta', [ConvocatoriasJuntaController::class, 'index'])->name('convocatoriasJunta')->middleware('responsable:admin|centro|junta');
     Route::post('/convocatoria_junta/add', [ConvocatoriasJuntaController::class, 'store'])->name('store')->middleware('responsable:admin|centro|junta');
     Route::post('/convocatoria_junta/delete', [ConvocatoriasJuntaController::class, 'delete'])->middleware('responsable:admin|centro|junta');
     Route::post('/convocatoria_junta/get', [ConvocatoriasJuntaController::class, 'get'])->middleware('responsable:admin|centro|junta');
     Route::post('/convocatoria_junta/update', [ConvocatoriasJuntaController::class, 'update'])->middleware('responsable:admin|centro|junta');
     Route::post('/convocatoria_junta/validate', [ConvocatoriasJuntaController::class, 'validateConvocatoria'])->middleware('responsable:admin|centro|junta');
     Route::post('/convocatoria_junta/convocar', [ConvocatoriasJuntaController::class, 'convocados'])->middleware('responsable:admin|centro|junta');
-    Route::post('/convocatoria_junta/asistir', [ConvocatoriasJuntaController::class, 'asistir'])->middleware('responsable:admin|centro|junta');
 
     // MIEMBROS JUNTA
     Route::get('/miembros_junta', [MiembrosJuntaController::class, 'index'])->name('miembrosJunta');
@@ -110,6 +108,18 @@ Route::group(['middleware' => ['responsable:admin|centro|junta']], function () {
     Route::post('/miembro_junta/get', [MiembrosJuntaController::class, 'get']);
     Route::post('/miembro_junta/update', [MiembrosJuntaController::class, 'update']);
     Route::post('/miembro_junta/validate', [MiembrosJuntaController::class, 'validateMiembro']);
+});
+
+Route::group(['middleware' => ['miembro:admin|centro|junta']], function () {
+    // CONVOCATORIAS JUNTA
+    Route::get('/convocatorias_junta', [ConvocatoriasJuntaController::class, 'index'])->name('convocatoriasJunta');
+    Route::post('/convocatoria_junta/asistir', [ConvocatoriasJuntaController::class, 'asistir']);
+});
+
+Route::group(['middleware' => ['miembro:admin|centro|junta|comision']], function () {
+ // CONVOCATORIAS COMISION
+ Route::get('/convocatorias_comision', [ConvocatoriasComisionController::class, 'index'])->name('convocatoriasComision');
+ Route::post('/convocatoria_comision/asistir', [ConvocatoriasComisionController::class, 'asistir']);
 });
 
 Route::group(['middleware' => ['responsable:admin|centro|junta|comision']], function () {
@@ -131,14 +141,12 @@ Route::group(['middleware' => ['responsable:admin|centro|junta|comision']], func
     Route::post('/miembro_comision/validate', [MiembrosComisionController::class, 'validateMiembro']);
 
     // CONVOCATORIAS COMISION
-    Route::get('/convocatorias_comision', [ConvocatoriasComisionController::class, 'index'])->name('convocatoriasComision');
     Route::post('/convocatoria_comision/add', [ConvocatoriasComisionController::class, 'store'])->name('store');
     Route::post('/convocatoria_comision/delete', [ConvocatoriasComisionController::class, 'delete']);
     Route::post('/convocatoria_comision/get', [ConvocatoriasComisionController::class, 'get']);
     Route::post('/convocatoria_comision/update', [ConvocatoriasComisionController::class, 'update']);
     Route::post('/convocatoria_comision/validate', [ConvocatoriasComisionController::class, 'validateConvocatoria']);
     Route::post('/convocatoria_comision/convocar', [ConvocatoriasComisionController::class, 'convocados']);
-    Route::post('/convocatoria_comision/asistir', [ConvocatoriasComisionController::class, 'asistir']);
 
     // REPRESENTACIONES
     Route::post('/representacion/get', [RepresentacionController::class, 'get']);

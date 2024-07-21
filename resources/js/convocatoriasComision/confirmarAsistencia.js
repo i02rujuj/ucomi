@@ -18,7 +18,6 @@ confirmarAsistenciaButtons.forEach(button => {
                 denyButtonColor: '#d33', 
                 toast: true,
                 position: 'top-right',
-                showLoaderOnConfirm:true,
             });
 
             let confirmado = 0
@@ -47,22 +46,10 @@ confirmarAsistenciaButtons.forEach(button => {
                 const response = await ASISTIR_CONVOCATORIA_BBDD(dataToSend)
 
                 if (response.status === 200) {
-                    await Swal.fire({
-                        icon: icon,
-                        title: title,
-                        text: text,
-                    })
-
-                    button.classList.remove('text-green-400','text-red-400')
-                    
-                    if(confirmado){
-                        button.classList.add('text-green-400')
-                    }
-                    else{
-                        button.classList.add('text-red-400')
-                    }
+                    window.location.reload()
                 } 
                 else {
+                    console.log(response)
                     await Swal.fire({
                         icon: "error",
                         title: 'Confirmar asistencia',

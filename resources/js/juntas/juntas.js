@@ -223,3 +223,10 @@ const editButtons = document.querySelectorAll('#btn-editar-junta');
 editButtons.forEach(button => {
     addEditEvent(button);
 });
+
+const verMiembros = document.querySelectorAll('#btn-ver-miembros')
+verMiembros.forEach(button => {
+    button.addEventListener('click', async (event) => {
+        event.stopPropagation()
+    }, true)
+})

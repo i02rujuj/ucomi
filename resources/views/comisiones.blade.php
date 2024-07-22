@@ -114,17 +114,37 @@ Comisiones
                                 </div>  
                             </div>
                  
-                            <div class="flex justify-end items-center gap-2 mt-2" >
-                                <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg">Comisión de Junta {{$com->junta->fecha_constitucion_format}}</span>
-                                @if ($com['fechaDisolucion']==null)
-                                    <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Vigente</span>
-                                @else
-                                    <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">No vigente</span>
-                                @endif
+                            <div class="flex justify-between items-center gap-2 mt-2" >
 
-                                @if ($com['deleted_at']!=null)
-                                    <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Eliminado</span>
-                                @endif
+                                <div>
+                                    <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg">Comisión Junta {{$com->junta->fecha_constitucion_format}}</span>
+                                    @if ($com['fechaDisolucion']==null)
+                                        <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Vigente</span>
+                                    @else
+                                        <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">No vigente</span>
+                                    @endif
+
+                                    @if ($com['deleted_at']!=null)
+                                        <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Eliminado</span>
+                                    @endif
+                                </div>
+
+                                <div class="flex justify-end items-center gap-2" >
+                                    <a id="btn-ver-miembros" data-comision-id="{{ $com['id'] }}" class="group max-w-max absolute flex flex-col justify-center items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="{{route('miembrosComision')}}?filtroCentro=&filtroJunta=&filtroComision={{$com['id']}}&filtroRepresentacion=&filtroVigente=1&filtroEstado=1&action=filtrar">
+                                        <span class="material-icons-round cursor-pointer">
+                                            groups
+                                        </span>
+                                        <div class="z-50 invisible group-hover:visible [transform:perspective(50px)_translateZ(0)_rotateX(10deg)] group-hover:[transform:perspective(0px)_translateZ(0)_rotateX(0deg)] absolute bottom-0 mb-6 origin-bottom transform rounded text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                            <div class="flex max-w-xs flex-col items-center">
+                                                <div class="rounded bg-gray-900 p-1 text-xs text-center shadow-lg">
+                                                    <span>Mostrar miembros de Comisión</span>
+                                                </div>
+                                                <div class="clip-bottom h-2 w-4 bg-gray-900"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                
                             </div>
                         </div>
                     @endforeach

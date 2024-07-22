@@ -207,7 +207,14 @@ const addEditEvent = (button) => {
     });
 };
 
-const editButtons = document.querySelectorAll('#btn-editar-centro');
+const editButtons = document.querySelectorAll('#btn-editar-centro')
 editButtons.forEach(button => {
     addEditEvent(button);
-});
+})
+
+const verMiembros = document.querySelectorAll('#btn-ver-miembros')
+verMiembros.forEach(button => {
+    button.addEventListener('click', async (event) => {
+        event.stopPropagation()
+    }, true)
+})

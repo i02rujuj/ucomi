@@ -57,6 +57,7 @@ class MiembrosComisionController extends Controller
                 case 'limpiar':
                     $request['filtroCentro']=null;
                     $request['filtroJunta']=null;
+                    $request['filtroComision']=null;
                     $request['filtroRepresentacion']=null;
                     $request['filtroVigente']=null;
                     $request['filtroEstado']=null;
@@ -117,7 +118,7 @@ class MiembrosComisionController extends Controller
             ]);
         
         } catch (\Throwable $th) {
-            toastr('No se pudieron obtener los miembros de comision.', NotificationInterface::ERROR, ' ');
+            toastr('No se pudieron obtener los miembros de comision.'.$th->getMessage(), NotificationInterface::ERROR, ' ');
             return redirect()->route('home')->with('errors', 'No se pudieron obtener los miembros de comisión.');
         }
     }

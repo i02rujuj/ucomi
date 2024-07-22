@@ -75,7 +75,7 @@ Centros
                                     <img src="{{ $centro->logo ? $centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
                                 </div>
 
-                                <div class="left-part truncate w-full max-w-max pl-3 z-10">
+                                <div class="left-part truncate w-full pl-3 z-10">
                                     <div class="flex items-start">
                                         <span class="material-icons-round scale-75">
                                             school
@@ -95,15 +95,33 @@ Centros
                                         </div>
                                     </div>
 
-                                    <div class="flex items-center gap-2 mt-2" >
-                                        <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $centro->tipo->nombre }}</span>
+                                    <div class="flex items-center justify-between gap-2 mt-2" >
+                                        <div>
+                                            <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $centro->tipo->nombre }}</span>
 
-                                        @if ($centro['deleted_at']!=null)    
-                                            <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Eliminado</span>
-                                        @endif
+                                            @if ($centro['deleted_at']!=null)    
+                                                <span class="text-xs bg-red-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Eliminado</span>
+                                            @endif
+                                        </div>
+                                        
+                                        <div class="flex justify-end items-center gap-2" >
+                                            <a id="btn-ver-miembros" data-centro-id="{{ $centro['id'] }}" class="group max-w-max absolute flex flex-col justify-center items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="{{route('miembrosGobierno')}}?filtroCentro={{ $centro['id'] }}&filtroRepresentacion=&filtroVigente=1&filtroEstado=1&action=filtrar">
+                                                <span class="material-icons-round cursor-pointer">
+                                                    groups
+                                                </span>
+                                                <div class="z-50 invisible group-hover:visible [transform:perspective(50px)_translateZ(0)_rotateX(10deg)] group-hover:[transform:perspective(0px)_translateZ(0)_rotateX(0deg)] absolute bottom-0 mb-6 origin-bottom transform rounded text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                                    <div class="flex max-w-xs flex-col items-center">
+                                                        <div class="rounded bg-gray-900 p-1 text-xs text-center shadow-lg">
+                                                            <span>Mostrar miembros de Gobierno</span>
+                                                        </div>
+                                                        <div class="clip-bottom h-2 w-4 bg-gray-900"></div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>         
+                            </div>
                         </div>
                     @endforeach
                 @else

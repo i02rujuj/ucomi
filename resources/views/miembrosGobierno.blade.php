@@ -178,7 +178,7 @@ Miembros de Centro
                         </div>
                     @endforeach
                 @else
-                    No se han encontrado miembros de centro
+                    No se han encontrado miembros de gobierno
                 @endif
             </div>
 

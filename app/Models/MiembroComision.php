@@ -69,10 +69,10 @@ class MiembroComision extends Model
                 return $builder->where('idRepresentacion', $request->filtroRepresentacion);       
             })->when($request->has('filtroVigente') && $request->filtroVigente!=null, function($builder) use ($request){
                 if($request->filtroVigente==1){
-                    return $builder->whereNull('fechaDisolucion');
+                    return $builder->whereNull('fechaCese');
                 }
                 elseif($request->filtroVigente==2){
-                    return $builder->whereNotNull('fechaDisolucion');
+                    return $builder->whereNotNull('fechaCese');
                 }
             })->when($request->has('filtroEstado') && $request->filtroEstado!=null && $request->filtroEstado!=2, function($builder) use ($request){
                 if($request->filtroEstado==0){

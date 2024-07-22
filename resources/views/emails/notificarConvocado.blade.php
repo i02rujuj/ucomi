@@ -46,12 +46,12 @@
         <img src="{{asset('img/logo.jpg')}}" alt="Ucomi" style="height: 100px; margin: 0 auto 20px; display: block;">
         <h1 class="header">¡Has sido convocado!</h1>
         <p>Hola, {{$mailData['usuario']}}:</p>
-        <p>Has sido convocado a la convocatoria de {{$mailData['tipoConvocatoria']}} del centro de la Universidad de Córdoba '{{$mailData['centro']}}' en la siguiente fecha:</p>
+        <p>Has sido convocado a la convocatoria de {{$mailData['tipoConvocatoria']}} del centro de la Universidad de Córdoba '{{$mailData['organo']}}' en la siguiente fecha:</p>
         <h5>Lugar: {{$mailData['lugar']}}</h5>
         <h5>Fecha: {{$mailData['fecha']}}</h5>
         <h5>Hora: {{$mailData['hora']}}</h5>
         <p>Necesitamos confirmar su asistencia.</p>
-        <a href="{{route('convocatoriasJunta')}}?filtroJunta={{$mailData['idOrgano']}}&filtroVigente=1&filtroEstado=1&action=filtrar" class="button">Confirmar asistencia</a>
+        <a href="{{$mailData['url']}}" class="button">Confirmar asistencia</a>
         <p class="footer">Si tienes alguna pregunta o necesitas asistencia, no dudes en ponerte en contacto con nuestro equipo de soporte.</p>
         <p class="footer">Atentamente,</p>
         <p class="footer">Ucomi</p>

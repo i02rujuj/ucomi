@@ -320,11 +320,11 @@ class ConvocatoriasJuntaController extends Controller
                     //'usuario' => $convocado->usuario->name,
                     'usuario' => Auth::user()->name,
                     'tipoConvocatoria' => 'Junta',
-                    'centro' => $convocatoria->junta->centro->tipo->nombre." de ".$convocatoria->junta->centro->nombre,
+                    'organo' => $convocatoria->junta->centro->tipo->nombre." de ".$convocatoria->junta->centro->nombre,
                     'fecha' => $convocatoria->fecha,
                     'hora' => $convocatoria->hora,
                     'lugar' => $convocatoria->lugar,
-                    'idOrgano' => $convocatoria->junta->id,
+                    'url' => route('convocatoriasJunta')."?filtroJunta={$convocatoria->junta->id}&filtroVigente=1&filtroEstado=1&action=filtrar",
                ]));
 
                 toastr("La convocatoria del día '{$convocatoria->fecha}' ha sido notificada vía email a todos sus convocados.", NotificationInterface::SUCCESS, ' ');

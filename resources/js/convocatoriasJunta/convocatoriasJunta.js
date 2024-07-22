@@ -357,7 +357,6 @@ const notificarEvent = (button) => {
                         Swal.showValidationMessage(response.errors)
                         return false
                     }
-
                 },
             });
         } catch (error) {

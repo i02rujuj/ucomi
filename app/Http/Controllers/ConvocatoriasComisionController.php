@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use App\Models\MiembroComision;
 use App\Models\TipoConvocatoria;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NotificarConvocadosEmail;
 use Illuminate\Support\Facades\Validator;
 use Flasher\Prime\Notification\NotificationInterface;
 
@@ -309,6 +311,9 @@ class ConvocatoriasComisionController extends Controller
     public function convocados(Request $request)
     {
         try {
+
+            $convocatoria = Convocatoria::where('id', $request->id)->first();
+
             $convocados = Convocado::
             with(['usuario' => function ($query) use ($request){
                 $query
@@ -323,10 +328,33 @@ class ConvocatoriasComisionController extends Controller
             $request->notificado!=null ? $convocados = $convocados->where('notificado', $request->notificado) : "";
             $request->asiste!=null ? $convocados = $convocados->where('asiste', $request->asiste) : "";
 
+            if($request->notificar!=null && $request->notificar){
+
+                foreach ($convocados->get() as  $convocado) {
+                    $convocado['notificado']=1;
+                    $convocado->save();
+                }
+
+                Mail::to('i02rujuj@uco.es')->send(new NotificarConvocadosEmail([
+                    'asunto' => 'Confirmación asistencia a convocatoria de Comisión '.$convocatoria->comision->nombre,
+                    //'usuario' => $convocado->usuario->name,
+                    'usuario' => Auth::user()->name,
+                    'tipoConvocatoria' => 'Junta',
+                    'organo' => $convocatoria->comision->nombre,
+                    'fecha' => $convocatoria->fecha,
+                    'hora' => $convocatoria->hora,
+                    'lugar' => $convocatoria->lugar,
+                    'url' => route('convocatoriasComision')."?filtroComision={$convocatoria->comision->id}&filtroVigente=1&filtroEstado=1&action=filtrar",
+               ]));
+
+                toastr("La convocatoria del día '{$convocatoria->fecha}' ha sido notificada vía email a todos sus convocados.", NotificationInterface::SUCCESS, ' ');
+                return response()->json(['message' => "La convocatoria del día '$convocatoria->fecha' ha sido notificada vía email a todos sus convocados.", 'status' => 200], 200);
+            }
+
             return response()->json($convocados->get());
         } catch (\Throwable $th) {
-            toastr("Ha ocurrido un error al obtener los convocados de la convocatoria del día '$request->fecha'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Ha ocurrido un error al obtener los convocados de la convocatoria del día '$request->fecha'",'status' => 422], 200);
+            toastr("Ha ocurrido un error al obtener los convocados de la convocatoria del día '$convocatoria->fecha'", NotificationInterface::ERROR, ' ');
+            return response()->json(['errors' => "Ha ocurrido un error al obtener los convocados de la convocatoria del día '$convocatoria->fecha'",'status' => 422], 200);
         }
     }
 

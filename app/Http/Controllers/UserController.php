@@ -19,6 +19,18 @@ use Flasher\Prime\Notification\NotificationInterface;
 
 class UserController extends Controller
 {   
+
+    public function index(){
+
+        $users=null;
+
+        if(Auth::user()->hasRole('admin')){
+            $users=User::all();
+        }
+
+        return view('certificados')->with(['users'=>$users]);
+    }
+
     public function get(Request $request)
     {
         try {
@@ -122,21 +134,22 @@ class UserController extends Controller
             $validator = Validator::make($request->all(), [
                 'tipoCertificado' => 'required',
                 'representaciones' => 'required|min:1',
+                'idUsuario' => Auth::user()->hasRole('admin') ? 'required' : 'nullable',
             ]
             ,[
                 // Mensajes error tipoCertificado
                 'tipoCertificado.required' => 'El tipo de certificado es obligatorio.',
                 // Mensajes error representaciones
                 'representaciones.required' => 'Debe seleccionar al menos una opción',
-            ] 
-            
-            );
+                // Mensajes error idUsuario
+                'idUsuario.required' => 'El usuario es requerido',
+            ]);
 
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            $usuario = Auth::User()->name;
+            $usuario = null;
             $time = now();
             $dataCentro=null;
             $dataJunta=null;
@@ -183,8 +196,16 @@ class UserController extends Controller
                 if($representacion=='centro'){
 
                     $dataCentro = MiembroGobierno::
-                    select('id', 'idCentro', 'idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at')
-                    ->where('idUsuario', Auth::User()->id);
+                    select('id', 'idCentro', 'idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at');
+                    
+                    if(Auth::user()->hasRole('admin')){
+                        $dataCentro = $dataCentro->where('idUsuario', $request->idUsuario);
+                        $usuario = User::select('name')->where('id', $request->idUsuario)->first()->name;
+                    }
+                    else{
+                        $dataCentro = $dataCentro->where('idUsuario', Auth::User()->id);
+                        $usuario = Auth::User()->name;
+                    }
 
                     switch ($request->tipoCertificado) {
                         case config('constants.TIPOS_CERTIFICADO.ACTUAL'):
@@ -213,8 +234,16 @@ class UserController extends Controller
                 if($representacion=='junta'){
 
                     $dataJunta = MiembroJunta::
-                    select('id', 'idJunta', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at')
-                    ->where('idUsuario', Auth::User()->id);
+                    select('id', 'idJunta', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at');
+                    
+                    if(Auth::user()->hasRole('admin')){
+                        $dataJunta = $dataJunta->where('idUsuario', $request->idUsuario);
+                        $usuario = User::select('name')->where('id', $request->idUsuario)->first()->name;
+                    }
+                    else{
+                        $dataJunta = $dataJunta->where('idUsuario', Auth::User()->id);
+                        $usuario = Auth::user()->name;
+                    }
 
                     switch ($request->tipoCertificado) {
                         case config('constants.TIPOS_CERTIFICADO.ACTUAL'):
@@ -242,8 +271,16 @@ class UserController extends Controller
 
                 if($representacion=='comision'){
                     $dataComision = MiembroComision::
-                    select('id', 'idComision', 'idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at')
-                    ->where('idUsuario', Auth::User()->id);
+                    select('id', 'idComision', 'idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at');
+
+                    if(Auth::user()->hasRole('admin')){
+                        $dataComision = $dataComision->where('idUsuario', $request->idUsuario);
+                        $usuario = User::select('name')->where('id', $request->idUsuario)->first()->name;
+                    }
+                    else{
+                        $dataComision = $dataComision->where('idUsuario', Auth::User()->id);
+                        $usuario = Auth::User()->name;
+                    }
 
                     switch ($request->tipoCertificado) {
                         case config('constants.TIPOS_CERTIFICADO.ACTUAL'):
@@ -282,9 +319,6 @@ class UserController extends Controller
             ];
 
             $pdf = PDF::loadView('certificados.certificado', $data);
-            $pdf->setOptions([
-                'isRemoteEnabled' => true,
-            ]);
             $pdf->render();
             //dd($pdf);
             return $pdf->download("Certificado $tipoCertificado $usuario $time.pdf");
@@ -300,19 +334,22 @@ class UserController extends Controller
             $validator = Validator::make($request->all(), [
                 'tipoCertificado' => 'required',
                 'tiposConvocatoria' => 'required|min:1',
+                'idUsuario' => Auth::user()->hasRole('admin') ? 'required' : 'nullable',
             ]
             ,[
                 // Mensajes error tipoCertificado
                 'tipoCertificado.required' => 'El tipo de certificado es obligatorio.',
                 // Mensajes error tiposConvocatoria
                 'tiposConvocatoria.required' => 'Debe seleccionar al menos una opción',
+                // Mensajes error idUsuario
+                'idUsuario.required' => 'El usuario es requerido',
             ]);
 
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            $usuario = Auth::User()->name;
+            $usuario = null;
             $time = now();
             $dataJunta=null;
             $dataComision=null;
@@ -347,12 +384,19 @@ class UserController extends Controller
                     return redirect()->back();
                     break;
             }
-
             foreach ($request->tiposConvocatoria as  $tipoConvocatoria) {
 
                 if($tipoConvocatoria=='junta'){
-                    $dataJunta = Convocado::
-                    where('idUsuario', Auth::user()->id);
+                    $dataJunta = Convocado::select('id', 'idUsuario', 'idConvocatoria', 'asiste', 'notificado', 'updated_at', 'deleted_at');
+                    
+                    if(Auth::user()->hasRole('admin')){
+                        $dataJunta = $dataJunta->where('idUsuario', $request->idUsuario);
+                        $usuario = User::select('name')->where('id', $request->idUsuario)->first()->name;
+                    }
+                    else{
+                        $dataJunta = $dataJunta->where('idUsuario', Auth::User()->id);
+                        $usuario = Auth::User()->name;
+                    }
 
                     if(isset($request->asistencia[1])){
                         $dataJunta = $dataJunta->where('asiste', 1);
@@ -378,8 +422,16 @@ class UserController extends Controller
                 }
 
                 if($tipoConvocatoria=='comision'){
-                    $dataComision = Convocado::
-                    where('idUsuario', Auth::user()->id);
+                    $dataComision = Convocado::select('id', 'idUsuario', 'idConvocatoria', 'asiste', 'notificado', 'updated_at', 'deleted_at');
+                    
+                    if(Auth::user()->hasRole('admin')){
+                        $dataComision = $dataComision->where('idUsuario', $request->idUsuario);
+                        $usuario = User::select('name')->where('id', $request->idUsuario)->first()->name;
+                    }
+                    else{
+                        $dataComision = $dataComision->where('idUsuario', Auth::User()->id);
+                        $usuario = Auth::User()->name;
+                    }
 
                     if(isset($request->asistencia[1])){
                         $dataComision = $dataComision->where('asiste', 1);
@@ -416,11 +468,7 @@ class UserController extends Controller
             ];
 
             $pdf = PDF::loadView('certificados.certificadoConvocatoria', $data);
-            $pdf->setOptions([
-                'isRemoteEnabled' => true,
-            ]);
             $pdf->render();
-   
             return $pdf->download("Certificado $tipoCertificado $usuario $time.pdf");
         } catch (\Throwable $th) {
             toastr('Ha ocurrido un error al generar el certificado'.$th->getMessage(), NotificationInterface::ERROR, ' ');

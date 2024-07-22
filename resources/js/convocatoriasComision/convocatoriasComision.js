@@ -29,7 +29,7 @@ function renderHTMLConvocatoria(response){
         modal_edit.querySelector('#fecha').value=response.fecha
         modal_edit.querySelector('#hora').value=response.hora
 
-        if(response.deleted_at!=null){
+        if(response.deleted_at!=null || !permitirAcciones){
             modal_edit.querySelector('#idTipo').setAttribute('disabled', 'disabled')
             modal_edit.querySelector('#lugar').setAttribute('disabled', 'disabled')
             modal_edit.querySelector('#fecha').setAttribute('disabled', 'disabled')
@@ -164,12 +164,12 @@ const addEditEvent = (button) => {
                 throw "Error, convocatoria no encontrada"
 
             await Swal.fire({
-                title: response && response.deleted_at!=null ? 'Convocatoria eliminada' : 'Editar Convocatoria',
+                title: response && response.deleted_at!=null ? 'Convocatoria eliminada' : permitirAcciones ? 'Editar Convocatoria' : 'Convocatoria',
                 html: renderHTMLConvocatoria(response),
                 focusConfirm: false,
                 showDenyButton: (response && response.deleted_at!=null) || !permitirAcciones ? false : true,
-                showCancelButton: response && response.deleted_at!=null ? false : true,
-                showConfirmButton: response && response.deleted_at!=null ? false : true,
+                showCancelButton: response && response.deleted_at!=null || !permitirAcciones ? false : true,
+                showConfirmButton: response && response.deleted_at!=null || !permitirAcciones ? false : true,
                 denyButtonText: 'Eliminar',
                 confirmButtonText: "Actualizar",
                 cancelButtonText: "Cancelar",

@@ -11,6 +11,8 @@ use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
 use App\Models\TipoConvocatoria;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NotificarConvocadosEmail;
 use Illuminate\Support\Facades\Validator;
 use Flasher\Prime\Notification\NotificationInterface;
 
@@ -312,6 +314,18 @@ class ConvocatoriasJuntaController extends Controller
                     $convocado['notificado']=1;
                     $convocado->save();
                 }
+
+                Mail::to('i02rujuj@uco.es')->send(new NotificarConvocadosEmail([
+                    'asunto' => 'Confirmación asistencia a convocatoria de Junta del centro '.$convocatoria->junta->centro->tipo->nombre.' de '.$convocatoria->junta->centro->nombre,
+                    //'usuario' => $convocado->usuario->name,
+                    'usuario' => Auth::user()->name,
+                    'tipoConvocatoria' => 'Junta',
+                    'centro' => $convocatoria->junta->centro->tipo->nombre." de ".$convocatoria->junta->centro->nombre,
+                    'fecha' => $convocatoria->fecha,
+                    'hora' => $convocatoria->hora,
+                    'lugar' => $convocatoria->lugar,
+                    'idOrgano' => $convocatoria->junta->id,
+               ]));
 
                 toastr("La convocatoria del día '{$convocatoria->fecha}' ha sido notificada vía email a todos sus convocados.", NotificationInterface::SUCCESS, ' ');
                 return response()->json(['message' => "La convocatoria del día '$convocatoria->fecha' ha sido notificada vía email a todos sus convocados.", 'status' => 200], 200);

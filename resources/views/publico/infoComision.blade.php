@@ -89,6 +89,12 @@
                         <div class="ml-4">
                             Pertenece a la Junta de @if($comision->junta->centro->idTipo!=3) {{$comision->junta->centro->tipo->nombre}} @endif {{$comision->junta->centro->nombre}} con fecha de constitución {{$comision->junta->fechaConstitucion}}
                         </div>
+
+                        <hr class="mt-4">
+
+                        <div class="ml-4 mt-2">
+                            {{$comision->descripcion}}
+                        </div>
                     </div>
                 </div>
 

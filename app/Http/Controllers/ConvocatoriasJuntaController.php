@@ -289,6 +289,9 @@ class ConvocatoriasJuntaController extends Controller
     public function convocados(Request $request)
     {
         try {
+
+            $convocatoria = Convocatoria::where('id', $request->id)->first();
+
             $convocados = Convocado::
             with(['usuario' => function ($query) use ($request){
                 $query
@@ -303,10 +306,21 @@ class ConvocatoriasJuntaController extends Controller
             $request->notificado!=null ? $convocados = $convocados->where('notificado', $request->notificado) : "";
             $request->asiste!=null ? $convocados = $convocados->where('asiste', $request->asiste) : "";
 
+            if($request->notificar!=null && $request->notificar){
+
+                foreach ($convocados->get() as  $convocado) {
+                    $convocado['notificado']=1;
+                    $convocado->save();
+                }
+
+                toastr("La convocatoria del día '{$convocatoria->fecha}' ha sido notificada vía email a todos sus convocados.", NotificationInterface::SUCCESS, ' ');
+                return response()->json(['message' => "La convocatoria del día '$convocatoria->fecha' ha sido notificada vía email a todos sus convocados.", 'status' => 200], 200);
+            }
+
             return response()->json($convocados->get());
         } catch (\Throwable $th) {
-            toastr("Ha ocurrido un error al obtener los convocados de la convocatoria del día '$request->fecha'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Ha ocurrido un error al obtener los convocados de la convocatoria del día '$request->fecha'",'status' => 422], 200);
+            toastr("Ha ocurrido un error al obtener los convocados de la convocatoria del día '$convocatoria->fecha'", NotificationInterface::ERROR, ' ');
+            return response()->json(['errors' => "Ha ocurrido un error al obtener los convocados de la convocatoria del día '$convocatoria->fecha'",'status' => 422], 200);
         }
     }
 

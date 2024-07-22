@@ -57,7 +57,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/certificados', [UserController::class, 'index'])->name('certificados');
     Route::post('/generar_certificado', [UserController::class, 'generarCertificado'])->name('generarCertificado');
     Route::post('/generar_certificado_asistencia', [UserController::class, 'generarCertificadoAsistencia'])->name('generarCertificadoAsistencia');
-
 });
 
 Route::group(['middleware' => ['responsable:admin|centro']], function () {

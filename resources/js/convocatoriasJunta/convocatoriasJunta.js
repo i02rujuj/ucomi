@@ -340,6 +340,24 @@ const notificarEvent = (button) => {
                 customClass: 'swal-height',
                 preConfirm: async () => {
 
+                    const dataToSend = {
+                        id:button.dataset.convocatoriaId,
+                        idJunta: response.idJunta,
+                        notificado: null,
+                        asiste:null,
+                        notificar:true
+                    }
+            
+                    const notificados = await CONVOCAR_CONVOCATORIA_BBDD(dataToSend)
+
+                    if(notificados.status == 200){
+                        window.location.reload()
+                    }
+                    else{
+                        Swal.showValidationMessage(response.errors)
+                        return false
+                    }
+
                 },
             });
         } catch (error) {

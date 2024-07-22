@@ -1,6 +1,6 @@
 @extends ('layouts.panel')
 @section ('title')
-Perfil
+Certificados
 @endsection
 
 @section ('content')
@@ -20,10 +20,10 @@ Perfil
             </div>
             @endif
 
-            <form method="post" action="{{ route('generarCertificado') }}" target="_blank" enctype="multipart/form-data" class="bg-white p-8 mb-6 rounded-lg shadow-md">
+            <form id="form_generar_certificado" method="post" action="{{ route('generarCertificado') }}" enctype="multipart/form-data" class="bg-white p-8 mb-6 rounded-lg shadow-md">
                 @csrf
                 <div class="form-group flex flex-col gap-2">
-                    <label for="certificados" class="font-bold text-slate-600">Mis certificados</label>
+                    <label for="certificados" class="font-bold text-slate-600">Certificados</label>
 
                     <hr class="border-t border-slate-200 my-2">
                     
@@ -51,9 +51,9 @@ Perfil
                                 <label for="representaciones" class="block text-sm text-gray-600 mb-1">
                                     Representaciones:
                                 </label>
-                                <input type="checkbox" id="representacionCentro" name="representacionCentro" checked> Centro
-                                <input type="checkbox" id="representacionJunta" name="representacionJunta" checked class="accent-pink-500"> Junta
-                                <input type="checkbox" id="representacionComision" name="representacionComision" checked class="accent-yellow-500"> Comisión
+                                <input type="checkbox" id="representacionCentro" name="representaciones[]"  value="centro" checked> Centro
+                                <input type="checkbox" id="representacionJunta" name="representaciones[]" value="junta" checked class="accent-pink-500"> Junta
+                                <input type="checkbox" id="representacionComision" name="representaciones[]" value="comision" checked class="accent-yellow-500"> Comisión
                             
                                 @error('representaciones')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -66,7 +66,7 @@ Perfil
                                 <label for="opciones" class="block text-sm text-gray-600 mb-1">
                                     Opciones:
                                 </label>
-                                <input type="checkbox" id="responsable" name="responsable"> Responsable
+                                <input type="checkbox" id="responsable" name="responsable"> Solo los que he ejercido como responsable
                             
                                 @error('opciones')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -78,11 +78,11 @@ Perfil
                     <div id="fechas" class="flex gap-4 hidden">
                         <div class="left-side w-full">
                             <div class="mb-2">
-                                <label for="fechaInicio" class="block text-sm text-gray-600 mb-1">
+                                <label for="fechaDesde" class="block text-sm text-gray-600 mb-1">
                                     Desde fecha toma posesión:
                                 </label>
-                                <input id="fechaInicio" name="fechaInicio" type="date" value="{{old("fechaInicio")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" />
-                                @error('fechaInicio')
+                                <input id="fechaDesde" name="fechaDesde" type="date" value="{{old("fechaDesde")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" />
+                                @error('fechaDesde')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -91,11 +91,11 @@ Perfil
                         
                         <div class="left-side w-full">
                             <div class="mb-2">
-                                <label for="fechaFin" class="block text-sm text-gray-600 mb-1">
+                                <label for="fechaHasta" class="block text-sm text-gray-600 mb-1">
                                     Hasta:
                                 </label>
-                                <input id="fechaFin" name="fechaFin" type="date" value="{{old("fechaFin")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" />
-                                @error('fechaFin')
+                                <input id="fechaHasta" name="fechaHasta" type="date" value="{{old("fechaHasta")}}" class="text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 w-full outline-none" autocomplete="off" />
+                                @error('fechaHasta')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>

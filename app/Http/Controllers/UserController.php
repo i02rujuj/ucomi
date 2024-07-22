@@ -9,12 +9,12 @@ use App\Models\User;
 use App\Helpers\Helper;
 use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
-use PHPUnit\TextUI\Exception;
 use App\Models\MiembroComision;
 use App\Models\MiembroGobierno;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Flasher\Prime\Notification\NotificationInterface;
 
 class UserController extends Controller
 {   
@@ -118,8 +118,30 @@ class UserController extends Controller
     public function generarCertificado(Request $request)
     {
         try {
+            $validator = Validator::make($request->all(), [
+                'tipoCertificado' => 'required',
+                'representaciones' => 'required|min:1',
+            ]
+            ,[
+                // Mensajes error tipoCertificado
+                'tipoCertificado.required' => 'El tipo de certificado es obligatorio.',
+                // Mensajes error representaciones
+                'representaciones.required' => 'Debe seleccionar al menos una opción',
+            ] 
+            
+            );
+
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
             $usuario = Auth::User()->name;
             $time = now();
+            $dataCentro=null;
+            $dataJunta=null;
+            $dataComision=null;
+            $dateDesde=null;
+            $dateHasta=null;
 
             switch ($request->tipoCertificado) {
                 case config('constants.TIPOS_CERTIFICADO.ACTUAL'):
@@ -131,28 +153,32 @@ class UserController extends Controller
                     $idTipoCertificado = config('constants.TIPOS_CERTIFICADO.HISTORICO');
                     $tipoCertificado = "Histórico";
 
-                    if((isset($request->data['fechaDesde']) && !isset($request->data['fechaHasta'])) || (!isset($request->data['fechaDesde']) && isset($request->data['fechaHasta']))){
-                        throw new Exception('Es necesario indicar las dos fechas para realizar la búsqueda o no seleccionar ninguna para obtener todos los resultados');
+                    if((isset($request->fechaDesde) && !isset($request->fechaHasta)) || (!isset($request->fechaDesde) && isset($request->fechaHasta))){
+                        toastr('Para obtener el certificado histórico es necesario indicar las dos fechas para realizar la búsqueda o no seleccionar ninguna para obtener todos los resultados', NotificationInterface::ERROR, ' ');
+                        return redirect()->back();
                     }
 
-                    if(!(!isset($request->data['fechaDesde']) && !isset($request->data['fechaHasta']))){
+                    if(!(!isset($request->fechaDesde) && !isset($request->fechaHasta))){
                         // Validar que fechaHasta no pueda ser mayor a fechaDesde
-                        $dateDesde = new DateTime($request->data['fechaDesde']);
-                        $dateHasta = new DateTime($request->data['fechaHasta']);
+                        $dateDesde = new DateTime($request->fechaDesde);
+                        $dateHasta = new DateTime($request->fechaHasta);
 
-                        if ($dateHasta>$dateDesde) {
-                            throw new Exception('La fecha hasta no puede ser superior a la fecha desde');
+                        if ($dateHasta<$dateDesde) {
+                            toastr('La fecha hasta no puede anterior a la fecha desde', NotificationInterface::ERROR, ' ');
+                            return redirect()->back();
                         }  
                     }
 
                     break;
                 
                 default:
-                    throw new Exception('Tipo de certificado incorrecto');
+                    toastr('Tipo de certificado incorrecto', NotificationInterface::ERROR, ' ');
+                    return redirect()->back();
                     break;
             }
 
-            if($request->representacionCentro){
+            if(isset($request->representaciones[0])){
+
                 $dataCentro = MiembroGobierno::
                 select('id', 'idCentro', 'idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at')
                 ->where('idUsuario', Auth::User()->id);
@@ -163,7 +189,9 @@ class UserController extends Controller
                         break;
 
                     case config('constants.TIPOS_CERTIFICADO.HISTORICO'):
-                        $dataCentro = $dataCentro->whereBetween('fechaTomaPosesion', [$dateDesde, $dateHasta]);
+                        if($dateDesde!=null && $dateHasta!=null){
+                            $dataCentro = $dataCentro->whereBetween('fechaTomaPosesion', [$dateDesde, $dateHasta]);
+                        }
                         break;
                 }
 
@@ -179,7 +207,8 @@ class UserController extends Controller
                     ->get();
             }
 
-            if($request->representacionJunta){
+            if(isset($request->representaciones[1])){
+
                 $dataJunta = MiembroJunta::
                 select('id', 'idJunta', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at')
                 ->where('idUsuario', Auth::User()->id);
@@ -190,7 +219,9 @@ class UserController extends Controller
                         break;
 
                     case config('constants.TIPOS_CERTIFICADO.HISTORICO'):
-                        $dataJunta = $dataJunta->whereBetween('fechaTomaPosesion', [$dateDesde, $dateHasta]);
+                        if($dateDesde!=null && $dateHasta!=null){
+                            $dataJunta = $dataJunta->whereBetween('fechaTomaPosesion', [$dateDesde, $dateHasta]);
+                        }
                         break;
                 }
 
@@ -206,7 +237,7 @@ class UserController extends Controller
                     ->get();
             }
 
-            if($request->representacionComision){
+            if(isset($request->representaciones[2])){
                 $dataComision = MiembroComision::
                 select('id', 'idComision', 'idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at')
                 ->where('idUsuario', Auth::User()->id);
@@ -217,7 +248,9 @@ class UserController extends Controller
                         break;
 
                     case config('constants.TIPOS_CERTIFICADO.HISTORICO'):
-                        $dataComision = $dataComision->whereBetween('fechaTomaPosesion', [$dateDesde, $dateHasta]);
+                        if($dateDesde!=null && $dateHasta!=null){
+                            $dataComision = $dataComision->whereBetween('fechaTomaPosesion', [$dateDesde, $dateHasta]);
+                        }
                         break;
                 }
 
@@ -250,7 +283,8 @@ class UserController extends Controller
             //dd($pdf);
             return $pdf->stream("Certificado $tipoCertificado $usuario $time.pdf");
         } catch (\Throwable $th) {
-           
+            toastr('Ha ocurrido un error al generar el certificado', NotificationInterface::ERROR, ' ');
+            return redirect()->back();
         }   
     }
 }

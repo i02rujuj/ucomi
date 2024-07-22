@@ -34,7 +34,7 @@
     <hr style="margin-top:-10px">
 
 	<h2>Certificado {{$tipo}}</h2>
-    <p style="text-indent: 40px;">A fecha de hoy, {{date('d/m/Y')}}, {{$usuario}} figura como representante de los siguientes organismos:</p>
+    <p style="text-indent: 40px;">A fecha de hoy, {{date('d/m/Y')}}, {{$usuario}} figura como representante de los siguientes órganos de representación de la Universidad de Córdoba:</p>
 
     @if(isset($dataCentro) && $dataCentro->count())
 

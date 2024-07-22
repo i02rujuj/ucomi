@@ -42,6 +42,7 @@ return [
     'TIPOS_CERTIFICADO' => [
         'ACTUAL' => 1, 
         'HISTORICO' => 2,
+        'CONVOCATORIA' => 3,
     ],
 ];
 

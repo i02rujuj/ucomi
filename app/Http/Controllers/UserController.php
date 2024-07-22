@@ -7,6 +7,7 @@ use PDF;
 use DateTime;
 use App\Models\User;
 use App\Helpers\Helper;
+use App\Models\Convocado;
 use App\Models\MiembroJunta;
 use Illuminate\Http\Request;
 use App\Models\MiembroComision;
@@ -177,93 +178,96 @@ class UserController extends Controller
                     break;
             }
 
-            if(isset($request->representaciones[0])){
+            foreach ($request->representaciones as  $representacion) {
 
-                $dataCentro = MiembroGobierno::
-                select('id', 'idCentro', 'idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at')
-                ->where('idUsuario', Auth::User()->id);
+                if($representacion=='centro'){
 
-                switch ($request->tipoCertificado) {
-                    case config('constants.TIPOS_CERTIFICADO.ACTUAL'):
-                        $dataCentro = $dataCentro->whereNull('fechaCese');
-                        break;
+                    $dataCentro = MiembroGobierno::
+                    select('id', 'idCentro', 'idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at')
+                    ->where('idUsuario', Auth::User()->id);
 
-                    case config('constants.TIPOS_CERTIFICADO.HISTORICO'):
-                        if($dateDesde!=null && $dateHasta!=null){
-                            $dataCentro = $dataCentro->whereBetween('fechaTomaPosesion', [$dateDesde, $dateHasta]);
-                        }
-                        break;
+                    switch ($request->tipoCertificado) {
+                        case config('constants.TIPOS_CERTIFICADO.ACTUAL'):
+                            $dataCentro = $dataCentro->whereNull('fechaCese');
+                            break;
+
+                        case config('constants.TIPOS_CERTIFICADO.HISTORICO'):
+                            if($dateDesde!=null && $dateHasta!=null){
+                                $dataCentro = $dataCentro->whereBetween('fechaTomaPosesion', [$dateDesde, $dateHasta]);
+                            }
+                            break;
+                    }
+
+                    if($request->responsable){
+                        $dataCentro = $dataCentro->where('responsable', 1);
+                    }
+        
+                    $dataCentro = $dataCentro
+                        ->orderBy('deleted_at')
+                        ->orderBy('fechaCese')
+                        ->orderBy('updated_at','desc')
+                        ->orderBy('idRepresentacion')
+                        ->get();
                 }
 
-                if($request->responsable){
-                    $dataCentro = $dataCentro->where('responsable', 1);
-                }
-    
-                $dataCentro = $dataCentro
-                    ->orderBy('deleted_at')
-                    ->orderBy('fechaCese')
-                    ->orderBy('updated_at','desc')
-                    ->orderBy('idRepresentacion')
-                    ->get();
-            }
+                if($representacion=='junta'){
 
-            if(isset($request->representaciones[1])){
+                    $dataJunta = MiembroJunta::
+                    select('id', 'idJunta', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at')
+                    ->where('idUsuario', Auth::User()->id);
 
-                $dataJunta = MiembroJunta::
-                select('id', 'idJunta', 'idUsuario', 'idRepresentacion', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at')
-                ->where('idUsuario', Auth::User()->id);
+                    switch ($request->tipoCertificado) {
+                        case config('constants.TIPOS_CERTIFICADO.ACTUAL'):
+                            $dataJunta = $dataJunta->whereNull('fechaCese');
+                            break;
 
-                switch ($request->tipoCertificado) {
-                    case config('constants.TIPOS_CERTIFICADO.ACTUAL'):
-                        $dataJunta = $dataJunta->whereNull('fechaCese');
-                        break;
+                        case config('constants.TIPOS_CERTIFICADO.HISTORICO'):
+                            if($dateDesde!=null && $dateHasta!=null){
+                                $dataJunta = $dataJunta->whereBetween('fechaTomaPosesion', [$dateDesde, $dateHasta]);
+                            }
+                            break;
+                    }
 
-                    case config('constants.TIPOS_CERTIFICADO.HISTORICO'):
-                        if($dateDesde!=null && $dateHasta!=null){
-                            $dataJunta = $dataJunta->whereBetween('fechaTomaPosesion', [$dateDesde, $dateHasta]);
-                        }
-                        break;
-                }
-
-                if($request->responsable){
-                    $dataJunta = $dataJunta->where('responsable', 1);
-                }
-    
-                $dataJunta = $dataJunta
-                    ->orderBy('deleted_at')
-                    ->orderBy('fechaCese')
-                    ->orderBy('updated_at','desc')
-                    ->orderBy('idRepresentacion')
-                    ->get();
-            }
-
-            if(isset($request->representaciones[2])){
-                $dataComision = MiembroComision::
-                select('id', 'idComision', 'idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at')
-                ->where('idUsuario', Auth::User()->id);
-
-                switch ($request->tipoCertificado) {
-                    case config('constants.TIPOS_CERTIFICADO.ACTUAL'):
-                        $dataComision = $dataComision->whereNull('fechaCese');
-                        break;
-
-                    case config('constants.TIPOS_CERTIFICADO.HISTORICO'):
-                        if($dateDesde!=null && $dateHasta!=null){
-                            $dataComision = $dataComision->whereBetween('fechaTomaPosesion', [$dateDesde, $dateHasta]);
-                        }
-                        break;
+                    if($request->responsable){
+                        $dataJunta = $dataJunta->where('responsable', 1);
+                    }
+        
+                    $dataJunta = $dataJunta
+                        ->orderBy('deleted_at')
+                        ->orderBy('fechaCese')
+                        ->orderBy('updated_at','desc')
+                        ->orderBy('idRepresentacion')
+                        ->get();
                 }
 
-                if($request->responsable){
-                    $dataComision = $dataComision->where('responsable', 1);
+                if($representacion=='comision'){
+                    $dataComision = MiembroComision::
+                    select('id', 'idComision', 'idUsuario', 'idRepresentacion', 'cargo', 'fechaTomaPosesion', 'fechaCese', 'responsable', 'updated_at', 'deleted_at')
+                    ->where('idUsuario', Auth::User()->id);
+
+                    switch ($request->tipoCertificado) {
+                        case config('constants.TIPOS_CERTIFICADO.ACTUAL'):
+                            $dataComision = $dataComision->whereNull('fechaCese');
+                            break;
+
+                        case config('constants.TIPOS_CERTIFICADO.HISTORICO'):
+                            if($dateDesde!=null && $dateHasta!=null){
+                                $dataComision = $dataComision->whereBetween('fechaTomaPosesion', [$dateDesde, $dateHasta]);
+                            }
+                            break;
+                    }
+
+                    if($request->responsable){
+                        $dataComision = $dataComision->where('responsable', 1);
+                    }
+        
+                    $dataComision = $dataComision
+                        ->orderBy('deleted_at')
+                        ->orderBy('fechaCese')
+                        ->orderBy('updated_at','desc')
+                        ->orderBy('idRepresentacion')
+                        ->get();
                 }
-    
-                $dataComision = $dataComision
-                    ->orderBy('deleted_at')
-                    ->orderBy('fechaCese')
-                    ->orderBy('updated_at','desc')
-                    ->orderBy('idRepresentacion')
-                    ->get();
             }
 
             $data = [
@@ -273,6 +277,8 @@ class UserController extends Controller
                     'dataCentro' => $dataCentro,
                     'dataJunta' => $dataJunta,
                     'dataComision' => $dataComision,
+                    'dateDesde' => $dateDesde!=null ? $dateDesde->format('d/m/Y') : null,
+                    'dateHasta' => $dateHasta!=null ? $dateHasta->format('d/m/Y') : null,
             ];
 
             $pdf = PDF::loadView('certificados.certificado', $data);
@@ -281,9 +287,143 @@ class UserController extends Controller
             ]);
             $pdf->render();
             //dd($pdf);
-            return $pdf->stream("Certificado $tipoCertificado $usuario $time.pdf");
+            return $pdf->download("Certificado $tipoCertificado $usuario $time.pdf");
         } catch (\Throwable $th) {
-            toastr('Ha ocurrido un error al generar el certificado', NotificationInterface::ERROR, ' ');
+            toastr('Ha ocurrido un error al generar el certificado'.$th->getMessage(), NotificationInterface::ERROR, ' ');
+            return redirect()->back();
+        }   
+    }
+
+    public function generarCertificadoAsistencia(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'tipoCertificado' => 'required',
+                'tiposConvocatoria' => 'required|min:1',
+            ]
+            ,[
+                // Mensajes error tipoCertificado
+                'tipoCertificado.required' => 'El tipo de certificado es obligatorio.',
+                // Mensajes error tiposConvocatoria
+                'tiposConvocatoria.required' => 'Debe seleccionar al menos una opción',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            $usuario = Auth::User()->name;
+            $time = now();
+            $dataJunta=null;
+            $dataComision=null;
+            $dateDesde=null;
+            $dateHasta=null;
+
+            switch ($request->tipoCertificado) {
+                case config('constants.TIPOS_CERTIFICADO.CONVOCATORIA'):
+                    $idTipoCertificado = config('constants.TIPOS_CERTIFICADO.CONVOCATORIA');
+                    $tipoCertificado = "Asistencia a convocatorias";
+
+                    if((isset($request->fechasAsistenciaDesde) && !isset($request->fechasAsistenciaHasta)) || (!isset($request->fechasAsistenciaDesde) && isset($request->fechasAsistenciaHasta))){
+                        toastr('Para obtener el certificado es necesario indicar las dos fechas para realizar la búsqueda o no seleccionar ninguna para obtener todos los resultados', NotificationInterface::ERROR, ' ');
+                        return redirect()->back();
+                    }
+
+                    if(!(!isset($request->fechasAsistenciaDesde) && !isset($request->fechasAsistenciaHasta))){
+                        // Validar que fechaHasta no pueda ser mayor a fechaDesde
+                        $dateDesde = new DateTime($request->fechasAsistenciaDesde);
+                        $dateHasta = new DateTime($request->fechasAsistenciaHasta);
+
+                        if ($dateHasta<$dateDesde) {
+                            toastr('La fecha de hasta no puede anterior a la fecha desde', NotificationInterface::ERROR, ' ');
+                            return redirect()->back();
+                        }  
+                    }
+
+                    break;
+                
+                default:
+                    toastr('Tipo de certificado incorrecto', NotificationInterface::ERROR, ' ');
+                    return redirect()->back();
+                    break;
+            }
+
+            foreach ($request->tiposConvocatoria as  $tipoConvocatoria) {
+
+                if($tipoConvocatoria=='junta'){
+                    $dataJunta = Convocado::
+                    where('idUsuario', Auth::user()->id);
+
+                    if(isset($request->asistencia[1])){
+                        $dataJunta = $dataJunta->where('asiste', 1);
+                    }
+    
+                    if(isset($request->asistencia[2])){
+                        $dataJunta = $dataJunta->where('asiste', 0);
+                    }
+
+                    $dataJunta = $dataJunta
+                        ->whereHas('convocatoria', function($builder) use($dateDesde, $dateHasta){
+                            if($dateDesde!=null && $dateHasta!=null){
+                                $builder = $builder->whereBetween('fecha', [$dateDesde, $dateHasta]);
+                            }
+                            return $builder->whereHas('junta', function($builder){
+                                
+                            });
+                        })
+                        ->orderBy('deleted_at')
+                        ->orderBy('idConvocatoria')
+                        ->orderBy('updated_at','desc')
+                        ->get();
+                }
+
+                if($tipoConvocatoria=='comision'){
+                    $dataComision = Convocado::
+                    where('idUsuario', Auth::user()->id);
+
+                    if(isset($request->asistencia[1])){
+                        $dataComision = $dataComision->where('asiste', 1);
+                    }
+    
+                    if(isset($request->asistencia[2])){
+                        $dataComision = $dataComision->where('asiste', 0);
+                    }
+
+                    $dataComision = $dataComision
+                        ->whereHas('convocatoria', function($builder) use($dateDesde, $dateHasta){
+                                if($dateDesde!=null && $dateHasta!=null){
+                                    $builder = $builder->whereBetween('fecha', [$dateDesde, $dateHasta]);
+                                }
+                            
+                                return $builder->whereHas('comision', function($builder){
+                            });
+                        })
+                        ->orderBy('deleted_at')
+                        ->orderBy('idConvocatoria')
+                        ->orderBy('updated_at','desc')
+                        ->get();
+                }
+            }
+
+            $data = [
+                    'idTipo' => $idTipoCertificado,
+                    'tipo' => $tipoCertificado,
+                    'usuario' => $usuario,
+                    'dataJunta' => $dataJunta,
+                    'dataComision' => $dataComision,
+                    'dateDesde' => $dateDesde!=null ? $dateDesde->format('d/m/Y') : null,
+                    'dateHasta' => $dateHasta!=null ? $dateHasta->format('d/m/Y') : null,
+            ];
+
+            $pdf = PDF::loadView('certificados.certificadoConvocatoria', $data);
+            $pdf->setOptions([
+                'isRemoteEnabled' => true,
+            ]);
+            $pdf->render();
+   
+            return $pdf->download("Certificado $tipoCertificado $usuario $time.pdf");
+        } catch (\Throwable $th) {
+            toastr('Ha ocurrido un error al generar el certificado'.$th->getMessage(), NotificationInterface::ERROR, ' ');
             return redirect()->back();
         }   
     }

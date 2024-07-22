@@ -27,9 +27,9 @@ class ConvocatoriasComisionController extends Controller
 
                 if($datosResponsableCentro = Auth::user()->esResponsableDatos('centro')['centros']){
                     $convocatorias = $convocatorias
-                    ->whereHas('junta', function($builder) use ($datosResponsableCentro){
+                    ->whereHas('comision', function($builder) use ($datosResponsableCentro){
                         return $builder
-                        ->whereHas('centro', function($builder) use ($datosResponsableCentro){
+                        ->whereHas('junta', function($builder) use ($datosResponsableCentro){
                             $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
                         });
                     }); 
@@ -38,14 +38,14 @@ class ConvocatoriasComisionController extends Controller
                     ->whereHas('junta', function($builder) use ($datosResponsableCentro){
                         return $builder
                         ->whereHas('centro', function($builder) use ($datosResponsableCentro){
-                            $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+                            $builder->whereIn('id', $datosResponsableCentro['idCentros']);
                         });
                     });
                 }
     
                 if($datosResponsableJunta = Auth::user()->esResponsableDatos('junta')['juntas']){
                     $convocatorias = $convocatorias
-                    ->whereHas('junta', function($builder) use ($datosResponsableJunta){
+                    ->whereHas('comision', function($builder) use ($datosResponsableJunta){
                         return $builder->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
                     });
                     $comisiones = $comisiones->whereIn('idJunta', $datosResponsableJunta['idJuntas']);
@@ -139,7 +139,7 @@ class ConvocatoriasComisionController extends Controller
 
         } catch (\Throwable $th) {
             toastr('No se pudieron obtener las convocatorias.', NotificationInterface::ERROR, ' ');
-            return redirect()->route('home')->with('errors', 'No se pudieron obtener las convocatorias.');
+            return redirect()->route('home')->with('errors', 'No se pudieron obtener las convocatorias.'.$th->getMessage());
         }
     }
     

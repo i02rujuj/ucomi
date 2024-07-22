@@ -21,7 +21,7 @@ class Convocado extends Model
  
      public function convocatoria()
     {
-        return $this->belongsTo(Comision::class, 'idConvocatoria');
+        return $this->belongsTo(Convocatoria::class, 'idConvocatoria');
     }
 
     public function usuario()

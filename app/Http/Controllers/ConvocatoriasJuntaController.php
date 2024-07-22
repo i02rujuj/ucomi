@@ -29,7 +29,7 @@ class ConvocatoriasJuntaController extends Controller
                     ->whereHas('junta', function($builder) use ($datosResponsableCentro){
                         return $builder
                         ->whereHas('centro', function($builder) use ($datosResponsableCentro){
-                            $builder->whereIn('idCentro', $datosResponsableCentro['idCentros']);
+                            $builder->whereIn('id', $datosResponsableCentro['idCentros']);
                         });
                     }); 
                     

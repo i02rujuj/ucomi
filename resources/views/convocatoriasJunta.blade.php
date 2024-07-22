@@ -196,7 +196,6 @@ Convocatorias Junta
                                         </div>
                                     </a>
                                 @endif
-
                             </div>
                         </div>
                     @endforeach

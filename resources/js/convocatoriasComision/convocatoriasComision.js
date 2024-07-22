@@ -205,8 +205,8 @@ const renderHTMLConvocados = (convocados, tipo) => {
 
         let html =`
             <div class="relative overflow-x-auto">
-            <table class="w-full text-xs text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <table class="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-md text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-1 py-1">
                             Nombre
@@ -335,7 +335,7 @@ const notificarEvent = (button) => {
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '',
                 showLoaderOnConfirm:true,
-                width: '90vw',
+                width: '70vw',
                 heightAuto:false, 
                 customClass: 'swal-height',
                 preConfirm: async () => {
@@ -388,7 +388,7 @@ const asistentesEvent = (button) => {
                 title:'Asistentes convocatoria',
                 html: renderHTMLConvocados(convocados, 'asistentes'),
                 showConfirmButton:false,
-                width: '90vw',
+                width: '70vw',
                 heightAuto:false, 
                 customClass: 'swal-height' 
             });

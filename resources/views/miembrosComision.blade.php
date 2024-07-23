@@ -43,7 +43,7 @@ Miembros de Comisión
                     </x-inputSelectModal>
                 </div>
 
-                <x-inputSelectModal label="Comisiones vigentes*" id="idComision" entidad="miembro">
+                <x-inputSelectModal label="Comisióm*" id="idComision" entidad="miembro">
                     <option value="" selected disabled>Selecciona una comisión</option>
                     @foreach ($comisiones as $comision)
                         <option value="{{ $comision->id }}">{{ $comision->nombre }} </option>

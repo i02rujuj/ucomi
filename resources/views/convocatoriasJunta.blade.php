@@ -36,7 +36,7 @@ Convocatorias Junta
 
             <div id="modal_add" name="modal_add" class="hidden mt-4">
                 
-                <x-inputSelectModal label="Juntas vigentes*" id="idJunta" entidad="convocatoria">
+                <x-inputSelectModal label="Junta*" id="idJunta" entidad="convocatoria">
                     <option value="" selected disabled>Selecciona una junta</option>
                     @foreach ($juntas as $junta)
                         <option value="{{$junta->id}}">{{$junta->fecha_constitucion_format}} | {{$junta->centro->nombre}}</option>

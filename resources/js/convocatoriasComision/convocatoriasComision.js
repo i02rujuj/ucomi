@@ -427,8 +427,9 @@ const asistentesEvent = (button) => {
 const actasEvent = (button) => {
     button.addEventListener('click', async (event) => {
         event.stopPropagation()
+        window.open(button.dataset.acta, '_blank');
 
-        await Swal.fire({
+        /*await Swal.fire({
             html: `
                 <iframe src="${button.dataset.acta}" class="w-full h-full"></iframe>
             `,
@@ -437,7 +438,7 @@ const actasEvent = (button) => {
             width: '85vw',
             heightAuto:false, 
             customClass: 'swal-height'   
-        })
+        })*/
     }, true)    
 }
 

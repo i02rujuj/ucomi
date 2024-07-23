@@ -36,7 +36,7 @@ Convocatorias Comisión
 
             <div id="modal_add" name="modal_add" class="hidden mt-4">
                 
-                <x-inputSelectModal label="Comisiones vigentes*" id="idComision" entidad="convocatoria">
+                <x-inputSelectModal label="Comisión*" id="idComision" entidad="convocatoria">
                     <option value="" selected disabled>Selecciona una comisión</option>
                     @foreach ($comisiones as $comision)
                         <option value="{{$comision->id}}">{{$comision->nombre}} </option>

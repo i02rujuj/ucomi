@@ -43,7 +43,7 @@ Miembros de Junta
                     </x-inputSelectModal>
                 </div>
 
-                <x-inputSelectModal label="Juntas vigentes*" id="idJunta" entidad="miembro">
+                <x-inputSelectModal label="Junta*" id="idJunta" entidad="miembro">
                     <option value="" selected disabled>Selecciona una junta</option>
                     @foreach ($juntas as $junta)
                         <option value="{{ $junta->id }}">{{ $junta->fecha_constitucion_format }} | {{ $junta->centro->nombre }} </option>

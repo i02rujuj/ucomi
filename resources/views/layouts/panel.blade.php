@@ -66,7 +66,7 @@
                     @if(auth()->user()->esResponsable('admin|centro'))
                     <li @class(['mb-1 flex', request()->routeIs('centros') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="{{ route('centros') }}" class="text-gray-600 w-full flex justify-start items-center">
-                            <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                            <span class="material-icons-round text-slate-600 ml-4 mr-2">
                                 account_balance
                             </span>
                             Centros
@@ -77,7 +77,7 @@
                     @if(auth()->user()->esResponsable('admin|centro|junta'))
                     <li @class(['mb-1 flex', request()->routeIs('juntas') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="{{ route('juntas') }}" class="text-gray-600 w-full flex justify-start items-center">
-                            <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                            <span class="material-icons-round text-slate-600 ml-4 mr-2">
                                 workspaces
                             </span>
                             Juntas
@@ -88,7 +88,7 @@
                     @if(auth()->user()->esResponsable('admin|centro|junta|comision'))
                     <li @class(['mb-1 flex', request()->routeIs('comisiones') ? 'px-3 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'hover:px-3 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                         <a href="{{ route('comisiones') }}" class="text-gray-600 w-full flex justify-start items-center">
-                            <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                            <span class="material-icons-round text-slate-600 ml-4 mr-2">
                                 send
                             </span>
                             Comisiones
@@ -113,7 +113,7 @@
                         @if(auth()->user()->esResponsable('admin|centro'))
                         <li @class(['mb-1 flex', request()->routeIs('miembrosGobierno') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('miembrosGobierno') }}" class="text-gray-600 w-full flex justify-start items-center">
-                                <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                                <span class="material-icons-round text-slate-600 ml-4 mr-2">
                                     manage_accounts
                                 </span>
                                 Gobierno
@@ -124,7 +124,7 @@
                         @if(auth()->user()->esResponsable('admin|centro|junta'))
                         <li @class(['mb-1 flex', request()->routeIs('miembrosJunta') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('miembrosJunta') }}" class="text-gray-600 w-full flex justify-start items-center">
-                                <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                                <span class="material-icons-round text-slate-600 ml-4 mr-2">
                                     manage_accounts
                                 </span>
                                 Junta
@@ -135,7 +135,7 @@
                         @if(auth()->user()->esResponsable('admin|centro|junta|comision'))
                         <li @class(['mb-1 flex', request()->routeIs('miembrosComision') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('miembrosComision') }}" class="text-gray-600 w-full flex justify-start items-center">
-                                <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                                <span class="material-icons-round text-slate-600 ml-4 mr-2">
                                     manage_accounts
                                 </span>
                                 Comisión
@@ -165,7 +165,7 @@
 
                         <li @class(['mb-1 flex', request()->routeIs('convocatoriasJunta') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('convocatoriasJunta') }}" class="text-gray-600 w-full flex justify-start items-center">
-                                <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                                <span class="material-icons-round text-slate-600 ml-4 mr-2">
                                     pending_actions
                                 </span>
                                 Junta
@@ -178,7 +178,7 @@
 
                         <li @class(['mb-1 flex', request()->routeIs('convocatoriasComision') ? 'px-9 font-medium hover:font-semibold bg-blue-100 w-full rounded-md box-border' : 'px-6 hover:px-9 hover:bg-blue-50 hover:rounded-md ease-in-out hover:transition-all duration-200'])>
                             <a href="{{ route('convocatoriasComision') }}" class="text-gray-600 w-full flex justify-start items-center">
-                                <span class="material-icons-round text-slate-600 ml-4 mr-1">
+                                <span class="material-icons-round text-slate-600 ml-4 mr-2">
                                     schedule_send
                                 </span>
                                 Comisión

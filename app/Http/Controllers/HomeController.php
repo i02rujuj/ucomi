@@ -31,7 +31,7 @@ class HomeController extends Controller
         where('idUsuario', Auth::user()->id)
         ->whereNull('fechaCese')
         ->orderBy('responsable', 'desc')
-        ->orderBy('updated_at', 'desc')
+        ->orderBy('fechaTomaPosesion', 'desc')
         ->orderBy('idRepresentacion')
         ->get(); 
 
@@ -39,7 +39,7 @@ class HomeController extends Controller
         where('idUsuario', Auth::user()->id)
         ->whereNull('fechaCese')
         ->orderBy('responsable', 'desc')
-        ->orderBy('updated_at', 'desc')
+        ->orderBy('fechaTomaPosesion', 'desc')
         ->orderBy('idRepresentacion')
         ->get(); 
 
@@ -47,7 +47,7 @@ class HomeController extends Controller
         where('idUsuario', Auth::user()->id)
         ->whereNull('fechaCese')
         ->orderBy('responsable', 'desc')
-        ->orderBy('updated_at', 'desc')
+        ->orderBy('fechaTomaPosesion', 'desc')
         ->orderBy('idRepresentacion')
         ->get(); 
 

@@ -75,13 +75,13 @@ class CentroSeeder extends Seeder
                 'logo' => asset('img/centros/logo_agronomía.png')
             ],
             [
-                'nombre'=>'Centro Magisterio Sagrado Corazón', 
+                'nombre'=>'Magisterio Sagrado Corazón', 
                 'direccion'=>'Córdoba', 
                 'tipo'=>config('constants.TIPOS_CENTRO.OTRO'),
                 'logo' => asset('img/centros/logo_sagrado_corazon.png')
             ],
             [
-                'nombre'=>'Centro Universitario FIDISEC', 
+                'nombre'=>'Universitario FIDISEC', 
                 'direccion'=>'Cabra (Córdoba)', 
                 'tipo'=>config('constants.TIPOS_CENTRO.OTRO'),
                 'logo' => asset('img/centros/logo_fidisec.png')
@@ -93,7 +93,7 @@ class CentroSeeder extends Seeder
                 'logo' => asset('img/centros/logo_idep.jpg')
             ],
             [
-                'nombre'=>'Centro Intergeneracional Francisco de Santisteban', 
+                'nombre'=>'Intergeneracional Francisco de Santisteban', 
                 'direccion'=>'Córdoba', 
                 'tipo'=>config('constants.TIPOS_CENTRO.OTRO'),
                 'logo' => asset('img/centros/logo_santisteban.png')

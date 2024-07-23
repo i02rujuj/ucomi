@@ -75,11 +75,11 @@ class MiembrosComisionController extends Controller
             $miembrosComision = $miembrosComision
             ->orderBy('deleted_at')
             ->orderBy('fechaCese')
-            ->orderBy('updated_at','desc')
             ->orderBy('idComision')
             ->orderBy('idRepresentacion')
+            ->orderBy('fechaTomaPosesion', 'desc')
             ->orderBy('idUsuario')
-            ->paginate(10);
+            ->paginate(12);
 
             $users = User::select('id', 'name')
             ->get();

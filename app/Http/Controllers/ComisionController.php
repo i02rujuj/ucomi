@@ -60,9 +60,8 @@ class ComisionController extends Controller
             $comisiones = $comisiones
             ->orderBy('deleted_at')
             ->orderBy('fechaDisolucion')
-            ->orderBy('updated_at','desc')
             ->orderBy('fechaConstitucion', 'desc')
-            ->paginate(6);
+            ->paginate(12);
 
             if($request->input('action')=='limpiar'){
                 return redirect()->route('comisiones')->with([

@@ -67,24 +67,26 @@ Centros
                     @foreach ($centros as $centro)
                         <div id="btn-editar-centro" data-centro-id="{{ $centro['id'] }}" class="card bg-white p-4 rounded-lg shadow-md cursor-pointer">
                             
-                            <div class="flex justify-center text-center items-center ">
-                                <h2 class="md:truncate font-bold">{{ $centro['nombre'] }}</h2>
+                            <div class="flex justify-start text-center items-center gap-2 mx-2">
+                                <div class="right-part w-full max-w-max">
+                                    <img src="{{ $centro->logo ? $centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-12 h-12 ml-1 mb-1 justify-self-center rounded-full object-cover">  
+                                </div>
+                                <div class="flex justify-center text-center w-full">
+                                    <h2 class="font-bold">{{$centro->tipo->nombre}} {{ $centro['nombre'] }}</h2>
+                                </div>
                             </div>
 
                             <hr class="my-2">
 
-                            <div class="flex items-center left-part w-full pl-3 z-10 gap-3">
-                                <div class="w-full max-w-max">
-                                    <img src="{{ $centro->logo ? $centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
-                                </div>
+                            <div class="flex items-center left-part w-full pl-3 z-10 gap-3 mt-2">
 
-                                <div class="w-full truncate">  
-                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1 my-3">
-                                        <div class="truncate flex items-center">
+                                <div class="w-full ">  
+                                    <div class="flex text-xs text-slate-400 font-medium items-center gap-1">
+                                        <div class="flex items-center">
                                             <span class="material-icons-round scale-75">
                                                 place
                                             </span>
-                                            <div class="direccion truncate">
+                                            <div class="direccion">
                                                 {{ $centro->direccion }}
                                             </div>
                                         </div>

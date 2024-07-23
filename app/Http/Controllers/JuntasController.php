@@ -48,9 +48,8 @@ class JuntasController extends Controller
             $juntas = $juntas
             ->orderBy('deleted_at')
             ->orderBy('fechaDisolucion')
-            ->orderBy('updated_at','desc')
             ->orderBy('fechaConstitucion', 'desc')
-            ->paginate(10);
+            ->paginate(12);
 
             if($request->input('action')=='limpiar'){
                 return redirect()->route('juntas')->with([

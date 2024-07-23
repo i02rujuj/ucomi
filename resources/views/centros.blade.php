@@ -36,19 +36,19 @@ Centros
             </div>
 
             <div id="modal_add" name="modal_add" class="hidden">
-                <div class="flex my-2 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center">
+                <div class="flex my-4 gap-x-2 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center max-xs:gap-1">
                     <label for="nombre" class="block text-sm text-gray-600 w-32 max-xs:w-full">Nombre *</label>
-                    <input type="text" id="nombre" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none required">
+                    <input type="text" id="nombre" class=" centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none required">
                 </div>
 
-                <div class="flex my-2 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center">
+                <div class="flex my-4 gap-x-2 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center max-xs:gap-1">
                     <label for="direccion" class="block text-sm text-gray-600 w-32 max-xs:w-full">Direccion *</label>
-                    <input type="text" id="direccion" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required">
+                    <input type="text" id="direccion" class="centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required">
                 </div>
         
-                <div class="flex my-3 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center">
+                <div class="flex my-4 gap-x-2 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center max-xs:gap-1">
                     <label for="idTipo" class="block text-sm text-gray-600 w-32 max-xs:w-full">Tipo *</label>
-                    <select id="idTipo" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 mx-7 my-2 px-2 py-1 rounded-md outline-none required">
+                    <select id="idTipo" class="centro text-sm text-gray-600 border bg-blue-50 w-60 mx-7 px-2 py-1 rounded-md outline-none required">
                         <option value="" selected disabled>Selecciona un tipo</option>
                         @foreach ($tiposCentro as $tipo)
                             <option value="{{$tipo->id}}">{{$tipo->nombre}}</option>
@@ -56,10 +56,10 @@ Centros
                     </select>
                 </div>
 
-                <div class="flex my-2 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center">
+                <div class="flex my-4 gap-x-2 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center max-xs:gap-1">
                     <div>
                         <label for="img_logo" class="text-sm text-gray-600 w-32 max-xs:w-full max-xs:text-center">
-                            <img id="img_logo" name="img_logo" src="{{asset('img/default_image.png')}}" alt="Imagen de centro" class="mx-7 w-16 h-16 mb-1 rounded-full object-cover">  
+                            <img id="img_logo" name="img_logo" src="{{asset('img/default_image.png')}}" alt="Imagen de centro" class="mx-7 w-16 h-16 mt-2 mb-1 rounded-full object-cover">  
                         </label>
                     </div>
                     

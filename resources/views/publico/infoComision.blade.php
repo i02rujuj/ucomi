@@ -157,7 +157,7 @@
             </div>
         </div>
     @else
-        <div class="mt-32">
+        <div class="mx-20 my-32 max-sm:my-20 max-sm:mx-10">
             Actualmente no se encuentra información disponible sobre la comisión seleccionada
         </div>
     @endif

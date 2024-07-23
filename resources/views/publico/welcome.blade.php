@@ -20,8 +20,8 @@ Ucomi
                             @foreach ($centros as $centro)
                                 <button type="submit" name="centro" value="{{$centro->id}}">
                                     <div class='contenedor tooltip'>
-                                        <img src="{{ $centro->logo ? $centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="bg-white w-24 h-24 ml-1 mb-1 object-cover logo rounded-md">   
-                                        <span class="tooltiptext">{{$centro->tipo->nombre != 'Otro' ? $centro->tipo->nombre : ''}} {{$centro->nombre}}</span>
+                                        <img src="{{ $centro->logo ? $centro->logo : asset('img/default_image.png') }}" alt="{{$centro->tipo != config('constants.TIPOS_CENTRO.OTRO') ? $centro->tipo->nombre : ''}} {{$centro->nombre}}" class="bg-white w-24 h-24 ml-1 mb-1 object-cover logo rounded-md">   
+                                        <span class="tooltiptext">{{$centro->tipo != config('constants.TIPOS_CENTRO.OTRO') ? $centro->tipo->nombre : ''}} {{$centro->nombre}}</span>
                                     </div>
                                 </button>                      
                             @endforeach

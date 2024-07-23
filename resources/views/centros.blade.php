@@ -91,7 +91,7 @@ Centros
                                     </div>
 
                                     <div class="flex items-center justify-end mt-2 gap-10" >
-                                        <div>
+                                        <div class="flex flex-wrap gap-2">
                                             <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $centro->tipo->nombre }}</span>
 
                                             @if ($centro['deleted_at']!=null)    

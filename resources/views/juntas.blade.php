@@ -131,7 +131,7 @@ Juntas
                                         </div>
 
                                         <div class="flex justify-end items-center gap-10 mt-3" >
-                                            <div>
+                                            <div class="flex flex-wrap gap-2">
                                                 <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Junta</span>
                                                 @if ($junta['fechaDisolucion']==null)
                                                     <span class="text-xs bg-green-200 text-blue-900 font-semibold px-2 rounded-lg truncate">Vigente</span>

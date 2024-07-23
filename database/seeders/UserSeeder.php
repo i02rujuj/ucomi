@@ -19,12 +19,14 @@ class UserSeeder extends Seeder
                 'nombre'=>'José Luis Ávila Jiménez', 
                 'email'=>'jlavila@uco.es', 
                 'rol'=>'admin',
+                'image' => asset('img/miembrosGobierno/JoseLuisAvilaJimenez.jpg'),
             ],
             [
                 'id' => 2,
                 'nombre'=>'Javier Ruiz Jurado', 
                 'email'=>'i02rujuj@uco.es', 
                 'rol'=>'admin',
+                'image' => asset('img/miembrosGobierno/JavierRuizJurado.jpeg'),
             ],
             [
                 'id' => 3,

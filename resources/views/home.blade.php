@@ -103,7 +103,7 @@ Panel
                                                             <span class="material-icons-round scale-75">
                                                                 school
                                                             </span>
-                                                            <h2 class="ml-1">{{ $miembro->centro->nombre }}</h2>
+                                                            <h2 class="ml-1">Centro '{{ $miembro->centro->tipo->nombre }} {{ $miembro->centro->nombre }}'</h2>
                                                         </div>
                                                     </div> 
                     
@@ -242,7 +242,7 @@ Panel
                                                         <span class="material-icons-round scale-75">
                                                             send
                                                         </span>
-                                                        <h2 class="ml-1">{{ $miembro->comision->nombre }}</h2>
+                                                        <h2 class="ml-1">Comisión '{{ $miembro->comision->nombre }}'</h2>
                                                         </div>
                                                     </div>
                 
@@ -285,8 +285,9 @@ Panel
                 </div> 
         </div>
     @else
-    <div class="mx-auto p-6">
-        <img id="carousel-image" src="{{ asset('img/inicio1.png') }}" alt="Beneficio 1" class="rounded-lg w-full h-auto object-cover" />
+    <div class="flex flex-wrap justify-center items-center mx-auto py-8 gap-10">
+        <p class="text-lg text-center my-4">Actualmente no tienes ninguna representación vigente en la Universidad de Córdoba</p>
+        <img id="carousel-image" src="{{ asset('img/inicio1.png') }}" alt="Beneficio 1" class="rounded-lg md:w-2/3 h-auto object-cover" />
     </div>
     @endif
 </div>

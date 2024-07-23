@@ -40,7 +40,6 @@ function renderHTMLMiembro(response){
 
     if(response){
         $(modal_add).find("#idUsuario").val(response.usuario.id).trigger('change');
-
         $(modal_add).find("#idUsuario").prop("disabled", true);
         modal_add.querySelector('#idCentro').value=response.centro.id
         modal_add.querySelector('#idCentro').setAttribute('disabled', 'disabled')

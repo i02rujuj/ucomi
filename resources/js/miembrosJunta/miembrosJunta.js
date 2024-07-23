@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded",  (event) => {
 function renderHTMLMiembro(response){
 
     $(modal_add).find("#idUsuario").val('').trigger('change');
+    $(modal_add).find("#idUsuario").prop("disabled", false);
     modal_add.querySelector('#idJunta').value=""
     modal_add.querySelector('#idRepresentacion').value=""
     modal_add.querySelector('#fechaTomaPosesion').value=""
@@ -30,30 +31,23 @@ function renderHTMLMiembro(response){
     modal_add.querySelector('#responsable').value=0
 
     if(response){
-        let modal_edit = modal_add.cloneNode(true);
-
-        modal_edit.classList.remove('hidden')
-        modal_edit.querySelector('#user').innerHTML= `
-            <div class="flex w-full justify-center items-center">
-                <label for="usuario" class="block text-sm text-gray-600 w-36 text-right">Usuario: *</label>
-                <input class="miembro" type="hidden" id="idUsuario" value="${response.usuario.id}"/>
-                <input type="text" id="usuario" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.usuario.name}" disabled>
-            </div>`
-        modal_edit.querySelector('#idJunta').value=response.junta.id
-        modal_edit.querySelector('#idJunta').setAttribute('disabled', 'disabled')
-        modal_edit.querySelector('#idJunta').classList.add('bg-red-50')
-        modal_edit.querySelector('#idRepresentacion').value=response.idRepresentacion
-        modal_edit.querySelector('#fechaTomaPosesion').value=response.fechaTomaPosesion
-        modal_edit.querySelector('#fechaCese').value=response.fechaCese
-        modal_edit.querySelector('#responsable').value=response.responsable
+        $(modal_add).find("#idUsuario").val(response.usuario.id).trigger('change');
+        $(modal_add).find("#idUsuario").prop("disabled", true);
+        modal_add.querySelector('#idJunta').value=response.junta.id
+        modal_add.querySelector('#idJunta').setAttribute('disabled', 'disabled')
+        modal_add.querySelector('#idJunta').classList.add('bg-red-50')
+        modal_add.querySelector('#idRepresentacion').value=response.idRepresentacion
+        modal_add.querySelector('#fechaTomaPosesion').value=response.fechaTomaPosesion
+        modal_add.querySelector('#fechaCese').value=response.fechaCese
+        modal_add.querySelector('#responsable').value=response.responsable
 
         if(response.deleted_at!=null){
-            modal_edit.querySelector('#idRepresentacion').setAttribute('disabled', 'disabled')
-            modal_edit.querySelector('#fechaTomaPosesion').setAttribute('disabled', 'disabled')
-            modal_edit.querySelector('#fechaCese').setAttribute('disabled', 'disabled')
-            modal_edit.querySelector('#responsable').setAttribute('disabled', 'disabled')
-        }
-        return modal_edit        
+            $(modal_add).find("#idUsuario").prop("disabled", true);
+            modal_add.querySelector('#idRepresentacion').setAttribute('disabled', 'disabled')
+            modal_add.querySelector('#fechaTomaPosesion').setAttribute('disabled', 'disabled')
+            modal_add.querySelector('#fechaCese').setAttribute('disabled', 'disabled')
+            modal_add.querySelector('#responsable').setAttribute('disabled', 'disabled')
+        }      
     }
     else{
         modal_add.classList.remove('hidden')

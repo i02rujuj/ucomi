@@ -42,7 +42,7 @@ Miembros de Centro
                     </x-inputSelectModal>
                 </div>
 
-                <x-inputSelectModal label="Centro asociado*" id="idCentro" entidad="miembro">
+                <x-inputSelectModal label="Centros vigentes*" id="idCentro" entidad="miembro">
                     <option value="" selected hidden>Selecciona un centro</option>
                     @foreach ($centros as $centro)
                         <option value="{{$centro->id}}">{{$centro->nombre}}</option>

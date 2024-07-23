@@ -81,34 +81,29 @@ Panel
 
                     {{--GOBIERNO--}}
                     <div x-show="openTab === 0">
-                        <div class="ml-4">
+                        <div class="">
                             <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
                                 @if($miembrosGobierno->count())
                                     @foreach ($miembrosGobierno as $miembro)
-                                        <div class="card bg-white p-6 rounded-lg shadow-md">
-                                            <div class="flex gap-3">
-                                                <div class="right-part w-full max-w-max mt-1">
+                                        <div class="card bg-white p-2 rounded-lg shadow-md mt-2">
+                                            
+                                            <div class="flex justify-start text-center items-center gap-4">
+                                                <div class="right-part w-full max-w-max">
                                                     <img src="{{ $miembro->usuario->image ? $miembro->usuario->image : asset('img/default_image_profile.jpg') }}" alt="Imagen de usuario" class="shadow-black shadow-sm w-16 h-16 ml-1 mb-1 justify-self-center rounded-md object-cover">  
                                                     <img src="{{ $miembro->centro->logo ? $miembro->centro->logo : asset('img/default_image.jpg') }}" alt="Imagen de centro" class="shadow-black shadow-sm -mt-9 w-8 h-8 ml-1 mb-1 justify-self-center rounded-md ">  
                                                 </div>
-                                            
-                                                <div class="left-part truncate">
+                                                <h2 class="font-bold">{{ $miembro->representacion->nombre }}</h2>
+                                            </div>
+
+                                            <div class="flex gap-3 mt-2">
+                                                <div class="left-part">
                     
-                                                    <div class="flex font-bold truncate items-center gap-1">
-                                                        <div class="flex items-center">
-                                                            <span class="material-icons-round scale-75">
-                                                                psychology
-                                                            </span>
-                                                            <h2 class="ml-1">{{ $miembro->representacion->nombre }}</h2>
-                                                        </div>
-                                                    </div>
-                    
-                                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                                    <div class="flex text-xs text-slate-400 font-medium items-center gap-1">
                                                         <div class="flex items-center">
                                                             <span class="material-icons-round scale-75">
                                                                 school
                                                             </span>
-                                                            <h2 class="ml-1 truncate">{{ $miembro->centro->nombre }}</h2>
+                                                            <h2 class="ml-1">{{ $miembro->centro->nombre }}</h2>
                                                         </div>
                                                     </div> 
                     
@@ -117,7 +112,7 @@ Panel
                                                             <span class="material-icons-round scale-75">
                                                                 event
                                                             </span>
-                                                            <div class="fechaTomaPosesion truncate">
+                                                            <div class="fechaTomaPosesion truncate ml-1">
                     
                                                                 {{ $miembro->fecha_toma_posesion_format }} | 
                                                                 
@@ -132,7 +127,7 @@ Panel
                                                 </div>
                                             </div>
                     
-                                            <div class="flex justify-end items-center gap-2 mt-2">
+                                            <div class="flex flex-wrap justify-end items-center gap-2 mt-2">
                                                 <span class="flex items-center text-xs bg-blue-100 font-semibold px-2 rounded-lg truncate">
                                                     @if ($miembro->responsable==1)
                                                     <span class="text-sm material-icons-round text-yellow-700">
@@ -151,43 +146,38 @@ Panel
 
                     {{--JUNTA--}}
                     <div x-show="openTab === 1">
-                        <div class="ml-4">
+                        <div class="">
                             <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
                                 @if($miembrosJunta->count())
                                     @foreach ($miembrosJunta as $miembro)
-                                        <div class="card bg-white p-6 rounded-lg shadow-md">
-                                            <div class="flex gap-3">
-                                                <div class="right-part w-full max-w-max mt-1">
+                                        <div class="card bg-white p-2 rounded-lg shadow-md mt-2">
+
+                                            <div class="flex justify-start text-center items-center gap-4">
+                                                <div class="right-part w-full max-w-max">
                                                     <img src="{{ $miembro->usuario->image ? $miembro->usuario->image : asset('img/default_image_profile.jpg') }}" alt="Imagen de usuario" class="shadow-black shadow-sm w-16 h-16 ml-1 mb-1 justify-self-center rounded-md object-cover">  
                                                     <img src="{{ $miembro->junta->centro->logo ? $miembro->junta->centro->logo : asset('img/default_image.jpg') }}" alt="Imagen de centro" class="shadow-black shadow-sm -mt-9 w-8 h-8 ml-1 mb-1 justify-self-center rounded-md ">  
                                                 </div>
-                                            
-                                                <div class="left-part truncate">
+                                                <h2 class="font-bold">{{ $miembro->representacion->nombre }}</h2>
+                                            </div>                       
 
-                                                    <div class="flex font-bold truncate items-center gap-1">
-                                                        <div class="flex items-center">
-                                                            <span class="material-icons-round scale-75">
-                                                                psychology
-                                                            </span>
-                                                            <h2 class="ml-1">{{ $miembro->representacion->nombre }}</h2>
-                                                        </div>
-                                                    </div>
+                                            <div class="flex gap-3 mt-2">
+                                                <div class="left-part ">
 
-                                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                                    <div class="flex text-xs text-slate-400 font-medium items-center gap-1">
                                                         <div class="flex items-center">
                                                             <span class="material-icons-round scale-75">
                                                                 workspaces
                                                             </span>
-                                                            <h2 class="ml-1 truncate">Junta de {{ $miembro->junta->fecha_constitucion_format }}</h2>
+                                                            <h2 class="ml-1 ">Junta de {{ $miembro->junta->centro->tipo->nombre }} {{ $miembro->junta->fecha_constitucion_format }}</h2>
                                                         </div>
                                                     </div>
                 
-                                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                                    <div class="flex text-xs text-slate-400 font-medium items-center gap-1">
                                                         <div class="flex items-center">
                                                             <span class="material-icons-round scale-75">
                                                                 school
                                                             </span>
-                                                            <h2 class="ml-1 truncate">{{ $miembro->junta->centro->nombre }}</h2>
+                                                            <h2 class="ml-1">{{ $miembro->junta->centro->nombre }}</h2>
                                                         </div>
                                                     </div> 
                 
@@ -211,7 +201,7 @@ Panel
                                                 </div>
                                             </div>
                 
-                                            <div class="flex justify-end items-center gap-2 mt-2">
+                                            <div class="flex flex-wrap justify-end items-center gap-2 mt-2">
                                                 <span class="flex items-center text-xs bg-blue-100 font-semibold px-2 rounded-lg truncate">
                                                     @if ($miembro->responsable==1)
                                                     <span class="text-sm material-icons-round text-yellow-700">
@@ -230,34 +220,29 @@ Panel
 
                     {{--COMISIÓN--}}
                     <div x-show="openTab === 2">
-                        <div class="ml-4">
+                        <div class="">
                             <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
                                 @if($miembrosComision->count())
                                     @foreach ($miembrosComision as $miembro)
-                                        <div class="card bg-white p-6 rounded-lg shadow-md">
-                                            <div class="flex gap-3">
-                                                <div class="right-part w-full max-w-max mt-1">
+                                        <div class="card bg-white p-2 rounded-lg shadow-md mt-2">
+
+                                            <div class="flex justify-start text-center items-center gap-4">
+                                                <div class="right-part w-full max-w-max">
                                                     <img src="{{ $miembro->usuario->image ? $miembro->usuario->image : asset('img/default_image_profile.jpg') }}" alt="Imagen de usuario" class="shadow-black shadow-sm w-16 h-16 ml-1 mb-1 justify-self-center rounded-md object-cover">  
                                                     <img src="{{ $miembro->comision->junta->centro->logo ? $miembro->comision->junta->centro->logo : asset('img/default_image.jpg') }}" alt="Imagen de centro" class="shadow-black shadow-sm -mt-9 w-8 h-8 ml-1 mb-1 justify-self-center rounded-md ">  
                                                 </div>
-                                            
-                                                <div class="left-part truncate">
+                                                <h2 class="font-bold">{{ $miembro->representacion->nombre }}</h2>
+                                            </div>
 
-                                                    <div class="flex font-bold truncate items-center gap-1">
-                                                        <div class="flex items-center">
-                                                            <span class="material-icons-round scale-75">
-                                                                psychology
-                                                            </span>
-                                                            <h2 class="ml-1">{{ $miembro->representacion->nombre }}</h2>
-                                                        </div>
-                                                    </div>
-                
-                                                    <div class="flex font-bold truncate items-center gap-1">
-                                                        <div class="flex items-center">
+                                            <div class="flex gap-3 mt-2">                                            
+                                                <div class="left-part w-full">
+               
+                                                    <div class="flex items-center gap-1 text-xs text-slate-400 font-medium">
+                                                        <div class="flex w-full items-center">
                                                         <span class="material-icons-round scale-75">
                                                             send
                                                         </span>
-                                                        <h2 class="ml-1 truncate">{{ $miembro->comision->nombre }}</h2>
+                                                        <h2 class="ml-1">{{ $miembro->comision->nombre }}</h2>
                                                         </div>
                                                     </div>
                 
@@ -266,7 +251,7 @@ Panel
                                                             <span class="material-icons-round scale-75">
                                                                 event
                                                             </span>
-                                                            <div class="fechaTomaPosesion truncate">
+                                                            <div class="fechaTomaPosesion truncate ml-1">
                 
                                                                 {{ $miembro->fecha_toma_posesion_format }} | 
                                                                 
@@ -281,7 +266,7 @@ Panel
                                                 </div>
                                             </div>
                 
-                                            <div class="flex justify-end items-center gap-2 mt-2">
+                                            <div class="flex flex-wrap justify-end items-center gap-2 mt-2">
                                                 <span class="flex items-center text-xs bg-blue-100 font-semibold px-2 rounded-lg truncate">
                                                     @if ($miembro->responsable==1)
                                                         <span class="text-sm material-icons-round text-yellow-700">

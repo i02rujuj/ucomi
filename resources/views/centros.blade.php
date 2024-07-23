@@ -35,60 +35,72 @@ Centros
                 @endif
             </div>
 
-            <div id="modal_add" name="modal_add" class="hidden">
-                <div class="flex my-4 gap-x-2 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center max-xs:gap-1">
-                    <label for="nombre" class="block text-sm text-gray-600 w-32 max-xs:w-full">Nombre *</label>
-                    <input type="text" id="nombre" class=" centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none required">
+            <div id="modal_add" name="modal_add" class="hidden w-full max-w-lg mt-4">
+                <div class="sm:flex sm:items-center mb-6">
+                    <div class="sm:w-1/4">
+                        <label for="nombre" class="block text-sm text-gray-600 sm:text-right mb-1 sm:mb-0 pr-4">Nombre *</label>
+                    </div>
+                    <div class="sm:w-3/4">
+                        <input type="text" id="nombre" class="centro text-sm text-gray-600 border bg-blue-50 rounded-md appearance-none border-gray-200 w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
+                    </div>
                 </div>
 
-                <div class="flex my-4 gap-x-2 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center max-xs:gap-1">
-                    <label for="direccion" class="block text-sm text-gray-600 w-32 max-xs:w-full">Direccion *</label>
-                    <input type="text" id="direccion" class="centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required">
+                <div class="sm:flex sm:items-center mb-6">
+                    <div class="sm:w-1/4">
+                        <label for="direccion" class="block text-sm text-gray-600 sm:text-right mb-1 sm:mb-0 pr-4">Direccion *</label>
+                    </div>
+                    <div class="sm:w-3/4">
+                        <input type="text" id="direccion" class="centro text-sm text-gray-600 border bg-blue-50 rounded-md appearance-none border-gray-200 w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
+                    </div>
                 </div>
         
-                <div class="flex my-4 gap-x-2 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center max-xs:gap-1">
-                    <label for="idTipo" class="block text-sm text-gray-600 w-32 max-xs:w-full">Tipo *</label>
-                    <select id="idTipo" class="centro text-sm text-gray-600 border bg-blue-50 w-60 mx-7 px-2 py-1 rounded-md outline-none required">
-                        <option value="" selected disabled>Selecciona un tipo</option>
-                        @foreach ($tiposCentro as $tipo)
-                            <option value="{{$tipo->id}}">{{$tipo->nombre}}</option>
-                        @endforeach
-                    </select>
+                <div class="sm:flex sm:items-center mb-2">
+                    <div class="sm:w-1/4">
+                        <label for="idTipo" class="block text-sm text-gray-600 sm:text-right mb-1 sm:mb-0 pr-4">Tipo *</label>
+                    </div>
+                    <div class="sm:w-3/4">
+                        <select id="idTipo" class="centro text-sm text-gray-600 border bg-blue-50 rounded-md appearance-none border-gray-200 w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
+                            <option value="" selected disabled>Selecciona un tipo</option>
+                            @foreach ($tiposCentro as $tipo)
+                                <option value="{{$tipo->id}}">{{$tipo->nombre}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
 
-                <div class="flex my-4 gap-x-2 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center max-xs:gap-1">
-                    <div>
-                        <label for="img_logo" class="text-sm text-gray-600 w-32 max-xs:w-full max-xs:text-center">
-                            <img id="img_logo" name="img_logo" src="{{asset('img/default_image.png')}}" alt="Imagen de centro" class="mx-7 w-16 h-16 mt-2 mb-1 rounded-full object-cover">  
+                <div class="flex gap-x-4 justify-center items-center flex-wrap">
+                    <div class="">
+                        <label for="img_logo" class="block text-sm text-gray-600">
+                            <img id="img_logo" name="img_logo" src="{{asset('img/default_image.png')}}" alt="Imagen de centro" class="w-16 h-16 mt-2 mb-1 rounded-full object-cover">  
                         </label>
                     </div>
-                    
-                    <input id="logo" name="logo" type="file" class="centro w-60 text-sm text-gray-600 border bg-blue-50 rounded-md mx-7 my-2 px-2 py-1 outline-none" autocomplete="off" />
+                    <div class="">
+                        <input id="logo" name="logo" type="file" class="centro text-sm text-gray-600 border bg-blue-50 rounded-md mt-2 py-1 outline-none" />
+                    </div>
                 </div>      
             </div>
 
             <hr class="my-2 border-t border-gray-300" />
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
+            <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
 
                 @if($centros && $centros[0])
                     @foreach ($centros as $centro)
                         <div id="btn-editar-centro" data-centro-id="{{ $centro['id'] }}" class="card bg-white p-4 rounded-lg shadow-md cursor-pointer">
-                            <div class="flex items-center">
-                                <div class="right-part w-full max-w-max">
-                                    <img src="{{ $centro->logo ? $centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
+                            
+                            <div class="flex justify-center text-center items-center ">
+                                <h2 class="md:truncate font-bold">{{ $centro['nombre'] }}</h2>
+                            </div>
+
+                            <hr class="my-2">
+
+                            <div class="flex items-center left-part w-full pl-3 z-10 gap-3">
+                                <div class="w-full max-w-max">
+                                    <img src="{{ $centro->logo ? $centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-12 h-12 ml-1 mb-1 justify-self-center rounded-full object-cover">  
                                 </div>
 
-                                <div class="left-part truncate w-full pl-3 z-10">
-                                    <div class="flex items-start">
-                                        <span class="material-icons-round scale-75">
-                                            school
-                                        </span>
-                                        &nbsp;
-                                        <h2 class="text-base font-bold truncate">{{ $centro['nombre'] }}</h2>
-                                    </div>
-
-                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1">
+                                <div class="w-full">  
+                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1 mt-3">
                                         <div class="truncate flex items-center">
                                             <span class="material-icons-round scale-75">
                                                 place
@@ -99,7 +111,7 @@ Centros
                                         </div>
                                     </div>
 
-                                    <div class="flex items-center justify-between gap-2 mt-2" >
+                                    <div class="flex items-center justify-end mt-2 gap-10" >
                                         <div>
                                             <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $centro->tipo->nombre }}</span>
 

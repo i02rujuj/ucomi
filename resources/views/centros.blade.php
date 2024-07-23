@@ -37,10 +37,10 @@ Centros
 
             <div id="modal_add" name="modal_add" class="hidden w-full max-w-lg mt-4">
 
-                <x-inputModal label="Nombre: *" type="text" id="nombre" entidad="centro"></x-inputModal>
-                <x-inputModal label="Dirección: *" type="text" id="direccion" entidad="centro"></x-inputModal>
+                <x-inputModal label="Nombre*" type="text" id="nombre" entidad="centro"></x-inputModal>
+                <x-inputModal label="Dirección*" type="text" id="direccion" entidad="centro"></x-inputModal>
                 
-                <x-inputSelectModal label="Tipo: *" id="idTipo" entidad="centro">
+                <x-inputSelectModal label="Tipo*" id="idTipo" entidad="centro">
                     <option value='' selected disabled>Selecciona un tipo</option>
                     @foreach ($tiposCentro as $tipo)
                         <option value='{{$tipo->id}}'>{{$tipo->nombre}}</option>

@@ -36,21 +36,16 @@ Juntas
             </div>
 
             <div id="modal_add" name="modal_add" class="hidden mt-4">
-                <x-inputSelectModal label="Centro asociado: *" id="idCentro" entidad="junta">
+                <x-inputSelectModal label="Centro asociado*" id="idCentro" entidad="junta">
                     <option value="" selected disabled>Selecciona un centro</option>
                     @foreach ($centros as $centro)
                         <option value="{{$centro->id}}">{{$centro->nombre}}</option>
                     @endforeach
                 </x-inputSelectModal>
 
-                <div class="flex flex-wrap justify-center">
-                    <div class="w-1/2 max-sm:pr-4">
-                        <x-inputDateModal label="Constitución: *" type="date" id="fechaConstitucion" entidad="junta"></x-inputDateModal>
-                    </div>
-                    <div class="w-1/2">
-                        <x-inputDateModal label="Disolución: *" type="date" id="fechaDisolucion" entidad="junta"></x-inputDateModal> 
-                    </div>
-                </div>
+                <x-inputDateModal label="Fecha Constitución*" type="date" id="fechaConstitucion" entidad="junta"></x-inputDateModal>
+                <x-inputDateModal label="Fecha Disolución*" type="date" id="fechaDisolucion" entidad="junta"></x-inputDateModal> 
+
             </div>
 
             <hr class="my-2 border-t border-gray-300" />

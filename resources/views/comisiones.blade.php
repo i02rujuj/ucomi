@@ -36,24 +36,19 @@ Comisiones
 
             <div id="modal_add" name="modal_add" class="hidden mt-4">
 
-                <x-inputModal label="Nombre: *" type="text" id="nombre" entidad="comision"></x-inputModal>
-                <x-inputModal label="Descripción: *" type="text" id="descripcion" entidad="comision"></x-inputModal>
+                <x-inputModal label="Nombre*" type="text" id="nombre" entidad="comision"></x-inputModal>
+                <x-inputModal label="Descripción*" type="text" id="descripcion" entidad="comision"></x-inputModal>
 
-                <x-inputSelectModal label="Junta asociada: *" id="idJunta" entidad="comision">
+                <x-inputSelectModal label="Junta asociada*" id="idJunta" entidad="comision">
                     <option value="" selected disabled>Selecciona una junta</option>
                     @foreach ($juntas as $junta)
                         <option value="{{$junta->id}}">{{$junta->fecha_constitucion_format}} | {{$junta->centro->nombre}}</option>
                     @endforeach
                 </x-inputSelectModal>
 
-                <div class="flex flex-wrap justify-center">
-                    <div class="w-1/2 max-sm:pr-4">
-                        <x-inputDateModal label="Constitución: *" type="date" id="fechaConstitucion" entidad="comision"></x-inputDateModal>
-                    </div>
-                    <div class="w-1/2">
-                        <x-inputDateModal label="Disolución: *" type="date" id="fechaDisolucion" entidad="comision"></x-inputDateModal> 
-                    </div>
-                </div> 
+                <x-inputDateModal label="Constitución*" type="date" id="fechaConstitucion" entidad="comision"></x-inputDateModal>
+                <x-inputDateModal label="Disolución*" type="date" id="fechaDisolucion" entidad="comision"></x-inputDateModal> 
+
             </div>
 
             <hr class="my-4 border-t border-gray-300" />

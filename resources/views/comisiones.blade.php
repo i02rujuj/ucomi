@@ -46,8 +46,8 @@ Comisiones
                     @endforeach
                 </x-inputSelectModal>
 
-                <x-inputDateModal label="Constitución*" type="date" id="fechaConstitucion" entidad="comision"></x-inputDateModal>
-                <x-inputDateModal label="Disolución*" type="date" id="fechaDisolucion" entidad="comision"></x-inputDateModal> 
+                <x-inputDateModal label="Constitución*" id="fechaConstitucion" entidad="comision"></x-inputDateModal>
+                <x-inputDateModal label="Disolución*" id="fechaDisolucion" entidad="comision"></x-inputDateModal> 
 
             </div>
 

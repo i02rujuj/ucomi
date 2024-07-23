@@ -25,6 +25,7 @@ function renderHTMLMiembro(response){
     $(modal_add).find("#idUsuario").val('').trigger('change');
     $(modal_add).find("#idUsuario").prop("disabled", false);
     modal_add.querySelector('#idJunta').value=""
+    modal_add.querySelector('#idJunta').removeAttribute('disabled')
     modal_add.querySelector('#idRepresentacion').value=""
     modal_add.querySelector('#fechaTomaPosesion').value=""
     modal_add.querySelector('#fechaCese').value=""

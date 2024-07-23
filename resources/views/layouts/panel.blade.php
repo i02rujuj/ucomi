@@ -69,7 +69,6 @@
                             <span class="material-icons-round text-slate-600 ml-4 mr-1">
                                 account_balance
                             </span>
-                            &nbsp;
                             Centros
                         </a>
                     </li>
@@ -81,7 +80,6 @@
                             <span class="material-icons-round text-slate-600 ml-4 mr-1">
                                 workspaces
                             </span>
-                            &nbsp;
                             Juntas
                         </a>
                     </li> 
@@ -93,7 +91,6 @@
                             <span class="material-icons-round text-slate-600 ml-4 mr-1">
                                 send
                             </span>
-                            &nbsp;
                             Comisiones
                         </a>
                     </li>
@@ -104,8 +101,6 @@
                         <span class="material-icons-round text-slate-600 ml-4 mr-2">
                             manage_accounts
                         </span>
-                        
-                        &nbsp;
                             Miembros
 
                         <span class="material-icons-round text-slate-600 ml-2">
@@ -121,7 +116,6 @@
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
                                     manage_accounts
                                 </span>
-                                &nbsp;
                                 Gobierno
                             </a>
                         </li>
@@ -133,7 +127,6 @@
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
                                     manage_accounts
                                 </span>
-                                &nbsp;
                                 Junta
                             </a>
                         </li>
@@ -145,7 +138,6 @@
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
                                     manage_accounts
                                 </span>
-                                &nbsp;
                                 Comisión
                             </a>
                         </li>
@@ -160,8 +152,6 @@
                         <span class="material-icons-round text-slate-600 ml-4 mr-2">
                             event
                         </span>
-                        
-                        &nbsp;
                             Convocatorias
 
                         <span class="material-icons-round text-slate-600 ml-2">
@@ -178,7 +168,6 @@
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
                                     pending_actions
                                 </span>
-                                &nbsp;
                                 Junta
                             </a>
                         </li>
@@ -192,7 +181,6 @@
                                 <span class="material-icons-round text-slate-600 ml-4 mr-1">
                                     schedule_send
                                 </span>
-                                &nbsp;
                                 Comisión
                             </a>
                         </li>
@@ -208,7 +196,6 @@
                             <span class="material-icons-round text-slate-600 ml-4 mr-2">
                                 account_box
                             </span>
-                            &nbsp;
                             Perfil
                         </a>
                     </li>
@@ -218,7 +205,6 @@
                             <span class="material-icons-round text-slate-600 ml-4 mr-2">
                                 picture_as_pdf
                             </span>
-                            &nbsp;
                             Certificados
                         </a>
                     </li>
@@ -228,7 +214,6 @@
                             <span class="material-icons-round text-red-600 ml-4 mr-2">
                                 logout
                             </span>
-                            &nbsp;
                             Cerrar Sesión
                         </a>
                     </li>

@@ -65,8 +65,8 @@ Miembros de Comisión
                     </x-inputSelectModal>
                 </div>
 
-                <x-inputDateModal label="Toma Posesión*" type="date" id="fechaTomaPosesion" entidad="miembro"></x-inputDateModal>
-                <x-inputDateModal label="Fecha Cese" type="date" id="fechaCese" entidad="miembro"></x-inputDateModal> 
+                <x-inputDateModal label="Toma Posesión*" id="fechaTomaPosesion" entidad="miembro"></x-inputDateModal>
+                <x-inputDateModal label="Fecha Cese" id="fechaCese" entidad="miembro"></x-inputDateModal> 
                 
                 <x-inputSelectModal label="Responsable:" id="responsable" entidad="miembro">
                     <option class="text-center" value="0">No</option>
@@ -106,8 +106,7 @@ Miembros de Comisión
                                         <span class="material-icons-round scale-75">
                                             send
                                         </span>
-                                        &nbsp;
-                                        <h2 class="truncate">{{ $miembro->comision->nombre }}</h2>
+                                        <h2 class="ml-1 truncate">{{ $miembro->comision->nombre }}</h2>
                                         </div>
                                     </div>
 
@@ -117,7 +116,7 @@ Miembros de Comisión
                                             <span class="material-icons-round scale-75">
                                                 event
                                             </span>
-                                            <div class="fechaTomaPosesion truncate">
+                                            <div class="ml-1 fechaTomaPosesion truncate">
 
                                                 {{ $miembro->fecha_toma_posesion_format }} | 
                                                 

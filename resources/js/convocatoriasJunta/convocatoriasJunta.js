@@ -205,13 +205,13 @@ const renderHTMLConvocados = (convocados, tipo) => {
 
         let html =`
             <div class="relative overflow-x-auto">
-            <table class="w-full text-md text-left rtl:text-left text-gray-500 dark:text-gray-400">
+            <table class="w-full text-md max-md:text-xs text-left rtl:text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-md text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-1 py-1">
                             Nombre
                         </th>
-                        <th scope="col" class="px-1 py-1">
+                        <th scope="col" class="px-1 py-1 max-md:hidden">
                             ${tipo=='notificados'? 'Email' : 'Representación'}
                         </th>
                         <th scope="col" class="px-1 py-1 text-center">
@@ -239,13 +239,13 @@ const renderHTMLConvocados = (convocados, tipo) => {
             switch(tipo){
                 case 'notificados':
                     let miembro_td_email = document.createElement("td");
-                    miembro_td_email.classList.add('px-1', 'py-1');
+                    miembro_td_email.classList.add('px-1', 'py-1', 'max-md:hidden');
                     miembro_td_email.innerHTML = miembro.usuario.email
                     miembro_tr.appendChild(miembro_td_email);      
                     break;
                 case 'asistentes':
                     let miembro_td_representacion = document.createElement("td");
-                    miembro_td_representacion.classList.add('px-1', 'py-1');
+                    miembro_td_representacion.classList.add('px-1', 'py-1', 'max-md:hidden');
                     miembro_td_representacion.innerHTML = miembro.usuario.miembros_junta[0].representacion.nombre
                     miembro_tr.appendChild(miembro_td_representacion);
                     break;

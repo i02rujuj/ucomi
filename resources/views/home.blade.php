@@ -108,8 +108,7 @@ Panel
                                                             <span class="material-icons-round scale-75">
                                                                 school
                                                             </span>
-                                                            &nbsp;
-                                                            <h2 class="truncate">{{ $miembro->centro->nombre }}</h2>
+                                                            <h2 class="ml-1 truncate">{{ $miembro->centro->nombre }}</h2>
                                                         </div>
                                                     </div> 
                     
@@ -179,8 +178,7 @@ Panel
                                                             <span class="material-icons-round scale-75">
                                                                 workspaces
                                                             </span>
-                                                            &nbsp;
-                                                            <h2 class="truncate">Junta de {{ $miembro->junta->fecha_constitucion_format }}</h2>
+                                                            <h2 class="ml-1 truncate">Junta de {{ $miembro->junta->fecha_constitucion_format }}</h2>
                                                         </div>
                                                     </div>
                 
@@ -189,8 +187,7 @@ Panel
                                                             <span class="material-icons-round scale-75">
                                                                 school
                                                             </span>
-                                                            &nbsp;
-                                                            <h2 class="truncate">{{ $miembro->junta->centro->nombre }}</h2>
+                                                            <h2 class="ml-1 truncate">{{ $miembro->junta->centro->nombre }}</h2>
                                                         </div>
                                                     </div> 
                 
@@ -260,8 +257,7 @@ Panel
                                                         <span class="material-icons-round scale-75">
                                                             send
                                                         </span>
-                                                        &nbsp;
-                                                        <h2 class="truncate">{{ $miembro->comision->nombre }}</h2>
+                                                        <h2 class="ml-1 truncate">{{ $miembro->comision->nombre }}</h2>
                                                         </div>
                                                     </div>
                 

@@ -57,8 +57,8 @@ Miembros de Junta
                     @endforeach
                 </x-inputSelectModal>
 
-                <x-inputDateModal label="Toma Posesión*" type="date" id="fechaTomaPosesion" entidad="miembro"></x-inputDateModal>
-                <x-inputDateModal label="Fecha Cese" type="date" id="fechaCese" entidad="miembro"></x-inputDateModal> 
+                <x-inputDateModal label="Toma Posesión*" id="fechaTomaPosesion" entidad="miembro"></x-inputDateModal>
+                <x-inputDateModal label="Fecha Cese" id="fechaCese" entidad="miembro"></x-inputDateModal> 
                 
                 <x-inputSelectModal label="Responsable:" id="responsable" entidad="miembro">
                     <option class="text-center" value="0">No</option>
@@ -98,8 +98,7 @@ Miembros de Junta
                                             <span class="material-icons-round scale-75">
                                                 school
                                             </span>
-                                            &nbsp;
-                                            <h2 class="truncate">{{ $miembro->junta->centro->nombre }}</h2>
+                                            <h2 class="ml-1 truncate">{{ $miembro->junta->centro->nombre }}</h2>
                                         </div>
                                     </div> 
 
@@ -108,8 +107,7 @@ Miembros de Junta
                                             <span class="material-icons-round scale-75">
                                                 event
                                             </span>
-                                            &nbsp;
-                                            <h2 class="truncate">Junta de {{ $miembro->junta->fecha_constitucion_format }}</h2>
+                                            <h2 class="ml-1 truncate">Junta de {{ $miembro->junta->fecha_constitucion_format }}</h2>
                                         </div>
                                     </div> 
 

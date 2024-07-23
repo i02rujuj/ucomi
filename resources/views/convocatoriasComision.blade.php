@@ -121,8 +121,7 @@ Convocatorias Comisión
                                         <span class="material-icons-round scale-75">
                                             send
                                         </span>
-                                        &nbsp;
-                                        <h2 class="font-medium truncate">{{ $convocatoria->comision->nombre }} </h2>
+                                        <h2 class="ml-1 font-medium truncate">{{ $convocatoria->comision->nombre }} </h2>
                                     </div>
                                     
                                     <div class="flex justify-end items-center gap-2 mt-3" >

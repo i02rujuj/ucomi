@@ -14,6 +14,18 @@
             "dest": "/public/img/"
         },
         {
+            "src": "/img/centros/(.*)",
+            "dest": "/public/img/centros/"
+        },
+        {
+            "src": "/img/miembrosGobierno/(.*)",
+            "dest": "/public/img/miembrosGobierno"
+        },
+        {
+            "src": "/actas/(.*)",
+            "dest": "/public/actas"
+        },
+        {
             "src": "/js/(.*)",
             "dest": "/public/js/"
         },

@@ -36,42 +36,21 @@ Centros
             </div>
 
             <div id="modal_add" name="modal_add" class="hidden w-full max-w-lg mt-4">
-                <div class="sm:flex sm:items-center mb-6">
-                    <div class="sm:w-1/4">
-                        <label for="nombre" class="block text-sm text-gray-600 sm:text-right mb-1 sm:mb-0 pr-4">Nombre *</label>
-                    </div>
-                    <div class="sm:w-3/4">
-                        <input type="text" id="nombre" class="centro text-sm text-gray-600 border bg-blue-50 rounded-md appearance-none border-gray-200 w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
-                    </div>
-                </div>
 
-                <div class="sm:flex sm:items-center mb-6">
-                    <div class="sm:w-1/4">
-                        <label for="direccion" class="block text-sm text-gray-600 sm:text-right mb-1 sm:mb-0 pr-4">Direccion *</label>
-                    </div>
-                    <div class="sm:w-3/4">
-                        <input type="text" id="direccion" class="centro text-sm text-gray-600 border bg-blue-50 rounded-md appearance-none border-gray-200 w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
-                    </div>
-                </div>
-        
-                <div class="sm:flex sm:items-center mb-2">
-                    <div class="sm:w-1/4">
-                        <label for="idTipo" class="block text-sm text-gray-600 sm:text-right mb-1 sm:mb-0 pr-4">Tipo *</label>
-                    </div>
-                    <div class="sm:w-3/4">
-                        <select id="idTipo" class="centro text-sm text-gray-600 border bg-blue-50 rounded-md appearance-none border-gray-200 w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
-                            <option value="" selected disabled>Selecciona un tipo</option>
-                            @foreach ($tiposCentro as $tipo)
-                                <option value="{{$tipo->id}}">{{$tipo->nombre}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
+                <x-inputModal label="Nombre: *" type="text" id="nombre" entidad="centro"></x-inputModal>
+                <x-inputModal label="Dirección: *" type="text" id="direccion" entidad="centro"></x-inputModal>
+                
+                <x-inputSelectModal label="Tipo: *" id="idTipo" entidad="centro">
+                    <option value='' selected disabled>Selecciona un tipo</option>
+                    @foreach ($tiposCentro as $tipo)
+                        <option value='{{$tipo->id}}'>{{$tipo->nombre}}</option>
+                    @endforeach
+                </x-inputSelectModal>     
 
                 <div class="flex gap-x-4 justify-center items-center flex-wrap">
                     <div class="">
                         <label for="img_logo" class="block text-sm text-gray-600">
-                            <img id="img_logo" name="img_logo" src="{{asset('img/default_image.png')}}" alt="Imagen de centro" class="w-16 h-16 mt-2 mb-1 rounded-full object-cover">  
+                            <img id="img_logo" name="img_logo" src="{{asset('img/default_image.png')}}" alt="Imagen de centro" class="w-16 h-16 mb-1 rounded-full object-cover">  
                         </label>
                     </div>
                     <div class="">
@@ -96,11 +75,11 @@ Centros
 
                             <div class="flex items-center left-part w-full pl-3 z-10 gap-3">
                                 <div class="w-full max-w-max">
-                                    <img src="{{ $centro->logo ? $centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-12 h-12 ml-1 mb-1 justify-self-center rounded-full object-cover">  
+                                    <img src="{{ $centro->logo ? $centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-14 h-14 ml-1 mb-1 justify-self-center rounded-full object-cover">  
                                 </div>
 
                                 <div class="w-full">  
-                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1 mt-3">
+                                    <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1 my-3">
                                         <div class="truncate flex items-center">
                                             <span class="material-icons-round scale-75">
                                                 place

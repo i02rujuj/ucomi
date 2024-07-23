@@ -8,7 +8,7 @@
 
     <div class="flex divide-x mb-8 mt-24 items-center justify-evenly w-full">
         <div class=" px-10">
-            <img src="{{ asset('img/inicio1.png') }}" alt="LogoUCO" class="rounded-lg w-60 h-28 object-cover transition ease-in-out hover:scale-105" />
+            <img src="{{ asset('img/inicio1.png') }}" alt="LogoUCO" class="rounded-lg w-60 h-28 max-sm:w-full max-sm:h-full transition ease-in-out hover:scale-105" />
         </div>
 
         <div class="max-lg:hidden px-10 lg:text-2xl text-gray-600 text-center">
@@ -21,7 +21,7 @@
         </div>
 
         <div class="px-10">
-            <img src="{{$comision->junta->centro->logo}}" alt="LogoCentro" class="w-28 h-28 rounded-lg object-cover transition ease-in-out hover:scale-105" />
+            <img src="{{$comision->junta->centro->logo}}" alt="LogoCentro" class="w-28 h-28 rounded-lg max-sm:w-full max-sm:h-full transition ease-in-out hover:scale-105" />
         </div>
     </div>
 
@@ -79,20 +79,20 @@
 
                 {{--INFORMACIÓN--}}
                 <div x-show="openTab === 0">
-                    <div class="ml-4 text-lg">
-                        <div class="ml-4 font-semibold">
+                    <div class="mx-2 text-lg">
+                        <div class="font-semibold text-justify mb-2">
                             Comisión de @if($comision!=null) {{$comision->nombre}} @endif
                         </div>
-                        <div class="ml-4">
+                        <div class="text-justify">
                             Fecha constitución: {{$comision->fechaConstitucion}}
                         </div>
-                        <div class="ml-4">
+                        <div class="text-justify">
                             Pertenece a la Junta de @if($comision->junta->centro->idTipo!=3) {{$comision->junta->centro->tipo->nombre}} @endif {{$comision->junta->centro->nombre}} con fecha de constitución {{$comision->junta->fechaConstitucion}}
                         </div>
 
-                        <hr class="mt-4">
+                        <hr class="my-4">
 
-                        <div class="ml-4 mt-2">
+                        <div class="mt-2 text-justify">
                             {{$comision->descripcion}}
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                 {{--COMPOSICIÓN--}}
                 <div x-show="openTab === 1">
 
-                    <div class="ml-4 mb-3">
+                    <div class="mx-2 mb-3">
                         <table class="w-full text-md text-left rtl:text-right text-gray-700 dark:text-gray-500">
                             <thead class="text-md text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
@@ -141,9 +141,9 @@
 
                 {{--ACTAS--}}
                 <div x-show="openTab === 2">
-                    <div class="ml-4 mt-5 text-lg">                          
+                    <div class="mx-2 mt-5 text-lg">                          
                         @foreach ($comision->convocatorias as $convocatoria)
-                        <div class="ml-4 mt-1">
+                        <div class="mt-1">
                             <button id="btn-show-acta" data-acta="{{$convocatoria->acta}}" class="rounded-md hover:text-white hover:bg-gray-700 px-2">    
                                 <span class="material-icons-round scale-75">
                                     picture_as_pdf

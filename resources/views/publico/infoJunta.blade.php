@@ -6,9 +6,9 @@
 
 @section('contentTop')
 
-    <div class="flex divide-x mb-8 mt-24 items-center justify-evenly w-full">
+    <div class="flex divide-x mb-8 mt-24 items-center justify-evenly w-full px-8">
         <div class="px-10 ">
-            <img src="{{ asset('img/inicio1.png') }}" alt="LogoUCO" class="rounded-lg w-60 h-28 object-cover transition ease-in-out hover:scale-105" />
+            <img src="{{ asset('img/inicio1.png') }}" alt="LogoUCO" class="rounded-lg w-60 h-28 max-sm:w-full max-sm:h-full transition ease-in-out hover:scale-105" />
         </div>
 
         <div class="max-lg:hidden px-10 lg:text-2xl text-gray-600 text-center">
@@ -16,7 +16,7 @@
         </div>
 
         <div class="px-10">
-            <img src="{{$centro->logo}}" alt="LogoCentro" class="w-28 h-28 rounded-lg object-cover transition ease-in-out hover:scale-105" />
+            <img src="{{$centro->logo}}" alt="LogoCentro" class="w-28 h-28 max-sm:w-full max-sm:h-full rounded-lg transition ease-in-out hover:scale-105" />
         </div>
     </div>
 
@@ -87,21 +87,21 @@
 
                 {{--INFORMACIÓN--}}
                 <div x-show="openTab === 0">
-                    <div class="ml-4 text-lg">
-                        <div class="ml-4 mt-2 font-semibold">
+                    <div class="mx-2 text-lg">
+                        <div class="mt-2 font-semibold">
                             Junta de @if($junta->centro->idTipo!=config('constants.TIPOS_CENTRO.OTRO')) {{$junta->centro->tipo->nombre}} @endif {{$junta->centro->nombre}}
                         </div>
-                        <div class="ml-4 mt-2">
+                        <div class="mt-2">
                             - Fecha constitución: {{$junta->fechaConstitucion}}
                         </div>
 
-                        <hr class="mt-4">
+                        <hr class="my-4">
 
                         <div class="ml-4 mt-2 font-semibold">
                             Funciones de la Junta de centro
                         </div>
 
-                        <div class="ml-4 mt-2">
+                        <div class="mt-2 text-justify">
                             <ol>
                                 <li>1. Elaborar su Reglamento de organización y funcionamiento y aprobar los Reglamentos de Junta de Centro de conformidad con los presentes Estatutos.
                                 <li>2. Distribuir los fondos asignados a la Facultad o Escuela y controlar la ejecución del gasto correspondiente.
@@ -126,7 +126,7 @@
 
                 {{--EQUIPO GOBIERNO--}}
                 <div x-show="openTab === 1">
-                    <div class="ml-4">
+                    <div class="mx-2">
                         <div class="mb-3">
                             <div class="text-md font-bold">
                                 Director/a
@@ -142,8 +142,8 @@
                                     </div>
                                 @endif
                                 @if ($miembro->cargo)
-                                     <div class="text-sm font-semibold">
-                                        <pre>    {{$miembro->cargo}}</pre>
+                                     <div class="ml-6 text-sm font-semibold">
+                                        {{$miembro->cargo}}
                                     </div>
                                 @endif       
                             @endforeach
@@ -164,8 +164,8 @@
                                     </div>
                                 @endif  
                                 @if ($miembro->cargo)
-                                    <div class="text-sm font-semibold">
-                                        <pre>    {{$miembro->cargo}}</pre>
+                                    <div class="ml-6 text-sm font-semibold">
+                                        {{$miembro->cargo}}
                                     </div>
                                 @endif                     
                             @endforeach
@@ -186,8 +186,8 @@
                                     </div>
                                 @endif 
                                 @if ($miembro->cargo)
-                                    <div class="text-sm font-semibold">
-                                        <pre>    {{$miembro->cargo}}</pre>
+                                    <div class="ml-6 text-sm font-semibold">
+                                        {{$miembro->cargo}}
                                     </div>
                                 @endif           
                             @endforeach
@@ -208,8 +208,8 @@
                                     </div>
                                 @endif    
                                 @if ($miembro->cargo)
-                                    <div class="text-sm font-semibold">
-                                        <pre>    {{$miembro->cargo}}</pre>
+                                    <div class="ml-6 text-sm font-semibold">
+                                        {{$miembro->cargo}}
                                     </div>
                                 @endif                   
                             @endforeach                           
@@ -219,7 +219,7 @@
 
                 {{--COMPOSICIÓN--}}
                 <div x-show="openTab === 2">
-                    <div class="ml-4">
+                    <div class="mx-2">
                         <div class="mb-3">
                             <div class="text-md font-bold">
                                 Director/a
@@ -355,9 +355,9 @@
 
                 {{--ACTAS--}}
                 <div x-show="openTab === 3">
-                    <div class="ml-4 mt-5 text-lg">  
+                    <div class="mx-2 mt-5 text-lg">  
                         @foreach ($junta->convocatorias as $convocatoria)
-                            <div class="ml-4 mt-1">
+                            <div class="mt-1">
                                 <button id="btn-show-acta" data-acta="{{$convocatoria->acta}}" class="rounded-md hover:text-white hover:bg-gray-700 px-2">    
                                     <span class="material-icons-round scale-75">
                                         picture_as_pdf
@@ -371,11 +371,11 @@
 
                 {{--COMISIONES--}}
                 <div x-show="openTab === 4">
-                    <div class="ml-4 mt-5 text-lg"> 
+                    <div class="mx-2 mt-5 text-lg"> 
                         <form action="{{ route('infoComision') }}" method="GET">                         
                             @foreach ($junta->comisiones as $comision)
-                            <div class="ml-4 mt-1">
-                                <button type="submit" name="comision" value="{{$comision->id}}" class="flex gap-2 rounded-md hover:text-white hover:bg-gray-700 px-2">    
+                            <div class="mt-1">
+                                <button type="submit" name="comision" value="{{$comision->id}}" class="text-left rounded-md hover:text-white hover:bg-gray-700 px-2">    
                                     <span class="material-icons-round scale-75">
                                         send
                                     </span>

@@ -205,17 +205,17 @@ const renderHTMLConvocados = (convocados, tipo) => {
 
         let html =`
             <div class="relative overflow-x-auto">
-            <table class="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-md text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <table class="w-full text-md max-md:text-xs text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-md max-md:text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-1 py-1">
+                        <th scope="col" class="px-1 py-1 max-md:w-4/6">
                             Nombre
                         </th>
-                        <th scope="col" class="px-1 py-1">
+                        <th scope="col" class="px-1 py-1 max-md:hidden">
                             ${tipo=='notificados'? 'Email' : 'Representación'}
                         </th>
-                        <th scope="col" class="px-1 py-1 text-center">
-                            ${tipo=='notificados'? 'Notificado' : 'Confirmado'}
+                        <th scope="col" class="px-1 py-1 text-center max-md:w-2/6">
+                            ${tipo=='notificados'? 'Notificado' : 'Asiste'}
                         </th>
                     </tr>
                 </thead>
@@ -239,13 +239,13 @@ const renderHTMLConvocados = (convocados, tipo) => {
             switch(tipo){
                 case 'notificados':
                     let miembro_td_email = document.createElement("td");
-                    miembro_td_email.classList.add('px-1', 'py-1');
+                    miembro_td_email.classList.add('px-1', 'py-1', 'max-md:hidden');
                     miembro_td_email.innerHTML = miembro.usuario.email
                     miembro_tr.appendChild(miembro_td_email);      
                     break;
                 case 'asistentes':
                     let miembro_td_representacion = document.createElement("td");
-                    miembro_td_representacion.classList.add('px-1', 'py-1');
+                    miembro_td_representacion.classList.add('px-1', 'py-1', 'max-md:hidden');
                     miembro_td_representacion.innerHTML = miembro.usuario.miembros_comision[0].representacion.nombre
                     miembro_tr.appendChild(miembro_td_representacion);
                     break;
@@ -328,16 +328,14 @@ const notificarEvent = (button) => {
                 title:'Notificar',
                 html: renderHTMLConvocados(convocados, 'notificados'),
                 focusConfirm: false,
-                showCancelButton: true,
+                showCancelButton: false,
                 showConfirmButton: true,
                 confirmButtonText: "Enviar email",
-                cancelButtonText: "Cancelar",
                 confirmButtonColor: '#3085d6',
-                cancelButtonColor: '',
+                showCloseButton: true,
                 showLoaderOnConfirm:true,
-                width: '70vw',
+                width: '95vw',
                 heightAuto:false, 
-                customClass: 'swal-height',
                 preConfirm: async () => {
                     const dataToSend = {
                         id:button.dataset.convocatoriaId,
@@ -404,9 +402,9 @@ const asistentesEvent = (button) => {
                 title:'Asistentes convocatoria',
                 html: renderHTMLConvocados(convocados, 'asistentes'),
                 showConfirmButton:false,
-                width: '70vw',
-                heightAuto:false, 
-                customClass: 'swal-height' 
+                showCloseButton: true,
+                width: '90vw',
+                heightAuto:false,  
             });
         } catch (error) {
             await Swal.fire({
@@ -436,8 +434,7 @@ const actasEvent = (button) => {
             `,
             focusConfirm: false,
             showConfirmButton: false,
-            showCloseButton: true,
-            width: '90vw',
+            width: '85vw',
             heightAuto:false, 
             customClass: 'swal-height'   
         })

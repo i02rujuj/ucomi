@@ -34,47 +34,26 @@ Convocatorias Comisión
                 @endif
             </div>
 
-            <div id="modal_add" name="modal_add" class="hidden">
+            <div id="modal_add" name="modal_add" class="hidden mt-4">
                 
-                <div class="flex w-full mt-2 justify-center items-center">
-                    <label for="idComision" class="block text-sm text-gray-600 w-36 pr-12 text-right">Comisión: *</label>
-                    <select id="idComision" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" >
-                        <option value="" selected disabled>Selecciona una comisión</option>
-                        @foreach ($comisiones as $comision)
-                            <option value="{{$comision->id}}">{{$comision->nombre}} </option>
-                        @endforeach
-                    </select>
-                </div>
+                <x-inputSelectModal label="Comisiones vigentes*" id="idComision" entidad="convocatoria">
+                    <option value="" selected disabled>Selecciona una comisión</option>
+                    @foreach ($comisiones as $comision)
+                        <option value="{{$comision->id}}">{{$comision->nombre}} </option>
+                    @endforeach
+                </x-inputSelectModal>
 
-                <div class="flex w-full mt-4 justify-center items-center">
-                    <label for="idTipo" class="block text-sm text-gray-600 w-36 pr-12 text-right">Tipo: *</label>
-                    <select id="idTipo" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" >
-                        <option value="" selected disabled>Selecciona un tipo</option>
-                        @foreach ($tipos as $tipo)
-                            <option value="{{$tipo->id}}">{{$tipo->nombre}}</option>
-                        @endforeach
-                    </select>
-                </div>
+                <x-inputSelectModal label="Tipo*" id="idTipo" entidad="convocatoria">
+                    <option value="" selected disabled>Selecciona un tipo</option>
+                    @foreach ($tipos as $tipo)
+                        <option value="{{$tipo->id}}">{{$tipo->nombre}}</option>
+                    @endforeach
+                </x-inputSelectModal>
 
-                <div class="flex w-full justify-center items-center">
-                    <label for="lugar" class="block text-sm text-gray-600 w-36 pr-5 text-right">Lugar: *</label>
-                    <input id="lugar" name="lugar" type="text" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none"/>
-                </div>
-
-                <div class="flex w-full justify-center items-center">
-                    <label for="fecha" class="block text-sm text-gray-600 w-36 pr-5 text-right">Fecha: *</label>
-                    <input id="fecha" name="fecha" type="date" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" />
-                </div>
-
-                <div class="flex w-full justify-center items-center">
-                    <label for="hora" class="block text-sm text-gray-600 w-36 pr-5 text-right">Hora: *</label>
-                    <input id="hora" name="hora" type="time" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none"/>
-                </div>   
-                
-                <div class="flex w-full justify-center items-center">
-                    <label for="acta" class="block text-sm text-gray-600 w-36 pr-5 text-right">Acta:</label>
-                    <input id="acta" name="acta" type="file" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" autocomplete="off"/>
-                </div> 
+                <x-inputModal label="Lugar*" type="text" id="lugar" entidad="convocatoria"></x-inputModal>
+                <x-inputDateModal label="Fecha*" id="fecha" entidad="convocatoria"></x-inputDateModal>
+                <x-inputTimeModal label="Hora*" type="time" id="hora" entidad="convocatoria"></x-inputTimeModal> 
+                <x-inputFileModal label="Acta" type="file" id="acta" entidad="convocatoria"></x-inputFileModal>
             </div>
 
             <hr class="my-4 border-t border-gray-300" />
@@ -83,14 +62,28 @@ Convocatorias Comisión
                 @if($convocatorias && $convocatorias[0])
                     @foreach ($convocatorias as $convocatoria)
                         <div id="btn-editar-convocatoria" data-convocatoria-id="{{ $convocatoria['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
-                            <div class="flex justify-start items-center">
+                            
+                            <div class="flex justify-start text-center items-center gap-2">
                                 <div class="right-part w-full max-w-max">
-                                    <img src="{{ $convocatoria->comision->junta->centro->logo ? $convocatoria->comision->junta->centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
+                                    <img src="{{ $convocatoria->comision->junta->centro->logo ? $convocatoria->comision->junta->centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-10 h-10 ml-1 mb-1 justify-self-center rounded-full object-cover">  
                                 </div>
+                                <h2 class="font-bold">Convocatoria de Comisión</h2>
+                            </div>    
+                            
+                            <div class="flex justify-start items-center mt-2">
 
-                                <div class="left-part truncate w-full max-w-max pl-3 z-10">
+                                <div class="left-part w-full max-w-max z-10">
 
-                                    <div class="truncate flex items-center">
+                                    <div class="flex text-xs text-slate-400 font-medium items-center gap-1">
+                                        <div class="flex items-center">
+                                            <span class="material-icons-round scale-75">
+                                                send
+                                            </span>
+                                            <h2 class="ml-1">{{ $convocatoria->comision->nombre }}</h2>
+                                        </div>
+                                    </div>
+
+                                    <div class="truncate text-xs text-slate-400 flex items-center">
                                         <span class="material-icons-round scale-75">
                                             location_on
                                         </span>
@@ -116,15 +109,8 @@ Convocatorias Comisión
                                             </div>
                                         </div>
                                     </div> 
-
-                                    <div class="flex items-center text-xs text-slate-400">
-                                        <span class="material-icons-round scale-75">
-                                            send
-                                        </span>
-                                        <h2 class="ml-1 font-medium truncate">{{ $convocatoria->comision->nombre }} </h2>
-                                    </div>
                                     
-                                    <div class="flex justify-end items-center gap-2 mt-3" >
+                                    <div class="flex flex-wrap justify-end items-center gap-2 mt-3" >
                                         <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">Convocatoria Comisión</span>
 
                                         <span class="text-xs bg-blue-100 text-blue-900 font-semibold px-2 rounded-lg truncate">{{ $convocatoria->tipo->nombre }}</span>

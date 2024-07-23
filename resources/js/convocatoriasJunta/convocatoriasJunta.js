@@ -206,16 +206,16 @@ const renderHTMLConvocados = (convocados, tipo) => {
         let html =`
             <div class="relative overflow-x-auto">
             <table class="w-full text-md max-md:text-xs text-left rtl:text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-md text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <thead class="text-md max-md:text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-1 py-1">
+                        <th scope="col" class="px-1 py-1 max-md:w-4/6">
                             Nombre
                         </th>
                         <th scope="col" class="px-1 py-1 max-md:hidden">
                             ${tipo=='notificados'? 'Email' : 'Representación'}
                         </th>
-                        <th scope="col" class="px-1 py-1 text-center">
-                            ${tipo=='notificados'? 'Notificado' : 'Confirmado'}
+                        <th scope="col" class="px-1 py-1 text-center max-md:2/6">
+                            ${tipo=='notificados'? 'Notificado' : 'Asiste'}
                         </th>
                     </tr>
                 </thead>
@@ -328,14 +328,13 @@ const notificarEvent = (button) => {
                 title:'Notificar',
                 html: renderHTMLConvocados(convocados, 'notificados'),
                 focusConfirm: false,
-                showCancelButton: true,
+                showCancelButton: false,
                 showConfirmButton: true,
                 confirmButtonText: "Enviar email",
-                cancelButtonText: "Cancelar",
                 confirmButtonColor: '#3085d6',
-                cancelButtonColor: '',
                 showLoaderOnConfirm:true,
-                width: '70vw',
+                width: '95vw',
+                showCloseButton: true,
                 heightAuto:false, 
                 customClass: 'swal-height',
                 preConfirm: async () => {
@@ -405,7 +404,8 @@ const asistentesEvent = (button) => {
                 title:'Asistentes convocatoria',
                 html: renderHTMLConvocados(convocados, 'asistentes'),
                 showConfirmButton:false,
-                width: '70vw',
+                showCloseButton: true,
+                width: '95vw',
                 heightAuto:false, 
                 customClass: 'swal-height' 
             });
@@ -437,8 +437,7 @@ const actasEvent = (button) => {
             `,
             focusConfirm: false,
             showConfirmButton: false,
-            showCloseButton: true,
-            width: '90vw',
+            width: '85vw',
             heightAuto:false, 
             customClass: 'swal-height'   
         })

@@ -112,7 +112,7 @@ select:disabled {
 }    
 
 .swal-height {
-    height: 90vh;
+    @apply h-[90vh]
 }
 
 .swal2-modal {

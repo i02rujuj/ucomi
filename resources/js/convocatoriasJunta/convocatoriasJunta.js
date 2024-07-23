@@ -437,6 +437,7 @@ const actasEvent = (button) => {
             `,
             focusConfirm: false,
             showConfirmButton: false,
+            showCloseButton: true,
             width: '90vw',
             heightAuto:false, 
             customClass: 'swal-height'   

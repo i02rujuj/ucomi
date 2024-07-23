@@ -61,7 +61,7 @@ Centros
 
             <hr class="my-2 border-t border-gray-300" />
 
-            <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
 
                 @if($centros && $centros[0])
                     @foreach ($centros as $centro)
@@ -75,10 +75,10 @@ Centros
 
                             <div class="flex items-center left-part w-full pl-3 z-10 gap-3">
                                 <div class="w-full max-w-max">
-                                    <img src="{{ $centro->logo ? $centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-14 h-14 ml-1 mb-1 justify-self-center rounded-full object-cover">  
+                                    <img src="{{ $centro->logo ? $centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
                                 </div>
 
-                                <div class="w-full">  
+                                <div class="w-full truncate">  
                                     <div class="flex text-xs text-slate-400 font-medium truncate items-center gap-1 my-3">
                                         <div class="truncate flex items-center">
                                             <span class="material-icons-round scale-75">
@@ -100,7 +100,7 @@ Centros
                                         </div>
                                         
                                         <div class="flex justify-end items-center gap-2" >
-                                            <a id="btn-ver-miembros" data-centro-id="{{ $centro['id'] }}" class="group max-w-max absolute flex flex-col justify-center items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="{{route('miembrosGobierno')}}?filtroCentro={{ $centro['id'] }}&filtroRepresentacion=&filtroVigente=1&filtroEstado=1&action=filtrar">
+                                            <a id="btn-ver-miembros" data-centro-id="{{ $centro['id'] }}" class="group max-w-max absolute flex flex-col justify-end items-center hover:rounded-md hover:px-2 hover:border-gray-500 hover:bg-gray-700 hover:text-white" href="{{route('miembrosGobierno')}}?filtroCentro={{ $centro['id'] }}&filtroRepresentacion=&filtroVigente=1&filtroEstado=1&action=filtrar">
                                                 <span class="material-icons-round cursor-pointer">
                                                     groups
                                                 </span>

@@ -60,18 +60,18 @@ Juntas
                     @foreach ($juntas as $junta)
                         <div id="btn-editar-junta" data-junta-id="{{ $junta['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
                             
-                            <div class="flex justify-center text-center items-center ">
-                                <h2 class="md:truncate font-bold">{{ $junta->centro->nombre }}</h2>
+                            <div class="flex justify-start text-center items-center gap-2">
+                                <div class="right-part w-full max-w-max">
+                                    <img src="{{ $junta->centro->logo ? $junta->centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-8 h-8 ml-1 mb-1 justify-self-center rounded-full object-cover">  
+                                </div>
+                                <h2 class="font-bold">{{ $junta->centro->nombre }}</h2>
                             </div>
 
                             <hr class="my-2">
                             
-                            <div class="flex items-center">
-                                <div class="right-part w-full max-w-max">
-                                    <img src="{{ $junta->centro->logo ? $junta->centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
-                                </div>
+                            <div class="flex items-center">  
 
-                                <div class="w-full"> 
+                                <div class="w-full truncate"> 
                                     <div class="left-part truncate w-full pl-3 z-10">
                                         <div class="truncate flex items-center">
                                             <span class="material-icons-round scale-75">
@@ -89,7 +89,7 @@ Juntas
                                                         person
                                                     </span>
                                                     <div class="truncate">
-                                                        Decano/a:
+                                                        Decano:
                                                         @if($decano = $junta->miembros(config('constants.REPRESENTACIONES.JUNTA.DEC'))->first())
                                                             {{ $decano->usuario->name }}
                                                         @else
@@ -103,7 +103,7 @@ Juntas
                                                         person
                                                     </span>
                                                     <div class="truncate">
-                                                        Director/a:
+                                                        Director:
                                                         @if($director = $junta->miembros(config('constants.REPRESENTACIONES.JUNTA.DIR'))->first())
                                                             {{ $director->usuario->name }}
                                                         @else
@@ -120,7 +120,7 @@ Juntas
                                                     person
                                                 </span>
                                                 <div class="truncate">
-                                                    Secretario/a:
+                                                    Secretario:
                                                     @if($secretario = $junta->miembros(config('constants.REPRESENTACIONES.JUNTA.SECRE'))->first())
                                                         {{ $secretario->usuario->name }}
                                                     @else

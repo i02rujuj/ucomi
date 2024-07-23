@@ -32,89 +32,74 @@ Miembros de Comisión
                 </div>
             </div>
 
-            <div id="modal_add" name="modal_add" class="hidden">
+            <div id="modal_add" name="modal_add" class="hidden mt-4">
 
                 <div id='user'>
-                    <div class="flex w-full mb-2 mt-4 justify-center items-center">
-                        <label for="idUsuario" class="block text-sm text-gray-600 w-36 pr-6 text-right">Usuario: *</label>
-                        <select id="idUsuario" class="swal2-input miembro text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none bg-blue-50" >
-                            @foreach ($users as $user)
-                                <option value="{{$user->id}}">{{$user->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <x-inputSelectModal label="Usuario*" id="idUsuario" entidad="miembro">
+                        <option value="">Selecciona un usuario</option>
+                        @foreach ($users as $user)
+                            <option value="{{$user->id}}">{{$user->name}}</option>
+                        @endforeach
+                    </x-inputSelectModal>
                 </div>
 
-                <div class="flex w-full mb-2 mt-4 justify-center items-center">
-                    <label for="idComision" class="block text-sm text-gray-600 w-36 pr-6 text-right">Comisiones vigentes:</label>
-                    <select id="idComision" name="idComision" class="swal2-input miembro text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none bg-blue-50">
-                        <option value="" selected disabled>Selecciona una comisión</option>
-                        @foreach ($comisiones as $comision)
-                            <option value="{{ $comision->id }}">{{ $comision->nombre }} </option>
-                        @endforeach
-                    </select>
-                </div> 
+                <x-inputSelectModal label="Comisiones vigentes*" id="idComision" entidad="miembro">
+                    <option value="" selected disabled>Selecciona una comisión</option>
+                    @foreach ($comisiones as $comision)
+                        <option value="{{ $comision->id }}">{{ $comision->nombre }} </option>
+                    @endforeach
+                </x-inputSelectModal>
 
-                <div class="flex w-full mt-4 justify-center items-center">
-                    <label for="idRepresentacion" class="block text-sm text-gray-600 w-36 pr-6 text-right">Representación: *</label>
-                    <select id="idRepresentacion" class="swal2-input miembro text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none bg-blue-50" >
-                        <option value="" selected disabled>Selecciona una representación</option>
-                        @foreach ($representacionesGeneral as $rep)
-                            <option value="{{$rep->id}}">{{$rep->nombre}}</option>
-                        @endforeach
-                    </select>
-                </div>
+                <x-inputSelectModal label="Representación*" id="idRepresentacion" entidad="miembro">
+                    <option value="" selected disabled>Selecciona una representación</option>
+                    @foreach ($representacionesGeneral as $rep)
+                        <option value="{{$rep->id}}">{{$rep->nombre}}</option>
+                    @endforeach
+                </x-inputSelectModal>
 
                 <div id='select-cargo'>
-                    <div class="flex w-full mt-4 justify-center items-center">
-                        <label for="cargo" class="block text-sm text-gray-600 w-36 pr-6 text-right">Cargo: </label>
-                        <select id="cargo" class="swal2-input miembro text-sm text-gray-600 border w-60 px-2 py-1 rounded-lg outline-none bg-blue-50" >
-                            <optgroup label="Cargos existentes">
-                                <option value="Presidente">Presidente</option>
-                            </optgroup>
-                        </select>
-                    </div>
+                    <x-inputSelectModal label="Cargo" id="cargo" entidad="miembro">
+                        <optgroup label="Cargos existentes">
+                            <option value="Presidente">Presidente</option>
+                        </optgroup>
+                    </x-inputSelectModal>
                 </div>
 
-                <div class="flex w-full justify-center items-center">
-                    <label for="fechaTomaPosesion" class="block text-sm text-gray-600 w-36 text-right">Toma posesión: *</label>
-                    <input type="date" id="fechaTomaPosesion" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none">
-                </div>
-
-                <div class="flex w-full justify-center items-center">
-                    <label for="fechaCese" class="block text-sm text-gray-600 w-36 text-right">Fecha cese:</label>
-                    <input type="date" id="fechaCese" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none">
-                </div>
-
-                <div class="flex w-full mt-3 justify-center items-center">
-                    <label for="responsable" class="block text-sm text-gray-600 w-36 pr-6 text-right">Responsable:</label>
-                    <select id="responsable" class="miembro swal2-input tipo text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none">                     
-                        <option value="0">No</option>
-                        <option value="1">Sí</option>
-                    </select>
-                </div>  
+                <x-inputDateModal label="Toma Posesión*" type="date" id="fechaTomaPosesion" entidad="miembro"></x-inputDateModal>
+                <x-inputDateModal label="Fecha Cese" type="date" id="fechaCese" entidad="miembro"></x-inputDateModal> 
+                
+                <x-inputSelectModal label="Responsable:" id="responsable" entidad="miembro">
+                    <option class="text-center" value="0">No</option>
+                    <option class="text-center" value="1">Sí</option>
+                </x-inputSelectModal>
             </div>
 
-            <hr className="my-6 border-t border-gray-300" />
+            <hr className="my-4 border-t border-gray-300" />
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
                 @if($miembrosComision->count())
                     @foreach ($miembrosComision as $miembro)
                         <div id="btn-editar-miembro" data-miembro-id="{{ $miembro['id'] }}" class="card bg-white p-6 rounded-lg shadow-md cursor-pointer">
-                            <div class="flex gap-3">
-                                <div class="right-part w-full max-w-max mt-1">
+                            
+                            <div class="flex justify-start text-center items-center gap-2">
+                                <div class="right-part w-full max-w-max">
                                     <img src="{{ $miembro->usuario->image ? $miembro->usuario->image : asset('img/default_image_profile.jpg') }}" alt="Imagen de usuario" class="shadow-black shadow-sm w-16 h-16 ml-1 mb-1 justify-self-center rounded-md object-cover">  
                                     <img src="{{ $miembro->comision->junta->centro->logo ? $miembro->comision->junta->centro->logo : asset('img/default_image.jpg') }}" alt="Imagen de centro" class="shadow-black shadow-sm -mt-9 w-8 h-8 ml-1 mb-1 justify-self-center rounded-md ">  
                                 </div>
+                                <h2 class="font-bold">{{ $miembro->usuario->name }}</h2>
+                            </div>
+
+                            <div class="flex font-bold truncate items-center gap-1 mt-2">
+                                <div class="flex items-center">
+                                    <span class="material-icons-round scale-75">
+                                        psychology
+                                    </span>
+                                    <h2 class="ml-1">{{ $miembro->representacion->nombre }}</h2>
+                                </div>
+                            </div>
                             
+                            <div class="flex gap-3">
                                 <div class="left-part truncate">
-                                    <div class="flex items-center">
-                                        <span class="material-icons-round scale-75">
-                                            person
-                                        </span>
-                                        &nbsp;
-                                        <h2 class="text-base font-bold truncate">{{ $miembro->usuario->name }}</h2>
-                                    </div>
 
                                     <div class="text-xs text-slate-400 font-medium truncate items-center gap-1">
                                         <div class="flex items-center">
@@ -123,15 +108,6 @@ Miembros de Comisión
                                         </span>
                                         &nbsp;
                                         <h2 class="truncate">{{ $miembro->comision->nombre }}</h2>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex font-bold truncate items-center gap-1">
-                                        <div class="flex items-center">
-                                            <span class="material-icons-round scale-75">
-                                                psychology
-                                            </span>
-                                            <h2 class="ml-1">{{ $miembro->representacion->nombre }}</h2>
                                         </div>
                                     </div>
 
@@ -156,7 +132,7 @@ Miembros de Comisión
                                 </div>
                             </div>
 
-                            <div class="flex justify-end items-center gap-2 mt-2">
+                            <div class="flex flex-wrap justify-end items-center gap-2 mt-2">
                                 <span class="flex items-center text-xs bg-blue-100 font-semibold px-2 rounded-lg truncate">
                                     @if ($miembro->responsable==1)
                                         <span class="text-sm material-icons-round text-yellow-700">

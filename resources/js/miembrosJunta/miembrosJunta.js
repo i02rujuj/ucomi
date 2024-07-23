@@ -32,7 +32,7 @@ function renderHTMLMiembro(response){
 
     if(response){
         $(modal_add).find("#idUsuario").val(response.usuario.id).trigger('change');
-        $(modal_add).find("#idUsuario").prop("disabled", true);
+        $(modal_add).find("#idUsuario").prop("disabled", false);
         modal_add.querySelector('#idJunta').value=response.junta.id
         modal_add.querySelector('#idJunta').setAttribute('disabled', 'disabled')
         modal_add.querySelector('#idJunta').classList.add('bg-red-50')
@@ -49,10 +49,9 @@ function renderHTMLMiembro(response){
             modal_add.querySelector('#responsable').setAttribute('disabled', 'disabled')
         }      
     }
-    else{
-        modal_add.classList.remove('hidden')
-        return modal_add
-    }
+
+    modal_add.classList.remove('hidden')
+    return modal_add
 }
 
 const preConfirm = async(accion, id=null) => {

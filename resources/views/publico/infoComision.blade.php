@@ -13,10 +13,10 @@
 
         <div class="max-lg:hidden px-10 lg:text-2xl text-gray-600 text-center">
             <div>
-                Junta de @if($comision->junta->centro->idTipo!=3) {{$comision->junta->centro->tipo->nombre}} @endif {{$comision->junta->centro->nombre}} 
-            </div>
-            <div>
                 Comisión de @if($comision!=null) {{$comision->nombre}} @endif
+            </div>
+            <div class="text-sm">
+                Junta de @if($comision->junta->centro->idTipo!=3) {{$comision->junta->centro->tipo->nombre}} @endif {{$comision->junta->centro->nombre}} 
             </div>
         </div>
 
@@ -25,12 +25,12 @@
         </div>
     </div>
 
-    <div class="hidden max-lg:block px-10 text-2xl text-gray-600 text-center my-8">
-        <div>
-            Junta de @if($comision->junta->centro->idTipo!=3) {{$comision->junta->centro->tipo->nombre}} @endif {{$comision->junta->centro->nombre}} 
-        </div>
+    <div class="hidden max-lg:block px-10 text-2xl text-gray-600 text-center">
         <div>
             Comisión de @if($comision!=null) {{$comision->nombre}} @endif
+        </div>
+        <div class="text-sm">
+            Junta de @if($comision->junta->centro->idTipo!=3) {{$comision->junta->centro->tipo->nombre}} @endif {{$comision->junta->centro->nombre}} 
         </div>
     </div>
 

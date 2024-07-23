@@ -6,8 +6,8 @@
 
 @section('contentTop')
 
-    <div class="flex divide-x mb-4 mt-24 items-center justify-evenly w-full">
-        <div class="px-10">
+    <div class="flex divide-x mb-8 mt-24 items-center justify-evenly w-full">
+        <div class="px-10 ">
             <img src="{{ asset('img/inicio1.png') }}" alt="LogoUCO" class="rounded-lg w-60 h-28 object-cover transition ease-in-out hover:scale-105" />
         </div>
 
@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <div class="hidden max-lg:block px-10 text-2xl text-gray-600 text-center my-8">
+    <div class="hidden max-lg:block px-10 text-2xl text-gray-600 text-center">
         Junta de @if($centro->idTipo!=config('constants.TIPOS_CENTRO.OTRO')) {{$centro->tipo->nombre}} @endif {{$centro->nombre}}
     </div>
 

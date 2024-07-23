@@ -36,7 +36,7 @@ Convocatorias Junta
 
             <div id="modal_add" name="modal_add" class="hidden">
                 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mt-2 justify-center items-center">
+                <div class="flex w-full mt-2 justify-center items-center">
                     <label for="idJunta" class="block text-sm text-gray-600 w-36 pr-12 text-right">Junta: *</label>
                     <select id="idJunta" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" >
                         <option value="" selected disabled>Selecciona una junta</option>
@@ -46,7 +46,7 @@ Convocatorias Junta
                     </select>
                 </div>
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mt-4 justify-center items-center">
+                <div class="flex w-full mt-4 justify-center items-center">
                     <label for="idTipo" class="block text-sm text-gray-600 w-36 pr-12 text-right">Tipo: *</label>
                     <select id="idTipo" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" >
                         <option value="" selected disabled>Selecciona un tipo</option>
@@ -56,22 +56,22 @@ Convocatorias Junta
                     </select>
                 </div>
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
+                <div class="flex w-full justify-center items-center">
                     <label for="lugar" class="block text-sm text-gray-600 w-36 pr-5 text-right">Lugar: *</label>
                     <input id="lugar" name="lugar" type="text" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none"/>
                 </div>
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
+                <div class="flex w-full justify-center items-center">
                     <label for="fecha" class="block text-sm text-gray-600 w-36 pr-5 text-right">Fecha: *</label>
                     <input id="fecha" name="fecha" type="date" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" />
                 </div>
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
+                <div class="flex w-full justify-center items-center">
                     <label for="hora" class="block text-sm text-gray-600 w-36 pr-5 text-right">Hora: *</label>
                     <input id="hora" name="hora" type="time" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none"/>
                 </div>   
                 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
+                <div class="flex w-full justify-center items-center">
                     <label for="acta" class="block text-sm text-gray-600 w-36 pr-5 text-right">Acta:</label>
                     <input id="acta" name="acta" type="file" class="convocatoria swal2-input text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none" autocomplete="off"/>
                 </div> 

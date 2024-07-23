@@ -36,17 +36,17 @@ Centros
             </div>
 
             <div id="modal_add" name="modal_add" class="hidden">
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mt-1 justify-center items-center">
+                <div class="flex w-full mt-1 justify-center items-center">
                     <label for="nombre" class="block text-sm text-gray-600 w-32 text-right">Nombre *</label>
                     <input type="text" id="nombre" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none required">
                 </div>
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-3 justify-center items-center">
+                <div class="flex w-full mb-3 justify-center items-center">
                     <label for="direccion" class="block text-sm text-gray-600 w-32 text-right">Direccion *</label>
                     <input type="text" id="direccion" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required">
                 </div>
         
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
+                <div class="flex w-full mb-4 justify-center items-center">
                     <label for="idTipo" class="block text-sm text-gray-600 mb-1 w-32 pr-7 text-right">Tipo *</label>
                     <select id="idTipo" class="swal2-input centro tipo text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required">
                         <option value="" selected disabled>Selecciona un tipo</option>
@@ -55,7 +55,7 @@ Centros
                         @endforeach
                     </select>
                 </div>
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-4 justify-center items-center">
+                <div class="flex w-full mb-4 justify-center items-center">
                     <label for="img_logo" class="block text-sm text-gray-600 w-32 text-right">
                         <img id="img_logo" name="img_logo" src="{{asset('img/default_image.png')}}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
                     </label>

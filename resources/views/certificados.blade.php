@@ -28,8 +28,6 @@ Certificados
                         <div class="form-group flex flex-col gap-2">
                             <label for="certificados" class="font-bold text-slate-600">Opciones de administrador</label>
                             <hr class="border-t border-slate-200 my-2">
-        
-                            
                                 <div>
                                     <label for="idUsuario" class="block text-sm text-gray-600 mb-1">Usuario:</label>
                                     <select id="idUsuario" name="idUsuario" class="text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none bg-blue-50" >
@@ -101,7 +99,7 @@ Certificados
                             </div>
                         </div>
 
-                        <div id="fechas" class="flex gap-4 hidden">
+                        <div id="fechas" class="flex flex-wrap md:flex-wrap lg:flex-nowrap gap-4 hidden">
                             <div class="left-side w-full">
                                 <div class="mb-2">
                                     <label for="fechaDesde" class="block text-sm text-gray-600 mb-1">
@@ -112,7 +110,6 @@ Certificados
                                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
-        
                             </div>
                             
                             <div class="left-side w-full">
@@ -191,7 +188,7 @@ Certificados
                         </div>
                     </div>
 
-                    <div id="fechasAsistencia" class="flex gap-4">
+                    <div id="fechasAsistencia" class="flex flex-wrap md:flex-wrap lg:flex-nowrap gap-4">
                         <div class="left-side w-full">
                             <div class="mb-2">
                                 <label for="fechasAsistenciaDesde" class="block text-sm text-gray-600 mb-1">

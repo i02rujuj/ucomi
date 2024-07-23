@@ -34,7 +34,7 @@ function renderHTMLMiembro(response){
 
         modal_edit.classList.remove('hidden')
         modal_edit.querySelector('#user').innerHTML= `
-            <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
+            <div class="flex w-full justify-center items-center">
                 <label for="usuario" class="block text-sm text-gray-600 w-36 text-right">Usuario: *</label>
                 <input class="miembro" type="hidden" id="idUsuario" value="${response.usuario.id}"/>
                 <input type="text" id="usuario" class="swal2-input miembro text-sm text-gray-600 border bg-red-50 w-60 px-2 py-1 rounded-mdoutline-none" value="${response.usuario.name}" disabled>

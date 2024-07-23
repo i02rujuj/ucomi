@@ -35,7 +35,7 @@ Miembros de Comisión
             <div id="modal_add" name="modal_add" class="hidden">
 
                 <div id='user'>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-4 justify-center items-center">
+                    <div class="flex w-full mb-2 mt-4 justify-center items-center">
                         <label for="idUsuario" class="block text-sm text-gray-600 w-36 pr-6 text-right">Usuario: *</label>
                         <select id="idUsuario" class="swal2-input miembro text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none bg-blue-50" >
                             @foreach ($users as $user)
@@ -45,7 +45,7 @@ Miembros de Comisión
                     </div>
                 </div>
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mb-2 mt-4 justify-center items-center">
+                <div class="flex w-full mb-2 mt-4 justify-center items-center">
                     <label for="idComision" class="block text-sm text-gray-600 w-36 pr-6 text-right">Comisiones vigentes:</label>
                     <select id="idComision" name="idComision" class="swal2-input miembro text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none bg-blue-50">
                         <option value="" selected disabled>Selecciona una comisión</option>
@@ -55,7 +55,7 @@ Miembros de Comisión
                     </select>
                 </div> 
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mt-4 justify-center items-center">
+                <div class="flex w-full mt-4 justify-center items-center">
                     <label for="idRepresentacion" class="block text-sm text-gray-600 w-36 pr-6 text-right">Representación: *</label>
                     <select id="idRepresentacion" class="swal2-input miembro text-sm text-gray-600 border w-60 px-2 py-1 rounded-md outline-none bg-blue-50" >
                         <option value="" selected disabled>Selecciona una representación</option>
@@ -66,7 +66,7 @@ Miembros de Comisión
                 </div>
 
                 <div id='select-cargo'>
-                    <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mt-4 justify-center items-center">
+                    <div class="flex w-full mt-4 justify-center items-center">
                         <label for="cargo" class="block text-sm text-gray-600 w-36 pr-6 text-right">Cargo: </label>
                         <select id="cargo" class="swal2-input miembro text-sm text-gray-600 border w-60 px-2 py-1 rounded-lg outline-none bg-blue-50" >
                             <optgroup label="Cargos existentes">
@@ -76,17 +76,17 @@ Miembros de Comisión
                     </div>
                 </div>
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
+                <div class="flex w-full justify-center items-center">
                     <label for="fechaTomaPosesion" class="block text-sm text-gray-600 w-36 text-right">Toma posesión: *</label>
                     <input type="date" id="fechaTomaPosesion" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none">
                 </div>
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full justify-center items-center">
+                <div class="flex w-full justify-center items-center">
                     <label for="fechaCese" class="block text-sm text-gray-600 w-36 text-right">Fecha cese:</label>
                     <input type="date" id="fechaCese" class="swal2-input miembro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none">
                 </div>
 
-                <div class="flex flex-wrap md:flex-wrap lg:flex-nowrap w-full mt-3 justify-center items-center">
+                <div class="flex w-full mt-3 justify-center items-center">
                     <label for="responsable" class="block text-sm text-gray-600 w-36 pr-6 text-right">Responsable:</label>
                     <select id="responsable" class="miembro swal2-input tipo text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none">                     
                         <option value="0">No</option>

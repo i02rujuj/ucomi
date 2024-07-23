@@ -36,34 +36,38 @@ Centros
             </div>
 
             <div id="modal_add" name="modal_add" class="hidden">
-                <div class="flex w-full mt-1 justify-center items-center">
-                    <label for="nombre" class="block text-sm text-gray-600 w-32 text-right">Nombre *</label>
+                <div class="flex my-2 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center">
+                    <label for="nombre" class="block text-sm text-gray-600 w-32 max-xs:w-full">Nombre *</label>
                     <input type="text" id="nombre" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 rounded-md w-60 px-2 py-1 outline-none required">
                 </div>
 
-                <div class="flex w-full mb-3 justify-center items-center">
-                    <label for="direccion" class="block text-sm text-gray-600 w-32 text-right">Direccion *</label>
+                <div class="flex my-2 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center">
+                    <label for="direccion" class="block text-sm text-gray-600 w-32 max-xs:w-full">Direccion *</label>
                     <input type="text" id="direccion" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required">
                 </div>
         
-                <div class="flex w-full mb-4 justify-center items-center">
-                    <label for="idTipo" class="block text-sm text-gray-600 mb-1 w-32 pr-7 text-right">Tipo *</label>
-                    <select id="idTipo" class="swal2-input centro tipo text-sm text-gray-600 border bg-blue-50 w-60 px-2 py-1 rounded-md outline-none required">
+                <div class="flex my-3 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center">
+                    <label for="idTipo" class="block text-sm text-gray-600 w-32 max-xs:w-full">Tipo *</label>
+                    <select id="idTipo" class="swal2-input centro text-sm text-gray-600 border bg-blue-50 w-60 mx-7 my-2 px-2 py-1 rounded-md outline-none required">
                         <option value="" selected disabled>Selecciona un tipo</option>
                         @foreach ($tiposCentro as $tipo)
                             <option value="{{$tipo->id}}">{{$tipo->nombre}}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="flex w-full mb-4 justify-center items-center">
-                    <label for="img_logo" class="block text-sm text-gray-600 w-32 text-right">
-                        <img id="img_logo" name="img_logo" src="{{asset('img/default_image.png')}}" alt="Imagen de centro" class="w-16 h-16 ml-1 mb-1 justify-self-center rounded-full object-cover">  
-                    </label>
-                    <input id="logo" name="logo" type="file" class="centro w-60 text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none" autocomplete="off" />
+
+                <div class="flex my-2 justify-center items-center text-right max-xs:flex-wrap max-xs:text-center">
+                    <div>
+                        <label for="img_logo" class="text-sm text-gray-600 w-32 max-xs:w-full max-xs:text-center">
+                            <img id="img_logo" name="img_logo" src="{{asset('img/default_image.png')}}" alt="Imagen de centro" class="mx-7 w-16 h-16 mb-1 rounded-full object-cover">  
+                        </label>
+                    </div>
+                    
+                    <input id="logo" name="logo" type="file" class="centro w-60 text-sm text-gray-600 border bg-blue-50 rounded-md mx-7 my-2 px-2 py-1 outline-none" autocomplete="off" />
                 </div>      
             </div>
 
-            <hr class="my-4 border-t border-gray-300" />
+            <hr class="my-2 border-t border-gray-300" />
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
 

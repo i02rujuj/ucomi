@@ -11,10 +11,8 @@ use App\Models\Comision;
 use Illuminate\Http\Request;
 use App\Models\Representacion;
 use App\Models\MiembroComision;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Flasher\Prime\Notification\NotificationInterface;
 
 class MiembrosComisionController extends Controller
 {
@@ -118,8 +116,7 @@ class MiembrosComisionController extends Controller
             ]);
         
         } catch (\Throwable $th) {
-            toastr('No se pudieron obtener los miembros de comision.'.$th->getMessage(), NotificationInterface::ERROR, ' ');
-            return redirect()->route('home')->with('errors', 'No se pudieron obtener los miembros de comisión.');
+            return redirect()->route('home')->with(['errors', 'No se pudieron obtener los miembros de comisión.']);
         }
     }
 
@@ -142,12 +139,10 @@ class MiembrosComisionController extends Controller
                 "responsable" => $request->data['responsable'],
             ]);
 
-            toastr("El miembro de comisión '{$miembroComision->usuario->name}' se ha añadido correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El miembro de comisión '{$miembroComision->usuario->name}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            toastr("Error al añadir el miembro de comisión '{$miembroComision->usuario->name}'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al añadir el miembro de comisión '{$miembroComision->usuario->name}'", 'status' => 422], 200);
+            return response()->json(['errors' => "Error al añadir el miembro de comisión '{$miembroComision->usuario->name}'", 'status' => 500], 200);
         }
     }
 
@@ -169,12 +164,10 @@ class MiembrosComisionController extends Controller
             $miembroComision->responsable = $request->data['responsable'];  
             $miembroComision->save();
 
-            toastr("El miembro de comision '{$miembroComision->usuario->name}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El miembro de comision '{$miembroComision->usuario->name}' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            toastr("Error al actualizar el miembro de comisión '{$miembroComision->usuario->name}'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al actualizar el miembro de comisión '{$miembroComision->usuario->name}'", 'status' => 422], 200);
+            return response()->json(['errors' => "Error al actualizar el miembro de comisión '{$miembroComision->usuario->name}'", 'status' => 500], 200);
         }
     }
 
@@ -190,12 +183,10 @@ class MiembrosComisionController extends Controller
             $miembroComision = MiembroComision::where('id', $request->id)->first();
             $miembroComision->delete();
 
-            toastr("El miembro de comisión '{$miembroComision->usuario->name}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El miembro de comisión '{$miembroComision->usuario->name}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            toastr("Error al eliminar el miembro de comisión '{$miembroComision->usuario->name}'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al eliminar el miembro de comisión '{$miembroComision->usuario->name}'",'status' => 422], 200);
+            return response()->json(['errors' => "Error al eliminar el miembro de comisión '{$miembroComision->usuario->name}'",'status' => 500], 200);
         }
     }
 
@@ -209,8 +200,7 @@ class MiembrosComisionController extends Controller
             
             return response()->json($miembroComision);
         } catch (\Throwable $th) {
-            toastr('No se ha encontrado el miembro de comisión.', NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => 'No se ha encontrado el miembro de comisión.','status' => 422], 200);
+            return response()->json(['errors' => 'No se ha encontrado el miembro de comisión.','status' => 500], 200);
         }
     }
 

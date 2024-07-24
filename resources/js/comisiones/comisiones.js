@@ -141,13 +141,26 @@ const preConfirm = async(accion, id=null) => {
             break
     }
 
+    switch (response.status) {
+        case 200:
+            localStorage.setItem("notification", JSON.stringify(notification(response.message, 'success')));
+            window.location.reload()   
+            break;
+    
+        case 422:
+            Swal.showValidationMessage(response.errors)
+            return false
+        break;
 
-    if (response.status === 200) {
-        window.location.reload()
-    } 
-    else {
-        Swal.showValidationMessage(response.errors)
-        return false
+        case 500:
+            localStorage.setItem("notification", JSON.stringify(notification(response.errors, 'error')));
+            window.location.reload()   
+        break;
+    
+        default:
+            Swal.showValidationMessage(response.errors)
+            return false
+            break;
     }
 
 }
@@ -208,16 +221,7 @@ const addEditEvent = (button) => {
             });
 
         } catch (error) {
-            await Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Ha ocurrido un error al realizar una operación con la comisión.",
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-                showConfirmButton: false,
-                position: 'top-right',
-            });
+            await Swal.fire(notification("Ha ocurrido un error al realizar una operación con la comisión.", 'error'))
         }
     });
 };

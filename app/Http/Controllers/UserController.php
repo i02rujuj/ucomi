@@ -168,8 +168,7 @@ class UserController extends Controller
                     $tipoCertificado = "Histórico";
 
                     if((isset($request->fechaDesde) && !isset($request->fechaHasta)) || (!isset($request->fechaDesde) && isset($request->fechaHasta))){
-                        toastr('Para obtener el certificado histórico es necesario indicar las dos fechas para realizar la búsqueda o no seleccionar ninguna para obtener todos los resultados', NotificationInterface::ERROR, ' ');
-                        return redirect()->back();
+                        return redirect()->back()->with(['errors' => 'Para obtener el certificado histórico es necesario indicar las dos fechas para realizar la búsqueda o no seleccionar ninguna para obtener todos los resultados']);
                     }
 
                     if(!(!isset($request->fechaDesde) && !isset($request->fechaHasta))){
@@ -178,16 +177,14 @@ class UserController extends Controller
                         $dateHasta = new DateTime($request->fechaHasta);
 
                         if ($dateHasta<$dateDesde) {
-                            toastr('La fecha hasta no puede anterior a la fecha desde', NotificationInterface::ERROR, ' ');
-                            return redirect()->back();
+                            return redirect()->back()->with(['errors' => 'La fecha hasta no puede anterior a la fecha desde']);
                         }  
                     }
 
                     break;
                 
                 default:
-                    toastr('Tipo de certificado incorrecto', NotificationInterface::ERROR, ' ');
-                    return redirect()->back();
+                    return redirect()->back()->with(['errors' => 'Tipo de certificado incorrecto']);
                     break;
             }
 
@@ -323,8 +320,7 @@ class UserController extends Controller
             //dd($pdf);
             return $pdf->download("Certificado $tipoCertificado $usuario $time.pdf");
         } catch (\Throwable $th) {
-            toastr('Ha ocurrido un error al generar el certificado'.$th->getMessage(), NotificationInterface::ERROR, ' ');
-            return redirect()->back();
+            return redirect()->back()->with(['errors' => 'Ha ocurrido un error al generar el certificado']);
         }   
     }
 
@@ -362,8 +358,7 @@ class UserController extends Controller
                     $tipoCertificado = "Asistencia a convocatorias";
 
                     if((isset($request->fechasAsistenciaDesde) && !isset($request->fechasAsistenciaHasta)) || (!isset($request->fechasAsistenciaDesde) && isset($request->fechasAsistenciaHasta))){
-                        toastr('Para obtener el certificado es necesario indicar las dos fechas para realizar la búsqueda o no seleccionar ninguna para obtener todos los resultados', NotificationInterface::ERROR, ' ');
-                        return redirect()->back();
+                        return redirect()->back()->with(['errors' => 'Para obtener el certificado es necesario indicar las dos fechas para realizar la búsqueda o no seleccionar ninguna para obtener todos los resultados']);
                     }
 
                     if(!(!isset($request->fechasAsistenciaDesde) && !isset($request->fechasAsistenciaHasta))){
@@ -372,16 +367,14 @@ class UserController extends Controller
                         $dateHasta = new DateTime($request->fechasAsistenciaHasta);
 
                         if ($dateHasta<$dateDesde) {
-                            toastr('La fecha de hasta no puede anterior a la fecha desde', NotificationInterface::ERROR, ' ');
-                            return redirect()->back();
+                            return redirect()->back()->with(['errors' => 'La fecha de hasta no puede anterior a la fecha desde']);
                         }  
                     }
 
                     break;
                 
                 default:
-                    toastr('Tipo de certificado incorrecto', NotificationInterface::ERROR, ' ');
-                    return redirect()->back();
+                    return redirect()->back()->with(['errors' => 'Tipo de certificado incorrecto']);
                     break;
             }
             foreach ($request->tiposConvocatoria as  $tipoConvocatoria) {
@@ -471,8 +464,7 @@ class UserController extends Controller
             $pdf->render();
             return $pdf->download("Certificado $tipoCertificado $usuario $time.pdf");
         } catch (\Throwable $th) {
-            toastr('Ha ocurrido un error al generar el certificado'.$th->getMessage(), NotificationInterface::ERROR, ' ');
-            return redirect()->back();
+            return redirect()->back()->with(['errors' => 'Ha ocurrido un error al generar el certificado']);
         }   
     }
 }

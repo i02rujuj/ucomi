@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NotificarConvocadosEmail;
 use Illuminate\Support\Facades\Validator;
-use Flasher\Prime\Notification\NotificationInterface;
 
 class ConvocatoriasJuntaController extends Controller
 {
@@ -109,8 +108,7 @@ class ConvocatoriasJuntaController extends Controller
             ]);
 
         } catch (\Throwable $th) {
-            toastr('No se pudieron obtener las convocatorias.', NotificationInterface::ERROR, ' ');
-            return redirect()->route('home')->with('errors', 'No se pudieron obtener las convocatorias.');
+            return redirect()->route('home')->with(['errors', 'No se pudieron obtener las convocatorias.']);
         }
     }
     
@@ -149,12 +147,10 @@ class ConvocatoriasJuntaController extends Controller
                 ]);
             }
 
-            toastr("La convocatoria del día '$convocatoria->fecha' se ha añadido correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La convocatoria  del día '$convocatoria->fecha' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            toastr("Error al añadir la convocatoria del día '$convocatoria->fecha'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al añadir la convocatoria del día '$convocatoria->fecha'", 'status' => 422], 200);
+            return response()->json(['errors' => "Error al añadir la convocatoria del día '$convocatoria->fecha'", 'status' => 500], 200);
         }
     }
 
@@ -180,12 +176,10 @@ class ConvocatoriasJuntaController extends Controller
             $convocatoria->hora = $request->data['hora'];
             $convocatoria->save();
            
-            toastr("La convocatoria del día '$convocatoria->fecha' se ha actualizado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La convocatoria del día '$convocatoria->fecha' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            toastr("Error al actualizar la convocatoria del día '$convocatoria->fecha'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al actualizar la convocatoria del día '$convocatoria->fecha'", 'status' => 422], 200);
+            return response()->json(['errors' => "Error al actualizar la convocatoria del día '$convocatoria->fecha'", 'status' => 500], 200);
         }
     }
 
@@ -204,12 +198,10 @@ class ConvocatoriasJuntaController extends Controller
             Convocado::where('idConvocatoria', $request->id)->delete();
             $convocatoria->delete();
 
-            toastr("La convocatoria del día '{$convocatoria->fecha}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La convocatoria del día '{$convocatoria->fecha}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            toastr("Error al eliminar la convocatoria del día '{$convocatoria->fecha}'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al eliminar la convocatoria del día '{$convocatoria->fecha}'",'status' => 422], 200);
+            return response()->json(['errors' => "Error al eliminar la convocatoria del día '{$convocatoria->fecha}'",'status' => 500], 200);
         }
     }
 
@@ -223,8 +215,7 @@ class ConvocatoriasJuntaController extends Controller
 
             return response()->json($convocatoria);
         } catch (\Throwable $th) {
-            toastr("No se ha encontrado la convocatoria.", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => 'No se ha encontrado la convocatoria.','status' => 422], 200);
+            return response()->json(['errors' => 'No se ha encontrado la convocatoria.','status' => 500], 200);
         }
     }
 
@@ -325,14 +316,12 @@ class ConvocatoriasJuntaController extends Controller
                     'url' => route('convocatoriasJunta')."?filtroJunta={$convocatoria->junta->id}&filtroVigente=1&filtroEstado=1&action=filtrar",
                ]));
 
-                toastr("La convocatoria del día '{$convocatoria->fecha}' ha sido notificada vía email a todos sus convocados.", NotificationInterface::SUCCESS, ' ');
                 return response()->json(['message' => "La convocatoria del día '$convocatoria->fecha' ha sido notificada vía email a todos sus convocados.", 'status' => 200], 200);
             }
 
             return response()->json($convocados->get());
         } catch (\Throwable $th) {
-            toastr("Ha ocurrido un error al obtener los convocados de la convocatoria del día '$convocatoria->fecha'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Ha ocurrido un error al obtener los convocados de la convocatoria del día '$convocatoria->fecha'",'status' => 422], 200);
+            return response()->json(['errors' => "Ha ocurrido un error al obtener los convocados de la convocatoria del día '$convocatoria->fecha'",'status' => 500], 200);
         }
     }
 
@@ -347,17 +336,14 @@ class ConvocatoriasJuntaController extends Controller
             $convocatoria = Convocatoria::where('id', $request->idConvocatoria)->first();
 
             if($request->asiste==1){
-                toastr("Se ha confirmado la asistencia a la convocatoria de la junta {$convocatoria->junta->centro->nombre} con fecha {$convocatoria->fecha} a las {$convocatoria->hora} en {$convocatoria->lugar}", NotificationInterface::SUCCESS, ' ');
                 return response()->json(['message' => "Se ha confirmado la asistencia a la convocatoria de la junta {$convocatoria->junta->centro->nombre} con fecha {$convocatoria->fecha} a las {$convocatoria->hora} en {$convocatoria->lugar}",'status' => 200], 200);
             }
             else{
-                toastr("Se ha cancelado la asistencia a la convocatoria de la junta {$convocatoria->junta->centro->nombre} con fecha {$convocatoria->fecha} a las {$convocatoria->hora} en {$convocatoria->lugar}", NotificationInterface::INFO, ' ');
                 return response()->json(['message' => "Se ha cancelado la asistencia a la convocatoria de la junta {$convocatoria->junta->centro->nombre} con fecha {$convocatoria->fecha} a las {$convocatoria->hora} en {$convocatoria->lugar}",'status' => 200], 200);
             }
 
         } catch (\Throwable $th) {
-            toastr('Ha ocurrido un error al editar la asistencia de la convocatoria', NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => 'Ha ocurrido un error al editar la asistencia de la convocatoria','status' => 422], 200);
+            return response()->json(['errors' => 'Ha ocurrido un error al editar la asistencia de la convocatoria','status' => 500], 200);
         }
     }
 }

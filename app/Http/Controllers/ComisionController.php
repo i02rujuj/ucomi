@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Flasher\Prime\Notification\NotificationInterface;
 
 class ComisionController extends Controller
 {
@@ -83,8 +82,7 @@ class ComisionController extends Controller
             ]);
 
         } catch (\Throwable $th) {
-            toastr('No se pudieron obtener las comisiones.', NotificationInterface::ERROR, ' ');
-            return redirect()->route('home')->with('errors', 'No se pudieron obtener las comisiones.'.$th->getMessage());
+            return redirect()->route('home')->with(['errors', 'No se pudieron obtener las comisiones.']);
         }
     }
 
@@ -105,12 +103,10 @@ class ComisionController extends Controller
                 "fechaDisolucion" => $request->data['fechaDisolucion'],
             ]);
 
-            toastr("La comisión '{$comision->nombre}' se ha añadido correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La comisión '{$comision->nombre}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            toastr("Error al añadir la comisión '{$comision->nombre}'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al añadir la comisión '{$comision->nombre}'", 'status' => 422], 200);
+            return response()->json(['errors' => "Error al añadir la comisión '{$comision->nombre}'", 'status' => 500], 200);
         }
     }
 
@@ -137,12 +133,10 @@ class ComisionController extends Controller
             $comision->fechaDisolucion = $request->data['fechaDisolucion'];
             $comision->save();
 
-            toastr("La comision '{$comision->nombre}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La comision '{$comision->nombre}' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            toastr("Error al actualizar la comisión '{$comision->nombre}'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al actualizar la comisión '{$comision->nombre}'", 'status' => 422], 200);
+            return response()->json(['errors' => "Error al actualizar la comisión '{$comision->nombre}'", 'status' => 500], 200);
         }
     }
 
@@ -158,12 +152,10 @@ class ComisionController extends Controller
             $comision = Comision::where('id', $request->id)->first();
             $comision->delete();
 
-            toastr("La comisión '{$comision->nombre}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "La comisión '{$comision->nombre}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            toastr("Error al eliminar la comisión '{$comision->nombre}'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al eliminar la comisión '{$comision->nombre}'",'status' => 422], 200);
+            return response()->json(['errors' => "Error al eliminar la comisión '{$comision->nombre}'",'status' => 500], 200);
         }
     }
 
@@ -177,8 +169,7 @@ class ComisionController extends Controller
             
             return response()->json($comision);
         } catch (\Throwable $th) {
-            toastr("No se ha encontrado la comisión.", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "No se ha encontrado la comisión.",'status' => 422], 200);
+            return response()->json(['errors' => "No se ha encontrado la comisión.",'status' => 500], 200);
         }
     }
 

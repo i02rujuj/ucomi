@@ -45,35 +45,31 @@ confirmarAsistenciaButtons.forEach(button => {
 
                 const response = await ASISTIR_CONVOCATORIA_BBDD(dataToSend)
 
-                if (response.status === 200) {
-                    window.location.reload()
-                } 
-                else {
-                    console.log(response)
-                    await Swal.fire({
-                        icon: "error",
-                        title: 'Confirmar asistencia',
-                        text: 'Se ha producido un error al confirmar tu asistencia',
-                        toast: true,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        showConfirmButton: false,
-                        position: 'top-right',
-                    })
+                switch (response.status) {
+                    case 200:
+                        localStorage.setItem("notification", JSON.stringify(notification(response.message, 'success')));
+                        window.location.reload()   
+                        break;
+                
+                    case 422:
+                        Swal.showValidationMessage(response.errors)
+                        return false
+                    break;
+            
+                    case 500:
+                        localStorage.setItem("notification", JSON.stringify(notification(response.errors, 'error')));
+                        window.location.reload()   
+                    break;
+                
+                    default:
+                        Swal.showValidationMessage(response.errors)
+                        return false
+                        break;
                 }
             }
 
         } catch (error) {
-            await Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Ha ocurrido un error al realizar una operación al confirmar/denegar la asistencia.",
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-                showConfirmButton: false,
-                position: 'top-right',
-            });
+            await Swal.fire(notification("Ha ocurrido un error al realizar una operación al confirmar/denegar la asistencia.", 'error'))
         }
 
     }, true)

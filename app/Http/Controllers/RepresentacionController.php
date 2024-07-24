@@ -16,7 +16,7 @@ class RepresentacionController extends Controller
             }
             return response()->json($rep);
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se ha encontrado la representación.', 'status' => 422], 200);
+            return response()->json(['errors' => 'No se ha encontrado la representación.', 'status' => 500], 200);
         }
     }
 
@@ -29,7 +29,7 @@ class RepresentacionController extends Controller
             }
             return response()->json($representaciones);
         } catch (\Throwable $th) {
-            return response()->json(['errors' => 'No se han podido obtener las representaciones.', 'status' => 422], 200);
+            return response()->json(['errors' => 'No se han podido obtener las representaciones.', 'status' => 500], 200);
         }
     }
 }

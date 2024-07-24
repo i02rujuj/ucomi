@@ -1,6 +1,7 @@
-const notification = (title, type) => {
+const notification = (text, type, title=null) => {
     return {
-        'title' : title,
+        'title': title,
+        'text' : text,
         'iconColor': 'white',
         'icon': type,
         'customClass': {

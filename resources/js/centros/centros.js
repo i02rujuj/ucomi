@@ -1,18 +1,10 @@
 import { DELETE_CENTRO_BBDD, UPDATE_CENTRO_BBDD, ADD_CENTRO_BBDD, VALIDATE_CENTRO_BBDD } from "./axiosTemplate.js";
 import Swal from 'sweetalert2';
-import {notification} from '../notifications.js'
 
 let modal_add = null
 let modal_edit = null
 
 document.addEventListener("DOMContentLoaded", async (event) => {
-    /*const toastString = localStorage.getItem("swal");
-    if(toastString){
-        Swal.fire(JSON.parse(toastString));
-    }
-    
-    localStorage.removeItem("swal");*/
-
     modal_add = document.querySelector('#modal_add')
 })
 
@@ -137,9 +129,10 @@ const preConfirm = async(accion, id=null) => {
         break;
     
         default:
+            Swal.showValidationMessage(response.errors)
+            return false
             break;
     }
-
 }
 
 /**
@@ -214,16 +207,7 @@ const addEditEvent = (button) => {
             });
 
         } catch (error) {
-            await Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Ha ocurrido un error al realizar una operación con el centro.",
-                toast: true,
-                timer: 3000,
-                timerProgressBar: true,
-                showConfirmButton: false,
-                position: 'top-right',
-            });
+            await Swal.fire(notification("Ha ocurrido un error al realizar una operación con el centro.", 'error'))
         }
     });
 };

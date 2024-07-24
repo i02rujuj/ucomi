@@ -12,7 +12,6 @@ use App\Models\Representacion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Flasher\Prime\Notification\NotificationInterface;
 
 class MiembrosJuntaController extends Controller
 {
@@ -91,8 +90,7 @@ class MiembrosJuntaController extends Controller
             ]);
         
         } catch (\Throwable $th) {
-            toastr('No se pudieron obtener los miembros de junta.', NotificationInterface::ERROR, ' ');
-            return redirect()->route('home')->with('errors', 'No se pudieron obtener los miembros de junta.');
+            return redirect()->route('home')->with(['errors', 'No se pudieron obtener los miembros de junta.']);
         }
     }
 
@@ -114,12 +112,10 @@ class MiembrosJuntaController extends Controller
                 "responsable" => $request->data['responsable'],
             ]);
 
-            toastr("El miembro de junta '{$miembroJunta->usuario->name}' se ha añadido correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El miembro de junta '{$miembroJunta->usuario->name}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            toastr("Error al añadir el miembro de junta '{$miembroJunta->usuario->name}'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al añadir el miembro de junta '{$miembroJunta->usuario->name}'", 'status' => 422], 200);
+            return response()->json(['errors' => "Error al añadir el miembro de junta '{$miembroJunta->usuario->name}'", 'status' => 500], 200);
         }
     }
 
@@ -141,12 +137,10 @@ class MiembrosJuntaController extends Controller
 
             $miembroJunta->save();
 
-            toastr("El miembro de junta '{$miembroJunta->usuario->name}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El miembro de junta '{$miembroJunta->usuario->name}' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            toastr("Error al actualizar el miembro de junta '{$miembroJunta->usuario->name}'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => 'Error al actualizar el miembro de junta.', 'status' => 422], 200);
+            return response()->json(['errors' => 'Error al actualizar el miembro de junta.', 'status' => 500], 200);
         }
     }
 
@@ -162,12 +156,10 @@ class MiembrosJuntaController extends Controller
             $miembroJunta = MiembroJunta::where('id', $request->id)->first();
             $miembroJunta->delete();
 
-            toastr("El miembro de junta '{$miembroJunta->usuario->name}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El miembro de junta '{$miembroJunta->usuario->name}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            toastr("Error al eliminar el miembro de junta '{$miembroJunta->usuario->name}'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al eliminar el miembro de junta '{$miembroJunta->usuario->name}'",'status' => 422], 200);
+            return response()->json(['errors' => "Error al eliminar el miembro de junta '{$miembroJunta->usuario->name}'",'status' => 500], 200);
         }
     }
 
@@ -181,8 +173,7 @@ class MiembrosJuntaController extends Controller
             
             return response()->json($miembroJunta);
         } catch (\Throwable $th) {
-            toastr('No se ha encontrado el miembro de junta.', NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => 'No se ha encontrado el miembro de junta.','status' => 422], 200);
+            return response()->json(['errors' => 'No se ha encontrado el miembro de junta.','status' => 500], 200);
         }
     }
 

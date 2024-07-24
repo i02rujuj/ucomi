@@ -19,7 +19,7 @@ class TiposCentroController extends Controller
             return response()->json($tiposCentro);
 
         } catch (\Throwable $th) {
-            return redirect()->route('home')->with('error', 'No se han podido obtener los tipos de centro.');
+            return redirect()->route('home')->with(['error', 'No se han podido obtener los tipos de centro.']);
         }
     }
 }

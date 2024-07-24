@@ -11,7 +11,6 @@ use App\Models\Representacion;
 use App\Models\MiembroGobierno;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Flasher\Prime\Notification\NotificationInterface;
 
 class MiembrosGobiernoController extends Controller
 {
@@ -83,8 +82,7 @@ class MiembrosGobiernoController extends Controller
             ]);
         
         } catch (\Throwable $th) {
-            toastr('No se pudieron obtener los miembros de gobierno.', NotificationInterface::ERROR, ' ');
-            return redirect()->route('home')->with('errors', 'No se pudieron obtener los miembros de gobierno.');
+            return redirect()->route('home')->with(['errors', 'No se pudieron obtener los miembros de gobierno.']);
         }
     }
 
@@ -107,12 +105,10 @@ class MiembrosGobiernoController extends Controller
                 "responsable" => $request->data['responsable'],
             ]);
 
-            toastr("El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha añadido correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            toastr("Error al añadir el miembro de gobierno '{$miembroGobierno->usuario->name}'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al añadir el miembro de gobierno '{$miembroGobierno->usuario->name}'", 'status' => 422], 200);
+            return response()->json(['errors' => "Error al añadir el miembro de gobierno '{$miembroGobierno->usuario->name}'", 'status' => 500], 200);
         }
     }
 
@@ -135,12 +131,10 @@ class MiembrosGobiernoController extends Controller
 
             $miembroGobierno->save();
 
-            toastr("El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha actualizado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha actualizado correctamente.", 'status' => 200], 200);
             
         } catch (\Throwable $th) {
-            toastr("Error al actualizar el miembro de gobierno '{$miembroGobierno->usuario->name}'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al actualizar el miembro de gobierno '{$miembroGobierno->usuario->name}'", 'status' => 422], 200);
+            return response()->json(['errors' => "Error al actualizar el miembro de gobierno '{$miembroGobierno->usuario->name}'", 'status' => 500], 200);
         }
     }
 
@@ -156,12 +150,10 @@ class MiembrosGobiernoController extends Controller
             $miembroGobierno = MiembroGobierno::where('id', $request->id)->first();
             $miembroGobierno->delete();
 
-            toastr("El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha eliminado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            toastr("Error al eliminar el miembro de gobierno '{$miembroGobierno->usuario->name}'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al eliminar el miembro de gobierno '{$miembroGobierno->usuario->name}'",'status' => 422], 200);
+            return response()->json(['errors' => "Error al eliminar el miembro de gobierno '{$miembroGobierno->usuario->name}'",'status' => 500], 200);
         }
     }
 
@@ -175,8 +167,7 @@ class MiembrosGobiernoController extends Controller
 
             return response()->json($miembroGobierno);
         } catch (\Throwable $th) {
-            toastr("No se ha encontrado el miembro de gobierno.", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "No se ha encontrado el miembro de gobierno.",'status' => 422], 200);
+            return response()->json(['errors' => "No se ha encontrado el miembro de gobierno.",'status' => 500], 200);
         }
     }
 

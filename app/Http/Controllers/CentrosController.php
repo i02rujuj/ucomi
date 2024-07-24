@@ -58,7 +58,7 @@ class CentrosController extends Controller
                 'filtroNombre' => $request['filtroNombre'],
                 'filtroTipo' => $request['filtroTipo'],
                 'filtroEstado' => $request['filtroEstado'],
-                'action' => $req345uest['action'],
+                'action' => $request['action'],
             ]);
 
         } catch (\Throwable $th) {

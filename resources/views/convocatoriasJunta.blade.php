@@ -68,7 +68,9 @@ Convocatorias Junta
                                     <img src="{{ $convocatoria->junta->centro->logo ? $convocatoria->junta->centro->logo : asset('img/default_image.png') }}" alt="Imagen de centro" class="w-10 h-10 ml-1 mb-1 justify-self-center rounded-full object-cover">  
                                 </div>
                                 <h2 class="font-bold">Convocatoria Junta de {{$convocatoria->junta->centro->tipo->nombre}}</h2>
-                            </div>                           
+                            </div>  
+                            
+                            <hr class="my-2">
                             
                             <div class="flex justify-start items-center mt-2">
                                 

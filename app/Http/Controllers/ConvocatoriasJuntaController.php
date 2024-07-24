@@ -313,7 +313,7 @@ class ConvocatoriasJuntaController extends Controller
                     $convocado->save();
                 }
 
-                Mail::to('i02rujuj@uco.es')->send(new NotificarConvocadosEmail([
+                Mail::to(Auth::user()->email)->send(new NotificarConvocadosEmail([
                     'asunto' => 'Confirmación asistencia a convocatoria de Junta del centro '.$convocatoria->junta->centro->tipo->nombre.' de '.$convocatoria->junta->centro->nombre,
                     //'usuario' => $convocado->usuario->name,
                     'usuario' => Auth::user()->name,

@@ -45,9 +45,7 @@ class PublicoController extends Controller
                 }
         }   
 
-        
-        toastr('No es posible consultar la información del centro.', NotificationInterface::ERROR, ' ');
-        return redirect()->route('welcome');
+        return redirect()->route('welcome')->with(['errors' => 'No es posible consultar la información del centro.']);
     }
 
     public function infoComision(Request $request)
@@ -62,8 +60,7 @@ class PublicoController extends Controller
                 }
         }   
 
-        toastr('No es posible consultar la información de la comisión.', NotificationInterface::ERROR, ' ');
-        return redirect()->route('welcome');
+        return redirect()->route('welcome')->with(['errors' => 'No es posible consultar la información de la comisión.']);
     }
     
     public function login(Request $request)

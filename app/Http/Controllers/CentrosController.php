@@ -38,6 +38,7 @@ class CentrosController extends Controller
 
             $centros=$centros
                 ->orderBy('deleted_at')
+                ->orderBy('updated_at','desc')
                 ->orderBy('idTipo')
                 ->orderBy('nombre')
                 ->paginate(12);

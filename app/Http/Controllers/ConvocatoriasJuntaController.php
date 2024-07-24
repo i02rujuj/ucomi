@@ -83,6 +83,7 @@ class ConvocatoriasJuntaController extends Controller
             $convocatorias = $convocatorias
             ->whereNot('idJunta', null)
             ->orderBy('deleted_at')
+            ->orderBy('updated_at','desc')
             ->orderBy('fecha', 'desc')  
             ->orderBy('hora', 'desc')          
             ->orderBy('idJunta')

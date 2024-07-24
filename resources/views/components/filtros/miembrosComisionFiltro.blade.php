@@ -57,13 +57,15 @@
                     </select>
                 </div>
                
-                <button type="submit" value="filtrar" name="action" class="w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
-                    Filtrar
-                </button>
+                <div class="flex justify-between">
+                    <button type="submit" value="filtrar" name="action" class="text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
+                        Filtrar
+                    </button>
 
-                <button type="submit" value="limpiar" name="action" class="w-full md:w-auto text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
-                    Limpiar
-                </button>
+                    <button type="submit" value="limpiar" name="action" class="text-sm bg-blue-100 text-slate-600 border border-blue-200 font-medium hover:text-black py-1 px-4 rounded">
+                        Limpiar
+                    </button>
+                </div>
             </div>          
         </div>
     </form>

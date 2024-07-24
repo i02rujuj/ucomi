@@ -55,6 +55,7 @@ class MiembrosJuntaController extends Controller
 
             $miembrosJunta = $miembrosJunta
             ->orderBy('deleted_at')
+            ->orderBy('updated_at','desc')
             ->orderBy('fechaCese')
             ->orderBy('idJunta')
             ->orderBy('idRepresentacion')

@@ -112,6 +112,7 @@ class ConvocatoriasComisionController extends Controller
             $convocatorias = $convocatorias
             ->whereNot('idComision', null)
             ->orderBy('deleted_at')
+            ->orderBy('updated_at','desc')
             ->orderBy('fecha', 'desc')  
             ->orderBy('hora', 'desc')          
             ->orderBy('idComision')

@@ -58,6 +58,7 @@ class ComisionController extends Controller
 
             $comisiones = $comisiones
             ->orderBy('deleted_at')
+            ->orderBy('updated_at','desc')
             ->orderBy('fechaDisolucion')
             ->orderBy('fechaConstitucion', 'desc')
             ->paginate(12);

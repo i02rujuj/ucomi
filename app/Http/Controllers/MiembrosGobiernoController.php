@@ -46,6 +46,7 @@ class MiembrosGobiernoController extends Controller
 
             $miembrosGobierno = $miembrosGobierno
             ->orderBy('deleted_at')
+            ->orderBy('updated_at','desc')
             ->orderBy('fechaCese')
             ->orderBy('idCentro')
             ->orderBy('idRepresentacion')

@@ -72,6 +72,7 @@ class MiembrosComisionController extends Controller
             
             $miembrosComision = $miembrosComision
             ->orderBy('deleted_at')
+            ->orderBy('updated_at','desc')
             ->orderBy('fechaCese')
             ->orderBy('idComision')
             ->orderBy('idRepresentacion')

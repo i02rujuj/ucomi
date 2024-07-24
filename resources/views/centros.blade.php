@@ -23,7 +23,7 @@ Centros
                 
                 @include('components.filtros.centroFiltro')
 
-                @if($permitirAcciones = Auth::user()->esResponsable('admin|centro'))
+                @if($permitirAcciones = Auth::user()->esResponsable('admin'))
                     <div>
                         <div id="btn-add-centro" type="submit" class="flex items-center gap-2 bg-white px-5 py-2.5 rounded-md shadow cursor-pointer">
                             <span class="material-icons-round scale-75">

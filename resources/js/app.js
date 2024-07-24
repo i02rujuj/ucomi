@@ -8,6 +8,10 @@ window.Alpine = Alpine
 Alpine.start()
 
 import Swal from 'sweetalert2';
+window.Swal = Swal
+
+import {notification} from './notifications.js'
+window.notification=notification
 
 document.addEventListener("DOMContentLoaded", async (event) => {
     const toastString = localStorage.getItem("notification");

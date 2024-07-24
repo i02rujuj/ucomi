@@ -160,6 +160,7 @@ return [
          * Package Service Providers...
          */
         CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
+        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -186,6 +187,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
+        'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Helper' => App\Helpers\Helper::class,
     ])->toArray(),

@@ -9,7 +9,6 @@ use App\Models\TipoCentro;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Flasher\Prime\Notification\NotificationInterface;
 
 class CentrosController extends Controller
 {
@@ -108,7 +107,7 @@ class CentrosController extends Controller
 
             $centro->nombre = $request->data['nombre'];
             $centro->direccion = $request->data['direccion'];
-            $centro->idTipo = $request->data['idTipo'];
+            $centro->idTertipo = $request->data['idTipo'];
             $centro->save();
 
             return response()->json(['message' => "El centro '$centro->nombre' se ha actualizado correctamente.", 'status' => 200], 200);

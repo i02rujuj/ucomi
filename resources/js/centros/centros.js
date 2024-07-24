@@ -132,7 +132,7 @@ const preConfirm = async(accion, id=null) => {
         break;
 
         case 500:
-            localStorage.setItem("notification", JSON.stringify(notification(response.message, 'error')));
+            localStorage.setItem("notification", JSON.stringify(notification(response.errors, 'error')));
             window.location.reload()   
         break;
     

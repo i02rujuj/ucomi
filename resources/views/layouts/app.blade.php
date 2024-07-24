@@ -45,6 +45,7 @@
     </main>
 
     @include('components.footer')
-    
+    @include('sweetalert::alert')
+
 </body>
 </html>

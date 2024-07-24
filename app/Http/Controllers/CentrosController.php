@@ -58,7 +58,7 @@ class CentrosController extends Controller
                 'filtroNombre' => $request['filtroNombre'],
                 'filtroTipo' => $request['filtroTipo'],
                 'filtroEstado' => $request['filtroEstado'],
-                'action' => $request['action'],
+                'action' => $reqrruest['action'],
             ]);
 
         } catch (\Throwable $th) {
@@ -85,11 +85,9 @@ class CentrosController extends Controller
                 "logo" => $url_image,
             ]);
 
-            toastr("El centro '$centro->nombre' se ha añadido correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El centro '$centro->nombre' se ha añadido correctamente.", 'status' => 200], 200);
         } catch (\Throwable $th) {
-            toastr("Error al añadir el centro '$centro->nombre'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al añadir el centro '$centro->nombre'", 'status' => 422], 200);
+            return response()->json(['errors' => "Error al añadir el centro '$centro->nombre'", 'status' => 500], 200);
         }
     }
 
@@ -114,11 +112,9 @@ class CentrosController extends Controller
             $centro->idTipo = $request->data['idTipo'];
             $centro->save();
 
-           // toastr("El centro '$centro->nombre' se ha actualizado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El centro '$centro->nombre' se ha actualizado correctamente.", 'status' => 200], 200);
         } catch (\Throwable $th) {
-            toastr("Error al actualizar el centro '$centro->nombre'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al actualizar el centro '$centro->nombre'", 'status' => 422], 200);
+            return response()->json(['errors' => "Error al actualizar el centro '$centro->nombre'", 'status' => 500], 200);
         }
     }
 
@@ -134,12 +130,10 @@ class CentrosController extends Controller
             $centro = Centro::where('id', $request->id)->first();
             $centro->delete();
 
-            toastr("El centro '$centro->nombre' se ha eliminado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El centro '$centro->nombre' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            toastr("Error al eliminar el centro '$centro->nombre'", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => "Error al eliminar el centro '$centro->nombre'",'status' => 422], 200);
+            return response()->json(['errors' => "Error al eliminar el centro '$centro->nombre'",'status' => 500], 200);
         }
     }
 
@@ -154,8 +148,7 @@ class CentrosController extends Controller
 
             return response()->json($centro);
         } catch (\Throwable $th) {
-            toastr("No se ha encontrado el centro.", NotificationInterface::ERROR, ' ');
-            return response()->json(['errors' => 'No se ha encontrado el centro.', 'status' => 422], 200);
+            return response()->json(['errors' => 'No se ha encontrado el centro.', 'status' => 500], 200);
         }
     }
 

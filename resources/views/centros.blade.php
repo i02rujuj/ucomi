@@ -49,9 +49,7 @@ Centros
 
                 <div class="flex gap-x-4 justify-center items-center flex-wrap">
                     <div class="">
-                        <label for="img_logo" class="block text-sm text-gray-600">
-                            <img id="img_logo" name="img_logo" src="{{asset('img/default_image.png')}}" alt="Imagen de centro" class="w-16 h-16 mb-1 rounded-full object-cover">  
-                        </label>
+                        <img id="img_logo" name="img_logo" src="{{asset('img/default_image.png')}}" alt="Imagen de centro" class="w-16 h-16 mb-1 rounded-full object-cover">  
                     </div>
                     <div class="">
                         <input id="logo" name="logo" type="file" class="centro text-sm text-gray-600 border bg-blue-50 rounded-md mt-2 py-1 outline-none" />

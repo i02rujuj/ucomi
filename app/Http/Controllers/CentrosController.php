@@ -114,6 +114,7 @@ class CentrosController extends Controller
             $centro->idTipo = $request->data['idTipo'];
             $centro->save();
 
+            flasher("El centro '$centro->nombre' se ha actualizado correctamente.", NotificationInterface::SUCCESS);
             sweetalert("El centro '$centro->nombre' se ha actualizado correctamente.", NotificationInterface::SUCCESS);
             toastr("El centro '$centro->nombre' se ha actualizado correctamente.", NotificationInterface::SUCCESS, ' ');
             return response()->json(['message' => "El centro '$centro->nombre' se ha actualizado correctamente.", 'status' => 200], 200);

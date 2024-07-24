@@ -58,11 +58,11 @@ class CentrosController extends Controller
                 'filtroNombre' => $request['filtroNombre'],
                 'filtroTipo' => $request['filtroTipo'],
                 'filtroEstado' => $request['filtroEstado'],
-                'action' => $request['action'],
+                'action' => $req345uest['action'],
             ]);
 
         } catch (\Throwable $th) {
-            return redirect()->route('home')->with('errors', 'No se pudieron obtener los centros.');
+            return redirect()->route('home')->with(['errors' => 'No se pudieron obtener los centros.']);
         }
     }
 

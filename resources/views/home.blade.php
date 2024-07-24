@@ -15,7 +15,9 @@ Panel
             
         @if (session()->has('errors'))
             <div class="errorMessage my-2 py-1 px-4 text-sm font-medium bg-red-100 text-slate-700 rounded" role="alert">
+                567567
                 {{ session("errors") }}
+                4567567
             </div>
         @endif
     </div>

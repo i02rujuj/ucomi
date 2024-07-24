@@ -15,6 +15,7 @@ class MiembroGobiernoSeeder extends Seeder
 
         $miembrosGobierno =collect([
             [
+                'id' => 1,
                 'idUsuario' => 3, 
                 'idCentro' => 9,
                 'representacion' => config('constants.REPRESENTACIONES.GOBIERNO.DIR'),
@@ -22,6 +23,7 @@ class MiembroGobiernoSeeder extends Seeder
                 'responsable' => 1
             ],
             [
+                'id' => 2,
                 'idUsuario' => 4, 
                 'idCentro' => 9,
                 'representacion' => config('constants.REPRESENTACIONES.GOBIERNO.SECRE'),
@@ -29,6 +31,7 @@ class MiembroGobiernoSeeder extends Seeder
                 'responsable' => 1
             ],
             [
+                'id' => 3,
                 'idUsuario' => 37, 
                 'idCentro' => 9,
                 'representacion' => config('constants.REPRESENTACIONES.GOBIERNO.SUBDIR'),
@@ -37,6 +40,7 @@ class MiembroGobiernoSeeder extends Seeder
                 'responsable' => 0
             ],
             [
+                'id' => 4,
                 'idUsuario' => 34, 
                 'idCentro' => 9,
                 'representacion' => config('constants.REPRESENTACIONES.GOBIERNO.SUBDIR'),
@@ -45,6 +49,7 @@ class MiembroGobiernoSeeder extends Seeder
                 'responsable' => 0
             ],
             [
+                'id' => 5,
                 'idUsuario' => 38, 
                 'idCentro' => 9,
                 'representacion' => config('constants.REPRESENTACIONES.GOBIERNO.SUBDIR'),
@@ -53,6 +58,7 @@ class MiembroGobiernoSeeder extends Seeder
                 'responsable' => 0
             ],
             [
+                'id' => 6,
                 'idUsuario' => 23, 
                 'idCentro' => 9,
                 'representacion' => config('constants.REPRESENTACIONES.GOBIERNO.LIBRE'),
@@ -62,8 +68,9 @@ class MiembroGobiernoSeeder extends Seeder
             ],
         ]);
 
-        foreach($miembrosGobierno as $m){
+        foreach($miembrosGobierno->reverse() as $m){
             $miembro = new MiembroGobierno();
+            $miembro->id = $m['id'];
             $miembro->idUsuario = $m['idUsuario'];
             $miembro->idCentro = $m['idCentro'];
             $miembro->idRepresentacion = $m['representacion'];

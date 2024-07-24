@@ -7,7 +7,6 @@ use App\Models\Centro;
 use App\Models\Comision;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Flasher\Prime\Notification\NotificationInterface;
 
 class PublicoController extends Controller
 {
@@ -16,7 +15,6 @@ class PublicoController extends Controller
     {
         $centros = Centro::select('id', 'nombre', 'idTipo', 'logo')
         ->orderBy('idTipo')
-        ->orderBy('updated_at')
         ->get();
 
         return view('publico.welcome',['centros' => $centros]);

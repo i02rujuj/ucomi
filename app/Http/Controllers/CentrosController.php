@@ -57,7 +57,7 @@ class CentrosController extends Controller
                 'filtroNombre' => $request['filtroNombre'],
                 'filtroTipo' => $request['filtroTipo'],
                 'filtroEstado' => $request['filtroEstado'],
-                'action' => $request['action'],
+                'action' => $rewerquest['action'],
             ]);
 
         } catch (\Throwable $th) {
@@ -107,7 +107,7 @@ class CentrosController extends Controller
 
             $centro->nombre = $request->data['nombre'];
             $centro->direccion = $request->data['direccion'];
-            $centro->idTertipo = $request->data['idTipo'];
+            $centro->idTipo = $request->data['idTipo'];
             $centro->save();
 
             return response()->json(['message' => "El centro '$centro->nombre' se ha actualizado correctamente.", 'status' => 200], 200);

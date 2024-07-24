@@ -14,14 +14,17 @@ class TipoConvocatoriaSeeder extends Seeder
     {
         $tipo = new TipoConvocatoria();
         $tipo->nombre = 'Ordinaria';
+        $tipo->id = 1;
         $tipo->save();
 
         $tipo = new TipoConvocatoria();
         $tipo->nombre = 'Extraordinaria';
+        $tipo->id = 2;
         $tipo->save();
 
         $tipo = new TipoConvocatoria();
         $tipo->nombre = 'Urgente';
+        $tipo->id = 3;
         $tipo->save();
     }
 }

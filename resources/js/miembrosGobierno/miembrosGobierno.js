@@ -148,7 +148,7 @@ const preConfirm = async(accion, id=null) => {
     switch (response.status) {
         case 200:
             localStorage.setItem("notification", JSON.stringify(notification(response.message, 'success')));
-            window.location.reload()   
+            window.location.href = window.location.href.split('?')[0]
             break;
     
         case 422:

@@ -13,7 +13,7 @@ class MiembroJuntaSeeder extends Seeder
     public function run(): void
     {
 
-        $miembrosJunta =[
+        $miembrosJunta =collect([
             [
                 'idUsuario' => 3, 
                 'idJunta' => 1,
@@ -287,9 +287,9 @@ class MiembroJuntaSeeder extends Seeder
                 'fechaTomaPosesion' => '2022-12-02',
                 'responsable' => 0,
             ],
-        ];
+        ]);
 
-        foreach($miembrosJunta as $m){
+        foreach($miembrosJunta->reverse() as $m){
             $miembro = new MiembroJunta();
             $miembro->idUsuario = $m['idUsuario'];
             $miembro->idJunta = $m['idJunta'];

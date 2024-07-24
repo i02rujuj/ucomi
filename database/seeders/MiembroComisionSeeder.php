@@ -9,7 +9,7 @@ class MiembroComisionSeeder extends Seeder
 {
     public function run(): void
     {
-        $miembrosComision =[
+        $miembrosComision =collect([
             [
                 'idUsuario' => 3, 
                 'idComision' => 1, 
@@ -1058,9 +1058,9 @@ class MiembroComisionSeeder extends Seeder
                 'cargo' => 'Profesor área Ing. Química',
                 'responsable' => 0,
             ],
-        ];
+        ]);
 
-        foreach($miembrosComision as $m){
+        foreach($miembrosComision->reverse() as $m){
             $miembro = new MiembroComision();
             $miembro->idUsuario = $m['idUsuario'];
             $miembro->idComision = $m['idComision'];
@@ -1072,8 +1072,8 @@ class MiembroComisionSeeder extends Seeder
             $miembro->save();
         }
         // Se hace así para que haga un commit en cada creación y permita no repetir miembros
-        for($i=0; $i<10; $i++){
+        /*for($i=0; $i<10; $i++){
             MiembroComision::factory()->count(1)->create();
-        }
+        }*/
     }
 }

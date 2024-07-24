@@ -15,14 +15,17 @@ class TipoCentroSeeder extends Seeder
     {
         $tipo = new TipoCentro();
         $tipo->nombre = 'Facultad';
+        $tipo->id = 1;
         $tipo->save();
 
         $tipo = new TipoCentro();
         $tipo->nombre = 'Escuela';
+        $tipo->id = 2;
         $tipo->save();
 
         $tipo = new TipoCentro();
         $tipo->nombre = 'Centro';
+        $tipo->id = 3;
         $tipo->save();
     }
 }

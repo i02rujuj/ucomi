@@ -13,7 +13,7 @@ class MiembroGobiernoSeeder extends Seeder
     public function run(): void
     {
 
-        $miembrosGobierno =[
+        $miembrosGobierno =collect([
             [
                 'idUsuario' => 3, 
                 'idCentro' => 9,
@@ -60,7 +60,7 @@ class MiembroGobiernoSeeder extends Seeder
                 'fechaTomaPosesion' => '2022-11-17',
                 'responsable' => 0
             ],
-        ];
+        ]);
 
         foreach($miembrosGobierno as $m){
             $miembro = new MiembroGobierno();

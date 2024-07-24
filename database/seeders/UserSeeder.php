@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $usuarios = [
+        $usuarios = collect([
             [
                 'id' => 1,
                 'nombre'=>'José Luis Ávila Jiménez', 
@@ -264,11 +264,6 @@ class UserSeeder extends Seeder
                 'email'=>'rafael.morales@uco.es', 
             ],
             [
-                'id' => 48,
-                'nombre'=>'Joaquín Mateos Barroso', 
-                'email'=>'joaquin.mateos@uco.es', 
-            ],
-            [
                 'id' => 49,
                 'nombre'=>'José Luis Olivares Olmedilla', 
                 'email'=>'el1ololj@uco.es', 
@@ -498,10 +493,11 @@ class UserSeeder extends Seeder
                 'nombre'=>'Arturo Chica Pérez', 
                 'email'=>'afchica@uco.es', 
             ],
-        ];
+        ]);
 
-        foreach($usuarios as $user){
+        foreach($usuarios->reverse() as $user){
             $u = new User();
+            $u->id = $user['id'];
             $u->name = $user['nombre'];
             $u->email = $user['email'];
             $u->email_verified_at = now();

@@ -9,7 +9,7 @@ class ComisionSeeder extends Seeder
 {
     public function run(): void
     {
-        $comisiones =[
+        $comisiones =collect([
             [
                 'id' => 1,
                 'nombre' => 'Asuntos económicos', 
@@ -131,10 +131,11 @@ class ComisionSeeder extends Seeder
                 'idJunta' => 1,
             ],
             
-        ];
+        ]);
 
-        foreach($comisiones as $com){
+        foreach($comisiones->reverse() as $com){
             $c = new Comision();
+            $c->id = $com['id'];
             $c->nombre = $com['nombre'];
             $c->descripcion = $com['descripcion'];
             $c->fechaConstitucion = $com['fechaConstitucion'];

@@ -12,15 +12,17 @@ class JuntaSeeder extends Seeder
      */
     public function run(): void
     {
-        $juntas =[
+        $juntas =collect([
             [
+                'id' => 1,
                 'idCentro' => 9, // EPS UCO
                 'fechaConstitucion' => '2022-12-02',
             ],
-        ];
+        ]);
 
-        foreach($juntas as $j){
+        foreach($juntas->reverse() as $j){
             $junta = new Junta();
+            $junta->id = $j['id'];
             $junta->idCentro = $j['idCentro'];
             $junta->fechaConstitucion = $j['fechaConstitucion'];
             $junta->fechaDisolucion= null;

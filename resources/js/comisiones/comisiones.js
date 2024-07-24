@@ -90,6 +90,10 @@ const preConfirm = async(accion, id=null) => {
                         cancelButtonText: "Cancelar",
                         confirmButtonColor: '#d33',
                         cancelButtonColor: '',
+                        toast: true,
+                        timerProgressBar: true,
+                        showConfirmButton: true,
+                        position: 'top-right',
                         showLoaderOnConfirm:true,
                         preConfirm: async () => {confirmarCesarMiembros = true},
                     })

@@ -62,6 +62,9 @@ class Convocatoria extends Model
                 return $builder->where('idComision', $request->filtroComision);       
             })->when($request->has('filtroJunta') && $request->filtroJunta!=null, function($builder) use ($request){
                 return $builder->where('idJunta', $request->filtroJunta);       
+            })->when($request->has('filtroTipo') && $request->filtroTipo!=null, function($builder) use ($request){
+                return $builder->where('idTipo', $request->filtroTipo); 
+                      
             })->when($request->has('filtroEstado') && $request->filtroEstado!=null && $request->filtroEstado!=2, function($builder) use ($request){
                 if($request->filtroEstado==0){
                     return $builder->whereNotNull('deleted_at');

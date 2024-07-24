@@ -67,7 +67,7 @@ class ConvocatoriasJuntaController extends Controller
             switch ($request->input('action')) {
                 case 'limpiar':
                     $request['filtroJunta']=null;
-                    $request['filtroVigente']=null;
+                    $request['filtroTipo']=null;
                     $request['filtroEstado']=null;
                     break;
                 case 'filtrar':
@@ -103,7 +103,7 @@ class ConvocatoriasJuntaController extends Controller
                 'juntas' => $juntas, 
                 'tipos' => $tipos, 
                 'filtroJunta' => $request['filtroJunta'],
-                'filtroVigente' => $request['filtroVigente'],
+                'filtroTipo' => $request['filtroTipo'],
                 'filtroEstado' => $request['filtroEstado'],
                 'action' => $request['action'],
             ]);

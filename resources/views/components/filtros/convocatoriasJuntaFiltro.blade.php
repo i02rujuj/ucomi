@@ -15,10 +15,11 @@
                 </div>
 
                 <div class="mb-2">   
-                    <select class="w-full text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none" id="filtroVigente" name="filtroVigente">
-                        <option {{app('request')->input('filtroVigente')!=null && app('request')->input('filtroVigente')==0 ? 'selected' : ""}} value="0">Filtrar por vigencia</option>
-                        <option {{app('request')->input('filtroVigente')!=null && app('request')->input('filtroVigente')==1 ? 'selected' : ""}} value="1">Vigentes</option>
-                        <option {{app('request')->input('filtroVigente')!=null && app('request')->input('filtroVigente')==2 ? 'selected' : ""}} value="2">No Vigentes</option>
+                    <select class="w-full text-sm text-gray-600 border bg-blue-50 rounded-md px-2 py-1 outline-none" id="filtroTipo" name="filtroTipo">
+                        <option {{app('request')->input('filtroTipo')!=null && app('request')->input('filtroTipo')==0 ? 'selected' : ""}} value="0">Filtrar por tipo</option>
+                        @foreach ($tipos as $tipo)
+                            <option value="{{ $tipo['id'] }}" {{ app('request')->input('filtroTipo') == $tipo['id'] ? "selected":"" }}>{{ $tipo->nombre }}</option>
+                        @endforeach
                     </select>
                 </div>
 

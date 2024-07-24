@@ -200,7 +200,7 @@ Convocatorias Comisión
 
             <div class="mt-5">{{$convocatorias->appends([
                 'filtroComision' => $filtroComision,
-                'filtroVigente' => $filtroVigente,
+                'filtroTipo' => $filtroTipo,
                 'filtroEstado' => $filtroEstado,
                 'action' => $action,
                 ])->links()}}

@@ -96,7 +96,7 @@ class ConvocatoriasComisionController extends Controller
             switch ($request->input('action')) {
                 case 'limpiar':
                     $request['filtroComision']=null;
-                    $request['filtroVigente']=null;
+                    $request['filtroTipo']=null;
                     $request['filtroEstado']=null;
                     break;
                 case 'filtrar':
@@ -132,7 +132,7 @@ class ConvocatoriasComisionController extends Controller
                 'comisiones' => $comisiones, 
                 'tipos' => $tipos, 
                 'filtroComision' => $request['filtroComision'],
-                'filtroVigente' => $request['filtroVigente'],
+                'filtroTipo' => $request['filtroTipo'],
                 'filtroEstado' => $request['filtroEstado'],
                 'action' => $request['action'],
             ]);

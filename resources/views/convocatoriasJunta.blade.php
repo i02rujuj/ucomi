@@ -200,7 +200,7 @@ Convocatorias Junta
 
             <div class="mt-5">{{$convocatorias->appends([
                 'filtroJunta' => $filtroJunta,
-                'filtroVigente' => $filtroVigente,
+                'filtroTipo' => $filtroTipo,
                 'filtroEstado' => $filtroEstado,
                 'action' => $action,
                 ])->links()}}

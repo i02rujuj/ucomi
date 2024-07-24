@@ -1,3 +1,4 @@
+import { stringify } from "postcss";
 import { DELETE_CENTRO_BBDD, UPDATE_CENTRO_BBDD, ADD_CENTRO_BBDD, VALIDATE_CENTRO_BBDD } from "./axiosTemplate.js";
 import Swal from 'sweetalert2';
 
@@ -5,6 +6,13 @@ let modal_add = null
 let modal_edit = null
 
 document.addEventListener("DOMContentLoaded", async (event) => {
+    const toastString = localStorage.getItem("swal");
+    if(toastString){
+        Swal.fire(JSON.parse(toastString));
+    }
+    
+    localStorage.removeItem("swal");
+
     modal_add = document.querySelector('#modal_add')
 })
 
@@ -112,7 +120,23 @@ const preConfirm = async(accion, id=null) => {
             break;
     }
 
-    if (response.status === 200) {  
+    if (response.status == 200) {
+
+        const string = JSON.stringify({
+            'title' : response.message,
+            'iconColor': 'white',
+            'icon': 'success',
+            'customClass': {
+                popup: 'colored-toast',
+              },
+            'position' : 'top-right',
+            'toast' : true,
+            'timer' : 3000,
+            'timerProgressBar' : true,
+            'showConfirmButton' : false,
+        });
+        localStorage.setItem("swal", string);
+
         window.location.reload()   
     } 
     else {

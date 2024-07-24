@@ -134,6 +134,8 @@ Panel
                                                         workspace_premium
                                                     </span>
                                                     Responsable de Centro
+                                                    @else
+                                                        Miembro de Gobierno
                                                     @endif
                                                 </span>
                                             </div>
@@ -208,6 +210,8 @@ Panel
                                                         workspace_premium
                                                     </span>
                                                     Responsable de Junta
+                                                    @else
+                                                        Miembro de Junta
                                                     @endif
                                                 </span>
                                             </div>
@@ -273,6 +277,8 @@ Panel
                                                             workspace_premium
                                                         </span>
                                                         Responsable de Comisión
+                                                        @else
+                                                        Miembro de Comisión
                                                     @endif
                                                 </span>
                                             </div>

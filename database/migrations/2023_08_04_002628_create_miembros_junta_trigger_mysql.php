@@ -18,8 +18,8 @@ return new class extends Migration
 
             DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert_miembros_junta');
             DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update_miembros_junta');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert_miembros_junta');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update_miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_activo_insert_miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_activo_str_update_miembros_junta');
 
             DB::unprepared("CREATE TRIGGER add_vigente_insert_miembros_junta BEFORE INSERT ON miembros_junta
                         FOR EACH ROW
@@ -80,8 +80,8 @@ return new class extends Migration
         if(env('DB_CONNECTION')=="mysql"){
             DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_insert_miembros_junta');
             DB::unprepared('DROP TRIGGER IF EXISTS add_vigente_update_miembros_junta');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_insert_miembros_junta');
-            DB::unprepared('DROP TRIGGER IF EXISTS add_deleted_at_str_update_miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_activo_insert_miembros_junta');
+            DB::unprepared('DROP TRIGGER IF EXISTS add_activo_str_update_miembros_junta');
         }
     }
 };

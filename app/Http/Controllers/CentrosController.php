@@ -86,7 +86,7 @@ class CentrosController extends Controller
 
             return response()->json(['message' => "El centro '$centro->nombre' se ha añadido correctamente.", 'status' => 200], 200);
         } catch (\Throwable $th) {
-            return response()->json(['errors' => "Error al añadir el centro", 'status' => 500], 200);
+            return response()->json(['errors' => "Error al añadir el centro".$th->getMessage(), 'status' => 500], 200);
         }
     }
 

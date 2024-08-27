@@ -109,7 +109,7 @@ class MiembrosGobiernoController extends Controller
             return response()->json(['message' => "El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => "Error al añadir el miembro de gobierno '{$miembroGobierno->usuario->name}'", 'status' => 500], 200);
+            return response()->json(['errors' => "Error al añadir el miembro de gobierno", 'status' => 500], 200);
         }
     }
 
@@ -154,7 +154,7 @@ class MiembrosGobiernoController extends Controller
             return response()->json(['message' => "El miembro de gobierno '{$miembroGobierno->usuario->name}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => "Error al eliminar el miembro de gobierno '{$miembroGobierno->usuario->name}'",'status' => 500], 200);
+            return response()->json(['errors' => "Error al eliminar el miembro de gobierno",'status' => 500], 200);
         }
     }
 

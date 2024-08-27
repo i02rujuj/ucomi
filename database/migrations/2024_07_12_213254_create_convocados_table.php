@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('convocados', function (Blueprint $table) {
-            $table->id();
-
+            $table->id()->startingValue(10000);
             $table->unsignedBigInteger('idConvocatoria');
             $table->unsignedBigInteger('idUsuario');
             $table->integer('asiste')->default(0);

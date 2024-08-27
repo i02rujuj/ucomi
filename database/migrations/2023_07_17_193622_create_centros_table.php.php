@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('centros', function (Blueprint $table) {
             // Es lo mismo más simplificado a continuación: $table->bigIncrements('id')->unique();
-            $table->id();
+            $table->id()->startingValue(10000);
             $table->string('nombre');
             $table->string('direccion');
             $table->unsignedBigInteger('idTipo');

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('convocatorias', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(10000);
             $table->string('lugar');
             $table->date('fecha');
             $table->time('hora');

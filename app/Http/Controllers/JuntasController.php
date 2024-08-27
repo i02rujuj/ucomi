@@ -90,7 +90,7 @@ class JuntasController extends Controller
             return response()->json(['message' => "La junta de centro '{$junta->centro->nombre}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => "Error al añadir la junta de centro '{$junta->centro->nombre}'", 'status' => 500], 200);
+            return response()->json(['errors' => "Error al añadir la junta de centro", 'status' => 500], 200);
         }
     }
 
@@ -137,7 +137,7 @@ class JuntasController extends Controller
             return response()->json(['message' => "La junta de centro '{$junta->centro->nombre}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => "Error al eliminar la junta de centro '{$junta->centro->nombre}'",'status' => 500], 200);
+            return response()->json(['errors' => "Error al eliminar la junta de centro",'status' => 500], 200);
         }
     }
 

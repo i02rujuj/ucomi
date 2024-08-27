@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('juntas', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(10000);
             $table->unsignedBigInteger('idCentro');
             $table->date('fechaConstitucion');
             $table->date('fechaDisolucion')->nullable();

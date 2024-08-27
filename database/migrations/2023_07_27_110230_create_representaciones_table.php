@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('representaciones', function (Blueprint $table) {
-                $table->id();
+                $table->id()->startingValue(10000);
                 $table->string('nombre');
                 $table->integer('deCentro')->default(0);
                 $table->integer('deJunta')->default(0);

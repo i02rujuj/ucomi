@@ -222,7 +222,7 @@ class ConvocatoriasComisionController extends Controller
             return response()->json(['message' => "La convocatoria del día '{$convocatoria->fecha}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => "Error al eliminar la convocatoria del día '{$convocatoria->fecha}'",'status' => 500], 200);
+            return response()->json(['errors' => "Error al eliminar la convocatoria'",'status' => 500], 200);
         }
     }
 

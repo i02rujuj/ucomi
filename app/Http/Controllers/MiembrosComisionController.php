@@ -143,7 +143,7 @@ class MiembrosComisionController extends Controller
             return response()->json(['message' => "El miembro de comisión '{$miembroComision->usuario->name}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => "Error al añadir el miembro de comisión '{$miembroComision->usuario->name}'", 'status' => 500], 200);
+            return response()->json(['errors' => "Error al añadir el miembro de comisión", 'status' => 500], 200);
         }
     }
 
@@ -187,7 +187,7 @@ class MiembrosComisionController extends Controller
             return response()->json(['message' => "El miembro de comisión '{$miembroComision->usuario->name}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => "Error al eliminar el miembro de comisión '{$miembroComision->usuario->name}'",'status' => 500], 200);
+            return response()->json(['errors' => "Error al eliminar el miembro de comisión",'status' => 500], 200);
         }
     }
 

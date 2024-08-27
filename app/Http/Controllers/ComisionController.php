@@ -107,7 +107,7 @@ class ComisionController extends Controller
             return response()->json(['message' => "La comisión '{$comision->nombre}' se ha añadido correctamente.", 'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => "Error al añadir la comisión '{$comision->nombre}'", 'status' => 500], 200);
+            return response()->json(['errors' => "Error al añadir la comisión'", 'status' => 500], 200);
         }
     }
 
@@ -156,7 +156,7 @@ class ComisionController extends Controller
             return response()->json(['message' => "La comisión '{$comision->nombre}' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => "Error al eliminar la comisión '{$comision->nombre}'",'status' => 500], 200);
+            return response()->json(['errors' => "Error al eliminar la comisión",'status' => 500], 200);
         }
     }
 

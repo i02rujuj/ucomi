@@ -47,7 +47,7 @@ Comisiones
                 </x-inputSelectModal>
 
                 <x-inputDateModal label="Constitución*" id="fechaConstitucion" entidad="comision"></x-inputDateModal>
-                <x-inputDateModal label="Disolución*" id="fechaDisolucion" entidad="comision"></x-inputDateModal> 
+                <x-inputDateModal label="Disolución" id="fechaDisolucion" entidad="comision"></x-inputDateModal> 
 
             </div>
 

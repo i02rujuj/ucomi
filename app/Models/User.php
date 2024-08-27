@@ -161,21 +161,22 @@ class User extends Authenticatable
                     }
                     break;
                 case 'centro':
-                    if(isset($this->miembrosGobierno)) {
-                            return true;
+                    if($this->miembrosGobierno->count()>0) {
+                        return true;
                     }              
                     break;
                 case 'junta':
-                    if(isset($this->miembrosJunta)) {
+                    if($this->miembrosJunta->count()>0) {
                         return true;
                     } 
                     break;
                 case 'comision':
-                    if(isset($this->miembrosComision)) {
+                    if($this->miembrosComision->count()>0) {
                         return true;
                     }   
                     break;
             }
+            
         }
 
         return false;

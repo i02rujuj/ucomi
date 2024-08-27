@@ -86,7 +86,7 @@ class CentrosController extends Controller
 
             return response()->json(['message' => "El centro '$centro->nombre' se ha añadido correctamente.", 'status' => 200], 200);
         } catch (\Throwable $th) {
-            return response()->json(['errors' => "Error al añadir el centro '$centro->nombre'", 'status' => 500], 200);
+            return response()->json(['errors' => "Error al añadir el centro", 'status' => 500], 200);
         }
     }
 
@@ -113,7 +113,7 @@ class CentrosController extends Controller
 
             return response()->json(['message' => "El centro '$centro->nombre' se ha actualizado correctamente.", 'status' => 200], 200);
         } catch (\Throwable $th) {
-            return response()->json(['errors' => "Error al actualizar el centro '$centro->nombre'", 'status' => 500], 200);
+            return response()->json(['errors' => "Error al actualizar el centro", 'status' => 500], 200);
         }
     }
 
@@ -132,7 +132,7 @@ class CentrosController extends Controller
             return response()->json(['message' => "El centro '$centro->nombre' se ha eliminado correctamente.",'status' => 200], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['errors' => "Error al eliminar el centro '$centro->nombre'",'status' => 500], 200);
+            return response()->json(['errors' => "Error al eliminar el centro",'status' => 500], 200);
         }
     }
 

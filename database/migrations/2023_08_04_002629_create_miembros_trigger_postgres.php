@@ -35,7 +35,7 @@ return new class extends Migration
                                 THEN
                                     NEW.vigente := TO_CHAR('".Date::maxValue()."'::timestamp, 'yyyy-mm-dd hh24:mi:ss:ms')::text;
                                 ELSE 
-                                    NEW.vigente := TO_CHAR(NEW.fechaCese::date, 'yyyy-mm-dd hh24:mi:ss:ms')::text;
+                                    NEW.vigente := (NEW.\"fechaCese\"::date + TO_CHAR('".Date::now()."'::timestamp, 'hh24:mi:ss')::time)::text;
                                 END IF;
     
                                 RETURN NEW;
@@ -62,7 +62,7 @@ return new class extends Migration
                                     THEN
                                         NEW.vigente := TO_CHAR('".Date::maxValue()."'::timestamp, 'yyyy-mm-dd hh24:mi:ss:ms')::text;
                                     ELSE
-                                        NEW.vigente := TO_CHAR(NEW.fechaCese::date, 'yyyy-mm-dd hh24:mi:ss:ms')::text;
+                                        NEW.vigente := (NEW.\"fechaCese\"::date + TO_CHAR('".Date::now()."'::timestamp, 'hh24:mi:ss')::time)::text;
                                     END IF;
     
                                     RETURN NEW;

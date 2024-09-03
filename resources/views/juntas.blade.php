@@ -44,7 +44,7 @@ Juntas
                 </x-inputSelectModal>
 
                 <x-inputDateModal label="Fecha Constitución*" id="fechaConstitucion" entidad="junta"></x-inputDateModal>
-                <x-inputDateModal label="Fecha Disolución*" id="fechaDisolucion" entidad="junta"></x-inputDateModal> 
+                <x-inputDateModal label="Fecha Disolución" id="fechaDisolucion" entidad="junta"></x-inputDateModal> 
 
             </div>
 

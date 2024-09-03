@@ -37,7 +37,7 @@ Comisiones
             <div id="modal_add" name="modal_add" class="hidden mt-4">
 
                 <x-inputModal label="Nombre*" type="text" id="nombre" entidad="comision"></x-inputModal>
-                <x-inputModal label="Descripción*" type="text" id="descripcion" entidad="comision"></x-inputModal>
+                <x-inputModal label="Descripción" type="text" id="descripcion" entidad="comision"></x-inputModal>
 
                 <x-inputSelectModal label="Junta asociada*" id="idJunta" entidad="comision">
                     <option value="" selected disabled>Selecciona una junta</option>

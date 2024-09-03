@@ -47,7 +47,7 @@ Certificados
                 <div class="bg-white p-8 mb-6 rounded-lg shadow-md">
 
                     <div class="form-group flex flex-col gap-2">
-                        <label for="certificados" class="font-bold text-slate-600">Certificados generales</label>
+                        <label for="certificados" class="font-bold text-slate-600">Certificados de representación</label>
 
                         <hr class="border-t border-slate-200 my-2">
                         

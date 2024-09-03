@@ -190,7 +190,7 @@ class JuntasController extends Controller
         if($request->accion=='delete'){
             
             if($junta->miembros->count() > 0)
-                return response()->json(['errors' => 'Existen miembros de junta asociadas a esta junta. Para borrar la junta es necesario eliminar todos sus miembros de junta.', 'status' => 422], 200);
+                return response()->json(['errors' => 'Existen miembros de junta asociados a esta junta. Para borrar la junta es necesario eliminar todos sus miembros de junta.', 'status' => 422], 200);
 
             if($junta->comisiones->count() > 0)
                 return response()->json(['errors' => 'Existen comisiones asociadas a esta junta. Para borrar la junta es necesario eliminar todas sus comisiones.', 'status' => 422], 200);

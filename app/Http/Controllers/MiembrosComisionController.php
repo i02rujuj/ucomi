@@ -14,8 +14,19 @@ use App\Models\MiembroComision;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @brief Clase que contiene la lógica de negocio para la gestión de los miembros de comisión
+ * 
+ * @author Javier Ruiz Jurado
+ */
 class MiembrosComisionController extends Controller
 {
+    /**
+     * @brief Método principal que obtiene, filtra, ordena y devuelve los miembros de comisión según el tipo de usuario, paginados en bloques de doce elementos.
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return view miembrosComision.blade.php con los miembros y filtros aplicados
+     * @throws \Throwable Si no se pudieron obtener los miembros
+     */
     public function index(Request $request)
     {
         try {
@@ -121,6 +132,12 @@ class MiembrosComisionController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de guardar un miembro de comisión si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el miembro de comisión se ha guardado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo guardar el miembro de comisión
+     */
     public function store(Request $request)
     {
         try {
@@ -147,6 +164,12 @@ class MiembrosComisionController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de actualizar un miembro de comisión si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el miembro de comisión se ha actualizado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo actualizar el miembro de comisión
+     */
     public function update(Request $request)
     {
         try {
@@ -172,6 +195,12 @@ class MiembrosComisionController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de eliminar un miembro de comisión si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el miembro de comisión se ha eliminado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo eliminar el miembro de comisión
+     */
     public function delete(Request $request)
     {
         $request['accion']='delete';
@@ -191,6 +220,12 @@ class MiembrosComisionController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de obtener un miembro de comisión si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Datos del miembro de comisión a obtener
+     * @throws \Throwable Si no se pudo obtener el miembro de comisión, por ejemplo si no existe en la base de datos
+     */
     public function get(Request $request)
     {
         try {
@@ -205,6 +240,10 @@ class MiembrosComisionController extends Controller
         }
     }
 
+    /**
+     * @brief Método que establece las reglas de validación, así como los mensajes que serán devueltos en caso de no pasar la validación
+     * @return array con las reglas y mensajes de validación
+     */
     public function rules(){
         $rules = [
             'idComision' => 'required|integer|exists:App\Models\Comision,id',
@@ -242,6 +281,14 @@ class MiembrosComisionController extends Controller
         return [$rules, $rules_message];
     }
 
+    /**
+     * @brief Método encargado de validar los datos de un miembro de comisión, tanto al guardar, actualizar o eliminar
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el miembro de comisión se ha validado correctamente o mensaje indicando que los datos no han pasado la validación de datos por diferentes motivos:
+     * STORE: No ha pasado las reglas de validación, o la fecha de cese es menor que la fecha de toma de posesión, o ya existe el usuario como miembro de la comisión, o ya existe un presidente en la comisión
+     * UPDATE: No se ha encontrado el miembro a actualizar o no ha pasado las reglas de validación, o la fecha de cese es menor que la fecha de toma de posesión, o ya existe un presidente en la comisión
+     * DELETE: No se ha encontrado el miembro a eliminar.
+     */
     public function validateMiembro(Request $request){
 
         if($request->accion=='update' || $request->accion=='delete'){

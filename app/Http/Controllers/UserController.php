@@ -16,10 +16,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Flasher\Prime\Notification\NotificationInterface;
-
+/**
+ * @brief Clase que contiene la lógica de negocio para la gestión de los usuarios
+ * 
+ * @author Javier Ruiz Jurado
+ */
 class UserController extends Controller
 {   
-
+    /**
+     * @brief Método que devuelve la vista de certificados
+     * @return view certificados.blade.php
+     */
     public function index(){
 
         $users=null;
@@ -31,6 +38,12 @@ class UserController extends Controller
         return view('certificados')->with(['users'=>$users]);
     }
 
+    /**
+     * @brief Método encargado de obtener un usuario
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Datos del usuario a obtener
+     * @throws \Throwable Si no se pudo obtener el usuario, por ejemplo si no existe en la base de datos
+     */
     public function get(Request $request)
     {
         try {
@@ -48,6 +61,11 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de obtener todos los usuarios
+     * @return json Datos de los usuarios a obtener
+     * @throws \Throwable Si no se pudieron obtener los usuarios
+     */
     public function all()
     {
         try {
@@ -61,6 +79,12 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de guardar el perfil de un usuario si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return view con mensaje indicando al usuario que el perfil de usuario se ha guardado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo guardar el perfil del usuario
+     */
     public function store(Request $request)
     {
         try {
@@ -95,6 +119,11 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de guardar la imagen perfil de un usuario
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return view con mensaje indicando al usuario que la imagen de perfil del usuario se ha guardado correctamente o mensaje indicando que se ha producido un error
+     */
     public function saveImagePerfil(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -128,6 +157,12 @@ class UserController extends Controller
         } 
     }
 
+    /**
+     * @brief Método encargado de generar un certificado de representación de un usuario
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return pdf Descarga del certificado en PDF
+     * @throws \Throwable Si no se pudo generar el certificado
+     */
     public function generarCertificado(Request $request)
     {
         try {
@@ -324,6 +359,12 @@ class UserController extends Controller
         }   
     }
 
+    /**
+     * @brief Método encargado de generar un certificado de asistencia de un usuario
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return pdf Descarga del certificado en PDF
+     * @throws \Throwable Si no se pudo generar el certificado
+     */
     public function generarCertificadoAsistencia(Request $request)
     {
         try {

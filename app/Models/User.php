@@ -13,6 +13,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * @brief Clase que contiene los datos que hacen referencia al modelo de un usuario
+ * 
+ * @author Javier Ruiz Jurado
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
@@ -50,22 +55,43 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    /**
+     * @brief Método que devuelve los miembros de gobierno con respecto a un usuario
+     * @return HasMany miembros
+     */
     public function miembrosGobierno(){
         return $this->hasMany(MiembroGobierno::class, 'idUsuario');
     }
 
+    /**
+     * @brief Método que devuelve los miembros de junta con respecto a un usuario
+     * @return HasMany miembros
+     */
     public function miembrosJunta(){
         return $this->hasMany(MiembroJunta::class, 'idUsuario');
     }
 
+    /**
+     * @brief Método que devuelve los miembros de comisión con respecto a un usuario
+     * @return HasMany miembros
+     */
     public function miembrosComision(){
         return $this->hasMany(MiembroComision::class, 'idUsuario');
     }
 
+    /**
+     * @brief Método que devuelve los convocados con respecto a un usuario
+     * @return HasMany convocados
+     */
     public function convocados(){
         return $this->hasMany(Convocado::class, 'idUsuario');
     }
 
+    /**
+     * @brief Método que devuelve los datos a los que tendría acceso un responsable de centro, junta o comisión
+     * @param lista lista de los datos que queremos obtener
+     * @return resultado datos con acceso de responsable
+     */
     public function esResponsableDatos($lista){
 
         $resultado=[
@@ -108,6 +134,11 @@ class User extends Authenticatable
         return $resultado;
     }
 
+    /**
+     * @brief Método que devuelve si un usuario es responsable de centro, junta o comisión
+     * @param lista lista de los datos que queremos obtener
+     * @return booleano si es responsable o no
+     */
     public function esResponsable($lista){
 
         $lista = explode("|", $lista);
@@ -147,7 +178,11 @@ class User extends Authenticatable
         return false;
     }
 
-
+    /**
+     * @brief Método que devuelve si un usuario es miembro de centro, junta o comisión
+     * @param lista lista de los datos que queremos obtener
+     * @return booleano si es miembro o no
+     */
     public function esMiembro($lista){
 
         $lista = explode("|", $lista);
@@ -182,6 +217,11 @@ class User extends Authenticatable
         return false;
     }
 
+    /**
+     * @brief Método que devuelve los datos a los que tendría acceso un miembro de centro, junta o comisión
+     * @param lista lista de los datos que queremos obtener
+     * @return resultado datos con acceso de miembro
+     */
     public function esMiembroDatos($lista){
 
         $resultado=[
@@ -218,6 +258,10 @@ class User extends Authenticatable
         return $resultado;
     }
 
+    /**
+     * @brief Método que devuelve los nombres de los roles de la aplicación 
+     * @return string res nombres de roles
+     */
     public function getRoleName(){
 
         $res = '';
@@ -230,6 +274,10 @@ class User extends Authenticatable
         return $res;
     }
 
+    /**
+     * @brief Método que devuelve los permisos de los roles de la aplicación 
+     * @return string res permisos de roles
+     */
     public function getRoleNameType(){
         
         $roles = $this->getRoleNames();

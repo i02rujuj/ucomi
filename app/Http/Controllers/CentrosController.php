@@ -10,8 +10,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @brief Clase que contiene la lógica de negocio para la gestión de los centros
+ * 
+ * @author Javier Ruiz Jurado
+ */
 class CentrosController extends Controller
 {
+    /**
+     * @brief Método principal que obtiene, filtra, ordena y devuelve los centros según el tipo de usuario, paginados en bloques de doce elementos.
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return view centros.blade.php con los centros y filtros aplicados
+     * @throws \Throwable Si no se pudieron obtener los centros
+     */
     public function index(Request $request)
     {
         try {
@@ -66,6 +77,12 @@ class CentrosController extends Controller
         }
     }
 
+     /**
+     * @brief Método encargado de guardar un centro si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el centro se ha guardado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo guardar el centro
+     */
     public function store(Request $request)
     {                
         try {
@@ -90,6 +107,12 @@ class CentrosController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de actualizar un centro si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el centro se ha actualizado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo actualizar el centro
+     */
     public function update(Request $request)
     {
         try {
@@ -117,6 +140,12 @@ class CentrosController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de eliminar un centro si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el centro se ha eliminado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo eliminar el centro
+     */
     public function delete(Request $request)
     {
         try {
@@ -136,6 +165,12 @@ class CentrosController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de obtener un centro si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Datos del centro a obtener
+     * @throws \Throwable Si no se pudo obtener el centro, por ejemplo si no existe en la base de datos
+     */
     public function get(Request $request)
     {
         try {
@@ -151,6 +186,10 @@ class CentrosController extends Controller
         }
     }
 
+    /**
+     * @brief Método que establece las reglas de validación, así como los mensajes que serán devueltos en caso de no pasar la validación
+     * @return array con las reglas y mensajes de validación
+     */
     public function rules()
     {
         $rules = [
@@ -181,6 +220,14 @@ class CentrosController extends Controller
         return [$rules, $rules_message];
     }
 
+    /**
+     * @brief Método encargado de validar los datos de un centro, tanto al guardar, actualizar o eliminar
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el centro se ha validado correctamente o mensaje indicando que los datos no han pasado la validación de datos por diferentes motivos:
+     * STORE: No ha pasado las reglas de validación
+     * UPDATE: No se ha encontrado el centro a actualizar o no ha pasado las reglas de validación
+     * DELETE: No se ha encontrado el centro a eliminar o existen juntas asociadas al centro o existen miembros de gobierno asociados al centro.
+     */
     public function validateCentro(Request $request){
         
         if($request->accion=='update' || $request->accion=='delete'){

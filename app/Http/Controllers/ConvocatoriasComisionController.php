@@ -15,8 +15,19 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\NotificarConvocadosEmail;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @brief Clase que contiene la lógica de negocio para la gestión de las convocatorias de comisión
+ * 
+ * @author Javier Ruiz Jurado
+ */
 class ConvocatoriasComisionController extends Controller
 {
+    /**
+     * @brief Método principal que obtiene, filtra, ordena y devuelve las convocatorias de comisión según el tipo de usuario, paginados en bloques de doce elementos.
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return view convocatoriasComision.blade.php con las convocatorias y filtros aplicados
+     * @throws \Throwable Si no se pudieron obtener las convocatorias de comisión
+     */
     public function index(Request $request)
     {
         try {
@@ -142,6 +153,12 @@ class ConvocatoriasComisionController extends Controller
         }
     }
     
+    /**
+     * @brief Método encargado de guardar una convocatoria de comisión si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la convocatoria de comisión se ha guardado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo guardar la convocatoria de comisión
+     */
     public function store(Request $request)
     {
         try {
@@ -184,6 +201,12 @@ class ConvocatoriasComisionController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de actualizar una convocatoria de comisión si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la convocatoria de comisión se ha actualizado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo actualizar la convocatoria de comisión
+     */
     public function update(Request $request)
     {
         try {
@@ -213,6 +236,12 @@ class ConvocatoriasComisionController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de eliminar una convocatoria de comisión si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la convocatoria de comisión se ha eliminado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo eliminar la convocatoria de comisión
+     */
     public function delete(Request $request)
     {
         try {
@@ -226,6 +255,12 @@ class ConvocatoriasComisionController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de obtener una convocatoria de comisión si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Datos de la convocatoria de comisión a obtener
+     * @throws \Throwable Si no se pudo obtener la convocatoria de comisión, por ejemplo si no existe en la base de datos
+     */
     public function get(Request $request)
     {
         try {
@@ -240,6 +275,10 @@ class ConvocatoriasComisionController extends Controller
         }
     }
 
+    /**
+     * @brief Método que establece las reglas de validación, así como los mensajes que serán devueltos en caso de no pasar la validación
+     * @return array con las reglas y mensajes de validación
+     */
     public function rules()
     {
         $rules = [
@@ -277,6 +316,14 @@ class ConvocatoriasComisionController extends Controller
         return [$rules, $rules_message];
     }
 
+    /**
+     * @brief Método encargado de validar los datos de una convocatoria de comisión, tanto al guardar, actualizar o eliminar
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la convocatoria de comisión se ha validado correctamente o mensaje indicando que los datos no han pasado la validación de datos por diferentes motivos:
+     * STORE: No ha pasado las reglas de validación
+     * UPDATE: No se ha encontrado la convocatoria de comisión a actualizar o no ha pasado las reglas de validación
+     * DELETE: No se ha encontrado la convocatoria de comisión a eliminar.
+     */
     public function validateConvocatoria(Request $request){
 
         if($request->accion=='update' || $request->accion=='delete'){
@@ -298,6 +345,12 @@ class ConvocatoriasComisionController extends Controller
         return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
     }
 
+    /**
+     * @brief Método encargado de obtener los miembros convocados a una convocatoria de comisión, permitiendo notificar mediante email la confirmació nde su asistencia
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Datos con los convocados asistentes y/o notificados de la convocatoria de comisión indicada
+     * @throws \Throwable Si no se pudieron obtener los convocados
+     */
     public function convocados(Request $request)
     {
         try {
@@ -325,11 +378,11 @@ class ConvocatoriasComisionController extends Controller
                     $convocado->save();
                 }
 
-                Mail::to('i02rujuj@uco.es')->send(new NotificarConvocadosEmail([
+                Mail::to(Auth::user()->email)->send(new NotificarConvocadosEmail([
                     'asunto' => 'Confirmación asistencia a convocatoria de Comisión '.$convocatoria->comision->nombre,
                     //'usuario' => $convocado->usuario->name,
                     'usuario' => Auth::user()->name,
-                    'tipoConvocatoria' => 'Junta',
+                    'tipoConvocatoria' => 'Comisión',
                     'organo' => $convocatoria->comision->nombre,
                     'fecha' => $convocatoria->fecha,
                     'hora' => $convocatoria->hora,
@@ -337,7 +390,7 @@ class ConvocatoriasComisionController extends Controller
                     'url' => route('convocatoriasComision')."?filtroComision={$convocatoria->comision->id}&filtroVigente=1&filtroEstado=1&action=filtrar",
                ]));
 
-                return response()->json(['message' => "La convocatoria del día '$convocatoria->fecha' ha sido notificada vía email a todos sus convocados.", 'status' => 200], 200);
+                return response()->json(['message' => "La convocatoria del día '$convocatoria->fecha' ha sido notificada vía email a todos sus convocados. AHORA MISMO SOLO NOTIFICA AL EMAIL DEL USUARIO AUTENTICADO", 'status' => 200], 200);
             }
 
             return response()->json($convocados->get());
@@ -346,6 +399,12 @@ class ConvocatoriasComisionController extends Controller
         }
     }
 
+    /**
+     * @brief Método que permitir confirmar o cancelar una asistencia a una convocatoria de comisión por parte del usuario
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado de que la asistencia a la convocatoria de comisión se ha confirmado/cancelado correctamente
+     * @throws \Throwable Si no se pudo indicar la asitencia de la convocatoria
+     */
     public function asistir(Request $request)
     {
         try {
@@ -356,12 +415,7 @@ class ConvocatoriasComisionController extends Controller
 
             $convocatoria = Convocatoria::where('id', $request->idConvocatoria)->first();
 
-            if($request->asiste==1){
-                return response()->json(['message' => "Se ha confirmado la asistencia a la convocatoria de la comisión {$convocatoria->comision->nombre} con fecha {$convocatoria->fecha} a las {$convocatoria->hora} en {$convocatoria->lugar}",'status' => 200], 200);
-            }
-            else{
-                return response()->json(['message' => "Se ha cancelado la asistencia a la convocatoria de la comisión {$convocatoria->comision->nombre} con fecha {$convocatoria->fecha} a las {$convocatoria->hora} en {$convocatoria->lugar}",'status' => 200], 200);
-            }
+            return response()->json(['message' => "Se ha ".$request->asiste==1 ? 'confirmado' : 'cancelado'. " la asistencia a la convocatoria de la comisión {$convocatoria->comision->nombre} con fecha {$convocatoria->fecha} a las {$convocatoria->hora} en {$convocatoria->lugar}",'status' => 200], 200);
 
         } catch (\Throwable $th) {
             return response()->json(['errors' => 'Ha ocurrido un error al editar la asistencia de la convocatoria','status' => 500], 200);

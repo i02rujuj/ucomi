@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+/**
+ * @brief Clase que contiene los datos que hacen referencia al modelo de una comisión
+ * 
+ * @author Javier Ruiz Jurado
+ */
 class Comision extends Model
 {
     use HasFactory, SoftDeletes;
@@ -22,16 +26,29 @@ class Comision extends Model
     //Campos
     protected $fillable = ['idJunta', 'nombre', 'fechaConstitucion', 'fechaDisolucion', 'descripcion'];
 
+    /**
+     * @brief Método que devuelve la fecha de constitución formateada
+     * @return string fechaConstitucion
+     */
     public function getFechaConstitucionFormatAttribute()
     {  
         return Carbon::parse($this->fechaConstitucion)->format('d-m-Y');
     }
 
+    /**
+     * @brief Método que devuelve la junta de una comisión
+     * @return BelongsTo tipo
+     */
     public function junta()
     {
         return $this->belongsTo(Junta::class, 'idJunta');
     }
 
+    /**
+     * @brief Método que devuelve los miembros de una comisión
+     * @param representacion Opcional, si se indica se devolverán los miembros con la representación indicada
+     * @return HasMany miembros
+     */
     public function miembros($representacion=null)
     {
         $miembros = $this->hasMany(MiembroComision::class, 'idComision');
@@ -45,17 +62,31 @@ class Comision extends Model
             ->orderBy('fechaCese');
     }
 
+    /**
+     * @brief Método que devuelve los presidentes de una comisión
+     * @return HasMany miembros
+     */
     public function presidente()
     {
         return $this->hasMany(MiembroComision::class, 'idComision')
             ->where('cargo', 'Presidente');
     }
 
+     /**
+     * @brief Método que devuelve las convocatorias de una comisión
+     * @return HasMany convocatorias
+     */
     public function convocatorias()
     {
         return $this->hasMany(Convocatoria::class, 'idComision');
     }
 
+    /**
+     * @brief Método que se encarga de filtrar los datos de una comisión
+     * @param Builder $query con la consulta inicial a filtrar
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return Builder query de comisiones filtradas
+     */
     public function scopeFilters(Builder $query, Request $request){
         return $query
             ->when($request->has('filtroCentro') && $request->filtroCentro!=null, function($builder) use ($request){

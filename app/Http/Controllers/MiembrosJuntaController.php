@@ -13,8 +13,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @brief Clase que contiene la lógica de negocio para la gestión de los miembros de junta
+ * 
+ * @author Javier Ruiz Jurado
+ */
 class MiembrosJuntaController extends Controller
 {
+    /**
+     * @brief Método principal que obtiene, filtra, ordena y devuelve los miembros de junta según el tipo de usuario, paginados en bloques de doce elementos.
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return view miembrosJunta.blade.php con los miembros y filtros aplicados
+     * @throws \Throwable Si no se pudieron obtener los miembros
+     */
     public function index(Request $request)
     {
         try {
@@ -95,6 +106,12 @@ class MiembrosJuntaController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de guardar un miembro de junta si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el miembro de junta se ha guardado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo guardar el miembro de junta
+     */
     public function store(Request $request)
     {
         try {
@@ -120,6 +137,12 @@ class MiembrosJuntaController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de actualizar un miembro de junta si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el miembro de junta se ha actualizado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo actualizar el miembro de junta
+     */
     public function update(Request $request)
     {
         try {
@@ -145,6 +168,12 @@ class MiembrosJuntaController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de eliminar un miembro de junta si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el miembro de junta se ha eliminado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo eliminar el miembro de junta
+     */
     public function delete(Request $request)
     {
         $request['accion']='delete';
@@ -164,6 +193,12 @@ class MiembrosJuntaController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de obtener un miembro de junta si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Datos del miembro de junta a obtener
+     * @throws \Throwable Si no se pudo obtener el miembro de junta, por ejemplo si no existe en la base de datos
+     */
     public function get(Request $request)
     {
         try {
@@ -178,6 +213,10 @@ class MiembrosJuntaController extends Controller
         }
     }
 
+    /**
+     * @brief Método que establece las reglas de validación, así como los mensajes que serán devueltos en caso de no pasar la validación
+     * @return array con las reglas y mensajes de validación
+     */
     public function rules(){
         $rules = [
             'idJunta' => 'required|integer|exists:App\Models\Junta,id',
@@ -210,6 +249,14 @@ class MiembrosJuntaController extends Controller
         return [$rules, $rules_message];
     }
 
+    /**
+     * @brief Método encargado de validar los datos de un miembro de junta, tanto al guardar, actualizar o eliminar
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el miembro de junta se ha validado correctamente o mensaje indicando que los datos no han pasado la validación de datos por diferentes motivos:
+     * STORE: No ha pasado las reglas de validación, o la fecha de cese es menor que la fecha de toma de posesión, o ya existe el usuario como miembro de la junta, o ya existe un director o secretario en la junta
+     * UPDATE: No se ha encontrado el miembro a actualizar o no ha pasado las reglas de validación, o la fecha de cese es menor que la fecha de toma de posesión, o ya existe un director o secretario en la junta
+     * DELETE: No se ha encontrado el miembro a eliminar.
+     */
     public function validateMiembro(Request $request){
 
         if($request->accion=='update' || $request->accion=='delete'){

@@ -15,6 +15,8 @@ namespace App\Models{
 /**
  * App\Models\Centro
  *
+ * @brief Clase que contiene los datos que hacen referencia al modelo de un centro
+ * @author Javier Ruiz Jurado
  * @property int $id
  * @property string $nombre
  * @property string $direccion
@@ -49,6 +51,8 @@ namespace App\Models{
 /**
  * App\Models\Comision
  *
+ * @brief Clase que contiene los datos que hacen referencia al modelo de una comisión
+ * @author Javier Ruiz Jurado
  * @property int $id
  * @property string $nombre
  * @property string|null $descripcion
@@ -60,7 +64,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Convocatoria> $convocatorias
  * @property-read int|null $convocatorias_count
- * @property-read mixed $fecha_constitucion_format
+ * @property-read string $fecha_constitucion_format
  * @property-read \App\Models\Junta $junta
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MiembroComision> $presidente
  * @property-read int|null $presidente_count
@@ -88,6 +92,8 @@ namespace App\Models{
 /**
  * App\Models\Convocado
  *
+ * @brief Clase que contiene los datos que hacen referencia al modelo de un convocado
+ * @author Javier Ruiz Jurado
  * @property int $id
  * @property int $idConvocatoria
  * @property int $idUsuario
@@ -120,6 +126,8 @@ namespace App\Models{
 /**
  * App\Models\Convocatoria
  *
+ * @brief Clase que contiene los datos que hacen referencia al modelo de una convocatortia
+ * @author Javier Ruiz Jurado
  * @property int $id
  * @property string $lugar
  * @property string $fecha
@@ -134,7 +142,7 @@ namespace App\Models{
  * @property-read \App\Models\Comision|null $comision
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Convocado> $convocados
  * @property-read int|null $convocados_count
- * @property-read mixed $fecha_format
+ * @property-read string $fecha_format
  * @property-read \App\Models\Junta|null $junta
  * @property-read \App\Models\TipoConvocatoria $tipo
  * @method static \Illuminate\Database\Eloquent\Builder|Convocatoria filters(\Illuminate\Http\Request $request)
@@ -163,6 +171,8 @@ namespace App\Models{
 /**
  * App\Models\Junta
  *
+ * @brief Clase que contiene los datos que hacen referencia al modelo de una junta
+ * @author Javier Ruiz Jurado
  * @property int $id
  * @property int $idCentro
  * @property string $fechaConstitucion
@@ -176,8 +186,8 @@ namespace App\Models{
  * @property-read int|null $comisiones_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Convocatoria> $convocatorias
  * @property-read int|null $convocatorias_count
- * @property-read mixed $fecha_constitucion_format
- * @property-read mixed $fecha_disolucion_format
+ * @property-read string $fecha_constitucion_format
+ * @property-read string $fecha_disolucion_format
  * @method static \Illuminate\Database\Eloquent\Builder|Junta filters(\Illuminate\Http\Request $request)
  * @method static \Illuminate\Database\Eloquent\Builder|Junta newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Junta newQuery()
@@ -201,6 +211,8 @@ namespace App\Models{
 /**
  * App\Models\MiembroComision
  *
+ * @brief Clase que contiene los datos que hacen referencia al modelo de un miembro de comisión
+ * @author Javier Ruiz Jurado
  * @property int $id
  * @property int $idComision
  * @property int $idUsuario
@@ -215,8 +227,8 @@ namespace App\Models{
  * @property string $vigente
  * @property string $activo
  * @property-read \App\Models\Comision $comision
- * @property-read mixed $fecha_cese_format
- * @property-read mixed $fecha_toma_posesion_format
+ * @property-read string $fecha_cese_format
+ * @property-read string $fecha_toma_posesion_format
  * @property-read \App\Models\Representacion $representacion
  * @property-read \App\Models\User $usuario
  * @method static \Database\Factories\MiembroComisionFactory factory($count = null, $state = [])
@@ -248,6 +260,8 @@ namespace App\Models{
 /**
  * App\Models\MiembroGobierno
  *
+ * @brief Clase que contiene los datos que hacen referencia al modelo de un miembro de un centro
+ * @author Javier Ruiz Jurado
  * @property int $id
  * @property int $idCentro
  * @property int $idUsuario
@@ -262,8 +276,8 @@ namespace App\Models{
  * @property string $vigente
  * @property string $activo
  * @property-read \App\Models\Centro $centro
- * @property-read mixed $fecha_cese_format
- * @property-read mixed $fecha_toma_posesion_format
+ * @property-read string $fecha_cese_format
+ * @property-read string $fecha_toma_posesion_format
  * @property-read \App\Models\Representacion $representacion
  * @property-read \App\Models\User $usuario
  * @method static \Illuminate\Database\Eloquent\Builder|MiembroGobierno filters(\Illuminate\Http\Request $request)
@@ -294,6 +308,8 @@ namespace App\Models{
 /**
  * App\Models\MiembroJunta
  *
+ * @brief Clase que contiene los datos que hacen referencia al modelo de un miembro de una junta
+ * @author Javier Ruiz Jurado
  * @property int $id
  * @property int $idJunta
  * @property int $idUsuario
@@ -306,8 +322,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property string $vigente
  * @property string $activo
- * @property-read mixed $fecha_cese_format
- * @property-read mixed $fecha_toma_posesion_format
+ * @property-read string $fecha_cese_format
+ * @property-read string $fecha_toma_posesion_format
  * @property-read \App\Models\Junta $junta
  * @property-read \App\Models\Representacion $representacion
  * @property-read \App\Models\User $usuario
@@ -339,6 +355,8 @@ namespace App\Models{
 /**
  * App\Models\Representacion
  *
+ * @brief Clase que contiene los datos que hacen referencia al modelo de una representación
+ * @author Javier Ruiz Jurado
  * @property int $id
  * @property string $nombre
  * @property int $deCentro
@@ -371,6 +389,8 @@ namespace App\Models{
 /**
  * App\Models\TipoCentro
  *
+ * @brief Clase que contiene los datos que hacen referencia al modelo de un tipo de centro
+ * @author Javier Ruiz Jurado
  * @property int $id
  * @property string $nombre
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -397,6 +417,8 @@ namespace App\Models{
 /**
  * App\Models\TipoConvocatoria
  *
+ * @brief Clase que contiene los datos que hacen referencia al modelo de un tipo de convocatoria
+ * @author Javier Ruiz Jurado
  * @property int $id
  * @property string $nombre
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -423,6 +445,8 @@ namespace App\Models{
 /**
  * App\Models\User
  *
+ * @brief Clase que contiene los datos que hacen referencia al modelo de un usuario
+ * @author Javier Ruiz Jurado
  * @property int $id
  * @property string $name
  * @property string $email

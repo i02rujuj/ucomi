@@ -15,8 +15,20 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\NotificarConvocadosEmail;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @brief Clase que contiene la lógica de negocio para la gestión de las convocatorias de junta
+ * 
+ * @author Javier Ruiz Jurado
+ */
+
 class ConvocatoriasJuntaController extends Controller
 {
+    /**
+     * @brief Método principal que obtiene, filtra, ordena y devuelve las convocatorias de junta según el tipo de usuario, paginados en bloques de doce elementos.
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return view convocatoriasComision.blade.php con las convocatorias y filtros aplicados
+     * @throws \Throwable Si no se pudieron obtener las convocatorias de junta
+     */
     public function index(Request $request)
     {
         try {
@@ -113,6 +125,12 @@ class ConvocatoriasJuntaController extends Controller
         }
     }
     
+    /**
+     * @brief Método encargado de guardar una convocatoria de junta si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la convocatoria de junta se ha guardado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo guardar la convocatoria de junta
+     */
     public function store(Request $request)
     {
         try {
@@ -155,6 +173,12 @@ class ConvocatoriasJuntaController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de actualizar una convocatoria de junta si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la convocatoria de junta se ha actualizado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo actualizar la convocatoria de junta
+     */
     public function update(Request $request)
     {
         try {
@@ -184,6 +208,12 @@ class ConvocatoriasJuntaController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de eliminar una convocatoria de junta si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la convocatoria de junta se ha eliminado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo eliminar la convocatoria de junta
+     */
     public function delete(Request $request)
     {
         try {
@@ -206,6 +236,12 @@ class ConvocatoriasJuntaController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de obtener una convocatoria de junta si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Datos de la convocatoria de junta a obtener
+     * @throws \Throwable Si no se pudo obtener la convocatoria de junta, por ejemplo si no existe en la base de datos
+     */
     public function get(Request $request)
     {
         try {
@@ -220,6 +256,10 @@ class ConvocatoriasJuntaController extends Controller
         }
     }
 
+    /**
+     * @brief Método que establece las reglas de validación, así como los mensajes que serán devueltos en caso de no pasar la validación
+     * @return array con las reglas y mensajes de validación
+     */
     public function rules()
     {
         $rules = [
@@ -257,6 +297,14 @@ class ConvocatoriasJuntaController extends Controller
         return [$rules, $rules_message];
     }
 
+    /**
+     * @brief Método encargado de validar los datos de una convocatoria de junta, tanto al guardar, actualizar o eliminar
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la convocatoria de junta se ha validado correctamente o mensaje indicando que los datos no han pasado la validación de datos por diferentes motivos:
+     * STORE: No ha pasado las reglas de validación
+     * UPDATE: No se ha encontrado la convocatoria de junta a actualizar o no ha pasado las reglas de validación
+     * DELETE: No se ha encontrado la convocatoria de junta a eliminar.
+     */
     public function validateConvocatoria(Request $request){
 
         if($request->accion=='update' || $request->accion=='delete'){
@@ -278,6 +326,12 @@ class ConvocatoriasJuntaController extends Controller
         return response()->json(['message' => 'Validaciones correctas', 'status' => 200], 200);
     }
 
+    /**
+     * @brief Método encargado de obtener los miembros convocados a una convocatoria de junta, permitiendo notificar mediante email la confirmació nde su asistencia
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Datos con los convocados asistentes y/o notificados de la convocatoria de junta indicada
+     * @throws \Throwable Si no se pudieron obtener los convocados
+     */
     public function convocados(Request $request)
     {
         try {
@@ -317,7 +371,7 @@ class ConvocatoriasJuntaController extends Controller
                     'url' => route('convocatoriasJunta')."?filtroJunta={$convocatoria->junta->id}&filtroVigente=1&filtroEstado=1&action=filtrar",
                ]));
 
-                return response()->json(['message' => "La convocatoria del día '$convocatoria->fecha' ha sido notificada vía email a todos sus convocados.", 'status' => 200], 200);
+                return response()->json(['message' => "La convocatoria del día '$convocatoria->fecha' ha sido notificada vía email a todos sus convocados.  AHORA MISMO SOLO NOTIFICA AL EMAIL DEL USUARIO AUTENTICADO", 'status' => 200], 200);
             }
 
             return response()->json($convocados->get());
@@ -326,6 +380,12 @@ class ConvocatoriasJuntaController extends Controller
         }
     }
 
+    /**
+     * @brief Método que permitir confirmar o cancelar una asistencia a una convocatoria de junta por parte del usuario
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado de que la asistencia a la convocatoria de junta se ha confirmado/cancelado correctamente
+     * @throws \Throwable Si no se pudo indicar la asitencia de la convocatoria
+     */
     public function asistir(Request $request)
     {
         try {

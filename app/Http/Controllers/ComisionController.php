@@ -12,8 +12,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @brief Clase que contiene la lógica de negocio para la gestión de las comisiones
+ * 
+ * @author Javier Ruiz Jurado
+ */
 class ComisionController extends Controller
 {
+    /**
+     * @brief Método principal que obtiene, filtra, ordena y devuelve las comisiones según el tipo de usuario, paginados en bloques de doce elementos.
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return view comisiones.blade.php con las comisiones y filtros aplicados
+     * @throws \Throwable Si no se pudieron obtener las comisiones
+     */
     public function index(Request $request)
     {
         try {
@@ -87,6 +98,12 @@ class ComisionController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de guardar una comisión si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la comisión se ha guardado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo guardar la comisión
+     */
     public function store(Request $request)
     {
         try {
@@ -111,6 +128,12 @@ class ComisionController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de actualizar una comisión si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la comisión se ha actualizado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo actualizar la comisión
+     */
     public function update(Request $request)
     {
         try {
@@ -141,6 +164,12 @@ class ComisionController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de eliminar una comisión si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la comisión se ha eliminado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo eliminar la comisión
+     */
     public function delete(Request $request)
     {
         try {
@@ -160,6 +189,12 @@ class ComisionController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de obtener una comisión si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Datos de la comisión a obtener
+     * @throws \Throwable Si no se pudo obtener la comisión, por ejemplo si no existe en la base de datos
+     */
     public function get(Request $request)
     {
         try {
@@ -174,6 +209,10 @@ class ComisionController extends Controller
         }
     }
 
+    /**
+     * @brief Método que establece las reglas de validación, así como los mensajes que serán devueltos en caso de no pasar la validación
+     * @return array con las reglas y mensajes de validación
+     */
     public function rules()
     {
         $rules = [
@@ -206,22 +245,30 @@ class ComisionController extends Controller
         return [$rules, $rules_message];
     }
 
+    /**
+     * @brief Método encargado de validar los datos de una comisión, tanto al guardar, actualizar o eliminar
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la comisión se ha validado correctamente o mensaje indicando que los datos no han pasado la validación de datos por diferentes motivos:
+     * STORE: No ha pasado las reglas de validación o la fecha de disolución es menor que la fecha de constitución
+     * UPDATE: No se ha encontrado la comisión a actualizar o no ha pasado las reglas de validación  o la fecha de disolución es menor que la fecha de constitución
+     * DELETE: No se ha encontrado la comisión a eliminar o existen miembros de comisión asociados o existen convocatorias asociadas.
+     */
     public function validateComision(Request $request){
 
         if($request->accion=='update' || $request->accion=='delete'){
             $comision = Comision::where('id', $request->id)->first();
 
             if (!$comision) {
-                return response()->json(['errors' => 'No se ha encontrado la comision.','status' => 422], 200);
+                return response()->json(['errors' => 'No se ha encontrado la comisión.','status' => 422], 200);
             }
         }
 
         if($request->accion=='delete'){
             if($comision->miembros->count() > 0)
-                return response()->json(['errors' => 'Existen miembros de comision asociadas a esta comision. Para borrar la comision es necesario eliminar todos sus miembros de comision.', 'status' => 422], 200);
+                return response()->json(['errors' => 'Existen miembros de comisión asociadas a esta comisión. Para borrar la comisión es necesario eliminar todos sus miembros de comisión.', 'status' => 422], 200);
 
             if($comision->convocatorias->count() > 0)
-                return response()->json(['errors' => 'Existen convocatorias asociadas a esta comision. Para borrar la comision es necesario eliminar todas sus comision.', 'status' => 422], 200);
+                return response()->json(['errors' => 'Existen convocatorias asociadas a esta comisión. Para borrar la comisión es necesario eliminar todas sus comisión.', 'status' => 422], 200);
         }
         else{
             $validator = Validator::make($request->data, $this->rules()[0], $this->rules()[1]);

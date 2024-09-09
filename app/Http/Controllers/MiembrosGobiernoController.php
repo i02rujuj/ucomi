@@ -12,8 +12,19 @@ use App\Models\MiembroGobierno;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @brief Clase que contiene la lógica de negocio para la gestión de los miembros de gobierno
+ * 
+ * @author Javier Ruiz Jurado
+ */
 class MiembrosGobiernoController extends Controller
 {
+    /**
+     * @brief Método principal que obtiene, filtra, ordena y devuelve los miembros de gobierno según el tipo de usuario, paginados en bloques de doce elementos.
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return view miembrosGobierno.blade.php con los miembros y filtros aplicados
+     * @throws \Throwable Si no se pudieron obtener los miembros
+     */
     public function index(Request $request)
     {
         try {
@@ -87,6 +98,12 @@ class MiembrosGobiernoController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de guardar un miembro de gobierno si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el miembro de gobierno se ha guardado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo guardar el miembro de gobierno
+     */
     public function store(Request $request)
     {
         try {
@@ -113,6 +130,12 @@ class MiembrosGobiernoController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de actualizar un miembro de gobierno si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el miembro de gobierno se ha actualizado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo actualizar el miembro de gobierno
+     */
     public function update(Request $request)
     {
         try {
@@ -139,6 +162,12 @@ class MiembrosGobiernoController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de eliminar un miembro de gobierno si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el miembro de gobierno se ha eliminado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo eliminar el miembro de gobierno
+     */
     public function delete(Request $request)
     {
         $request['accion']='delete';
@@ -158,6 +187,12 @@ class MiembrosGobiernoController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de obtener un miembro de gobierno si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Datos del miembro de gobierno a obtener
+     * @throws \Throwable Si no se pudo obtener el miembro de gobierno, por ejemplo si no existe en la base de datos
+     */
     public function get(Request $request)
     {
         try {
@@ -172,6 +207,10 @@ class MiembrosGobiernoController extends Controller
         }
     }
 
+    /**
+     * @brief Método que establece las reglas de validación, así como los mensajes que serán devueltos en caso de no pasar la validación
+     * @return array con las reglas y mensajes de validación
+     */
     public function rules()
     {
         $rules = [
@@ -212,6 +251,14 @@ class MiembrosGobiernoController extends Controller
         return [$rules, $rules_message];
     }
 
+    /**
+     * @brief Método encargado de validar los datos de un miembro de gobierno, tanto al guardar, actualizar o eliminar
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que el miembro de gobierno se ha validado correctamente o mensaje indicando que los datos no han pasado la validación de datos por diferentes motivos:
+     * STORE: No ha pasado las reglas de validación, o la fecha de cese es menor que la fecha de toma de posesión, o ya existe el usuario como miembro del centro, o ya existe un director o secretario en el centro
+     * UPDATE: No se ha encontrado el miembro a actualizar o no ha pasado las reglas de validación, o la fecha de cese es menor que la fecha de toma de posesión, o ya existe un director o secretario en el centro
+     * DELETE: No se ha encontrado el miembro a eliminar.
+     */
     public function validateMiembro(Request $request){
 
         if($request->accion=='update' || $request->accion=='delete'){

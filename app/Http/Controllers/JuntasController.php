@@ -11,8 +11,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @brief Clase que contiene la lógica de negocio para la gestión de las juntas
+ * 
+ * @author Javier Ruiz Jurado
+ */
 class JuntasController extends Controller
 {
+    /**
+     * @brief Método principal que obtiene, filtra, ordena y devuelve las juntas según el tipo de usuario, paginados en bloques de doce elementos.
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return view juntas.blade.php con las juntas y filtros aplicados
+     * @throws \Throwable Si no se pudieron obtener las juntas
+     */
     public function index(Request $request)
     {
         try {
@@ -72,6 +83,12 @@ class JuntasController extends Controller
         }
     }
 
+     /**
+     * @brief Método encargado de guardar una junta si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la junta se ha guardado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo guardar la junta
+     */
     public function store(Request $request)
     { 
         try {
@@ -94,6 +111,12 @@ class JuntasController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de actualizar una junta si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la junta se ha actualizado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo actualizar la junta
+     */
     public function update(Request $request)
     {
         try {
@@ -122,6 +145,12 @@ class JuntasController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de eliminar una junta si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la junta se ha eliminado correctamente o mensaje indicando que los datos no han pasado la validación de datos
+     * @throws \Throwable Si no se pudo eliminar la junta
+     */
     public function delete(Request $request)
     {
         try {
@@ -141,6 +170,12 @@ class JuntasController extends Controller
         }
     }
 
+    /**
+     * @brief Método encargado de obtener una junta si los datos de entrada son validados correctamente
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Datos de la junta a obtener
+     * @throws \Throwable Si no se pudo obtener la junta, por ejemplo si no existe en la base de datos
+     */
     public function get(Request $request)
     {
         try {
@@ -155,6 +190,10 @@ class JuntasController extends Controller
         }
     }
 
+    /**
+     * @brief Método que establece las reglas de validación, así como los mensajes que serán devueltos en caso de no pasar la validación
+     * @return array con las reglas y mensajes de validación
+     */
     public function rules()
     {
         $rules = [
@@ -178,6 +217,14 @@ class JuntasController extends Controller
         return [$rules, $rules_message];
     }
 
+    /**
+     * @brief Método encargado de validar los datos de una junta, tanto al guardar, actualizar o eliminar
+     * @param Request $request Array que contiene todos los datos de entrada que el usuario ha indicado en la petición
+     * @return json Mensaje y estado indicando al usuario que la junta se ha validado correctamente o mensaje indicando que los datos no han pasado la validación de datos por diferentes motivos:
+     * STORE: No ha pasado las reglas de validación, o la fecha de disolución es menor que la fecha de constitución, o ya existe una junta vigente para el centro indicado
+     * UPDATE: No se ha encontrado la junta a actualizar o no ha pasado las reglas de validación, o la fecha de disolución es menor que la fecha de constitución, o ya existe una junta vigente para el centro indicado
+     * DELETE: No se ha encontrado la junta a eliminar o existen comisiones asociadas a la junta o existen miembros de junta asociados al centro o existen convocatorias de junta asociadas a la junta.
+     */
     public function validateJunta(Request $request){
 
         if($request->accion=='update' || $request->accion=='delete'){
@@ -218,7 +265,7 @@ class JuntasController extends Controller
                 else{
                     switch($request->accion){
                         case 'add':
-                            // Comprobación existencia junta en activo para la junta seleccionado
+                            // Comprobación existencia junta en activo para el centro seleccionado
                             $junta = Junta::select('id')
                                 ->where('idCentro', $request->data['idCentro'])
                                 ->where('fechaDisolucion', null)
